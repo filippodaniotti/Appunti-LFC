@@ -1,0 +1,29 @@
+\documentclass[
+	,a4paper
+	,12pt
+	,oneside
+	% ,draft
+]{book}
+
+\usepackage{style}
+
+\graphicspath{%
+	{./chapters/titlepage/images/}%
+  {./chapters/01/assets/images/}%
+}
+
+% arara: pdflatex: { shell: yes }
+% arara: latexmk: { clean: partial }
+\begin{document}
+\frontmatter
+
+	\import{./chapters/titlepage/}{titlepage}
+	\tableofcontents
+
+\mainmatter
+
+\import{./chapters/01/}{chapter01}
+
+\backmatter
+
+\end{document}

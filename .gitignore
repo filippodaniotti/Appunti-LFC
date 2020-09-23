@@ -1,0 +1,13 @@
+*.log
+*.aux
+*.gz
+*.toc
+*.lof
+*.out
+*.dvi
+*.fls
+*.fdb_latexmk
+*.sta
+*.pdf
+
+_minted*
