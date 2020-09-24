@@ -1,0 +1,24 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+\begin{tabularx}{\textwidth}{|X |X | X|}
+	\toprule
+		Grammarica & Linguaggio derivato & Spiegazione \\
+    \hline
+        $S \to aAB$ \newline 
+        $aA \to aaAb$ \newline 
+        $A \to \varepsilon$ 
+        & 
+        $\{a^n b^n |n>0\}$ 
+        & 
+        Spiegazione \\
+    \bottomrule
+\end{tabularx}
+\end{document}

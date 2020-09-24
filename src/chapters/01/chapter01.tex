@@ -9,7 +9,8 @@
 \begin{document}
 \chapter{Introduzione}
 
-\section{Cos'è un compilatore}
+\section{Il compilatore}
+\subsection{Cos'è un compilatore}
 Il compilatore, generalizzando, è un meccanismo che trasforma il codice sorgente in codice eseguibile.
 Nota però che il codice eseguibile è machine dependent, difatti noi studieremo i principi generali di questa traduzione ma dobbiamo tenere a mente il fatto che ogni tipo di macchina ha il suo linguaggio macchina che deve essere utilizzato per scrivere gli eseguibili da essa utilizzabili.
 
@@ -21,7 +22,7 @@ L’esempio classico di utilizzo di un compilatore è la traduzione da codice c 
 Un codice in assembly, tuttavia non è ancora eseguibile. Manca il passaggio di conversione da assembly a codice binario; tuttavia, questo passaggio non è così complesso dato che assembly ha una corrispondenza quasi 1:1 con il binario.
 Ma quest’ultima traduzione non è l’unico passaggio mancante: rimane ancora da affrontare la fase di linking.
 
-\section{Le fasi del processo di compilazione}
+\subsection{Le fasi del processo di compilazione}
 In questa sezione presentiamo le fasi del processo di compilazione come se fossero in pipeline, ma sappi che per ragioni di efficienza vengono spesso sovrapposte. Due punti fondamentali di questo processo sono i seguenti:
 \begin{enumerate}
     \item Se scriviamo il programma in un certo linguaggio, lo dovremo compilare con il compilatore dedicato esattamente a quel linguaggio

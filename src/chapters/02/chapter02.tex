@@ -1,0 +1,86 @@
+\documentclass[class=book, crop=false, oneside]{standalone}
+\usepackage[subpreambles=true]{standalone}
+
+\usepackage{../../style}
+
+\graphicspath{{./assets/images/}}
+% arara: pdflatex: { synctex: yes, shell: yes }
+% arara: latexmk: { clean: partial }
+\begin{document}
+\chapter{Le grammatiche generative}
+
+\section{Definizione di grammatica generativa}
+Le grammatiche che tratteremo in questo corso sono chiamate grammatiche generative (così dette perché vengono usate per generare linguaggi).
+
+Il primo passo per definire una grammatica è definirne il vocabolario, questo consiste in un set di simboli.
+Alcuni di questi simboli sono chiamati terminals (terminali) e giocano il ruolo di token nell’analisi lessicale.
+Un simbolo particolare nella grammatica è lo \emph{starting symbol}, come suggerisce il nome, questo è il simbolo che permette di iniziare a generare il linguaggio derivato dalla grammatica (tale processo sarà chiarito in seguito).
+
+Altra cosa da fissare in una grammatica è il set delle produzioni (\emph{productions}); queste sono regole di riscrittura da stringhe ad altre stringhe e rispettano la seguente limitazione: la stringa di partenza deve contenere almeno un simbolo non-terminale.
+
+Per quanto abbiamo visto fin ora una grammatica generativa è composta da:
+	\begin{itemize}
+        \item Un vocabolario, il set dei simboli
+        \item Alcuni simboli speciali (i terminali, i non terminali ed il simbolo di partenza)
+        \item Le produzioni (regole che permettono di trasformare stringhe contenenti non terminali in qualcos’altro)
+    \end{itemize}
+Un esempio di regole per una grammatica è il seguente:
+\begin{equation}\label{produzioni_esempio_0}
+    \{S \to aSb, S \to ab\}
+\end{equation}
+Dove $S$ è lo starting point mentre $a$ e $b$ sono caratteri terminali (a volte detti anche “parole”).
+
+
+Questi sono gli ingredienti di una grammatica generativa; il linguaggio di una grammatica è l’insieme di stringhe composte solo da terminali che può essere generato partendo dallo starting point di quella stessa grammatica.
+
+\subsection{Derivare il linguaggio di una grammatica}
+Per derivare un linguaggio dalla grammatica dobbiamo applicare (quante volte possiamo) tutte le regole di riscrittura che appartengono alla grammatica generativa stessa.\\
+Ogni riscrittura è chiamata \emph{derivation step} (simbolo $\implies$, diverso dal simbolo usato nelle produzioni $\to$).
+L’operazione di derivazione serve per tradurre stringhe con caratteri non terminali con stringhe composte solo da caratteri terminali (seguendo le regole dettate dalle produzioni).
+
+
+Continuiamo con il nostro esempio:\\
+Partendo dalla grammatica espressa in \ref{produzioni_esempio_0} possiamo sviluppare la seguente derivazione:
+\begin{equation}
+    S \implies ab
+\end{equation}
+Questa è una derivazione da $S$ con un singolo step; la parola $ab$ appartiene al linguaggio della nostra grammatica d’esempio.
+Un'altra derivazione possibile è la seguente:
+\begin{equation}
+    S \implies aSb \implies aaSbb
+\end{equation}
+Diversamente da prima, $aaSbb$ non è una parola del linguaggio perché non è composta \emph{solo} da caratteri terminali.
+
+In questo modo si può definire qual è il linguaggio determinato da una grammatica, ad esempio con la grammatica che abbiamo visto prima possiamo generare ogni sequenza di parole formate da $n$ terminali $a$ seguiti da $n$ terminali $b$.
+Tale linguaggio può essere scritto formalmente in questo modo:
+\begin{equation}
+    \{a^n b^n |n>0\}
+\end{equation}
+
+
+L'utilità del meccanismo di derivazione del linguaggio può esserci più chiara se pensiamo all'esempio appena visto come un metodo per verificare che tutte le parentesi aperte vengano chiuse, dove il terminale $a$ sta per parentesi aperta ed il terminale $b$ sta per parentesi chiusa.
+
+La grammatica tramite il mezzo delle produzioni ci permette di fare questo tipo di controlli.
+
+\paragraph{Regole di notazione}
+Presentiamo ora alcune regole di notazione per lavorare con il processo di derivazione delle grammatiche generative.
+\begin{itemize}
+    \item i simboli del vocabolario prescelto che non fungono da terminali verranno sempre indicati con lettere maiuscole
+    \item il carattere $\varepsilon$ denota la parola vuota
+    \item la lunghezza di $\varepsilon$ è zero
+    \item $\varepsilon$ = $\varepsilon$$\varepsilon$
+    \item $\varepsilon$ =  $b^0$ dove $b$ è un qualunque carattere terminale
+    \item il carattere $\varepsilon$ non viene scritto nelle parole
+\end{itemize}
+
+\section{Esercizi di derivazione da una grammatica}
+Presentiamo ora una serie di esercizietti di derivazione del linguaggio da una certa grammatica, con breve spiegazione del processo.
+
+\begin{table}[H]\label{Esercizio 1}
+	\centering
+	\subimport{assets/tables/}{exercise1.tex}
+    \caption{Esercizio 1}
+\end{table}
+
+
+\end{document}
