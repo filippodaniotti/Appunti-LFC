@@ -24,8 +24,12 @@
 \usepackage{
 	,amsmath
 	,amssymb
+	,amsfonts
 	,amsthm
+	,calrsfs
 }
+
+\usepackage[mathscr]{euscript}
 
 \usepackage{units} % unità di misura
 
@@ -55,6 +59,12 @@
 \usepackage[normalem]{ulem}
 
 \usepackage{csquotes}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{osservazione}[corollary]{Osservazione}
+\renewcommand\qedsymbol{QED}
 
 \newcommand\tab[1][1cm]{\hspace*{#1}}
 
