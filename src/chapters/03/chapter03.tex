@@ -48,7 +48,7 @@
 \begin{osservazione}
   Cerchiamo di capire come mai possiamo essere certi che la grammatica \(\mathcal{G}\), per come l'abbiamo definita, è libera.
 
-  Prendiamo l'insieme delle produzioni di \(\mathcal{G}\); abbiamo già visto come è stato ricavato. Il refreshing va a colpire solamente i nomi dei terminali o non-terminali, non la loro forma, che rimane immutata (\(A \implies \alpha\)). Questa forma è rispettata anche dalle due nuove produzioni aggiunte (\(S \implies S'_1\) e \(S \implies S'_2\)) (e tipo quindi?)
+  Prendiamo l'insieme delle produzioni di \(\mathcal{G}\); abbiamo già visto come è stato ricavato. Il refreshing va a colpire solamente i nomi dei terminali o non-terminali, non la loro forma, che rimane immutata (\(A \rightarrow \alpha\)). Questa forma è rispettata anche dalle due nuove produzioni aggiunte (\(S \rightarrow S'_1\) e \(S \rightarrow S'_2\)) (e tipo quindi?)
 
 \end{osservazione}
 
@@ -67,21 +67,21 @@
   È semplice convincersi dell'importanza dell'operazione di refreshing. Se consideriamo due grammatiche \(\mathcal{G}_1, \mathcal{G}_2\) con le seguenti produzioni:
   \begin{figure}
     \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{prod-g1-g2}
+    \includegraphics[width=.7\textwidth,keepaspectratio]{why-refresh_1}
   \end{figure}
   \noindent Avremo quindi generati i seguenti linguaggi: \(\mathcal{L(G)}_1 = \{aa\}\) e \(\mathcal{L(G)}_2 = \{bb\}\).
 
   Se non effettuassimo refreshing, Ci troveremo ad avere una nuova grammatica con le seguenti produzioni:
   \begin{figure}
     \centering
-    \includegraphics[width=.3\textwidth,keepaspectratio]{prod-g-naive}
+    \includegraphics[width=.3\textwidth,keepaspectratio]{why-refresh_2}
   \end{figure}
   \noindent Il linguaggio prodotto da questa nuova grammatica sarebbe diverso da quello dato dall'unione delle due grammatiche di partenza, poiché avremmo \(\mathcal{L(G)} = \{aa, ab, ba, bb\} \neq mathcal{L(G)}_1 \cup \mathcal{L(G)}_2\).
 
   Con un'opportuno resfreshing otteniamo invece:
   \begin{figure}
     \centering
-    \includegraphics[width=.3\textwidth,keepaspectratio]{prod-g}
+    \includegraphics[width=.3\textwidth,keepaspectratio]{why-refresh_3}
   \end{figure}
   Questo insieme di produzioni garantisce che la grammatica generi il linguaggio desiderato.
 \end{osservazione}
@@ -107,11 +107,11 @@
 \paragraph{Definizione}
 Una grammatica libera \(\mathcal{G} = (V, T, S, \mathcal{P})\) è in \emph{Chomsky Normal Form} se e solo se:
 \begin{itemize}
-  \item non ha alcuna \(\epsilon\)-produzione, al massimo \(S \implies \epsilon\);
+  \item non ha alcuna \(\epsilon\)-produzione, al massimo \(S \rightarrow \epsilon\);
   \item tutte le sue non \(\epsilon\)-produzioni  una tra le due seguenti forme:
   \begin{itemize}
-    \item \(A \implies a\)
-    \item \(A \implies BC\)
+    \item \(A \rightarrow a\)
+    \item \(A \rightarrow BC\)
   \end{itemize}
   in cui sia \(B\) sia \(C\) sono diversi da \(S\).
 \end{itemize}
@@ -122,7 +122,139 @@ Una grammatica libera \(\mathcal{G} = (V, T, S, \mathcal{P})\) è in \emph{Choms
 
 \noindent La dimostrazione del lemma è lasciata per esercizio.
 
+\section{Come epurare le grammatiche libere}
+Esiste un teorema che ci permette di fare pulizia etnica sui linguaggi.
+\begin{theorem}
+  Consideriamo un linguaggio libero \(\mathcal{L}\); allora esiste una grammatica libera \(\mathcal{G}\) tale che \(\mathcal{L(G)} = \mathcal{L}\setminus\epsilon\) e tale da:
+  \begin{itemize}
+    \item non avere alcuna \(\epsilon\)-produzione, ovvero produzioni di forma \(A \rightarrow \epsilon\);
+    \item non avere alcuna produzione d'unità (\emph{unit production}), ovvero produzione di forma \(A \rightarrow B\);
+    \item non avere alcun non-terminale non utile, ovvero non-terminali che non appaiono mai in alcuna derivazione di qualche stringa di terminale.
+  \end{itemize}
+\end{theorem}
+
+Le grammatiche che possiedono queste caratteristiche sono più sintetici e generano linguaggi equivalenti a livello espressivo, ma più puliti; ad esempio, non c'è alcun bisogno di avere molti non-terminali che abbiano una produzione in \(\epsilon\) e, qualora richiesto, la produzione \(S \rightarrow \epsilon\) sarebbe sufficiente allo scopo (da approfondire).
+
+Non è nostro interesse entrare nel dettaglio degli algoritmi per effettuare questa pulizia, poiché dimostrarne la correttezza richiederebbe un considerevole impegno. Andremo però ad analizzare come possiamo, se non altro,  eliminare le \(\epsilon\)-produzioni.
+
+\subsection{Come eliminare le \(\epsilon\)-produzioni}
+Per eliminare le \(\epsilon\)-produzioni bisogna procedere ad individuare i non-terminali \emph{annullabili}, ovvero quei non-terminali che, con qualche derivazione, producono la parola vuota (\(A : A \rightarrow^* \epsilon\)). Si può procedere ricorsivamente:
+\begin{itemize}
+  \item base: se la grammatica comprende una produzione della forma \(A \rightarrow \epsilon\), allora quel non-terminale \(A\) è annullabile;
+  \item iterazione: se la grammatica comprende una produzione della forma \(A \rightarrow Y_1Y_2 \ldots Y_n\) e i non terminali \(Y_1, Y_2, \ldots, Y_3\) sono tutti annullabili, allora anche \(A\) è annullabile.
+\end{itemize}
+A questo punto, andiamo a sostituire ogni produzione della forma \(A \rightarrow Y_1Y_2 \ldots Y_n\) con una famiglia di produzioni dove ogni combinazione di \(Y_i\) annullabili è rimossa dal body della produzione. Se tutti gli \(Y_i\) sono annullabili, non bisogna includere nella famiglia risultante la produzione \(A \rightarrow \epsilon\). Quindi, si elimina ogni produzione \(A \rightarrow \epsilon\).
+
+\paragraph{Esempio di applicazione}
+Andiamo a vedere un esempio considerando la seguente grammatica:
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.3\textwidth,keepaspectratio]{ex-th-1-3-1_1}
+\end{figure}
+
+Osserviamo subito che sia \(A\) sia \(C\) hanno una produzione che conduce a \(\epsilon\), pertanto sono annullabili; allo stesso modo, \(B\) è annullabile attraverso \(C\) e \(S\) è annullabile attraverso \(A, b\) e \(C\). Con le operazioni che abbiamo illustrato poc'anzi, la grammatica che otteniamo è la seguente:
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.3\textwidth,keepaspectratio]{ex-th-1-3-1_2}
+\end{figure}
+
+Si noti che, in questa grammatica, il non-letterale \(C\) è non utile.
 
 \section{Pumping lemma for free languages}
+
+\subsection{Definizione e formulazione}
+
+Si segua lentamente formulazione e dimostrazione per questo tanto articolato quanto importante lemma.
+
+\begin{lemma}
+  Consideriamo un linguaggio libero \(\mathcal{L}\), allora:
+  \begin{itemize}
+    \item \(\exists p \in \mathbb{N}^+\) tale che
+    \item \(\forall z \in \mathcal{L} : |z| > p\), allora
+    \item \(\exists u, v, w, x, y\) tale che:
+    \begin{itemize}
+      \item \(z = uvwxy \textrm{ } \land\)
+      \item \(|vwx| \leq p \textrm{ } \land\)
+      \item \(|vx| > 0 \textrm{ }\land\)
+      \item \(\forall i \in \mathbb{N}.uv^iwx^iy \in \mathcal{L}\)
+    \end{itemize}
+  \end{itemize}
+\end{lemma}
+
+\begin{proof}
+  Partiamo considerando un linguaggio libero \(\mathcal{L}\) che non comprende la parola vuota (\(\epsilon \notin \mathcal{L}\)); sappiamo quindi che deve esistere una grammatica libera "epurata" \(\mathcal{G}\) che generi il linguaggio \(\mathcal{L}\) (\(\mathcal{L} = \mathcal{L(G)}\)).
+
+  Osserviamo che, per ogni possibile albero di derivazione, ogni cammino dalla radice a un terminale attraversa tanti non-terminali quanto il valore della lunghezza del cammino stesso. Ad esempio, la lunghezza del cammino \(\langle S, B_1, B_2, \ldots, B_{k-1}, a \rangle\) è \(k\), così come il numero di non-terminali attraversati.
+
+  Adesso definimo \(p\) come la lunghezza della più lunga parola derivabile con degli alberi di derivazione, e che inoltre sia tale che i suoi camini, a partire dalla radice, siano lunghi al più come il numero di non-terminali di \(\mathcal{G}\). Consideriamo quindi anche una parola \(z \in \mathcal{L}\), più lunga di \(p\) (\(|z| > p\)). Possiamo quindi essere sicuri che esiste un albero di derivazione per \(z\) che possiede almeno un cammino la cui lunghezza è strettamente maggiore del numero di non-terminali, poiché \(|z| >p\).
+
+  Adesso, per un qualche albero di derivazione, andiamo a considerare la più profonda coppia di occorrenze dello stesso non-terminale lungo un qualche cammino; con più profonda coppia di occerrenze intendiamo la coppia composta dalla più lontana e dalla seconda più lontana occorrenza dalla radice di uno stesso non terminale.
+
+  Andiamo a visualizzare la situazione attraverso un albero di derivazione, considerando le due occorrenze di un non-terminale \(A\).
+
+  \begin{figure}
+    \centering
+    \includegraphics[width=.25\textwidth,keepaspectratio]{pl-proof_1}
+  \end{figure}
+
+  Possiamo dire, nelle due occorrenze di \(A\), sono radicati due sottoalberi distinti, che noi qui rappresenteremo colorati di verde e porpora. La parola \(z\) può quindi essere "spacchettata" in cinque sottoparole, come illustrato di seguito.
+
+  \begin{figure}
+    \centering
+    \includegraphics[width=.8\textwidth,keepaspectratio]{pl-proof_2}
+  \end{figure}
+
+  Dal momento che \(A_1\) e \(A_2\) sono occorrenze di uno stesso non-terminale, condividono la medesima famiglia di produzioni. Questo fatto è notevole: se, a partire da \(A_2\), siamo riusciti a trovare una qualche sequenza di derivazioni tale da essere arrivati a \(A_1\), allora con la stessa sequenza possiamo trovare una nuova occorrenza di \(A\), il che ci rende ragionevolmente certi che possiamo generare un numero arbitrario di sottostringhe \(v, x\) di \(z\).
+
+  \begin{figure}[H]
+    \centering
+    \begin{minipage}{0.25\textwidth}
+      \centering
+      \includegraphics[width=\textwidth,keepaspectratio]{pl-proof_3}
+    \end{minipage}
+     \hfill
+    \begin{minipage}{0.25\textwidth}
+      \centering
+      \includegraphics[width=\textwidth,keepaspectratio]{pl-proof_4}
+    \end{minipage}
+  \end{figure}
+
+
+  Allo stesso modo sappiamo che, se a partire da \(A_1\) possiamo otteniamo un sottoalbero di derivazioni \(w\), questo stesso sottoalbero può essere ottenuto a partire da \(A_2\).
+
+  \begin{figure}
+    \centering
+    \includegraphics[width=.25\textwidth,keepaspectratio]{pl-proof_5}
+  \end{figure}
+
+  Queste affermazioni possono essere riassunte, per l'appunto, nella formula:
+
+  \begin{equation*}
+    \forall i \in \mathbb{N}.uv^iwx^iy \in \mathcal{L}
+  \end{equation*}
+
+  Ulteriori considerazioni:
+   \begin{itemize}
+     \item per come abbiamo scelto le occorrenze di \(A\), la profondità del sottoalbero radicato in \(A_2\) è minore del numero di non-terminali presenti nella grammatica considerata, da cui, per definizione stessa del valore \(p\), \(|vwx| < p\);
+     \item la grammatica \(\mathcal{G}\) che genera il linguaggio che stiamo considerando è ripulita, per cui nelle derivazioni di forma \(A \implies^* \alpha A \beta\), almeno uno dei due simboli \(\alpha, \beta\) deve fornire uno ulteriore; questo ci permette di affermare che \(|vx| > 0\).
+   \end{itemize}
+
+   \paragraph{Dimostrazione se \(\epsilon \in \mathcal{L}\)}
+   La dimostrazione che abbiamo appena concluso è relativa a linguaggi privi di parola vuota, ma con un attimo di cura nell'impostazione possiamo estenderla anche ai linguaggi che comprendono \(\epsilon\).
+
+   Considerando un linguaggio \(\mathcal{L}\) che comprenda \(\epsilon\), partiamo ricavando una grammatica \(\mathcal{G} = (V, T, S, \mathcal{P})\) che generi \(\mathcal{L} \setminus \{\epsilon\}\). A questo punto definiamo una seconda nuova grammatica \(\mathcal{G}'\), in cui andiamo semplicemente ad aggiungere un nuovo starting symbol assieme a due produzioni: una che punti verso lo starting symbol della precedente grammatica, e una seconda che generi invece \(\epsilon\). Formalmente:
+
+   \begin{equation*}
+     \mathcal{G}' = (V, T, S', \mathcal{P} \cup \{ S' \rightarrow S, S' \rightarrow \epsilon \})
+   \end{equation*}
+
+   In questo modo abbiamo che \(\mathcal{L} = \mathcal{L(G')}\) e possiamo procedere analogamente a prima
+
+\end{proof}
+
+\subsection{Applicazioni}
+
 
 \end{document}
