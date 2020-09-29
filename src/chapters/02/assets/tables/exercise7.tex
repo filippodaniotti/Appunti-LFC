@@ -1,0 +1,30 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+\begin{tabularx}{\textwidth}{|X |X |}
+	\toprule
+		Grammatica & Linguaggio derivato \\
+    \hline
+        $S \to CD $ \newline
+        $C \to aCA | bCB $ \newline
+        $AD \to aD $ \newline
+        $BD \to bD $ \newline
+        $Aa \to aA $ \newline
+        $Ab \to bA $ \newline
+        $Ba \to aB $ \newline
+        $Bb \to bB $ \newline
+        $C \to \varepsilon $ \newline
+        $D \to \varepsilon $
+        & 
+        $\{ ww | w \in \{a^*b^*\}^*\}$
+        \\
+    \bottomrule
+\end{tabularx}
+\end{document}

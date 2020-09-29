@@ -13,10 +13,10 @@
 Le grammatiche che tratteremo in questo corso sono chiamate grammatiche generative (così dette perché vengono usate per generare linguaggi).
 
 Il primo passo per definire una grammatica è definirne il vocabolario, questo consiste in un set di simboli.
-Alcuni di questi simboli sono chiamati terminali (\emph{terminals}) e giocano il ruolo di token nell’analisi lessicale.
-Un simbolo particolare nella grammatica è lo \emph{starting symbol}: come suggerisce il nome, questo è il simbolo che permette di iniziare a generare il linguaggio derivato dalla grammatica (tale processo sarà chiarito in seguito).
+Alcuni di questi simboli sono chiamati terminali (terminals) e giocano il ruolo di token nell’analisi lessicale.
+Un simbolo particolare nella grammatica è lo starting symbol: come suggerisce il nome, questo è il simbolo che permette di iniziare a generare il linguaggio derivato dalla grammatica (tale processo sarà chiarito in seguito).
 
-Altra cosa da fissare in una grammatica è il set delle produzioni (\emph{productions}); queste sono regole di riscrittura da stringhe ad altre stringhe e rispettano la seguente limitazione: la stringa di partenza deve contenere almeno un simbolo non-terminale.
+Altra cosa da fissare in una grammatica è il set delle produzioni (productions); queste sono regole di riscrittura da stringhe ad altre stringhe e rispettano la seguente limitazione: la stringa di partenza deve contenere almeno un simbolo non-terminale.
 
 Un esempio di regole per una grammatica è il seguente:
 \begin{equation}
@@ -36,7 +36,7 @@ Il linguaggio di una grammatica è l’insieme di stringhe composte solo da term
 
 \subsection{Derivare il linguaggio di una grammatica generativa}
 Per derivare un linguaggio dalla grammatica generativa dobbiamo applicare (quante volte possiamo) tutte le regole di riscrittura che appartengono alla grammatica stessa.\\
-Ogni riscrittura è chiamata \emph{derivation step} (simbolo $\implies$, diverso dal simbolo usato nelle produzioni $\to$).
+Ogni riscrittura è chiamata derivation step (simbolo $\implies$, diverso dal simbolo usato nelle produzioni $\to$).
 L’operazione di derivazione serve per tradurre stringhe con caratteri non terminali in stringhe composte solo da caratteri terminali (seguendo le regole dettate dalle produzioni).
 
 
@@ -138,14 +138,172 @@ Essendo il linguaggio definito come un insieme di parole che la grammatica può 
 \subsubsection*{Spiegazione di \ref{Esercizio 5}:}
 Non c'è molto da dire in questo caso se non che l’insieme contenente la parola vuota è diverso dall’insieme vuoto $\{\varepsilon\} \neq \Phi$.
 
-% \begin{table}[H]
-% 	\centering
-% 	\subimport{assets/tables/}{exercise6.tex}
-%     \caption{Esercizio 6}
-%     \label{Esercizio 6}
-% \end{table}
-% \subsubsection*{Spiegazione di \ref{Esercizio 6}:}
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{exercise6.tex}
+    \caption{Esercizio 6}
+    \label{Esercizio 6}
+\end{table}
+\subsubsection*{Spiegazione di \ref{Esercizio 6}:}
+La spiegazione è lasciata al lettore.
 
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{exercise7.tex}
+    \caption{Esercizio 7}
+    \label{Esercizio 7}
+\end{table}
+\subsubsection*{Spiegazione di \ref{Esercizio 7}:}
+Prima di tutto partiamo da $S$, l'unica produzione possibile ci porta a $CD$; ora possiamo dimenticarci di $S$.
 
+Vediamo subito che sia $C$ che $D$ possono essere trasformate in $\varepsilon$ a piacimento, quindi possiamo interrompere le derivazioni da loro in ogni momento.
+
+Ora, $C$ ci permette di utilizzare le due produzioni $C \to aCA$ e $C \to bCB$ (il simbolo $|$ ci dice che da $C$ posso produrre $sCA$ \emph{or} $bCB$).
+
+Notiamo che se siamo in una forma del tipo $aCAD$ possiamo proseguire con le produzioni di $C$ oppure possiamo utilizzare $AD \to aD$ ed osservando bene notiamo che questo è l'unico modo in cui potremo eliminare il non terminale $A$, il che è speculare per quanto riguarda il caso $bCBD$.
+
+Notiamo inoltre che per ogni nuovo non terminale che aggiungiamo sulla destra dovremo farlo scorrere fino al limite estremo destro della parola (dove si trova $D$) per trasformarlo in terminale; a questo aggiungiamo che per ogni $a$ sulla sinistra aggiungo $A$ sulla destra ed in egual modo funziona per $b$.
+
+Ora dovrebbe essere chiaro che, al termine delle derivazioni, il numero di $a$ sulla sinistra  sarà uguale al numero di $a$ sulla destra e lo stesso per $b$; inoltre al non terminale appena a sinistra dell'ultimo $C$ corrisponderà un terminale uguale in posizione estrema destra (appena prima di $D$).
+
+La soluzione è quindi $\{ ww | w \in \{a^* b^*\}^*\}$.
+
+\section{Grammatiche Generative formalmente}
+Una grammatica generativa è una tupla con questa forma (V, T, S, P):
+\begin{itemize}
+    \item V è il vocabolario (simboli terminali e non, completo)
+    \item T è il set dei simboli terminali
+    \item S è lo start symbol
+    \item P è il set delle produzioni
+\end{itemize}
+Una volta definiti i componenti di una grammatica generativa, definiamo le convenzioni notazionali (o notazioni convenzionali) che si usano in questo campo:
+\begin{itemize}
+    \item Lettere maiuscole all’inizio dell’alfabeto ($A$, $B$…) significano simbolo non terminale ($\in (V \setminus T)$).
+    \item Lettere maiuscole alla fine dell’alfabeto ($X$, $Y$, $Z$…) un generico simbolo del vocabolario, terminale o meno, non si sa ($\in V$).
+    \item Lettere minuscole inizio alfabeto ($a$, $b$…) per indicare caratteri terminali ($\in T$).
+    \item Lettere minuscole greche per indicare stringhe che possono essere composte da terminali o non terminali $\in V^*$, dove $^*$ significa che possono esserci zero o più ripetizioni di elementi nella base.
+    \item Lettere minuscole in fondo all’alfabeto con pedice numerico ($w$, $w_0$…) per indicare stringhe di caratteri terminali
+\end{itemize}
+Definiamo ora formalmente l'oggetto produzione, esso è una traduzione in questa forma:
+\begin{equation}
+    \delta \to \beta
+\end{equation}
+Dove $\delta \in V^+$, $\delta$ contiene almeno un non terminale (non traduciamo terminali in altri terminali); il $^+$ significa che c’è una o più ripetizioni di elementi nella base, che quindi non è vuota ($\varepsilon$).\\
+$\delta$ è detto \textbf{driver} della produzione mentre $\beta$ è detto \textbf{corpo} della produzione.
+
+Il linguaggio generato da una grammatica $G = (V,T,S,P)$ è così definito:
+\begin{equation}
+    L(G) = {w | w \in T^* and \; S \implies^* \; w }
+\end{equation}
+Ovvero l'insieme di tutti gli elementi (anche vuoti) che si possono derivare con uno o più passi dallo starting point.
+
+\subsection{Tipi di grammatiche generative}
+Esiste una gerarchia delle grammatiche, che non dipende dal genere di analisi che permettono di fare, ma dipende solo dalla struttura delle loro produzioni.
+
+Si parla di Context-free grammars, o free grammars, quando tutte le produzioni sono in forma $A \to \beta$, ovvero che hanno driver composti \emph{solo} da non terminali.
+
+Queste grammatiche sono molto importanti perché praticamente tutti i linguaggi di programmazione sono derivati da questo tipo di grammatica.
+Si dice di un linguaggio che è context-free se esiste una grammatica libera che genera quello steso linguaggio.
+$L$ è un linguaggio libero se e solo se esiste una grammatica libera $G$ tale che $L=L(G)$.
+
+L’operazione di analizzare una stringa e verificare se appartiene ad una determinata grammatica dipende naturalmente dal metodo con cui si decide di applicare la derivazione dallo starting point della grammatica stessa.
+
+Se una stringa si può derivare da una certa grammatica, si dice che la prima appartiene al linguaggio di quest'ultima.
+Esistono due tipi di derivazione canonica:
+\begin{itemize}
+    \item Rightmost (si rimpiazzano sempre prima i non terminali più a destra)
+    \item Leftmost (si rimpiazzano sempre prima i non terminali più a sinistra)
+\end{itemize}
+Se utilizziamo come strategia una di queste due tutti i passi analitici di una derivazione sono deterministici, perché ad ogni passo o procedo con l’elemento più a destra o procedo con quello più a sinistra. Per questo motivo queste sono le due modalità di derivazione canonica.
+
+Le grammatiche libere si prestano in modo naturale ad essere processate tramite il cosiddetto albero di derivazione.
+Questo albero ha come radice lo starting point, poi, per ogni passo di derivazione secondo una produzione in forma $A \to X_1 | X_2 |...| X_n $, si generano $n$ figli del nodo con la derivazione di $A$ messa in atto.
+Le foglie dell’albero saranno composte da $\varepsilon$ oppure da caratteri terminali. In figura \ref{albero_di_derivazione} è riportato come esempio l'albero di derivazione della grammatica:
+\begin{equation}
+    S \to aSb | \varepsilon
+    \label{grammatica_allbero}
+\end{equation}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.2\textwidth,keepaspectratio]{albero_di_derivazione}
+    \caption{Albero di derivazione di \ref{grammatica_allbero}}
+    \label{albero_di_derivazione}
+\end{figure}
+Ma tornando con i piedi per terra, cosa centra tutto questo con i compilatori?\\
+Un certo programma che è stato trasformato in una stringa viene verificato controllando che la tale stringa sia derivata dalla grammatica del programma stesso. Un modo per verificare questo è trovare l’albero di derivazione della stringa che rappresenta il tal programma.
+
+\subsection{Ambiguità delle grammatiche}
+Una grammatica $G$ si dice ambigua se esiste $w \in L(G)$ che può essere derivata da due derivazioni canoniche distinte, entrambe rightmost o entrambe leftmost. Distinte significa che l'ordine di applicazione delle produzioni è differente, ma questo sarà più chiaro in seguito.
+
+Noi non vogliamo grammatiche ambigue, ci complicano la vita.
+Prendiamo ad esempio la grammatica delle espressioni aritmetiche:
+\begin{equation}
+    E \to E+E | E*E |  n
+\end{equation}
+Intuitivamente si può leggere come exp -> exp+exp  o  exp*exp  o  numero.\\
+Questa grammatica ci permette di fare operazioni di somma o moltiplicazione, è ambigua o meno?
+
+Per verificarlo proviamo a derivare questo $w = n+n*n$ utilizzando la tecnica leftmost e generando due derivazioni distinte.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.3\textwidth,keepaspectratio]{leftmost_1.jpg}
+    \caption{Derivazione leftmost 1}
+    \label{leftmost_1}
+\end{figure}
+Nel primo caso di derivazione leftmost (\ref{leftmost_1}) partiamo con il trasformare $E$ in $E+E$; di seguito proseguendo in leftmost trasformiamo la prima $E$ in $n$, poi la seconda $E$ in $E*E$.
+Infine trasformiamo (sempre da sinistra a destra) entrambe le $E$ rimanenti in $n$.
+
+Semplice, no? Ora proviamo ad ottenere la stessa parola in modo alternativo:
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.3\textwidth,keepaspectratio]{leftmost_2.jpg}
+    \caption{Derivazione leftmost 2}
+    \label{leftmost_2}
+\end{figure}
+Si nota subito che la differenza sostanziale è che in questo secondo caso (\ref{leftmost_2}) la prima produzione che utilizziamo non è $E \to E+E$, bensì $E \to E*E$.
+
+Questo comporta due derivazioni differenti anche se entrambe sono nella stessa forma canonica leftmost.
+La grammatica di partenza è quindi ambigua: nonostante il significato (l'interpretazione matematica dei due alberi) sia diverso riusciamo a costruire $w$ con due alberi differenti che usano la stessa strategia canonica di derivazione.
+
+Ora abbiamo visto questo processo, sappi che la prof.ssa Quaglia preferisce 14 a 1 la derivazione con albero a quella con stringa perché è più chiara.
+
+\subsubsection*{Dangling Else}
+Introduciamo una nuova forma di grammatica
+\begin{equation}
+    S \to \; if \; b \; then \; S |\; if\; B\; then\; S\; else\; S |\; other    
+\end{equation}
+È una grammatica ambigua?
+
+Prendiamo ad esempio questa parola:
+\begin{equation}
+    w =\; if\; b\; then\; if\; b\; then\; other\; else\; other
+\end{equation}
+Con quale $then$ è accoppiato l’$else$? Non si può sapere!
+
+Di fatto possiamo ricostruire w con questi due diversi alberi:
+%TODO: immagine albero 1
+%TODO: immagine albero 2
+Questo ci introduce il problema di come trattare la gestione del comando $if \; then \; else$ in un linguaggio di programmazione. 
+Per questo nei vari linguaggi troviamo sempre qualche forma di strategia per risolvere questo problema:
+\begin{itemize}
+    \item Mettere le parentesi
+    \item Eliminare l’else e usare solo if
+    \item Usare la regola del closest unmatched then (l’$else$ è sempre valutato come appartenente all’ultimo $then$ non ancora elsato)
+\end{itemize}	
+L’else è intrinsecamente ambiguo.
+
+Osservazione:\\
+L’ambiguità in alcuni casi può essere indecidibile, in quanto non sempre esiste un algoritmo che ci dice se la grammatica è ambigua o no.
+
+\subsection{Piccola parentesi sui linguaggi naturali}
+I linguaggi naturali spesso nascondono molte più ambiguità delle grammatiche che affronteremo in questo corso.
+D'altro canto le grammatiche per linguaggi di programmazione sono molto difficili da scrivere anche perché sono pensate e studiate per ottenere una certa velocità di verifica dei programmi.
+Il linguaggio naturale è ben più complesso: immagina quanto dev’essere difficile descrivere una grammatica per il linguaggio naturale ed immagina poi quale complessità può avere un algoritmo di verifica di tale grammatica, ammesso che questo possa esistere.
+
+Pensa solo al fatto che spesso e volentieri il linguaggio naturale dipende dal contesto! Questa cosa nei linguaggi di programmazione non s’è mai vista per fortuna.
+
+I parser per linguaggi di programmazione hanno complessità lineare di norma, se si va a vedere i parser del linguaggio naturale\dots sagra!
 
 \end{document}
