@@ -13,30 +13,31 @@
 Le grammatiche che tratteremo in questo corso sono chiamate grammatiche generative (così dette perché vengono usate per generare linguaggi).
 
 Il primo passo per definire una grammatica è definirne il vocabolario, questo consiste in un set di simboli.
-Alcuni di questi simboli sono chiamati terminals (terminali) e giocano il ruolo di token nell’analisi lessicale.
-Un simbolo particolare nella grammatica è lo \emph{starting symbol}, come suggerisce il nome, questo è il simbolo che permette di iniziare a generare il linguaggio derivato dalla grammatica (tale processo sarà chiarito in seguito).
+Alcuni di questi simboli sono chiamati terminali (\emph{terminals}) e giocano il ruolo di token nell’analisi lessicale.
+Un simbolo particolare nella grammatica è lo \emph{starting symbol}: come suggerisce il nome, questo è il simbolo che permette di iniziare a generare il linguaggio derivato dalla grammatica (tale processo sarà chiarito in seguito).
 
 Altra cosa da fissare in una grammatica è il set delle produzioni (\emph{productions}); queste sono regole di riscrittura da stringhe ad altre stringhe e rispettano la seguente limitazione: la stringa di partenza deve contenere almeno un simbolo non-terminale.
 
+Un esempio di regole per una grammatica è il seguente:
+\begin{equation}
+    \{S \to aSb, S \to ab\}
+    \label{produzioni_esempio_0}
+\end{equation}
+Dove $S$ è lo starting point mentre $a$ e $b$ sono caratteri terminali (a volte detti anche parole).\\
 Per quanto abbiamo visto fin ora una grammatica generativa è composta da:
 	\begin{itemize}
-        \item Un vocabolario, il set dei simboli
-        \item Alcuni simboli speciali (i terminali, i non terminali ed il simbolo di partenza)
-        \item Le produzioni (regole che permettono di trasformare stringhe contenenti non terminali in qualcos’altro)
+        \item Un vocabolario, ovvero l'insieme dei simboli
+        \item Alcuni simboli speciali, ovvero i terminali, i non terminali ed il simbolo di partenza
+        \item Le produzioni, ovvero regole che permettono di trasformare stringhe contenenti non terminali in qualcos’altro
     \end{itemize}
-Un esempio di regole per una grammatica è il seguente:
-\begin{equation}\label{produzioni_esempio_0}
-    \{S \to aSb, S \to ab\}
-\end{equation}
-Dove $S$ è lo starting point mentre $a$ e $b$ sono caratteri terminali (a volte detti anche “parole”).
+Questi sono gli ingredienti di una grammatica generativa.
 
+Il linguaggio di una grammatica è l’insieme di stringhe composte solo da terminali che può essere generato partendo dallo starting point di quella stessa grammatica.
 
-Questi sono gli ingredienti di una grammatica generativa; il linguaggio di una grammatica è l’insieme di stringhe composte solo da terminali che può essere generato partendo dallo starting point di quella stessa grammatica.
-
-\subsection{Derivare il linguaggio di una grammatica}
-Per derivare un linguaggio dalla grammatica dobbiamo applicare (quante volte possiamo) tutte le regole di riscrittura che appartengono alla grammatica generativa stessa.\\
+\subsection{Derivare il linguaggio di una grammatica generativa}
+Per derivare un linguaggio dalla grammatica generativa dobbiamo applicare (quante volte possiamo) tutte le regole di riscrittura che appartengono alla grammatica stessa.\\
 Ogni riscrittura è chiamata \emph{derivation step} (simbolo $\implies$, diverso dal simbolo usato nelle produzioni $\to$).
-L’operazione di derivazione serve per tradurre stringhe con caratteri non terminali con stringhe composte solo da caratteri terminali (seguendo le regole dettate dalle produzioni).
+L’operazione di derivazione serve per tradurre stringhe con caratteri non terminali in stringhe composte solo da caratteri terminali (seguendo le regole dettate dalle produzioni).
 
 
 Continuiamo con il nostro esempio:\\
@@ -58,9 +59,7 @@ Tale linguaggio può essere scritto formalmente in questo modo:
 \end{equation}
 
 
-L'utilità del meccanismo di derivazione del linguaggio può esserci più chiara se pensiamo all'esempio appena visto come un metodo per verificare che tutte le parentesi aperte vengano chiuse, dove il terminale $a$ sta per parentesi aperta ed il terminale $b$ sta per parentesi chiusa.
-
-La grammatica tramite il mezzo delle produzioni ci permette di fare questo tipo di controlli.
+L'utilità del meccanismo di derivazione del linguaggio può esserci più chiara se pensiamo all'esempio appena visto come un metodo per verificare che tutte le parentesi aperte vengano chiuse, dove il terminale $a$ sta per parentesi aperta ed il terminale $b$ sta per parentesi chiusa. Una grammatica come \ref{produzioni_esempio_0} tramite il mezzo delle produzioni ci permette di eseguire questo tipo di controlli.
 
 \paragraph{Regole di notazione}
 Presentiamo ora alcune regole di notazione per lavorare con il processo di derivazione delle grammatiche generative.
@@ -76,11 +75,77 @@ Presentiamo ora alcune regole di notazione per lavorare con il processo di deriv
 \section{Esercizi di derivazione da una grammatica}
 Presentiamo ora una serie di esercizietti di derivazione del linguaggio da una certa grammatica, con breve spiegazione del processo.
 
-\begin{table}[H]\label{Esercizio 1}
+\begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{exercise1.tex}
     \caption{Esercizio 1}
+    \label{Esercizio 1}
 \end{table}
+\subsubsection*{Spiegazione di \ref{Esercizio 1}:}
+Ricordiamo che si parte sempre dallo starting symbol a derivare un linguaggio, quindi da $S$.
+
+L'unica derivazione che si può effettuare in questo caso è $S \implies aAb$.
+Da qui in poi non si può procedere che con una delle due productions $aA \to aaAb$ oppure $A \to \varepsilon$, in un caso si aumenterà la stringa di un $a$ a sinistra e di un $b$ a destra, nell'altro caso si terminerà la derivazione.
+
+Diventa quindi semplice vedere che il linguaggio di questa grammatica è lo stesso generato da \ref{produzioni_esempio_0}, ovvero: $\{a^n b^n |n>0\}$.
+
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{exercise2.tex}
+    \caption{Esercizio 2}
+    \label{Esercizio 2}
+\end{table}
+\subsubsection*{Spiegazione di \ref{Esercizio 2}:}
+Come prima si parte dal simbolo $S$ che anche questa volta ci permette una sola produzione, quindi deriviamo senza ulteriori indugi: $S \implies AB$.
+
+In seguito ci rendiamo conto che le productions dell'esercizio altro non sono che delle regole per generare un numero a nostro piacimento di terminali $a$ e $b$, quindi deriviamo tranquillamente il seguente linguaggio: $\{a^n b^m |n,m>1\}$.
+
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{exercise3.tex}
+    \caption{Esercizio 3}
+    \label{Esercizio 3}
+\end{table}
+\subsubsection*{Spiegazione di \ref{Esercizio 3}:}
+In questo caso il simbolo di partenza $S$ ci offre due possibili productions, quindi dobbiamo sperimentarle entrambe per generare il linguaggio completo.
+
+La seconda produzione ci porta subito ad una derivazione terminale $S \implies abc$.
+La prima produzione invece $S \to aSBc$ ci permette di ricorrere in un processo ricorsivo che continua ad aggiungere terminali $a$ sulla sinistra, la coppia $Bc$ sulla destra e termina solo quando decidiamo di sostituire $S$ con $abc$.
+
+Questo implica che nella situazione terminale ci potremo trovare in una situazione in cui abbiamo una stringa con questa forma $aaa...abcBcBcBc...Bc$.
+
+Da questa forma per eliminare tutti i non terminali $B$ non abbiamo altra soluzione se non quella di utilizzare la produzione $cB \to Bc$ per spostare tutte le $c$ in fondo ed in seguito con $bB \to bb$ trasformare tutte le $B$ in $b$.
+
+Il linguaggio che ricaviamo alla fine è $\{a^nb^nc^n | n>0\}$.
+
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{exercise4.tex}
+    \caption{Esercizio 4}
+    \label{Esercizio 4}
+\end{table}
+\subsubsection*{Spiegazione di \ref{Esercizio 4}:}
+La grammatica specificata nell'esercizio non permette di generare stringhe contenenti solo caratteri terminali, di conseguenza non genera alcuna parola valida.
+
+Essendo il linguaggio definito come un insieme di parole che la grammatica può creare, per male che vada tale insieme è vuoto, ma esiste sempre. Questo è proprio il nostro caso, il linguaggio di questa grammatica è l’insieme vuoto.
+
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{exercise5.tex}
+    \caption{Esercizio 5}
+    \label{Esercizio 5}
+\end{table}
+\subsubsection*{Spiegazione di \ref{Esercizio 5}:}
+Non c'è molto da dire in questo caso se non che l’insieme contenente la parola vuota è diverso dall’insieme vuoto $\{\varepsilon\} \neq \Phi$.
+
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{exercise6.tex}
+    \caption{Esercizio 6}
+    \label{Esercizio 6}
+\end{table}
+\subsubsection*{Spiegazione di \ref{Esercizio 6}:}
+
 
 
 \end{document}
