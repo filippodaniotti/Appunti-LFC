@@ -1,0 +1,21 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+\begin{tabularx}{\textwidth}{|X |X |}
+	\toprule
+		Linguaggio & Risposta \\
+    \hline
+        $\{ a^n b^n c^n | n > 0 \}$
+        &
+				Non è libero
+        \\
+    \bottomrule
+\end{tabularx}
+\end{document}

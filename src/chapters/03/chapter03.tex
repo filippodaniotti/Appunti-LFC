@@ -102,13 +102,37 @@
   La dimostrazione sembra assolutamente uguale a quella del lemma della chiusura all'unione, sono confuso ma domani cercherò di chiarire.
 \end{proof}
 
+\subsection*{Chiusura rispetto all'interezione}
+
+\begin{lemma}
+  La classe dei linguaggi liberi è chiusa rispetto all'operazione d'intersezione.
+\end{lemma}
+
+\begin{proof}
+  La dimostrazione è per contraddizione, è sufficiente trovare due linguaggi liberi la cui intersezione non è libera.
+
+  Si considerino, ad esempio, due linguaggi $\mathcal{L}_1$ e $\mathcal{L}_2$, definiti come segue:
+  \begin{align*}
+      \mathcal{L}_1 = \{a^n b^n c^j | n, j > 0 \} \\
+      \mathcal{L}_2 = \{a^j b^n c^n | n, j > 0 \}
+  \end{align*}
+
+  \noindent Il linguaggio generato dalla loro intersezione è il seguente:
+
+  \begin{align*}
+    \mathcal{L}_1 \cap \mathcal{L}_2 = \{ a^n b^n c^n | n > 0 \}
+  \end{align*}
+
+  \noindent Questo linguaggio non è libero, e provarlo è molto semplice (si veda \ref{ex-freeNotfree_1}).
+
+\end{proof}
 
 \section{Chomsky Normal Form}
 \paragraph{Definizione}
 Una grammatica libera \(\mathcal{G} = (V, T, S, \mathcal{P})\) è in \emph{Chomsky Normal Form} se e solo se:
 \begin{itemize}
-  \item non ha alcuna \(\epsilon\)-produzione, al massimo \(S \rightarrow \epsilon\);
-  \item tutte le sue non \(\epsilon\)-produzioni  una tra le due seguenti forme:
+  \item non ha alcuna \(\varepsilon\)-produzione, al massimo \(S \rightarrow \varepsilon\);
+  \item tutte le sue non \(\varepsilon\)-produzioni  una tra le due seguenti forme:
   \begin{itemize}
     \item \(A \rightarrow a\)
     \item \(A \rightarrow BC\)
@@ -125,40 +149,53 @@ Una grammatica libera \(\mathcal{G} = (V, T, S, \mathcal{P})\) è in \emph{Choms
 \section{Come epurare le grammatiche libere}
 Esiste un teorema che ci permette di fare pulizia etnica sui linguaggi.
 \begin{theorem}
-  Consideriamo un linguaggio libero \(\mathcal{L}\); allora esiste una grammatica libera \(\mathcal{G}\) tale che \(\mathcal{L(G)} = \mathcal{L}\setminus\epsilon\) e tale da:
+  Consideriamo un linguaggio libero \(\mathcal{L}\); allora esiste una grammatica libera \(\mathcal{G}\) tale che \(\mathcal{L(G)} = \mathcal{L}\setminus\varepsilon\) e tale da:
   \begin{itemize}
-    \item non avere alcuna \(\epsilon\)-produzione, ovvero produzioni di forma \(A \rightarrow \epsilon\);
+    \item non avere alcuna \(\varepsilon\)-produzione, ovvero produzioni di forma \(A \rightarrow \varepsilon\);
     \item non avere alcuna produzione d'unità (\emph{unit production}), ovvero produzione di forma \(A \rightarrow B\);
     \item non avere alcun non-terminale non utile, ovvero non-terminali che non appaiono mai in alcuna derivazione di qualche stringa di terminale.
   \end{itemize}
 \end{theorem}
 
-Le grammatiche che possiedono queste caratteristiche sono più sintetici e generano linguaggi equivalenti a livello espressivo, ma più puliti; ad esempio, non c'è alcun bisogno di avere molti non-terminali che abbiano una produzione in \(\epsilon\) e, qualora richiesto, la produzione \(S \rightarrow \epsilon\) sarebbe sufficiente allo scopo (da approfondire).
+Le grammatiche che possiedono queste caratteristiche sono più sintetici e generano linguaggi equivalenti a livello espressivo, ma più puliti; ad esempio, non c'è alcun bisogno di avere molti non-terminali che abbiano una produzione in \(\varepsilon\) e, qualora richiesto, la produzione \(S \rightarrow \varepsilon\) sarebbe sufficiente allo scopo (da approfondire).
 
-Non è nostro interesse entrare nel dettaglio degli algoritmi per effettuare questa pulizia, poiché dimostrarne la correttezza richiederebbe un considerevole impegno. Andremo però ad analizzare come possiamo, se non altro,  eliminare le \(\epsilon\)-produzioni.
+Non è nostro interesse entrare nel dettaglio degli algoritmi per effettuare questa pulizia, poiché dimostrarne la correttezza richiederebbe un considerevole impegno. Andremo però ad analizzare come possiamo, se non altro,  eliminare le \(\varepsilon\)-produzioni.
 
-\subsection{Come eliminare le \(\epsilon\)-produzioni}
-Per eliminare le \(\epsilon\)-produzioni bisogna procedere ad individuare i non-terminali \emph{annullabili}, ovvero quei non-terminali che, con qualche derivazione, producono la parola vuota (\(A : A \rightarrow^* \epsilon\)). Si può procedere ricorsivamente:
+\subsection{Come eliminare le \(\varepsilon\)-produzioni}
+Per eliminare le \(\varepsilon\)-produzioni bisogna procedere ad individuare i non-terminali \emph{annullabili}, ovvero quei non-terminali che, con qualche derivazione, producono la parola vuota (\(A : A \rightarrow^* \varepsilon\)). Si può procedere ricorsivamente:
 \begin{itemize}
-  \item base: se la grammatica comprende una produzione della forma \(A \rightarrow \epsilon\), allora quel non-terminale \(A\) è annullabile;
+  \item base: se la grammatica comprende una produzione della forma \(A \rightarrow \varepsilon\), allora quel non-terminale \(A\) è annullabile;
   \item iterazione: se la grammatica comprende una produzione della forma \(A \rightarrow Y_1Y_2 \ldots Y_n\) e i non terminali \(Y_1, Y_2, \ldots, Y_3\) sono tutti annullabili, allora anche \(A\) è annullabile.
 \end{itemize}
-A questo punto, andiamo a sostituire ogni produzione della forma \(A \rightarrow Y_1Y_2 \ldots Y_n\) con una famiglia di produzioni dove ogni combinazione di \(Y_i\) annullabili è rimossa dal body della produzione. Se tutti gli \(Y_i\) sono annullabili, non bisogna includere nella famiglia risultante la produzione \(A \rightarrow \epsilon\). Quindi, si elimina ogni produzione \(A \rightarrow \epsilon\).
+A questo punto, andiamo a sostituire ogni produzione della forma \(A \rightarrow Y_1Y_2 \ldots Y_n\) con una famiglia di produzioni dove ogni combinazione di \(Y_i\) annullabili è rimossa dal body della produzione. Se tutti gli \(Y_i\) sono annullabili, non bisogna includere nella famiglia risultante la produzione \(A \rightarrow \varepsilon\). Quindi, si elimina ogni produzione \(A \rightarrow \varepsilon\).
 
 \paragraph{Esempio di applicazione}
 Andiamo a vedere un esempio considerando la seguente grammatica:
+%
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=.3\textwidth,keepaspectratio]{ex-th-1-3-1_1}
+% \end{figure}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=.3\textwidth,keepaspectratio]{ex-th-1-3-1_1}
-\end{figure}
+\begin{align*}
+  S\; & \to\; ABC\; |\; abc \\
+  A\; & \to\; aB\; |\; \varepsilon \\
+  B\; & \to\; bA\; |\; C \\
+  C\; & \to\; \varepsilon
+\end{align*}
 
-Osserviamo subito che sia \(A\) sia \(C\) hanno una produzione che conduce a \(\epsilon\), pertanto sono annullabili; allo stesso modo, \(B\) è annullabile attraverso \(C\) e \(S\) è annullabile attraverso \(A, b\) e \(C\). Con le operazioni che abbiamo illustrato poc'anzi, la grammatica che otteniamo è la seguente:
+Osserviamo subito che sia \(A\) sia \(C\) hanno una produzione che conduce a \(\varepsilon\), pertanto sono annullabili; allo stesso modo, \(B\) è annullabile attraverso \(C\) e \(S\) è annullabile attraverso \(A, b\) e \(C\). Con le operazioni che abbiamo illustrato poc'anzi, la grammatica che otteniamo è la seguente:
 
-\begin{figure}
-  \centering
-  \includegraphics[width=.3\textwidth,keepaspectratio]{ex-th-1-3-1_2}
-\end{figure}
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=.3\textwidth,keepaspectratio]{ex-th-1-3-1_2}
+% \end{figure}
+
+\begin{align*}
+  S\; & \to\; ABC\; |\; abc\; |\; AB\; |\; AC\; |\; AC\; |\; BC\; |\; A\; |\; B\; |\; C \\
+  A\; & \to \; aB \\
+  B\; & \to\; bA\; |\; C
+\end{align*}
 
 Si noti che, in questa grammatica, il non-letterale \(C\) è non utile.
 
@@ -184,7 +221,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 \end{lemma}
 
 \begin{proof}
-  Partiamo considerando un linguaggio libero \(\mathcal{L}\) che non comprende la parola vuota (\(\epsilon \notin \mathcal{L}\)); sappiamo quindi che deve esistere una grammatica libera "epurata" \(\mathcal{G}\) che generi il linguaggio \(\mathcal{L}\) (\(\mathcal{L} = \mathcal{L(G)}\)).
+  Partiamo considerando un linguaggio libero \(\mathcal{L}\) che non comprende la parola vuota (\(\varepsilon \notin \mathcal{L}\)); sappiamo quindi che deve esistere una grammatica libera "epurata" \(\mathcal{G}\) che generi il linguaggio \(\mathcal{L}\) (\(\mathcal{L} = \mathcal{L(G)}\)).
 
   Osserviamo che, per ogni possibile albero di derivazione, ogni cammino dalla radice a un terminale attraversa tanti non-terminali quanto il valore della lunghezza del cammino stesso. Ad esempio, la lunghezza del cammino \(\langle S, B_1, B_2, \ldots, B_{k-1}, a \rangle\) è \(k\), così come il numero di non-terminali attraversati.
 
@@ -241,13 +278,13 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
      \item la grammatica \(\mathcal{G}\) che genera il linguaggio che stiamo considerando è ripulita, per cui nelle derivazioni di forma \(A \implies^* \alpha A \beta\), almeno uno dei due simboli \(\alpha, \beta\) deve fornire uno ulteriore; questo ci permette di affermare che \(|vx| > 0\).
    \end{itemize}
 
-   \paragraph{Dimostrazione se \(\epsilon \in \mathcal{L}\)}
-   La dimostrazione che abbiamo appena concluso è relativa a linguaggi privi di parola vuota, ma con un attimo di cura nell'impostazione possiamo estenderla anche ai linguaggi che comprendono \(\epsilon\).
+   \paragraph{Dimostrazione se \(\varepsilon \in \mathcal{L}\)}
+   La dimostrazione che abbiamo appena concluso è relativa a linguaggi privi di parola vuota, ma con un attimo di cura nell'impostazione possiamo estenderla anche ai linguaggi che comprendono \(\varepsilon\).
 
-   Considerando un linguaggio \(\mathcal{L}\) che comprenda \(\epsilon\), partiamo ricavando una grammatica \(\mathcal{G} = (V, T, S, \mathcal{P})\) che generi \(\mathcal{L} \setminus \{\epsilon\}\). A questo punto definiamo una seconda nuova grammatica \(\mathcal{G}'\), in cui andiamo semplicemente ad aggiungere un nuovo starting symbol assieme a due produzioni: una che punti verso lo starting symbol della precedente grammatica, e una seconda che generi invece \(\epsilon\). Formalmente:
+   Considerando un linguaggio \(\mathcal{L}\) che comprenda \(\varepsilon\), partiamo ricavando una grammatica \(\mathcal{G} = (V, T, S, \mathcal{P})\) che generi \(\mathcal{L} \setminus \{\varepsilon\}\). A questo punto definiamo una seconda nuova grammatica \(\mathcal{G}'\), in cui andiamo semplicemente ad aggiungere un nuovo starting symbol assieme a due produzioni: una che punti verso lo starting symbol della precedente grammatica, e una seconda che generi invece \(\varepsilon\). Formalmente:
 
    \begin{equation*}
-     \mathcal{G}' = (V, T, S', \mathcal{P} \cup \{ S' \rightarrow S, S' \rightarrow \epsilon \})
+     \mathcal{G}' = (V, T, S', \mathcal{P} \cup \{ S' \rightarrow S, S' \rightarrow \varepsilon \})
    \end{equation*}
 
    In questo modo abbiamo che \(\mathcal{L} = \mathcal{L(G')}\) e possiamo procedere analogamente a prima
@@ -256,5 +293,65 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 
 \subsection{Applicazioni}
 
+\section{...}
+
+\section{Alcuni esercizi che contestualizzerò meglio più avanti}
+\subsection*{I seguenti linguaggi sono liberi?}
+
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{ex-freeNotFree_1.tex}
+    \caption{Esercizio 1}
+    \label{ex-freeNotFree_1}
+\end{table}
+
+\paragraph{Spiegazione \ref{ex-freeNotFree_1}}
+Questo linguaggio non è libero perché non è possibile trovare una grammatica che sia libera e che lo generi (c'è anche una qualche prova? Pumping lemma maybe?)
+
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{ex-freeNotFree_2.tex}
+    \caption{Esercizio 2}
+    \label{ex-freeNotFree_2}
+\end{table}
+
+\paragraph{Spiegazione \ref{ex-freeNotFree_2}}
+Per provare che questo linguaggio è libero possiamo sfruttare la chiusura dei linguaggi liberi rispetto alla concatenazione. È semplice trovare una grammatica libera che generi il linguaggio $ \{ a^nb^n | n > 0 \} $, come ad esempio la seguente:
+
+\begin{align*}
+  S\; & \to\; aSb\; |\; ab
+\end{align*}
+
+\noindent Altrettanto semplice è farlo per il linguaggio $ \{ c^j | j > 0 \} $ (qui usiamo $C$ come starting symbol):
+
+\begin{align*}
+  C\; & \to\; c\; |\; cC
+\end{align*}
+
+\noindent A questo punto, sfruttando la proprietà di concatenazione, riusciamo a identificare una grammatica libera $\mathcal{G}$ che, senza alcun problema, ci consente di ottenere il nostro linguaggio di partenza:
+
+\begin{align*}
+  S\; & \to\; SC \\
+  S\; & \to\; aSb\; |\; ab \\
+  C\; & \to\; c\; |\; cC
+\end{align*}
+
+\noindent Si noti che questa procedura, con le dovute accortezze, è la medesima utilizzata per ricavare la risposta di \ref{ex-freeNotFree_3}.
+
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{ex-freeNotFree_3.tex}
+    \caption{Esercizio 3}
+    \label{ex-freeNotFree_3}
+\end{table}
+
+\paragraph{Spiegazione \ref{ex-freeNotFree_3}}
+Si proceda analogamente a \ref{ex-freeNotFree_2}.
+
+\subsection*{Esercizi su linguaggi e ambiguità}
+
+\subsection*{Definizione di grammatiche a partire da linguaggio}
+
+\subsection*{Linguaggi dipendenti dal contesto}
 
 \end{document}
