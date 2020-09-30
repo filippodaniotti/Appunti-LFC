@@ -41,7 +41,7 @@
     \item infine, l'insieme delle produzioni è dato dall'unione tra i refresh delle produzioni delle due grammatiche di partenza  \(\mathcal{G}_1\) e \(\mathcal{G}_2\), unito a una nuova produzione che, dal nuovo starting symbol, produce il resfresh dello starting symbol di una delle due grammatiche di partenza.
   \end{itemize}
 
-  \noindent Questa definizione ci basta per asserire che \(\mathcal{L(G)}\) è libero e \(\mathcal{L(G)} = \mathcal{L(G)_1} \cup \mathcal{L(G)_2}\).
+  \noindent Questa definizione ci basta per asserire che \(\mathcal{L(G)}\) è libero e \(\mathcal{L(G)} = \mathcal{L}(\mathcal{G}_1)  \cup \mathcal{L}(\mathcal{G}_2) \).
 
 \end{proof}
 
@@ -53,13 +53,13 @@
 \end{osservazione}
 
 \begin{osservazione}
-  Cerchiamo di capire come mai  \(\mathcal{L(G)} = \mathcal{L(G)_1} \cup \mathcal{L(G)_2}\) è valido.
+  Cerchiamo di capire come mai  \(\mathcal{L(G)} = \mathcal{L}(\mathcal{G}_1)  \cup \mathcal{L}(\mathcal{G}_2) \) è valido.
   \begin{itemize}
     \item Consideriamo una stringa \(w \in \mathcal{L(G)}\); questo è vero se e solo se esiste una certa derivazione per ottenerla a partire dallo starting symbol (\(S \implies^* w\)).
     \item Per come abbiamo definito la grammatica \(\mathcal{G}\), il secondo passo della derivazione dev'essere necessariamente il refresh di uno dei due starting symbol delle grammatiche di partenza (\(S \implies S'_1 \implies^* w \lor S \implies S'_2 \implies^* w\));
     \item questo naturalmente è valido se e solo se, a questo punto, la stringa \(w\) può essere derivata in qualche modo a partire da uno degli starting symbol delle grammatiche di partenza (\(S_1 \implies^* w \lor S_2 \implies^* w\)).
-    \item Se \(w\) può essere ottenuta attraverso qualche derivazione a partire da \(S_1\) o \(S_2\), allora vuol dire che \(w\) appartiene a uno dei due linguaggi generati dalle nostre due grammatiche di partenza (\(w \in \mathcal{L(G)}_1 \lor w \in \mathcal{L(G)}_2\)).
-    \item Questo è equivalente ad affermare che \(w\) appartiene all'unione dei due linguaggi (\(w \in \mathcal{L(G)}_1 \cup \mathcal{L(G)}_2\)), e ci convince quindi della validità dell'asserto.
+    \item Se \(w\) può essere ottenuta attraverso qualche derivazione a partire da \(S_1\) o \(S_2\), allora vuol dire che \(w\) appartiene a uno dei due linguaggi generati dalle nostre due grammatiche di partenza (\(w \in \mathcal{L}(\mathcal{G}_1)  \lor w \in \mathcal{L}(\mathcal{G}_2) \)).
+    \item Questo è equivalente ad affermare che \(w\) appartiene all'unione dei due linguaggi (\(w \in \mathcal{L}(\mathcal{G}_1)  \cup \mathcal{L}(\mathcal{G}_2) \)), e ci convince quindi della validità dell'asserto.
   \end{itemize}
 \end{osservazione}
 
@@ -69,14 +69,14 @@
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{why-refresh_1}
   \end{figure}
-  \noindent Avremo quindi generati i seguenti linguaggi: \(\mathcal{L(G)}_1 = \{aa\}\) e \(\mathcal{L(G)}_2 = \{bb\}\).
+  \noindent Avremo quindi generati i seguenti linguaggi: \mathcal{L}(\mathcal{G}_1)  = \{aa\}\) e \mathcal{L}(\mathcal{G}_2)  = \{bb\}\).
 
   Se non effettuassimo refreshing, Ci troveremo ad avere una nuova grammatica con le seguenti produzioni:
   \begin{figure}
     \centering
     \includegraphics[width=.3\textwidth,keepaspectratio]{why-refresh_2}
   \end{figure}
-  \noindent Il linguaggio prodotto da questa nuova grammatica sarebbe diverso da quello dato dall'unione delle due grammatiche di partenza, poiché avremmo \(\mathcal{L(G)} = \{aa, ab, ba, bb\} \neq mathcal{L(G)}_1 \cup \mathcal{L(G)}_2\).
+  \noindent Il linguaggio prodotto da questa nuova grammatica sarebbe diverso da quello dato dall'unione delle due grammatiche di partenza, poiché avremmo \(\mathcal{L(G)} = \{aa, ab, ba, bb\} \neq \mathcal{L}(\mathcal{G}_1)  \cup \mathcal{L}(\mathcal{G}_2) \).
 
   Con un'opportuno resfreshing otteniamo invece:
   \begin{figure}
