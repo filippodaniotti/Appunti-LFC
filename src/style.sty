@@ -2,6 +2,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english, italian]{babel}
 
+\usepackage{microtype}
+\usepackage{newpxtext}
+
 \usepackage{
 	,graphicx
 	,wrapfig
@@ -10,14 +13,6 @@
 
 \usepackage[table,xcdraw]{xcolor}
 \usepackage{tikz}
-
-\usepackage{circuitikz}
-\usetikzlibrary{
-	,arrows
-	,calc
-	,circuits.logic.IEC
-	,shapes
-}
 
 \usepackage{enumitem}
 
@@ -31,7 +26,6 @@
 
 \usepackage[mathscr]{euscript}
 
-\usepackage{units} % unità di misura
 
 \usepackage{standalone}
 \usepackage{import}
@@ -42,9 +36,7 @@
 	,multirow
 }
 
-\usepackage{minted}
-% source: TODO
-% \AtBeginEnvironment{asminline}{\catcode‘\$=12\mathcode‘\$="613B}
+
 \usepackage{caption}
 % \usepackage{subcaption}
 
@@ -52,9 +44,6 @@
 
 \usepackage[hidelinks]{hyperref}
 
-\usepackage{tcolorbox}
-
-\usepackage{bytefield}
 
 \usepackage[normalem]{ulem}
 
@@ -73,27 +62,3 @@
 	\arrayrulecolor{black!30}%
 	\midrule[\lightrulewidth]%
 	\arrayrulecolor{black}}
-
-\providecommand\register[1]{%
-	\texttt{#1}%
-}
-
-\providecommand\opcode[1]{%
-	\mintinline{asm}{#1}%
-}
-
-\newcommand\registerOp[3]{%
-	\register{#1} \(#2\) \register{#3}%
-}
-
-\providecommand\suffix[1]{%
-	\texttt{#1}%
-}
-
-\providecommand\extension[1]{%
-	.\texttt{#1}%
-}
-
-\providecommand\CUflag[1]{%
-	\texttt{#1}%
-}
