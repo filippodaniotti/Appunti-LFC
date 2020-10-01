@@ -4,10 +4,7 @@
 \usepackage[english, italian]{babel}
 
 \usepackage{forest}
-
-\forestset{
-    derivation tree/.style={for tree={if n children=0 {red, content=\texttt{#1}}{blue}}}
-}
+\usepackage{../../../../style_tree}
 
 \begin{document}
     \begin{forest}
