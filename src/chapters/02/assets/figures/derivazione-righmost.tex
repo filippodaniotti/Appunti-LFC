@@ -1,0 +1,29 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+\usepackage{../../../../style_tree}
+
+\begin{document}
+    \begin{forest}
+        derivation tree
+        [E
+            [E
+                [E
+                    [n]
+                ]
+                [+]
+                [E
+                    [n]
+                ]
+            ]
+            [*]
+            [E
+                [n]
+            ]
+        ]
+    \end{forest}
+\end{document}
+

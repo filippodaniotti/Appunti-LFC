@@ -1,7 +1,8 @@
 \documentclass[class=book, crop=false, oneside, 12pt]{standalone}
-\usepackage[subpreambles=true]{standalone}
+\usepackage{standalone}
 
 \usepackage{../../style}
+\usepackage{../../style_tree}
 
 \graphicspath{{./assets/images/}}
 
@@ -59,7 +60,7 @@ Se rispettiamo le regole della grammatica il flusso di token viene tradotto in u
 Ecco il parse tree che si può ricavare dal nostro esempio: 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.9\textwidth,keepaspectratio]{parse_tree}
+	\subimport{assets/figures/}{parse-tree.tex}
 	\caption{Esempio di parse tree}
 \end{figure}
 La struttura del parse tree è derivata dalla grammatica del linguaggio. Ad esempio, \texttt{<NUM,2> MUL <NUM,3>} sono sottoalberi di \texttt{ASS} poiché la grammatica del linguaggio prevede che l’assegnazione abbia questa forma.
@@ -68,7 +69,7 @@ Più la struttura del parse tree è minimale più le fasi successive sono effici
 È qui che entra in gioco l’AST, che semplifica ancora lo schema: l’albero di sintassi astratta (abstract syntax tree, AST) è ottenuto dal parse tree compattando delle parti che non saranno utili nelle fasi seguenti della compilazione.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.9\textwidth,keepaspectratio]{abstract_syntax_tree}
+	\subimport{assets/figures/}{abstract-syntax-tree.tex}
 	\caption{Esempio di abstract syntax tree}
 	\label{esempio_AST}
 \end{figure}
@@ -92,7 +93,7 @@ Un esempio di operazione di analisi semantica è quello di capire se stiamo util
 Quindi si può dire che in questo caso l’analisi semantica chiarisce quale significato ha l’operatore \texttt{MUL}: nell’esempio riportato in \ref{esempio_AST} \texttt{MUL} = moltiplicazione tra due variabili di tipo \texttt{NUM}.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\textwidth,keepaspectratio]{semantic_analysis}
+	\subimport{assets/figures/}{semantica-mul.tex}
 	\caption{La semantica di \texttt{MUL} deve essere specificata}
 \end{figure}
 
@@ -104,7 +105,7 @@ In questa fase viene creato un codice testuale creato traducendo il parse tree. 
 Nel caso in \ref{codice_intermedio} sulla destra abbiamo il parse tree e sulla sinistra abbiamo un esempio del codice intermedio generato.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.9\textwidth,keepaspectratio]{codice_intermedio}
+	\subimport{assets/figures/}{codice-intermedio.tex}
 	\caption{Generazione del codice intermedio}
 	\label{codice_intermedio}
 \end{figure}

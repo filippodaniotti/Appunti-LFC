@@ -1,7 +1,8 @@
 \documentclass[class=book, crop=false, oneside, 12pt]{standalone}
-\usepackage[subpreambles=true]{standalone}
+\usepackage{standalone}
 
 \usepackage{../../style}
+\usepackage{../../style_tree}
 
 \graphicspath{{./assets/images/}}
 
@@ -225,7 +226,7 @@ Le foglie dell’albero saranno composte da $\varepsilon$ oppure da caratteri te
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.2\textwidth,keepaspectratio]{albero_di_derivazione}
+    \subimport{assets/figures/}{albero-derivazione1.tex}
     \caption{Albero di derivazione di \ref{grammatica_allbero}}
     \label{albero_di_derivazione}
 \end{figure}
@@ -247,7 +248,7 @@ Per verificarlo proviamo a derivare questo $w = n+n*n$ utilizzando la tecnica le
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.3\textwidth,keepaspectratio]{leftmost_1.jpg}
+	\subimport{assets/figures/}{derivazione-leftmost.tex}
     \caption{Derivazione leftmost 1}
     \label{leftmost_1}
 \end{figure}
@@ -257,7 +258,7 @@ Infine trasformiamo (sempre da sinistra a destra) entrambe le $E$ rimanenti in $
 Semplice, no? Ora proviamo ad ottenere la stessa parola in modo alternativo:
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.3\textwidth,keepaspectratio]{leftmost_2.jpg}
+	\subimport{assets/figures/}{derivazione-righmost.tex}
     \caption{Derivazione leftmost 2}
     \label{leftmost_2}
 \end{figure}

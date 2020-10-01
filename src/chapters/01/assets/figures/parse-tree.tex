@@ -1,0 +1,22 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+
+\begin{document}
+    \begin{forest}
+        [,circle,draw,delay={for tree={content=\texttt{#1}}}
+            [{<ID,pippo>}]
+            [ASS]
+            [,circle,draw
+                [{<NUM2,2>}]
+                [MUL]
+                [{<NUM,3>}]
+            ]
+            [SEMCOL]
+        ]
+    \end{forest}
+\end{document}
+

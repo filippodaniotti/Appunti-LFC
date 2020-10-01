@@ -1,0 +1,19 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+
+\begin{document}
+    \begin{forest}
+        [ASS,delay={for tree={content=\texttt{#1}}}
+            [{<ID,pippo>}]
+            [MUL
+                [{<NUM2,2>}]
+                [{<NUM,3>}]
+            ]
+        ]
+    \end{forest}
+\end{document}
+
