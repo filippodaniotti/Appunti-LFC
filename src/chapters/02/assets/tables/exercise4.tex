@@ -4,19 +4,13 @@
 \usepackage{amsmath}
 \usepackage{tabularx}
 
-
-% arara: pdflatex
-% arara: latexmk: { clean: partial }
 \begin{document}
-\begin{tabularx}{\textwidth}{|X |X |}
-	\toprule
-		Grammatica & Linguaggio derivato \\
-    \hline
+\begin{tabularx}{\textwidth}{XX}
+		Grammatica & Linguaggio derivato\\
+    \midrule
         $S \to AB$ \newline
         $A \to a$
         & 
-        $\Phi$ 
-        \\
-    \bottomrule
+        $\Phi$
 \end{tabularx}
 \end{document}

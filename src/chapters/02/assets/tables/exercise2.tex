@@ -4,22 +4,16 @@
 \usepackage{amsmath}
 \usepackage{tabularx}
 
-
-% arara: pdflatex
-% arara: latexmk: { clean: partial }
 \begin{document}
-\begin{tabularx}{\textwidth}{|X |X |}
-	\toprule
-		Grammatica & Linguaggio derivato \\
-    \hline
+\begin{tabularx}{\textwidth}{XX}
+		Grammatica & Linguaggio derivato\\
+    \midrule
         $S \to AB$ \newline
         $A \to aA$ \newline
         $A \to a$ \newline
         $B \to Bb$ \newline
         $B \to b$
         & 
-        $\{a^n b^m |n,m>1\}$ 
-        \\
-    \bottomrule
+        $\{a^n b^m \mid n,m > 1\}$ 
 \end{tabularx}
 \end{document}
