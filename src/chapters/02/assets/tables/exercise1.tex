@@ -4,20 +4,14 @@
 \usepackage{amsmath}
 \usepackage{tabularx}
 
-
-% arara: pdflatex
-% arara: latexmk: { clean: partial }
 \begin{document}
-\begin{tabularx}{\textwidth}{|X |X |}
-	\toprule
+\begin{tabularx}{\textwidth}{XX}
 		Grammatica & Linguaggio derivato \\
-    \hline
+    \midrule
         $S \to aAb$ \newline 
         $aA \to aaAb$ \newline 
         $A \to \varepsilon$ 
         & 
-        $\{a^n b^n |n>0\}$ 
-        \\
-    \bottomrule
+        $\{a^n b^n \mid n>0\}$
 \end{tabularx}
 \end{document}

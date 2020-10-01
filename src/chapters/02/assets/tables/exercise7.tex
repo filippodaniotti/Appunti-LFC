@@ -4,14 +4,10 @@
 \usepackage{amsmath}
 \usepackage{tabularx}
 
-
-% arara: pdflatex
-% arara: latexmk: { clean: partial }
 \begin{document}
-\begin{tabularx}{\textwidth}{|X |X |}
-	\toprule
+\begin{tabularx}{\textwidth}{XX}
 		Grammatica & Linguaggio derivato \\
-    \hline
+    \midrule
         $S \to CD $ \newline
         $C \to aCA | bCB $ \newline
         $AD \to aD $ \newline
@@ -23,8 +19,6 @@
         $C \to \varepsilon $ \newline
         $D \to \varepsilon $
         & 
-        $\{ ww | w \in \{a^*b^*\}^*\}$
-        \\
-    \bottomrule
+        $\{ ww \mid w \in \{a^*b^*\}^*\}$
 \end{tabularx}
 \end{document}

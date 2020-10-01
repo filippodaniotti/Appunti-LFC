@@ -1,11 +1,10 @@
-\documentclass[class=book, crop=false, oneside]{standalone}
+\documentclass[class=book, crop=false, oneside, 12pt]{standalone}
 \usepackage[subpreambles=true]{standalone}
 
 \usepackage{../../style}
 
 \graphicspath{{./assets/images/}}
-% arara: pdflatex: { synctex: yes, shell: yes }
-% arara: latexmk: { clean: partial }
+
 \begin{document}
 \chapter{Proprietà dei linguaggi context free}
 
@@ -92,7 +91,7 @@
   La classe dei linguaggi liberi è chiusa rispetto all'operazione di concatenazione.
 
   \begin{equation*}
-    \textrm{Se } \mathcal{L}_1 \land \mathcal{L}_2 \textrm{ sono liberi} \implies \{w_1w_2 | w_1 \in \mathcal{L}_1 \land w_2 \in \mathcal{L}_2\} \textrm{ è un linguaggio libero.}
+    \textrm{Se } \mathcal{L}_1 \land \mathcal{L}_2 \textrm{ sono liberi} \implies \{w_1w_2 \mid w_1 \in \mathcal{L}_1 \land w_2 \in \mathcal{L}_2\} \textrm{ è un linguaggio libero.}
   \end{equation*}
 
 \end{lemma}
