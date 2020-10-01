@@ -54,7 +54,7 @@ Diversamente da prima, $aaSbb$ non è una parola del linguaggio perché non è c
 In questo modo si può definire qual è il linguaggio determinato da una grammatica, ad esempio con la grammatica che abbiamo visto prima possiamo generare ogni sequenza di parole formate da $n$ terminali $a$ seguiti da $n$ terminali $b$.
 Tale linguaggio può essere scritto formalmente in questo modo:
 \begin{equation}
-    \{a^n b^n |n>0\}
+    \{a^n b^n \mid n>0\}
 \end{equation}
 
 
@@ -86,7 +86,7 @@ Ricordiamo che si parte sempre dallo starting symbol a derivare un linguaggio, q
 L'unica derivazione che si può effettuare in questo caso è $S \implies aAb$.
 Da qui in poi non si può procedere che con una delle due productions $aA \to aaAb$ oppure $A \to \varepsilon$, in un caso si aumenterà la stringa di un $a$ a sinistra e di un $b$ a destra, nell'altro caso si terminerà la derivazione.
 
-Diventa quindi semplice vedere che il linguaggio di questa grammatica è lo stesso generato da \ref{produzioni_esempio_0}, ovvero: $\{a^n b^n |n>0\}$.
+Diventa quindi semplice vedere che il linguaggio di questa grammatica è lo stesso generato da \ref{produzioni_esempio_0}, ovvero: $\{a^n b^n \mid n>0\}$.
 
 \begin{table}[H]
 	\centering
@@ -97,7 +97,7 @@ Diventa quindi semplice vedere che il linguaggio di questa grammatica è lo stes
 \subsubsection*{Spiegazione di \ref{Esercizio 2}:}
 Come prima si parte dal simbolo $S$ che anche questa volta ci permette una sola produzione, quindi deriviamo senza ulteriori indugi: $S \implies AB$.
 
-In seguito ci rendiamo conto che le productions dell'esercizio altro non sono che delle regole per generare un numero a nostro piacimento di terminali $a$ e $b$, quindi deriviamo tranquillamente il seguente linguaggio: $\{a^n b^m |n,m>1\}$.
+In seguito ci rendiamo conto che le productions dell'esercizio altro non sono che delle regole per generare un numero a nostro piacimento di terminali $a$ e $b$, quindi deriviamo tranquillamente il seguente linguaggio: $\{a^n b^m \mid n,m>1\}$.
 
 \begin{table}[H]
 	\centering
@@ -115,7 +115,7 @@ Questo implica che nella situazione terminale ci potremo trovare in una situazio
 
 Da questa forma per eliminare tutti i non terminali $B$ non abbiamo altra soluzione se non quella di utilizzare la produzione $cB \to Bc$ per spostare tutte le $c$ in fondo ed in seguito con $bB \to bb$ trasformare tutte le $B$ in $b$.
 
-Il linguaggio che ricaviamo alla fine è $\{a^nb^nc^n | n>0\}$.
+Il linguaggio che ricaviamo alla fine è $\{a^nb^nc^n \mid n>0\}$.
 
 \begin{table}[H]
 	\centering
@@ -157,7 +157,7 @@ Prima di tutto partiamo da $S$, l'unica produzione possibile ci porta a $CD$; or
 
 Vediamo subito che sia $C$ che $D$ possono essere trasformate in $\varepsilon$ a piacimento, quindi possiamo interrompere le derivazioni da loro in ogni momento.
 
-Ora, $C$ ci permette di utilizzare le due produzioni $C \to aCA$ e $C \to bCB$ (il simbolo $|$ ci dice che da $C$ posso produrre $sCA$ \emph{or} $bCB$).
+Ora, $C$ ci permette di utilizzare le due produzioni $C \to aCA$ e $C \to bCB$ (il simbolo $\mid$ ci dice che da $C$ posso produrre $sCA$ \emph{or} $bCB$).
 
 Notiamo che se siamo in una forma del tipo $aCAD$ possiamo proseguire con le produzioni di $C$ oppure possiamo utilizzare $AD \to aD$ ed osservando bene notiamo che questo è l'unico modo in cui potremo eliminare il non terminale $A$, il che è speculare per quanto riguarda il caso $bCBD$.
 
@@ -165,7 +165,7 @@ Notiamo inoltre che per ogni nuovo non terminale che aggiungiamo sulla destra do
 
 Ora dovrebbe essere chiaro che, al termine delle derivazioni, il numero di $a$ sulla sinistra  sarà uguale al numero di $a$ sulla destra e lo stesso per $b$; inoltre al non terminale appena a sinistra dell'ultimo $C$ corrisponderà un terminale uguale in posizione estrema destra (appena prima di $D$).
 
-La soluzione è quindi $\{ ww | w \in \{a^* b^*\}^*\}$.
+La soluzione è quindi $\{ ww \mid w \in \{a^* b^*\}^*\}$.
 
 \section{Grammatiche Generative formalmente}
 Una grammatica generativa è una tupla con questa forma (V, T, S, P):
@@ -192,7 +192,7 @@ $\delta$ è detto \textbf{driver} della produzione mentre $\beta$ è detto \text
 
 Il linguaggio generato da una grammatica $G = (V,T,S,P)$ è così definito:
 \begin{equation}
-    L(G) = {w | w \in T^* and \; S \implies^* \; w }
+    L(G) = {w \mid w \in T^* and \; S \implies^* \; w }
 \end{equation}
 Ovvero l'insieme di tutti gli elementi (anche vuoti) che si possono derivare con uno o più passi dallo starting point.
 
@@ -216,10 +216,10 @@ Esistono due tipi di derivazione canonica:
 Se utilizziamo come strategia una di queste due tutti i passi analitici di una derivazione sono deterministici, perché ad ogni passo o procedo con l’elemento più a destra o procedo con quello più a sinistra. Per questo motivo queste sono le due modalità di derivazione canonica.
 
 Le grammatiche libere si prestano in modo naturale ad essere processate tramite il cosiddetto albero di derivazione.
-Questo albero ha come radice lo starting point, poi, per ogni passo di derivazione secondo una produzione in forma $A \to X_1 | X_2 |...| X_n $, si generano $n$ figli del nodo con la derivazione di $A$ messa in atto.
+Questo albero ha come radice lo starting point, poi, per ogni passo di derivazione secondo una produzione in forma $A \to X_1 \mid X_2 \mid\dots\mid X_n $, si generano $n$ figli del nodo con la derivazione di $A$ messa in atto.
 Le foglie dell’albero saranno composte da $\varepsilon$ oppure da caratteri terminali. In figura \ref{albero_di_derivazione} è riportato come esempio l'albero di derivazione della grammatica:
 \begin{equation}
-    S \to aSb | \varepsilon
+    S \to aSb \mid \varepsilon
     \label{grammatica_allbero}
 \end{equation}
 
@@ -238,7 +238,7 @@ Una grammatica $G$ si dice ambigua se esiste $w \in L(G)$ che può essere deriva
 Noi non vogliamo grammatiche ambigue, ci complicano la vita.
 Prendiamo ad esempio la grammatica delle espressioni aritmetiche:
 \begin{equation}
-    E \to E+E | E*E |  n
+    E \to E+E \mid E*E \mid  n
 \end{equation}
 Intuitivamente si può leggere come exp -> exp+exp  o  exp*exp  o  numero.\\
 Questa grammatica ci permette di fare operazioni di somma o moltiplicazione, è ambigua o meno?
