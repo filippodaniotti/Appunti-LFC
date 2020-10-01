@@ -28,7 +28,7 @@
   Vediamo quindi come costruire una nuova grammatica libera che possa generare l'unione dei due linguaggi generati dalle rispettive grammatiche viste sopra. Consideriamo quindi una nuova grammatica \(\mathcal{G}\), i cui elementi sono così definiti:
 
   \begin{equation*}
-      \mathcal{G} = (V'_1 \cup V'_2 \cup \{S\}, T_1 \cup T_2, S, \mathcal{P}'_1 \cup \mathcal{P}'_2 \cup \{S \rightarrow S'_1 | S'_2\})
+      \mathcal{G} = (V'_1 \cup V'_2 \cup \{S\}, T_1 \cup T_2, S, \mathcal{P}'_1 \cup \mathcal{P}'_2 \cup \{S \rightarrow S'_1 \mid S'_2\})
   \end{equation*}
 
   \noindent Andiamo a vedere da vicino come sono stati ricavati gli elementi:
@@ -112,14 +112,14 @@
 
   Si considerino, ad esempio, due linguaggi $\mathcal{L}_1$ e $\mathcal{L}_2$, definiti come segue:
   \begin{align*}
-      \mathcal{L}_1 = \{a^n b^n c^j | n, j > 0 \} \\
-      \mathcal{L}_2 = \{a^j b^n c^n | n, j > 0 \}
+      \mathcal{L}_1 = \{a^n b^n c^j \mid n, j > 0 \} \\
+      \mathcal{L}_2 = \{a^j b^n c^n \mid n, j > 0 \}
   \end{align*}
 
   \noindent Il linguaggio generato dalla loro intersezione è il seguente:
 
   \begin{align*}
-    \mathcal{L}_1 \cap \mathcal{L}_2 = \{ a^n b^n c^n | n > 0 \}
+    \mathcal{L}_1 \cap \mathcal{L}_2 = \{ a^n b^n c^n \mid n > 0 \}
   \end{align*}
 
   \noindent Questo linguaggio non è libero, e provarlo è molto semplice (si veda \ref{ex-freeNotfree_1}).
@@ -315,13 +315,13 @@ Questo linguaggio non è libero perché non è possibile trovare una grammatica 
 \end{table}
 
 \paragraph{Spiegazione \ref{ex-freeNotFree_2}}
-Per provare che questo linguaggio è libero possiamo sfruttare la chiusura dei linguaggi liberi rispetto alla concatenazione. È semplice trovare una grammatica libera che generi il linguaggio $ \{ a^nb^n | n > 0 \} $, come ad esempio la seguente:
+Per provare che questo linguaggio è libero possiamo sfruttare la chiusura dei linguaggi liberi rispetto alla concatenazione. È semplice trovare una grammatica libera che generi il linguaggio $ \{ a^nb^n \mid n > 0 \} $, come ad esempio la seguente:
 
 \begin{align*}
   S\; & \to\; aSb\; \mid ab
 \end{align*}
 
-\noindent Altrettanto semplice è farlo per il linguaggio $ \{ c^j | j > 0 \} $ (qui usiamo $C$ come starting symbol):
+\noindent Altrettanto semplice è farlo per il linguaggio $ \{ c^j \mid j > 0 \} $ (qui usiamo $C$ come starting symbol):
 
 \begin{align*}
   C\; & \to\; c\; \mid cC
