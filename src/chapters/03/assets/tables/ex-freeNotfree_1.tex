@@ -4,18 +4,12 @@
 \usepackage{amsmath}
 \usepackage{tabularx}
 
-
-% arara: pdflatex
-% arara: latexmk: { clean: partial }
 \begin{document}
-\begin{tabularx}{\textwidth}{|X |X |}
-	\toprule
+\begin{tabularx}{\textwidth}{XX}
 		Linguaggio & Risposta \\
-    \hline
-        $\{ a^n b^n c^n | n > 0 \}$
+    \midrule
+        $\{ a^n b^n c^n \mid n > 0 \}$
         &
 				Non è libero
-        \\
-    \bottomrule
 \end{tabularx}
 \end{document}

@@ -177,9 +177,9 @@ Andiamo a vedere un esempio considerando la seguente grammatica:
 % \end{figure}
 
 \begin{align*}
-  S\; & \to\; ABC\; |\; abc \\
-  A\; & \to\; aB\; |\; \varepsilon \\
-  B\; & \to\; bA\; |\; C \\
+  S\; & \to\; ABC\; \mid abc \\
+  A\; & \to\; aB\; \mid \varepsilon \\
+  B\; & \to\; bA\; \mid C \\
   C\; & \to\; \varepsilon
 \end{align*}
 
@@ -191,9 +191,9 @@ Osserviamo subito che sia \(A\) sia \(C\) hanno una produzione che conduce a \(\
 % \end{figure}
 
 \begin{align*}
-  S\; & \to\; ABC\; |\; abc\; |\; AB\; |\; AC\; |\; AC\; |\; BC\; |\; A\; |\; B\; |\; C \\
+  S\; & \to\; ABC\; \mid abc\; \mid AB\; \mid AC\; \mid AC\; \mid BC\; \mid A\; \mid B\; \mid C \\
   A\; & \to \; aB \\
-  B\; & \to\; bA\; |\; C
+  B\; & \to\; bA\; \mid C
 \end{align*}
 
 Si noti che, in questa grammatica, il non-letterale \(C\) è non utile.
@@ -318,21 +318,21 @@ Questo linguaggio non è libero perché non è possibile trovare una grammatica 
 Per provare che questo linguaggio è libero possiamo sfruttare la chiusura dei linguaggi liberi rispetto alla concatenazione. È semplice trovare una grammatica libera che generi il linguaggio $ \{ a^nb^n | n > 0 \} $, come ad esempio la seguente:
 
 \begin{align*}
-  S\; & \to\; aSb\; |\; ab
+  S\; & \to\; aSb\; \mid ab
 \end{align*}
 
 \noindent Altrettanto semplice è farlo per il linguaggio $ \{ c^j | j > 0 \} $ (qui usiamo $C$ come starting symbol):
 
 \begin{align*}
-  C\; & \to\; c\; |\; cC
+  C\; & \to\; c\; \mid cC
 \end{align*}
 
 \noindent A questo punto, sfruttando la proprietà di concatenazione, riusciamo a identificare una grammatica libera $\mathcal{G}$ che, senza alcun problema, ci consente di ottenere il nostro linguaggio di partenza:
 
 \begin{align*}
   S\; & \to\; SC \\
-  S\; & \to\; aSb\; |\; ab \\
-  C\; & \to\; c\; |\; cC
+  S\; & \to\; aSb\; \mid ab \\
+  C\; & \to\; c\; \mid cC
 \end{align*}
 
 \noindent Si noti che questa procedura, con le dovute accortezze, è la medesima utilizzata per ricavare la risposta di \ref{ex-freeNotFree_3}.

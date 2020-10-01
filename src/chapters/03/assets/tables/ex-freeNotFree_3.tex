@@ -4,18 +4,12 @@
 \usepackage{amsmath}
 \usepackage{tabularx}
 
-
-% arara: pdflatex
-% arara: latexmk: { clean: partial }
 \begin{document}
-\begin{tabularx}{\textwidth}{|X |X |}
-	\toprule
+\begin{tabularx}{\textwidth}{XX}
 		Linguaggio & Risposta \\
-    \hline
-        $\{ a^j b^n c^n | n, j > 0 \}$
+    \midrule
+        $\{ a^j b^n c^n \mid n, j > 0 \}$
         &
 				Libero
-        \\
-    \bottomrule
 \end{tabularx}
 \end{document}
