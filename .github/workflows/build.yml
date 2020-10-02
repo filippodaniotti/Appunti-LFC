@@ -11,7 +11,7 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v2
         with:
-          root_file: ./src/main.tex
+          root_file: main.tex
           working_directory: src/
           latexmk_shell_escape: true
           # extra_system_packages: "py-pygments"
