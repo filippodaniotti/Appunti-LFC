@@ -295,7 +295,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 \section{...}
 
 \section{Alcuni esercizi che contestualizzerò meglio più avanti}
-\subsection*{I seguenti linguaggi sono liberi?}
+\subsection*{Esercizio 1 - I seguenti linguaggi sono liberi?}
 
 \begin{table}[H]
 	\centering
@@ -347,10 +347,115 @@ Per provare che questo linguaggio è libero possiamo sfruttare la chiusura dei l
 \paragraph{Spiegazione \ref{ex-freeNotFree_3}}
 Si proceda analogamente a \ref{ex-freeNotFree_2}.
 
-\subsection*{Esercizi su linguaggi e ambiguità}
+\subsection*{Esercizio 2}
+Consideriamo la seguente grammatica:
 
-\subsection*{Definizione di grammatiche a partire da linguaggio}
+\begin{align*}
+  \mathcal{G}:  S\; & \to\;  aSc\; \mid aTc\; \mid T \\
+   T\; & \to\; bTa\; \mid ba
+\end{align*}
 
-\subsection*{Linguaggi dipendenti dal contesto}
+\noindent Ci poniamo quindi i seguenti problemi: \(\mathcal{G}\) è ambigua? Qual è il linguaggio \(\mathcal{L(G)}\) generato?
+
+È molto semplice dimostrare che \(\mathcal{G}\) è ambigua, si veda come, con le due seguenti derivazioni, si giunge ad ottenere la medesima stringa \(w = abac\).
+
+\begin{gather*}
+  S \implies aSc \implies aTc \implies abac \\
+  S \implies aTc \implies abac
+\end{gather*}
+
+\noindent Per convincerci che le derivazioni sono entrambe rightmost, possiamo tracciare un albero di derivazione per \(\mathcal{G}\).
+
+\begin{figure}[H]
+	\centering
+	\subimport{assets/figures/}{ex-2.tex}
+	\caption{Albero di derivazione per \(\mathcal{G}\)}
+\end{figure}
+
+\noindent Infine, andiamo a definire il linguaggio \(\mathcal{L = L(G)}\), molto semplice da determinare:
+
+\begin{equation*}
+  \mathcal{L} = \{ a^n b^m a^m c^n \mid n \geq 0,\; m > 0 \}
+\end{equation*}
+
+\subsection*{Esercizio 3}
+In questo esercizio ci chiediamo quale sia il linguaggio generato dalla seguente grammatica.
+
+\begin{align*}
+  \mathcal{G}: S\; &\to\; 0B\; \mid 1A \\
+  A\; &\to\; 0\; \mid 0S\; \mid 1AA \\
+  B\; &\to\; 1\; \mid 1S\; \mid 0BB
+\end{align*}
+
+\noindent Il linguaggio generato è uno tale che ogni sua stringa possiede un egual numero di \(0\) e \(1\).
+
+Intuitivamente, è facile convincersene: supponiamo infatti di produrre, a partire da \(S\), una stringa \(0B\). A questo punto ci sono dati tre casi:
+
+\begin{itemize}
+  \item se applichiamo \(B\; \to\; 1\) andiamo a chiudere la derivazione con una stringa "bilanciata" (si passi sopra all'abuso di terminologia);
+  \item se invece abblichiamo la seconda produzione possibile \(B\; \to\; 1S\) non stiamo facendo altro che tornare al caso base del ragionamento, mantenendo comunque una stringa bilanciata;
+  \item l'unico modo che abbiamo per introdurre un altro \(0\) è applicare la terza produzione \(S\; \to\; 0BB\), ma quei due \(B\), a questo punto, non hanno altro modo di terminare se non diventando degli \(1\).
+\end{itemize}
+
+\noindent Il linguaggio generato può essere scritto come segue:
+
+\begin{equation*}
+  \{ w \mid w \in \{0, 1\}^* \land\; |0_w| = |1_w| \}
+\end{equation*}
+
+\subsection*{Esercizio 4}
+Si richiede di dire quali grammatiche generano i seguenti linguaggi:
+
+\begin{enumerate}
+  \item \(\mathcal{L}_1(\mathcal{G}_1) = \{ a^k b^n c^2k \mid k, n > 0 \}\)
+  \item \(\mathcal{L}_2(\mathcal{G}_2) = \{ a^k b^n c^2k \mid k, n \geq 0 \}\)
+\end{enumerate}
+
+More to come
+
+\paragraph{Spiegazione 1}
+
+\paragraph{Spiegazione 2}
+
+\subsection*{Esercizio 5 - Grammatiche context dependent}
+Considerata la seguente gramatica \(\mathcal{G}\), è vero che \(\mathcal{L(G)} = \O\)?
+
+\begin{align*}
+  \mathcal{G}: S\; &\to\; aBS\; \mid bA \\
+  aB\; &\to\; Ac\; \mid a \\
+  bA\; &\to\; S \mid Ba
+\end{align*}
+
+\noindent Il modo miglior per procedere alla soluzione di questo esercizio è procedere alla stesura dell'albero di derivazione.
+
+\begin{figure}[H]
+	\centering
+	\subimport{assets/figures/}{ex-5.tex}
+	\caption{Albero di derivazione per \(\mathcal{G}\)}
+\end{figure}
+
+\noindent Dal momento che siamo riusciti a trovare almeno una parola \(w = aa \in \mathcal{L(G)}\), possiamo dire senza timore di smentita che \(\mathcal{L(G)} \neq \O\).
+
+\subsection*{Esercizio 6}
+Quest'ultimo esercizio sarà disivo in tre parti.
+
+\paragraph{Parte 1}
+Si definisca una grammatica \(\mathcal{G}\) tale che \(\mathcal{L(G)}\) sia l'insieme di tutti i numeri pari nella rappresentazione binaria. Risposta:
+
+\begin{equation*}
+  \mathcal{G}:\; S \; \to\; 1S\; \mid 0S\; \mid 0
+\end{equation*}
+
+\paragraph{Parte 2}
+Si definisca una grammatica \(\mathcal{G'}\) tale che \(\mathcal{L(G')} = \{ 1^n0 \mid n \geq 0 \}\). Risposta:
+
+\begin{equation*}
+  \mathcal{G'}:\; S\; \to\; 1S\; \mid 0
+\end{equation*}
+
+\paragraph{Parte 3}
+Ci chiediamo: \(\mathcal{L(G)} = \mathcal{L(G')}\)?
+
+La risposta è no. Ad esempio, condieriamo la stringa \(w = 00\); questa appartiene a \(\mathcal{L(G)}\) attraverso la produzione \(S\; \implies\; 0S\; \implies\; 00 \), ma non appartiene a \(\mathcal{L(G')}\).
 
 \end{document}
