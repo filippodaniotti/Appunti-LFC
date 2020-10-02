@@ -21,3 +21,11 @@ jobs:
           name: build-dispensa
           path: ./src/main.pdf
         if: ${{ success() }}
+      - name: send photo message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: Tutto sembra stranamente funzionare...
+          document: src/main.pdf
+        if: ${{ success() }}
