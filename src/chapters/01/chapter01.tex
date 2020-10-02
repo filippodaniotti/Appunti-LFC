@@ -57,7 +57,7 @@ Questa analisi verifica che la sequenza di token sia aderente alla grammatica de
 
 Se rispettiamo le regole della grammatica il flusso di token viene tradotto in un parse tree (o meglio ancora, dipendentemente dal compilatore, in un albero di sintassi astratta).
 
-Ecco il parse tree che si può ricavare dal nostro esempio: 
+Ecco il parse tree che si può ricavare dal nostro esempio:
 \begin{figure}[H]
 	\centering
 	\subimport{assets/figures/}{parse-tree.tex}
@@ -132,6 +132,6 @@ Possiamo dividere questi passaggi in due gruppi:
 \end{itemize}
 
 Ma perché passiamo dalla fase del codice intermedio? Per ragioni di modularità:
-Se abbiamo $N$ linguaggi, abbiamo $N$ front-end e se abbiamo $K$ macchine, abbiamo $K$ back-end ciò implica che senza un codice intermedio dovremo creare $N*K$ differenti compilatori, usiamo il codice intermedio come livello di astrazione per semplificare il tutto. 
+Se abbiamo \(N\) linguaggi, abbiamo \(N\) front-end e se abbiamo \(K\) macchine, abbiamo \(K\) back-end ciò implica che senza un codice intermedio dovremo creare \(N*K\) differenti compilatori, usiamo il codice intermedio come livello di astrazione per semplificare il tutto. 
 
 \end{document}
