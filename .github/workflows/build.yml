@@ -15,7 +15,7 @@ jobs:
           latexmk_shell_escape: true
           # extra_system_packages: "py-pygments"
       - name: Upload pdf as artifact
-      - uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2
         with:
           name: build-dispensa
           path: ./src/main.pdf
