@@ -1,0 +1,262 @@
+\documentclass[class=book, crop=false, oneside, 12pt]{standalone}
+\usepackage[subpreambles=true]{standalone}
+\usepackage{../../style}
+\graphicspath{{./assets/images/}}
+
+\begin{document}
+
+
+\chapter{Analisi Lessicale e Linguaggi Regolari}
+
+
+\section{Torniamo all'analisi lessicale}
+
+Ora che abbiamo acquisito dei mezzi più potenti per affrontare questo corso, ribadiamo il concetto di analisi lessicale: dato il programma in ingresso restituisce una lista di stringhe che corrisponde alle parti del linguaggio identificate, i cosiddetti token.
+
+Dopo aver studiato il capitolo precedentte sappiamo come vengono generati linguaggi di questo tipo:
+\begin{equation}
+    \label{a^nb^n}
+    \{a^n b^n\}    
+\end{equation}
+Come detto in passato un liguaggio con quella forma può essere utilizzato nel caso in cui vogliamo riconoscere che siano state chiuse tutte le parentesi che sono state aperte.
+Il problema che vogliamo arrivare a risolvere è, più in generale, riconoscere se una stringa faccia parte o meno del linguaggio di una certa grammatica.
+
+Prendiamo l’esempio del linguaggio \ref{a^nb^n}, viene naturale l'utilizzo di una struttura di tipo stack:\\
+
+\begin{enumerate}
+    \item leggiamo i simboli uno alla volta e li mettiamo in uno stack;
+    \item per ogni $a$ che leggiamo inseriamo un elemento nella pila;
+    \item se troviamo una $b$ facciamo un pop dalla pila;
+    \item se ad un certo punto stiamo tentando di togliere un elemento da una pila vuota o se, finita l’analisi, rimangono ancora elementi nella pila, allora c’è qualche errore;
+    \item nel caso in cui al termine dell’analisi è andato tutto liscio e abbiamo svuotato la pila allora la parola analizzata appartiene al linguaggio \ref{a^nb^n}.
+\end{enumerate} 
+La precedente strategia sicuramente è ottima quando il linguaggio a questa forma, ma prendiamo ad esempio la grammatica che genera tutte le parole dell’alfabeto:
+\begin{equation}
+    \label{alfabeto}
+    S \to a | b | … | z | aS | bS | … | zS
+\end{equation}
+Per riconoscere parole generate da una tale grammatica il metodo di analisi naturale è una macchina a stati come quella in Fig.\ref{macchina_a_stati_finiti}
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\textwidth,keepaspectratio]{macchina_a_stati_finiti}
+    \label{macchina_a_stati_finiti}
+    \caption{Macchina a stati finiti}
+\end{figure}
+Il funzionamento di questi strumenti di analisi ci sarà ben più chiaro in seguito.
+
+La grammatica che produce tutte le lettere dell’alfabeto (il linguaggio \ref{alfabeto}) è una grammatica libera, ma ha anche una caratteristica in più: è regolare.
+
+
+\section{Grammatiche regolari}
+
+Le grammatiche regolari sono un sottoinsieme delle grammatiche libere che rispettano le seguenti restrizioni rguardo alle loro produzioni:
+\begin{itemize}
+    \item o il body è solo un terminale \(A \to a\)
+    \item oppure il body è nella forma terminale-Non terminale \(A \to aB\)  
+    \item altrimenti il body è \(\varepsilon\) \(A \to \varepsilon\)
+\end{itemize}
+Queste grammatiche possono generare espressioni regolari (hai presente la ricerca all’interno dei file?).
+I linguaggi generati da queste grammatiche sono linguaggi riconosciuti dagli automi a stati finiti, sia deterministici che non deterministici.
+
+Queste due osservazioni sono la base fondante dell'utilizzo delle grammatiche regolari per l’analisi lessicale.
+
+
+\subsection{Espressioni regolari}
+Prima di tutto partiamo con il definire una grammatica regolare.\\
+Sia fissato un alfabeto \(\mathcal{A}\) da cui estrarre tutte le basi e sia fissato un certo numero di operatori.
+
+Le espressioni regolari sono esprimibili tramite il meccanismo dell'induzione in questo modo:
+\begin{description}
+    \item[Base] sono un'espressione regolare tutti i simboli dell’alfabeto che abbiamo scelto più \(\varepsilon\), che  è sempre una espressione regolare, indipendentemente dall’alfabeto.
+    \item[Step] se \(r_1\) e \(r_2\) sono espressioni regolari allora:
+    \begin{itemize}
+        \item \(r_1 | r_2\) è un’espressione regolare, detta \emph{Alternation}
+        \item \(r_1 \dot r_2\) è un’espressione regolare, scritta anche come \(r_1 r_2\) e detta \emph{Concatenation}
+        \item \(r_1 * r_2\) è un’espressione regolare che significa ripetizione di \(r\) \(k\) volte, detta \emph{Kleene star}
+        \item \((r_1)\) è un’espressione regolare usata per definire l’ordine di svolgimento delle operazioni, è detta \emph{Parentheses}
+    \end{itemize} 
+\end{description}
+
+\subsection{I linguaggi delle espressioni regolari}
+Se un linguaggio può essere ricavato da un'espressione regolare si dice che l'espressione \emph{denota} quel linguaggio, il termine genera è riservato per le grammatiche generative.
+
+Detto ciò, come capiamo qual è il linguaggio denotato da un’espressione regolare?
+Data un’espressione regolare \(r\) su \(\mathcal{A}\) , il linguaggio denotato da quell'espressione \(\mathcal{L}(r)\) è anch'esso definibile tramite induzione:
+\begin{description}
+    \item[Base] \begin{itemize}
+                    \item \(\mathcal{L}(s) = \{a\} \; \forall a \in \mathcal{A}\)
+                    \item \(\mathcal{L}(\varepsilon) = \{\varepsilon\}\)
+                \end{itemize}
+    \item[Step] \begin{itemize}
+                    \item se \(r = r_1 | r_2 \) \\allora \(\mathcal{L}(r)= \mathcal{L}(r_1) \cup \mathcal{L}(r_2)\)
+                    \item se \(r=r_1r_2\) \\allora \(\mathcal{L}(r) = \{w_1 w_2 | w_1 \in \mathcal{L}(r_1) \; and \; w_2 \in \mathcal{L}(r_2)\}\)
+                    \item se \(r = r_1^*\) \\allora \( \mathcal{L}(r) = \{ \varepsilon \} \cup \{ w_1 w_2 ... w_k | k \ge 1 \; and \; \forall i : 1 \le i \le k \; . \; w_i \in \mathcal{L}(r_1)\} \)
+                    \item se \(r=(r_1)\) \\allora \( \mathcal{L}(r) = \mathcal{L}(r_1)\)
+                \end{itemize}
+\end{description}
+
+Osserviamo ora quali sono le regole di precedenza per gli operatori appena descritti.
+\begin{itemize}
+    \item La Kleene star ha la precedenza maggiore
+    \item La concatenazione è seconda in ordine di precedenza
+    \item L'alternanza ha la minor precedenza
+\end{itemize}
+Tutte queste operazioni hanno associatività a sinistra.
+Ecco un esempio esplicativo:
+\begin{equation*}
+    a | b c^*
+\end{equation*}
+una volta applicate le regole di precedenza l'espressione si legge in questo modo
+\begin{equation*}
+    (a | ( b  ( c^* ) ) )
+\end{equation*}    
+
+\subsubsection{Esercizi sulle operazioni con espressioni regolari}
+Ecco presentati in veloce sequenza una serie di semplici esercizi sulle operazioni con grammatiche regolari. 
+\begin{itemize}
+    \item \(\mathcal{L}(a | b) = \{a, b\}\)
+    \item \(\mathcal{L}((a | b) (a | b)) = \{aa, ab, ba, bb\}\)
+    \item \(\mathcal{L}(a^*) = \{a^n | n \ge 0\}\)
+    \item \(\mathcal{L}(a | a^* b) = \{a\} \cup \{a^n b | n \ge 0\}\)
+    \item \( (a|b|...|z)(a|b|...|z)^* \) denota l’insieme di tutte le parole dell’alfabeto
+    \item \( (0|1)^* \) denota l’insieme di tutti i numeri binari pari
+    \item \( b^*( abb^* )^* ( a | \varepsilon ) \) denota l’insieme delle parole su \(\{a,b\} \) senza alcuna occorenza consecutiva di \(a\)
+    \item \( (a|b)^* aa(a|b)^* \) denota l’insieme delle parole su \( \{a,b\} \) in cui ci sono sicuramente delle occorrenze consecutive di \(a\) (date da \(aa\) in posizione centrale)
+\end{itemize}
+
+
+\section{Automata a stati finiti}
+Gli automi a stati finiti sono usati per decidere se le parole appartengono ad un linguaggio denotato da una certa espressione regolare.
+Vedremo due tipi diversi di automa a stati finiti: deterministico e non deterministico; di questi tipi poi studieremo i casi ottimi di utilizzo.
+
+Nel caso non deterministico spesso i cacloli sono più pesanti perché un automa non deterministico deve vagliare più perocrsi di derivazione rispetto ai loro colleghi deterministici che hanno il vantaggio di dover valgiare solo i percorsi deterministici, che sono un sottoinsieme del totale.
+
+\subsection{Automa a stati finiti non deterministico}
+Un automa a stati finiti non deterministico (NFA) è rappresentabile con una tupla
+\begin{equation*}
+    (S, \mathcal{A}, mov_n, s_0, F)
+    \label{nfa_tupla}
+\end{equation*}
+in cui:
+\begin{itemize}
+    \item \(S\) è un insieme di stati
+    \item \(\mathcal{A}\) è un alfabeto con \(\varepsilon \notin \mathcal{A}\)
+    \item \(S_0 \in S\) è lo stato iniziale
+    \item \(F \subseteq S\) è l’insieme degli stati finali o accettabili 
+    \item \(move_n : S \times (\mathcal{A} \cup \{\varepsilon\}) \to 2^S\) è la funzione di transizione: da un certo stato, con un certo simbolo (che può essere anche \(\varepsilon\)) mi muovo in un certo stato compreso nei sottoinsiemi di \(S\)
+\end{itemize}
+
+\subsection{Rappresentazione grafica}
+La tupla \((S, \mathcal{A}, mov_n, s_0, F)\) può essere rappresentata con un grafo diretto seguendo queste convenzioni:
+\begin{itemize}
+    \item gli stati rappresentano i nodi;
+    \item lo stato iniziale è identificato da una freccia entrante;
+    \item gli stati finali sono rappresentati da un doppio cerchio;
+    \item le funzioni di transizione rappresentano gli archi, ad esempio \(move_n(S_1, a) = \{S_2, S_3\}\) si rappresenta come in Fig. \ref{nfa_grafo_esempio}
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.2\textwidth,keepaspectratio]{nfa_grafo_esempio}
+    \caption{Grafo rappresentante un NFA}
+    \label{nfa_grafo_esempio}
+\end{figure}
+Si nota anche che nella rappresentazione grafica gli archi da $S_1$ a $S_2$ ed $S_3$ vengono denotati da $a$.
+
+Proponiamo ora al lettore il seguente esempio (Fig. \ref{nfa_grafo_2})
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\textwidth,keepaspectratio]{nfa_grafo_2}
+    \caption{Secondo esempio di NFA}
+    \label{nfa_grafo_2}
+\end{figure}
+L’elemento di non determinismo è rappresentato dalle dure frecce \(a\) uscenti da \(S_0\) che potrebbero portarmi sia in \(S_1\) che in \(S_0\) di nuovo; inoltre la \(\varepsilon\) introduce sempre indeterminismo, perché permette di passare ad uno stato successivo senza consumare un carattere del terminale (o produrre un carattere nella stringa, che dir si voglia, e quindi inserisce incertezza riguardo al percorso di derivazione svolto).
+
+Notiamo che dalla rappresentazione grafica si evincono tutti gli elementi che compongono l’NFA, questa infatti è una rappresentazione completa.
+Si può anche dare una descrizione tabellare delle funzioni di transizione (\(move_n\)) appartenenti a questo NFA:
+
+% TODO: sostituire con una tabella vera
+\begin{figure}
+    \centering
+    \includegraphics[width=.4\textwidth,keepaspectratio]{tabella}
+    \caption{Tabella}
+    \label{tabella}
+\end{figure}
+Qual è quindi il linguaggio accettato da un automa di questo tipo? 
+Un NFA \(\mathcal{N}\) accetta (o riconosce) una parola \(w\) se e solo se esiste almeno un cammino che parte dallo stato iniziale di \(\mathcal{N}\) ed arriva a \(w\).
+
+Ricorda queste regole di scrittura:
+\begin{itemize}
+    \item \(\varepsilon \varepsilon\) si scrive \(\varepsilon\)
+    \item \(a\varepsilon\) si scrive \(a\)
+    \item \(\varepsilon a\) si scrive \(a\)
+\end{itemize}
+Il linguaggio accettato dall’automa è l’insieme di tutte le parole accettate dall’automa.
+Risolviamo ad esempio il linguaggio generato dall’automa descritto in figura \ref{nfa_grafo_2}.
+\begin{itemize}
+    \item \(a\) non appartiene al linguaggio, non esiste un percorso che mi porti ad uno stato finale attraversando un solo arco \(a\);
+    \item allo stesso modo non posso trovare la parola \(b\) nel linguaggio;
+    \item una parola possibile in questo linguaggio è \(abb\) ad esempio;
+    \item tutte le parole in questa forma sono parte del linguaggio \((a|b)^* abb\)
+\end{itemize}
+
+Proviamo a determinare il linguaggio dell'NFA descritto in figura \ref{nfa_grafo_3}:
+\begin{figure}
+    \centering
+    \includegraphics[width=.3\textwidth,keepaspectratio]{nfa_grafo_3}
+    \caption{}
+    \label{nfa_grafo_3}
+\end{figure}
+Il linguaggio accettato da questo NFA è \((a a^* ) | ( b b^* )\).
+
+\section{La costruzione di Thompson}
+La costruzione di Thompson è una procedura algoritmica che permette di costruire l’automa \(\mathcal{N}\) che genera lo stesso linguaggio generato da una certa espressione regolare \(r\), ovvero \(\mathcal{L}(\mathcal{N}) = \mathcal{L}(r)\).
+
+Anche questa costruzione è espressa in modo induttivo:
+\begin{description}
+    \item[Base] \(r\) è o \(\varepsilon\) oppure un simbolo dell’alfabeto \(a \in \mathcal{A}\); assumiamo di avere semrpre un NFA che riconosce \(\mathcal{L}(\varepsilon)\) ed uno che riconosce \(\mathcal{L}(a) \; \forall a \in \mathcal{A}\)
+    \item[Step] \(r\) è una tra le seguenti opzioni \(r_1 | r_2 , r_1 r_2 , r_1^* \) oppure \((r_1)\); dati gli NFA \(\mathcal{N}_1\) ed \(\mathcal{N}_2\) tali che \(\mathcal{L}(\mathcal{N}_1)=\mathcal{L}(r_1)\) e \(\mathcal{L}(\mathcal{N}_2)=\mathcal{L}(r_2)\) dobbiamo definire i vari NFA per le operazioni \(r_1|r_2\), \(r_1 r_2\), \(r_1^*\) ed \(r_1\). Le regole per definire questi nuovi NFA sono elencate successivamente.
+\end{description}
+A questo punto possiamo fare due osservazioni sulla costruzione di Thompson.
+\begin{enumerate}
+    \item Ogni passo della costruzione introduce al massimo due nuovi stati, ovvero l’NFA generato contiene al massimo \(2k\) stati, dove \(k\) è il numero di simboli e operatori nell’espressione regolare.
+    \item In ogni stato intermedio dell’NFA c’è esattamente uno stato finale e lo stato iniziale non ha nessun arco entrante e lo stato finale non ha alcun arco uscente. 
+\end{enumerate}
+Vediamo ora la rappresentazione grafica di questo algoritmo, partiamo dai passi base.
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\textwidth,keepaspectratio]{Thompson_base}
+    \caption{Thompson per il caso base}
+    \label{Thompson_base}
+\end{figure}
+La spiegazione dell'algoritmo nel caso base è banale, osserviamo invece con più interesse lo step induttivo.
+\begin{figure}
+    \centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{Thompson_step}
+    \caption{Thompson per lo step iduttivo}
+    \label{Thompson_step}
+\end{figure}
+Supponiamo di avere \(\mathcal{N}(r_1)\) ed \(\mathcal{N}(r_2)\) descritti come in precedenza, discutiamo le applicazioni di Thompson descritte in in Fig. \ref{Thompson_step}.
+\\\\
+\noindent Guardiamo il primo caso, l'operazione di addizione \(r = r_1|r_2\)\\
+Vogliamo creare un automa che accetta parole di \(\mathcal{L}(r_1)\) o anche parole di \(\mathcal{L}(r_2)\).
+Abbiamo i due \(\mathcal{N}\), che rappresentano gli stati intermedi, li posizioniamo uno sopra all’altro; ora possiamo creare uno stato vuoto ed usarlo come stato iniziale per entrambi gli \(\mathcal{N}\) e collegarlo a questi tramite una \(\varepsilon\) trasformazione; allo stesso modo possiamo creare uno stato finale raggiungibile dai due \(\mathcal{N}\) tramite una \(\varepsilon\) trasformazione.
+\\\\
+\noindent Guardiamo ora l’operazione di concatenazione \(r = r_1 r_2\)\\
+Per la nostra ipotesi induttiva sappiamo di poter far affidamento sui due automi \(\mathcal{N}(r_1)\) ed \(\mathcal{N}(r_2)\); in questo momento ci viene in aiuto la proprietà della costruzione che dice che i passi intermedi (i due \(\mathcal{N}\)) hanno esattamente uno stato finale ed uno stato iniziale senza archi entranti in nello stato iniziale e nessun arco uscente dagli stati finali. 
+In questo modo possiamo far coincidere lo stato iniziale di \(\mathcal{N}(r_2)\) con lo stato finale di \(\mathcal{N}(r_1)\). 
+Di conseguenza, una parola riesce ad arrivare allo stato terminale blu solo se riesce a passare sia da \(\mathcal{N}(r_1)\) che da \(\mathcal{N}(r_2)\).
+\\\\
+\noindent Guardiamo il caso della Kleene star \(r = r_1^*\)\\
+Vogliamo un automa che riconosce \(\varepsilon\) oppure tutte le parole che sono composte dalla ripetizione di parole appartenenti al linguaggio \(\mathcal{L}(r_1)\).
+Posseggo l’automa \(\mathcal{N}(r_1)\), che ha un solo stato iniziale ed un solo stato finale, aggiungo due stati che i serviranno come nuovo iniziale e nuovo finale.
+Siccome voglio poter avere \(\varepsilon\) come parola possibile collego con un arco \(\varepsilon\) il nuovo iniziale al nuovo finale, poi implemento la ripetizione con degli altri archi \(\varepsilon\) come in figura, la spiegazione è abbastanza banale.
+\\\\
+\noindent Guardiamo il caso della parentesizzazione \(r = ( r_1 )\)\\
+Ah no aspetta, non lo guardiamo davvero.
+\\
+Questo è il modo di utilizzare il processo di Thompson per costruire automi complessi, ci renderemo conto più avanti di quante \(\varepsilon\) questo ci costringe ad utilizzare e di cosa questo comporti.
+
+
+
+\end{document}

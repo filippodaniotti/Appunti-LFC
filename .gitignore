@@ -9,5 +9,6 @@
 *.fdb_latexmk
 *.sta
 *.pdf
+*.synctex(busy)
 
 _minted*
