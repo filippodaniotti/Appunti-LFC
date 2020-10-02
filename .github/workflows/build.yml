@@ -1,0 +1,22 @@
+name: Build LaTeX document
+on:
+  push:
+    branches: master
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: ./src/main.tex
+          latexmk_shell_escape: true
+          # extra_system_packages: "py-pygments"
+      - name: Upload pdf as artifact
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build-dispensa
+          path: ./src/main.pdf
+        if: ${{ success() }}
