@@ -349,13 +349,101 @@ La risposta è sì, possiamo farlo! Per vedere in che modo dobbiamo prima introd
 \subsection{\(\varepsilon\)-chiusura di un automa}
 Sia \((S, A move_n, s_0, F)\) un NFA, sia \(t\) uno stato in \(S\) e \(T\) un sottoinsieme di \(S\).
 
-Definiamo \(\varepsilon-chiusura(\{t\})\) l’insieme di stati in \(S\) che sono raggiungibili da \(t\) tramite zero o più \(\varepsilon\) transizioni (nota che \(t\) è sempre in questo insieme!).
+Definiamo \(\varepsilon\)-chiusura\((\{t\})\) l’insieme di stati in \(S\) che sono raggiungibili da \(t\) tramite zero o più \(\varepsilon\) transizioni (nota che \(t\) è sempre in questo insieme!).
 
-Definiamo \(\varepsilon-chiusura(T)\) nel seguente modo:
+Definiamo \(\varepsilon\)-chiusura\((T)\) nel seguente modo:
 \begin{equation}
     \varepsilon-chiusura(T) = \cup_{t \in T} \;\varepsilon-chiusura(\{t\})
 \end{equation} 
 
+\subsubsection{Calcolo della \(\varepsilon\)-chiusura}
+Per calcolare la \(\varepsilon\)-chiusura di un nodo di un automa useremo queste strutture:
+\begin{enumerate}
+    \item Uno stack
+    \item Un array booleano “alreadyOn” che ci serve per segnalare se uno stato \(t\) è già sulla pila o meno (lunghezza \(|S|\))
+    \item Un array bidimensionale per ricordare \(move_n\). Ogni entry \((t,x)\) è una lista linkata contenente tutti gli stati che sono raggiungibili con un \(x\)-transizione da \(t\).
+\end{enumerate}
+Ora che sappiamo quali sono le strutture dati che andremo ad utilizzare studiamo la fase di inizializzazione, all’inizio dei tempi non c’è niente sulla pila; poi inseriamo \(t\) e lo segnaliamo su alreadyOn.
+
+A questo punto estraiamo dalla cima dello stak, prendiamo il nodo estratto \(e\) e cerchiamo tutti i nodi che da \(e\) si raggiugono tramite un \(\varepsilon\)-arco, inseriamo tutti questi nello stak (se non sono già presenti) e ne segnaliamo l'inserimento settando il loro flag su alreadyOn.
+
+Continuiamo così finché lo stak non si svuota. L'algoritmo appena descritto si può trovare in fig. \ref{algoritmo_epsilon_chiusura}.
+\begin{figure}
+    \centering
+    \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_epsilon_chiusura}
+    \caption{Algoritmo per il calcolo della \(\varepsilon\)-chiusura\((\{t\})\)}
+    \label{algoritmo_epsilon_chiusura}
+\end{figure}
+
+
+Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'algoritmo per la verifica dell'appartenenza di una parola \(w\) al linguaggio riconosciuto da un automa, ovvero l'algoritmo di simulazione (fig. \ref{algoritmo_simulazione_nfa}).
+\begin{figure}
+    \centering
+    \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_simulazione_nfa}
+    \caption{Algoritmo di simulazione per un automa}
+    \label{algoritmo_simulazione_nfa}
+\end{figure}
+Dove \$ è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \$).
+Il funzionamento dell'algoritmo è questo, calcoliamo la \(\varepsilon\)-chiusura di \(s_0\) e la aggiungiamo all'insieme \(states\); prendiamo il primo simbolo nella parola e poi entriamo nel ciclo che compone il corpo della procedura.
+
+In questo corpo si utilizza la \(\varepsilon\)-chiusura per salvare in states le \(\varepsilon\)-chiusura di tutti gli stati che posso raggiungere \(symbol\)-transizione (una transizione marcata con \(symbol\)), una volta trovati questi nodi passo \(symbol\) prende il valore del prossimo carattere di \(w\).
+
+Una volta che \(symbol\) prende il valore di \$ mi fermo e controllo il contenuto di \(states\).
+
+Se \(states \cap F \neq \Phi\) significa che esiste uno stato in \(states\) che è anche uno stato finale dell'automa e quindi abbiamo trovato un percorso che riconosce la parola \(w\) e termina in uno stato finale (ammissibile); ottimo, abbiamo appena dimostrato che \(w\) appartiene al linguaggio riconosciuto dall'automa.
+
+Se invece la condizione precedente non è verificata, allora si è avverato uno dei seguenti casi (o anche entrambi): non esistono percorsi che riconoscono \(w\) o non esistono percorsi che riconoscono \(w\) e terminano in uno stato finale.
+
+
+\subsection{Esempi di simulazione}
+Applichiamo ora, come esempio, l'algoritmo di simulazione di un NFA dato, verificando se accetta la parola \(w  = ababb\). Lo svolgimento è rappresentato in figura \ref{simulazione_es_1}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.6\textwidth,keepaspectratio]{simulazione_es_1}
+    \caption{Esempio di applicazione dell'algoritmo di simulazione}
+    \label{simulazione_es_1}
+\end{figure}
+In seguito una breve descrizione della rappresentazione dell'algoritmo.
+
+Inizializziamo la variabile \(states\) a \(T0\) inserendo la \(\varepsilon\)-chiusura di 0; poi estraiamo il simbolo da aggiungere (il primo simbolo di \(w\)), questo è \(a\).
+
+Ora devo comporre l’insieme di stati che posso raggiungere da \(states\) con una \(a\)-transizione, questo insieme è \(\{3, 8\}\). 
+
+Di questo insieme l’algoritmo dice che devo calcolare la \(\varepsilon\)-chiusura, che corrisponde all’insieme nell’ultima colonna della prima riga; questo è il mio nuovo insieme di stati \(T1\) da cui partirò nello step successivo.
+
+Nel secondo step il simbolo che devo aggiungere è la seconda lettera di \(w\), ovvero \(b\), quindi vado a cercare quei nodi che posso raggiungere da \(T1\) con una \(b\)-transizione; questi nodi sono \(\{5,9\}\), una volta che li ho trovati ne calcolo la \(\varepsilon\)-chiusura, che compone \(T2\) e via così.
+
+Continuo così finché non finisco i simboli, a quel punto devo verificare se esiste nel mio insieme \(states\) uno stato finale: in questo caso è presente (10) e quindi la parola \(w\) appartiene al linguaggio riconosciuto dall’automa raffigurato.
+
+
+\subsection{Nota sulla \(\varepsilon\)-chiusura}
+\begin{theorem}
+    Sia \((S, A move_n, s_0, F)\) un NFA e sia \(M \subseteq S\).\\
+    Allora la \(\varepsilon\)-chiusura\((M)\) è il più piccolo insieme \(X \subseteq S\) tale che \(X\) è una soluzione alla seguene equazione:
+    \begin{equation}
+        X = M \cup \{ N’ | N \in X and N’ \in move_n (N,\varepsilon)\}
+    \end{equation}
+\end{theorem}
+Nota che diciamo il più piccolo insieme per evitare di proseguire in loop infiniti come quello rappresentato in figura \ref{nfa_ciclico}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.3\textwidth,keepaspectratio]{nfa_ciclico}
+    \caption{Se non scegliessimo il più piccolo \(X\) potremmo incorrere in cicli infiniti.}
+    \label{nfa_ciclico}
+\end{figure}
+Osserviamo con attenzione la formula appena descritta: \(X\) è \(M\) stesso unito anche a tutti gli stati \(N’\) raggiungibili da \(N\) tramite una \(\varepsilon\)-transizione (dove \(N\) è uno stato qualsiasi in \(M\)).
+
+Balza subito all'occhio come la formula per definire \(X\) dipenda da \(X\) stessa, quindi non la possiamo calcolare, giusto? 
+Sbagliato! in informatica possiamo risolvere queste equazioni date certe caratteristiche, ed è qui che giunge in nostro aiuto il teorema del punto fisso.
+
+
+\subsection{Teorema del punto fisso}
+\begin{theorem}
+    Sia \(f 2^D \to 2^D\) per qualche insieme finito \(D\), sia inoltre \( f \) monotona (ovvero \(X \subseteq Y \implies f(X) \subseteq f(Y)\)).\\
+    Allora esiste una precisa tecnica per risolvere l'equazione \(X = f(X)\).
+\end{theorem}
 
 
 
