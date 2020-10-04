@@ -122,7 +122,7 @@
     \mathcal{L}_1 \cap \mathcal{L}_2 = \{ a^n b^n c^n \mid n > 0 \}
   \end{align*}
 
-  \noindent Questo linguaggio non è libero, e provarlo è molto semplice (si veda \ref{ex-freeNotfree_1}).
+  \noindent Questo linguaggio non è libero, e provarlo è molto semplice (si veda \ref{ex-freeNotFree_1}).
 
 \end{proof}
 
@@ -359,10 +359,6 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 	Per esempio supponiamo sia \(|vwx|=b^p\), allora ic è facile prendere \(uv^0wx^0y\) e verificare che questo non può avere la forma \(a^pb^pa^pb^p\)
 	Dunque abbiamo trovato un elemento che contraddice il \emph{Pumping Lemma} e dunque l'ipotesi iniziale non è valida, ovvero \(\mathcal{L}\) non è \emph{free}
 
-
-
-\section{...}
-
 \section{Alcuni esercizi che contestualizzerò meglio più avanti}
 \subsection*{Esercizio 1 - I seguenti linguaggi sono liberi?}
 
@@ -480,14 +476,24 @@ Si richiede di dire quali grammatiche generano i seguenti linguaggi:
   \item \(\mathcal{L}_2(\mathcal{G}_2) = \{ a^k b^n c^2k \mid k, n \geq 0 \}\)
 \end{enumerate}
 
-More to come
+\paragraph{Soluzione 4.1}
+La soluzione quindi avrà la seguente forma:
 
-\paragraph{Spiegazione 1}
+\begin{align*}
+  S\; &\to\; aScc\; \mid  aTcc \\
+  T\; &\to\; bT\; \mid T
+\end{align*}
 
-\paragraph{Spiegazione 2}
+\paragraph{Soluzione 4.2}
+Nonostante l'esercizio, in apparenza, sia solo leggermente diverso dal precedente, ci dobbiamo porre il problema di come aggiungere la generazione della parola vuota \(\varepsilon\) al linguaggio. Questo può essere risolto in maniera molto elegante con una grammatica context-free e non ambigua, come ad esempio quella seguente:
+
+\begin{align*}
+  S\; &\to\; aScc\; \mid T \\
+  T\; &\to\; bT\; \mid \varepsilon
+\end{align*}
 
 \subsection*{Esercizio 5 - Grammatiche context dependent}
-Considerata la seguente gramatica \(\mathcal{G}\), è vero che \(\mathcal{L(G)} = \O\)?
+Considerata la seguente gramatica \(\mathcal{G}\), è vero che \(\mathcal{L(G)} = \varnothing\)?
 
 \begin{align*}
   \mathcal{G}: S\; &\to\; aBS\; \mid bA \\
@@ -503,7 +509,7 @@ Considerata la seguente gramatica \(\mathcal{G}\), è vero che \(\mathcal{L(G)} 
 	\caption{Albero di derivazione per \(\mathcal{G}\)}
 \end{figure}
 
-\noindent Dal momento che siamo riusciti a trovare almeno una parola \(w = aa \in \mathcal{L(G)}\), possiamo dire senza timore di smentita che \(\mathcal{L(G)} \neq \O\).
+\noindent Dal momento che siamo riusciti a trovare almeno una parola \(w = aa \in \mathcal{L(G)}\), possiamo dire senza timore di smentita che \(\mathcal{L(G)} \neq \varnothing\).
 
 \subsection*{Esercizio 6}
 Quest'ultimo esercizio sarà disivo in tre parti.
