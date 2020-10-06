@@ -1,5 +1,5 @@
 \documentclass[class=book, crop=false, oneside, 12pt]{standalone}
-\usepackage[subpreambles=true]{standalone}
+\usepackage{standalone}
 
 \usepackage{../../style}
 
@@ -64,24 +64,47 @@
 
 \begin{osservazione}
   È semplice convincersi dell'importanza dell'operazione di refreshing. Se consideriamo due grammatiche \(\mathcal{G}_1, \mathcal{G}_2\) con le seguenti produzioni:
-  \begin{figure}
-    \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{why-refresh_1}
-  \end{figure}
+  % \begin{figure}
+  %   \centering
+  %   \includegraphics[width=.7\textwidth,keepaspectratio]{why-refresh_1}
+  % \end{figure}
+
+  \begin{align*}
+    \mathcal{G}_1: S_1\; &\to\; aA & \mathcal{G}_2: S_2\; &\to\; bA \\
+    A\; &\to\; a & A\; &\to\; b
+  \end{align*}
+
   \noindent Avremo quindi generati i seguenti linguaggi: \(\mathcal{L}(\mathcal{G}_1)  = \{aa\}\) e \(\mathcal{L}(\mathcal{G}_2)  = \{bb\}\).
 
-  Se non effettuassimo refreshing, Ci troveremo ad avere una nuova grammatica con le seguenti produzioni:
-  \begin{figure}
-    \centering
-    \includegraphics[width=.3\textwidth,keepaspectratio]{why-refresh_2}
-  \end{figure}
+  Se non effettuassimo refreshing, ci troveremo ad avere una nuova grammatica con le seguenti produzioni:
+  % \begin{figure}
+  %   \centering
+  %   \includegraphics[width=.3\textwidth,keepaspectratio]{why-refresh_2}
+  % \end{figure}
+
+  \begin{align*}
+    \mathcal{G}: S\; &\to\; S_1\; \mid S_2 \\
+    S_1\; &\to\; aA \\
+    S_2\; &\to\; bA \\
+    A\; &\to\; a\; \mid b
+  \end{align*}
+
   \noindent Il linguaggio prodotto da questa nuova grammatica sarebbe diverso da quello dato dall'unione delle due grammatiche di partenza, poiché avremmo \(\mathcal{L(G)} = \{aa, ab, ba, bb\} \neq \mathcal{L}(\mathcal{G}_1)  \cup \mathcal{L}(\mathcal{G}_2) \).
 
   Con un'opportuno resfreshing otteniamo invece:
-  \begin{figure}
-    \centering
-    \includegraphics[width=.3\textwidth,keepaspectratio]{why-refresh_3}
-  \end{figure}
+  % \begin{figure}
+  %   \centering
+  %   \includegraphics[width=.3\textwidth,keepaspectratio]{why-refresh_3}
+  % \end{figure}
+
+  \begin{align*}
+    \mathcal{G}: S\; &\to\; S_1\; \mid S_2 \\
+    S_1\; &\to\; aA \\
+    S_2\; &\to\; bB \\
+    A\; &\to\; a \\
+    B\; &\to\; b
+  \end{align*}
+
   Questo insieme di produzioni garantisce che la grammatica generi il linguaggio desiderato.
 \end{osservazione}
 
@@ -148,7 +171,7 @@ Una grammatica libera \(\mathcal{G} = (V, T, S, \mathcal{P})\) è in \emph{Choms
 \section{Come epurare le grammatiche libere}
 Esiste un teorema che ci permette di fare pulizia etnica sui linguaggi.
 \begin{theorem}
-  Consideriamo un linguaggio libero \(\mathcal{L}\); allora esiste una grammatica libera \(\mathcal{G}\) tale che \(\mathcal{L(G)} = \mathcal{L}\setminus\varepsilon\) e tale da:
+  Consideriamo un linguaggio libero \(\mathcal{L}\); allora esiste una grammatica libera \(\mathcal{G}\) tale che \(\mathcal{L(G)} = \mathcal{L} \setminus \{\varepsilon\}\) e tale da:
   \begin{itemize}
     \item non avere alcuna \(\varepsilon\)-produzione, ovvero produzioni di forma \(A \rightarrow \varepsilon\);
     \item non avere alcuna produzione d'unità (\emph{unit production}), ovvero produzione di forma \(A \rightarrow B\);
@@ -160,7 +183,7 @@ Le grammatiche che possiedono queste caratteristiche sono più sintetici e gener
 
 Non è nostro interesse entrare nel dettaglio degli algoritmi per effettuare questa pulizia, poiché dimostrarne la correttezza richiederebbe un considerevole impegno. Andremo però ad analizzare come possiamo, se non altro,  eliminare le \(\varepsilon\)-produzioni.
 
-\subsection{Come eliminare le \(\varepsilon\)-produzioni}
+\subsection{Come eliminare le produzioni di parole vuote}
 Per eliminare le \(\varepsilon\)-produzioni bisogna procedere ad individuare i non-terminali \emph{annullabili}, ovvero quei non-terminali che, con qualche derivazione, producono la parola vuota (\(A : A \rightarrow^* \varepsilon\)). Si può procedere ricorsivamente:
 \begin{itemize}
   \item base: se la grammatica comprende una produzione della forma \(A \rightarrow \varepsilon\), allora quel non-terminale \(A\) è annullabile;
@@ -294,7 +317,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 
 	Qui passiamo alle applicazioni del \emph{Pumping Lemma}. In particolare può essere utilizzato per provare che un linguaggio \(\mathcal{L}\) non è libero.
 
-	In generale, da una implicazione logica del tipo \(A \implies B\), è possibile ottenere la negazione \(!A \implies !B\). Nel nostro caso, da \(\mathcal{L}\) libero \(\implies\) Tesi del \emph{Pumping Lemma}, abbiamo \(Not\) tesi del \emph{Pumping Lemma} \(\implies\) \(\mathcal{L}\) \(Not\) libero.
+	In generale, da un'implicazione logica del tipo \(A \implies B\), è possibile ottenere la negazione \(\neg A \implies \neg B\). Nel nostro caso, da \(\mathcal{L}\) libero \(\implies\) Tesi del \emph{Pumping Lemma}, abbiamo \(Not\) tesi del \emph{Pumping Lemma} \(\implies\) \(\mathcal{L}\) \(Not\) libero.
 	La negazione della tesi del \emph{Pumping Lemma} è la seguente:
 
 	\begin{itemize}

@@ -1,5 +1,5 @@
 \documentclass[class=book, crop=false, oneside, 12pt]{standalone}
-\usepackage[subpreambles=true]{standalone}
+\usepackage{standalone}
 \usepackage{../../style}
 \graphicspath{{./assets/images/}}
 
@@ -8,25 +8,24 @@
 
 \chapter{Analisi Lessicale e Linguaggi Regolari}
 
+\section{Introduzione}
 
-\section{Torniamo all'analisi lessicale}
+Ora che abbiamo acquisito dei mezzi più potenti per affrontare questo corso, ribadiamo il concetto di analisi lessicale: dato il programma in ingresso, quest'operazione restituisce una lista di stringhe che corrisponde alle parti del linguaggio identificate; questa lista di stringhe è nota come \emph{flusso dei token}.
 
-Ora che abbiamo acquisito dei mezzi più potenti per affrontare questo corso, ribadiamo il concetto di analisi lessicale: dato il programma in ingresso restituisce una lista di stringhe che corrisponde alle parti del linguaggio identificate, i cosiddetti token.
-
-Dopo aver studiato il capitolo precedentte sappiamo come vengono generati linguaggi di questo tipo:
-\begin{equation}
+Lo studio del capitolo precedente di consente di sapere come vengono generti linguaggi come il seguente:
+\begin{equation*}
     \label{a^nb^n}
     \{a^n b^n\}    
-\end{equation}
-Come detto in passato un liguaggio con quella forma può essere utilizzato nel caso in cui vogliamo riconoscere che siano state chiuse tutte le parentesi che sono state aperte.
+\end{equation*}
+Come detto in passato, un liguaggio con questa forma può essere utilizzato, ad esempio, nel caso in cui vogliamo avere un egual numero di parentesi aperte e chiuse.
 Il problema che vogliamo arrivare a risolvere è, più in generale, riconoscere se una stringa faccia parte o meno del linguaggio di una certa grammatica.
 
-Prendiamo l’esempio del linguaggio \ref{a^nb^n}, viene naturale l'utilizzo di una struttura di tipo stack:\\
+Prendiamo l’esempio del linguaggio \ref{a^nb^n}; per affrontare questo problema viene naturale l'utilizzo di una struttura di tipo stack:
 
 \begin{enumerate}
     \item leggiamo i simboli uno alla volta e li mettiamo in uno stack;
-    \item per ogni $a$ che leggiamo inseriamo un elemento nella pila;
-    \item se troviamo una $b$ facciamo un pop dalla pila;
+    \item per ogni \(a\) che leggiamo inseriamo un elemento nella pila;
+    \item se troviamo una \(b\) facciamo un pop dalla pila;
     \item se ad un certo punto stiamo tentando di togliere un elemento da una pila vuota o se, finita l’analisi, rimangono ancora elementi nella pila, allora c’è qualche errore;
     \item nel caso in cui al termine dell’analisi è andato tutto liscio e abbiamo svuotato la pila allora la parola analizzata appartiene al linguaggio \ref{a^nb^n}.
 \end{enumerate} 
