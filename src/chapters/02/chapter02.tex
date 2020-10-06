@@ -169,7 +169,7 @@ Ora dovrebbe essere chiaro che, al termine delle derivazioni, il numero di \(a\)
 La soluzione è quindi \(\{ ww \mid w \in \{a^* b^*\}^*\}\).
 
 \section{Grammatiche Generative formalmente}
-Una grammatica generativa è una tupla con questa forma \(\mathcal{G}=(V, T, S, P)\):
+Una grammatica generativa è una tupla con questa forma \(\mathcal{G}=(V, T, S, \mathcal{P})\):
 \begin{itemize}
     \item \(V\) è il vocabolario (simboli terminali e non, completo)
     \item \(T\) è il set dei simboli terminali
@@ -191,7 +191,7 @@ Definiamo ora formalmente l'oggetto produzione, esso è una traduzione in questa
 Dove \(\delta \in V^+\), \(\delta\) contiene almeno un non terminale (non traduciamo terminali in altri terminali); il \(^+\) significa che c’è una o più ripetizioni di elementi nella base, che quindi non è vuota (\(\varepsilon\)).\\
 \(\delta\) è detto \textbf{driver} della produzione mentre \(\beta\) è detto \textbf{corpo} della produzione.
 
-Il linguaggio generato da una grammatica \(\mathcal{G} = (V,T,S,P)\) è così definito:
+Il linguaggio generato da una grammatica \(\mathcal{G} = (V,T,S,\mathcal{P})\) è così definito:
 \begin{equation}
     \mathcal{L}(\mathcal{G}) = {w \mid w \in T^* and \; S \implies^* \; w }
 \end{equation}
