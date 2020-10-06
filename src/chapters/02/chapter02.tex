@@ -82,7 +82,7 @@ Presentiamo ora una serie di esercizietti di derivazione del linguaggio da una c
     \label{Esercizio 1}
 \end{table}
 \subsubsection*{Spiegazione di \ref{Esercizio 1}:}
-Ricordiamo che si parte sempre dallo starting symbol a derivare un linguaggio, quindi da \(S\).
+Ricordiamo che si parte sempre e solo dallo starting symbol a derivare un linguaggio, quindi da \(S\).
 
 L'unica derivazione che si può effettuare in questo caso è \(S \implies aAb\).
 Da qui in poi non si può procedere che con una delle due productions \(aA \to aaAb\) oppure \(A \to \varepsilon\), in un caso si aumenterà la stringa di un \(a\) a sinistra e di un \(b\) a destra, nell'altro caso si terminerà la derivazione.
@@ -169,12 +169,12 @@ Ora dovrebbe essere chiaro che, al termine delle derivazioni, il numero di \(a\)
 La soluzione è quindi \(\{ ww \mid w \in \{a^* b^*\}^*\}\).
 
 \section{Grammatiche Generative formalmente}
-Una grammatica generativa è una tupla con questa forma (V, T, S, P):
+Una grammatica generativa è una tupla con questa forma \(\mathcal{G}=(V, T, S, P)\):
 \begin{itemize}
-    \item V è il vocabolario (simboli terminali e non, completo)
-    \item T è il set dei simboli terminali
-    \item S è lo start symbol
-    \item P è il set delle produzioni
+    \item \(V\) è il vocabolario (simboli terminali e non, completo)
+    \item \(T\) è il set dei simboli terminali
+    \item \(S\) è lo start symbol
+    \item \(P\) è il set delle produzioni
 \end{itemize}
 Una volta definiti i componenti di una grammatica generativa, definiamo le convenzioni notazionali (o notazioni convenzionali) che si usano in questo campo:
 \begin{itemize}
@@ -191,9 +191,9 @@ Definiamo ora formalmente l'oggetto produzione, esso è una traduzione in questa
 Dove \(\delta \in V^+\), \(\delta\) contiene almeno un non terminale (non traduciamo terminali in altri terminali); il \(^+\) significa che c’è una o più ripetizioni di elementi nella base, che quindi non è vuota (\(\varepsilon\)).\\
 \(\delta\) è detto \textbf{driver} della produzione mentre \(\beta\) è detto \textbf{corpo} della produzione.
 
-Il linguaggio generato da una grammatica \(G = (V,T,S,P)\) è così definito:
+Il linguaggio generato da una grammatica \(\mathcal{G} = (V,T,S,P)\) è così definito:
 \begin{equation}
-    L(G) = {w \mid w \in T^* and \; S \implies^* \; w }
+    \mathcal{L}(\mathcal{G}) = {w \mid w \in T^* and \; S \implies^* \; w }
 \end{equation}
 Ovvero l'insieme di tutti gli elementi (anche vuoti) che si possono derivare con uno o più passi dallo starting point.
 
@@ -204,7 +204,7 @@ Si parla di Context-free grammars, o free grammars, quando tutte le produzioni s
 
 Queste grammatiche sono molto importanti perché praticamente tutti i linguaggi di programmazione sono derivati da questo tipo di grammatica.
 Si dice di un linguaggio che è context-free se esiste una grammatica libera che genera quello steso linguaggio.
-\(L\) è un linguaggio libero se e solo se esiste una grammatica libera \(G\) tale che \(L=L(G)\).
+\(\mathcal{L}\) è un linguaggio libero se e solo se esiste una grammatica libera \(\mathcal{G}\) tale che \(\mathcal{L}=\mathcal{L}(\mathcal{G})\).
 
 L’operazione di analizzare una stringa e verificare se appartiene ad una determinata grammatica dipende naturalmente dal metodo con cui si decide di applicare la derivazione dallo starting point della grammatica stessa.
 
@@ -231,10 +231,10 @@ Le foglie dell’albero saranno composte da \(\varepsilon\) oppure da caratteri 
     \label{albero_di_derivazione}
 \end{figure}
 Ma tornando con i piedi per terra, cosa centra tutto questo con i compilatori?\\
-Un certo programma che è stato trasformato in una stringa viene verificato controllando che la tale stringa sia derivata dalla grammatica del programma stesso. Un modo per verificare questo è trovare l’albero di derivazione della stringa che rappresenta il tal programma.
+Un certo programma che è stato trasformato in una stringa viene verificato controllando che la tale stringa sia derivata dalla grammatica del linguaggio in cui il programma è scritto. Un modo per verificare questo è trovare l’albero di derivazione della stringa che rappresenta il tal programma.
 
 \subsection{Ambiguità delle grammatiche}
-Una grammatica \(G\) si dice ambigua se esiste \(w \in L(G)\) che può essere derivata da due derivazioni canoniche distinte, entrambe rightmost o entrambe leftmost. Distinte significa che l'ordine di applicazione delle produzioni è differente, ma questo sarà più chiaro in seguito.
+Una grammatica \(\mathcal{G}\) si dice ambigua se esiste \(w \in \mathcal{L}(\mathcal{G})\) che può essere derivata da due derivazioni canoniche distinte, entrambe rightmost o entrambe leftmost. Distinte significa che l'ordine di applicazione delle produzioni è differente, ma questo sarà più chiaro in seguito.
 
 Noi non vogliamo grammatiche ambigue, ci complicano la vita.
 Prendiamo ad esempio la grammatica delle espressioni aritmetiche:
@@ -278,13 +278,24 @@ Introduciamo una nuova forma di grammatica
 
 Prendiamo ad esempio questa parola:
 \begin{equation}
+    \label{dangling_else}
     w =\; if\; b\; then\; if\; b\; then\; other\; else\; other
 \end{equation}
 Con quale \(then\) è accoppiato l’\(else\)? Non si può sapere!
 
-Di fatto possiamo ricostruire w con questi due diversi alberi:
-%TODO: immagine albero 1
-%TODO: immagine albero 2
+Di fatto possiamo ricostruire \(w\) con questi due diversi alberi:
+\begin{figure}
+	\centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{dangling_else_1.jpg}
+    \caption{Primo albero di derivazione per Eq. \ref{dangling_else}}
+    \label{dangling_else_1}
+\end{figure}
+\begin{figure}
+	\centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{dangling_else_2.jpg}
+    \caption{Secondo albero di derivazione per Eq. \ref{dangling_else}}
+    \label{dangling_else_2}
+\end{figure}
 Questo ci introduce il problema di come trattare la gestione del comando \(if \; then \; else\) in un linguaggio di programmazione.
 Per questo nei vari linguaggi troviamo sempre qualche forma di strategia per risolvere questo problema:
 \begin{itemize}
@@ -304,6 +315,6 @@ Il linguaggio naturale è ben più complesso: immagina quanto dev’essere diffi
 
 Pensa solo al fatto che spesso e volentieri il linguaggio naturale dipende dal contesto! Questa cosa nei linguaggi di programmazione non s’è mai vista per fortuna.
 
-I parser per linguaggi di programmazione hanno complessità lineare di norma, se si va a vedere i parser del linguaggio naturale\dots sagra!
+I parser per linguaggi di programmazione hanno complessità lineare di norma, se si va a vedere i parser del linguaggio naturale\dots  sayonara!
 
 \end{document}
