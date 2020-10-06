@@ -1,0 +1,20 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+
+\begin{document}
+    \begin{forest}
+        [ASS,delay={for tree={content=\texttt{#1}}}
+            [pippo, name=A]
+            [MUL, name=M
+                [., name=B]
+                [2]
+            ]
+        ]
+        \draw[-latex] (A) to[out=south,in=north] (B);
+    \end{forest}
+\end{document}
+

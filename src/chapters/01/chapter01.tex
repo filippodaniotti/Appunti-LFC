@@ -12,10 +12,10 @@
 \section{Il compilatore}
 \subsection{Cos'è un compilatore}
 Il compilatore, generalizzando, è un meccanismo che trasforma il codice sorgente in codice eseguibile.
-Nota però che il codice eseguibile è machine dependent, difatti noi studieremo i principi generali di questa traduzione ma dobbiamo tenere a mente il fatto che ogni tipo di macchina ha il suo proprio linguaggio macchina che deve essere utilizzato per scrivere gli eseguibili da essa utilizzabili.
+Una caratteristica del codice eseguibile è l'essere machine dependent, difatti noi studieremo i principi generali di questa traduzione ma dobbiamo tenere bene a mente il fatto che ogni tipo di macchina ha il suo proprio linguaggio macchina che deve essere utilizzato per scrivere gli eseguibili da essa utilizzabili.
 
 
-Prendiamo ora come punto di riferimento il compilatore gcc: tale progetto è in sviluppo da 20 anni e consta di ben più di due milioni di righe di codice!
+Durante il corso, useremo spesso come punto di riferimento il compilatore gcc: tale progetto è in sviluppo da 20 anni e consta di ben più di due milioni di righe di codice!
 
 
 L’esempio classico di utilizzo di un compilatore è la traduzione da codice \texttt{c} in assembly.
@@ -79,11 +79,15 @@ Non è facile scrivere una grammatica che possa essere analizzata con efficienza
 
 È da notare che esistono svariate forme di compilatori, noi ne stiamo vedendo una presentazione generale, ma, in molti casi, fasi come creazione di parse tree e AST vengono spesso sovrapposte.
 
-Nota importante:\\
 L’output dell’analisi sintattica è chiamato \emph{tree}, ma non necessariamente è un albero: spesso può essere un grafo. Ad esempio in un’operazione del tipo:
 \texttt{pippo = pippo * 2}
 Il nodo pippo sarebbe collegato sia alla radice che all’operatore \texttt{ASS}, creando quindi un grafo.
-%TODO: insrire immagine dell'AST dell'operazione pippo = pippo * 2
+\begin{figure}[H]
+	\centering
+	\subimport{assets/figures/}{pippo-tree.tex}
+	\caption{Abstract syntax tree che diventa un grafo quando la variabile a cui si assegna il valore fa parte dell'espressione alla destra dell'assegnamento.}
+	\label{esempio_pippo}
+\end{figure}
 
 \paragraph{Analisi semantica}
 Ora è la fase dell’analisi semantica.
