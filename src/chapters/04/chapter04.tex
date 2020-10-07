@@ -230,6 +230,7 @@ Risolviamo, ad esempio, il linguaggio generato dall’automa descritto in figura
 \section{La costruzione di Thompson}
 La costruzione di Thompson è una procedura algoritmica che permette di costruire l’automa \(\mathcal{N}\) che genera lo stesso linguaggio denotato da una certa espressione regolare \(r\), ovvero \(\mathcal{L}(\mathcal{N}) = \mathcal{L}(r)\).
 
+\subsection{Definizione}
 Anche questa costruzione è espressa in modo induttivo.
 
 \begin{description}
@@ -241,7 +242,7 @@ Anche questa costruzione è espressa in modo induttivo.
         \item \( r_1\) \(^\ast \);
         \item \((r_1)\);
     \end{itemize}
-    e, dati gli NFA \(\mathcal{N}_1\) e \(\mathcal{N}_2\) tali che \(\mathcal{L}(\mathcal{N}_1)=\mathcal{L}(r_1)\) e \(\mathcal{L}(\mathcal{N}_2)=\mathcal{L}(r_2)\), dobbiamo definire i vari NFA per le quattro operazioni \(r_1 \mid r_2\), \(r_1 r_2\), \(r_1^*\) ed \(r_1\). Le regole per definire questi nuovi NFA sono elencate successivamente.
+    e, dati gli NFA \(\mathcal{N}_1\) e \(\mathcal{N}_2\) tali che \(\mathcal{L}(\mathcal{N}_1)=\mathcal{L}(r_1)\) e \(\mathcal{L}(\mathcal{N}_2) = \mathcal{L}(r_2)\), dobbiamo definire i vari NFA per le quattro operazioni \(r_1 \mid r_2\), \(r_1 r_2\), \(r_1\) \(^\ast\) ed \(r_1\). Le regole per definire questi nuovi NFA sono elencate successivamente.
 \end{description}
 
 \noindent A questo punto possiamo fare due osservazioni sulla costruzione di Thompson.
@@ -251,6 +252,7 @@ Anche questa costruzione è espressa in modo induttivo.
     \item In ogni stato intermedio dell’NFA c’è esattamente uno stato finale, e inoltre lo stato iniziale non ha nessun arco entrante e lo stato finale non ha alcun arco uscente. 
 \end{enumerate}
 
+\subsection{Spiegazione in dettaglio}
 Vediamo ora la rappresentazione grafica di questo algoritmo. Partiamo dai passi base.
 
 \begin{figure}
@@ -270,23 +272,26 @@ Vediamo ora la rappresentazione grafica di questo algoritmo. Partiamo dai passi 
 \end{figure}
 Supponiamo di avere \(\mathcal{N}(r_1)\) e \(\mathcal{N}(r_2)\) descritti come in precedenza, discutiamo le applicazioni di Thompson descritte in in figura \ref{Thompson_step}.
 
+\subsubsection{Alternation}
 Guardiamo il primo caso, l'operazione di addizione \(r = r_1 \mid r_2\).\\
 Vogliamo creare un automa che accetta parole di \(\mathcal{L}(r_1)\) o anche parole di \(\mathcal{L}(r_2)\).
 Abbiamo i due \(\mathcal{N}\), che rappresentano gli stati intermedi; li posizioniamo uno sopra all’altro. Ora possiamo creare uno stato vuoto e usarlo come stato iniziale per entrambi gli \(\mathcal{N}\), e quindi collegarlo a questi ultimi tramite una \(\varepsilon\)-trasformazione; allo stesso modo possiamo creare uno stato finale raggiungibile dai due \(\mathcal{N}\) tramite una \(\varepsilon\)-trasformazione.
 
+\subsubsection{Concatenation}
 Guardiamo ora l’operazione di concatenazione \(r = r_1 r_2\).\\
 Per la nostra ipotesi induttiva, sappiamo di poter far affidamento sui due automi \(\mathcal{N}(r_1)\) ed \(\mathcal{N}(r_2)\); in questo momento ci viene in aiuto la proprietà della costruzione, che dice che i passi intermedi (i due \(\mathcal{N}\)) hanno esattamente uno stato finale ed uno stato iniziale, senza alcun arco entranto nello stato iniziale e nessun arco uscente dagli stati finali. 
 In questo modo possiamo far coincidere lo stato iniziale di \(\mathcal{N}(r_2)\) con lo stato finale di \(\mathcal{N}(r_1)\). 
 Di conseguenza, una parola riesce ad arrivare allo stato terminale blu solo se riesce a passare sia da \(\mathcal{N}(r_1)\) che da \(\mathcal{N}(r_2)\).
 
+\subsubsection{Kleene Star}
 Guardiamo il caso della Kleene star \(r = r_1^*\).\\
 Vogliamo un automa che riconosce o \(\varepsilon\) o tutte le parole che sono composte dalla ripetizione di altre parole appartenenti al linguaggio \(\mathcal{L}(r_1)\).
 Posseggo l’automa \(\mathcal{N}(r_1)\), che ha un solo stato iniziale ed un solo stato finale; aggiungo due stati che serviranno come nuovo stato iniziale e nuovo stato finale.
 Siccome voglio poter avere \(\varepsilon\) come parola possibile, introduco un nuovo arco \(\varepsilon\) che collega il nuovo stato iniziale al nuovo stato finale, quindi implemento la ripetizione con degli altri archi \(\varepsilon\) come in figura; la spiegazione è abbastanza banale.
 
-Guardiamo il caso della parentesizzazione \(r = ( r_1 )\), il quale risulta estremamente banale.\\
-% Ah no aspetta, non lo guardiamo davvero.
-\\
+\subsubsection{Parentheses}
+Guardiamo il caso della parentesizzazione \(r = ( r_1 )\), il quale risulta estremamente banale, così tanto che in realtà non lo guardiamo davvero scherzone lol.
+
 Questo è il modo di utilizzare il processo di Thompson per costruire automi complessi, ci renderemo conto più avanti di quante \(\varepsilon\) questo ci costringe ad utilizzare e di cosa questo comporti.
 
 \subsection{Applicazione di Thompson}
@@ -306,7 +311,7 @@ In primis applichiamo la regola di base (\ref{Thompson_base}).
     \label{esempio_Thompson_0}
 \end{figure}
 
-Concentriamoci ora sulla prima espressione, \( a \mid b = r_1 |\mid r_2 = r_3\); applichiamo la costruzione di Thompson per l’alternanza ai due automi per \(r_1\) e \(r_2\), otteniamo quindi l’automa per \(r_3\).
+Concentriamoci ora sulla prima espressione, \( a \mid b = r_1 \mid r_2 = r_3\); applichiamo la costruzione di Thompson per l’alternanza ai due automi per \(r_1\) e \(r_2\), otteniamo quindi l’automa per \(r_3\).
 
 \begin{figure}
     \centering
@@ -362,7 +367,7 @@ Il prossimo passaggio è la traduzione dell'operatore di parentesi, il che è ba
     \label{esempio_Thompson_4}
 \end{figure}
 
-Possiamo notare come il risultato cui giungiamo sia pieno di \(\varepsilon\);la costruzione di Thompson ci dà sicuramente un risultato esatto, ma non è detto che sia il risultato migliore, anzi; abbiamo già visto in passato un automa che riconosce lo stesso linguaggio di questo, e quell'automa era più semplice ed elegante (vedi \ref{nfa_grafo_2}).
+Possiamo notare come il risultato cui giungiamo sia pieno di \(\varepsilon\); la costruzione di Thompson ci dà sicuramente un risultato esatto, ma non è detto che sia il risultato migliore, anzi; abbiamo già visto in passato un automa che riconosce lo stesso linguaggio di questo, e quell'automa era più semplice ed elegante (vedi \ref{nfa_grafo_2}).
 
 Notiamo che comunque l’algoritmo di Thompson garantisce dei limiti superiori sulla complessità dell’automa che genera: ad ogni passo si aggiungono al massimo \(2\) nuovi nodi.
 La lunghezza dell’automa finale infatti è limitata da \(2n\), con \(n\) che rappresenta il numero di simboli nell’espressione regolare, dove con simboli si intende sia simboli del vocabolario che operatori.
@@ -399,7 +404,7 @@ Definiamo \(\varepsilon\)-chiusura\((\{t\})\) l’insieme di stati in \(S\) che 
 
 Definiamo \(\varepsilon\)-chiusura\((T)\) nel seguente modo:
 \begin{equation}
-    \varepsilon-chiusura(T) = \bigcup_{t \in T} \;\varepsilon-chiusura(\{t\})
+    \varepsilon \textrm{-chiusura}(T) = \bigcup_{t \in T} \;\varepsilon\textrm{-chiusura}(\{t\})
 \end{equation} 
 
 \subsubsection{Calcolo della \(\varepsilon\)-chiusura}
@@ -411,9 +416,12 @@ Per calcolare la \(\varepsilon\)-chiusura di un nodo di un automa useremo queste
     \item Un array bidimensionale per ricordare \(\textrm{move}_n\). Ogni entry \((t,x)\) è una lista linkata contenente tutti gli stati che sono raggiungibili con un \(x\)-transizione da \(t\).
 \end{enumerate}
 
-Ora che sappiamo quali sono le strutture dati che andremo ad utilizzare, studiamo la fase di inizializzazione: all’inizio dei tempi non c’è niente sulla pila, poi inseriamo \(t\) e lo segnaliamo su alreadyOn
+Ora che sappiamo quali sono le strutture dati che andremo ad utilizzare, studiamo la fase di inizializzazione: 
 
-A questo punto estraiamo dalla cima dello stak, prendiamo il nodo estratto \(e\) e cerchiamo tutti i nodi che da \(e\) si raggiugono tramite un \(\varepsilon\)-arco; inseriamo tutti questi nello stak (se non sono già presenti) e ne segnaliamo l'inserimento settando il loro flag su alreadyOn.
+\begin{itemize}
+    \item all’inizio dei tempi non c’è niente sulla pila, poi inseriamo \(t\) e lo segnaliamo su alreadyOn;
+    \item a questo punto estraiamo dalla cima dello stak, prendiamo il nodo estratto \(e\) e cerchiamo tutti i nodi che da \(e\) si raggiugono tramite un \(\varepsilon\)-arco; inseriamo tutti questi nello stak (se non sono già presenti) e ne segnaliamo l'inserimento settando il loro flag su alreadyOn.
+\end{itemize}
 
 Continuiamo così finché lo stak non si svuota. L'algoritmo appena descritto si può trovare in figura \ref{algoritmo_epsilon_chiusura}.
 
@@ -439,14 +447,14 @@ Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'a
     \label{algoritmo_simulazione_nfa}
 \end{figure}
 
-Dove \$ è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \$).
-Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(s_0\) e la aggiungiamo all'insieme \(states\); prendiamo il primo simbolo nella parola e poi entriamo nel ciclo che compone il corpo della procedura.
+Dove \texttt{\$} è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \texttt{\$}).
+Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(s_0\) e la aggiungiamo all'insieme \texttt{states}; prendiamo il primo simbolo nella parola e poi entriamo nel ciclo che compone il corpo della procedura.
 
-In questo corpo si utilizza la \(\varepsilon\)-chiusura per salvare in \texttt{states} la \(\varepsilon\)-chiusura di tutti gli stati che posso raggiungere tramite una \(symbol\)-transizione (una transizione marcata con \(symbol\)); una volta trovati questi nodi passo \texttt{symbol} prende il valore del prossimo carattere di \(w\).
+In questo corpo si utilizza la \(\varepsilon\)-chiusura per salvare in \texttt{states} la \(\varepsilon\)-chiusura di tutti gli stati che posso raggiungere tramite una \texttt{symbol}-transizione (una transizione marcata con \texttt{symbol}); una volta trovati questi nodi passo \texttt{symbol} prende il valore del prossimo carattere di \(w\).
 
-Una volta che \texttt{symbol} prende il valore di \$, mi fermo e controllo il contenuto di \texttt{states}.
+Una volta che \texttt{symbol} prende il valore di \texttt{\$}, mi fermo e controllo il contenuto di \texttt{states}.
 
-Se \texttt{states}\(\cap F \neq \Phi\), allora significa che esiste uno stato in \texttt{states} che è anche uno stato finale dell'automa e quindi abbiamo trovato un percorso che riconosce la parola \(w\) e termina in uno stato finale (ammissibile). Ottimo, abbiamo appena dimostrato che \(w\) appartiene al linguaggio riconosciuto dall'automa.
+Se \(\textrm{\texttt{states}} \; \cap \; F \neq \Phi\), allora significa che esiste uno stato in \texttt{states} che è anche uno stato finale dell'automa e quindi abbiamo trovato un percorso che riconosce la parola \(w\) e termina in uno stato finale (ammissibile). Ottimo, abbiamo appena dimostrato che \(w\) appartiene al linguaggio riconosciuto dall'automa.
 
 Se invece la condizione precedente non è verificata, allora si è avverato uno dei seguenti casi (o anche entrambi): o non esistono percorsi che riconoscono \(w\), o non esistono percorsi che riconoscono \(w\) e terminano in uno stato finale.
 
@@ -475,7 +483,7 @@ Continuo così finché non finisco i simboli; a quel punto devo verificare se es
 
 \subsection{Nota sulla \(\varepsilon\)-chiusura}
 \begin{theorem}
-    Sia \((S, A \textrm{move}_n, s_0, F)\) un NFA e sia \(M \subseteq S\).
+    Sia \((S, \mathcal{A}, \textrm{move}_n, s_0, F)\) un NFA e sia \(M \subseteq S\).
     
     Allora la \(\varepsilon\)-chiusura\((M)\) è il più piccolo insieme \(X \subseteq S\) tale che \(X\) è una soluzione alla seguene equazione:
     \begin{equation}
@@ -492,7 +500,7 @@ Continuo così finché non finisco i simboli; a quel punto devo verificare se es
     \label{nfa_ciclico}
 \end{figure}
 
-Osserviamo con attenzione la formula appena descritta: \(X\) è \(M\) stesso, unito anche a tutti gli stati \(N’\) raggiungibili da \(N\) tramite una \(\varepsilon\)-transizione,dove \(N\) è uno stato qualsiasi in \(M\).
+Osserviamo con attenzione la formula appena descritta: \(X\) è \(M\) stesso, unito anche a tutti gli stati \(N’\) raggiungibili da \(N\) tramite una \(\varepsilon\)-transizione, dove \(N\) è uno stato qualsiasi in \(M\).
 
 Balza subito all'occhio come la formula per definire \(X\) dipenda da \(X\) stessa; per questo motivo non dovremmo poterla calcolare, giusto? 
 Sbagliato! In informatica possiamo risolvere queste equazioni date certe caratteristiche, ed è qui che giunge in nostro aiuto il teorema del punto fisso.
@@ -500,7 +508,7 @@ Sbagliato! In informatica possiamo risolvere queste equazioni date certe caratte
 
 \subsection{Teorema del punto fisso}
 \begin{theorem}
-    Sia \(f: 2^D \to 2^D\) per qualche insieme finito \(D\), sia inoltre \( f \) monotona (ovvero \(X \subseteq Y \implies f(X) \subseteq f(Y)\)).
+    Sia \(f: 2^S \to 2^S\) per qualche insieme finito \(D\), sia inoltre \( f \) monotona (ovvero \(X \subseteq Y \implies f(X) \subseteq f(Y)\)).
 
     Allora esiste una precisa tecnica per risolvere l'equazione \(X = f(X)\).
 \end{theorem}
