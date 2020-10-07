@@ -472,6 +472,7 @@ Continuo così finché non finisco i simboli; a quel punto devo verificare se es
     Allora la \(\varepsilon\)-chiusura\((M)\) è il più piccolo insieme \(X \subseteq S\) tale che \(X\) è una soluzione alla seguene equazione:
     \begin{equation}
         X = M \cup \{ N’ \mid N \in X and N’ \in move_n (N,\varepsilon)\}
+        \label{eps-closure-set-eq}
     \end{equation}
 \end{theorem}
 
@@ -487,15 +488,43 @@ Continuo così finché non finisco i simboli; a quel punto devo verificare se es
 Osserviamo con attenzione la formula appena descritta: \(X\) è \(M\) stesso, unito anche a tutti gli stati \(N’\) raggiungibili da \(N\) tramite una \(\varepsilon\)-transizione,dove \(N\) è uno stato qualsiasi in \(M\).
 
 Balza subito all'occhio come la formula per definire \(X\) dipenda da \(X\) stessa; per questo motivo non dovremmo poterla calcolare, giusto? 
-Sbagliato! In informatica possiamo risolvere queste equazioni date certe caratteristiche, ed è qui che giunge in nostro aiuto il teorema del punto fisso.
+Sbagliato! In informatica possiamo risolvere queste equazioni date certe caratteristiche, ed è qui che giunge in nostro aiuto il teorema del punto fisso. 
 
 
 \subsection{Teorema del punto fisso}
-\begin{theorem}
-    Sia \(f 2^D \to 2^D\) per qualche insieme finito \(D\), sia inoltre \( f \) monotona (ovvero \(X \subseteq Y \implies f(X) \subseteq f(Y)\)).
+L'equazione \ref{eps-closure-set-eq} vista poco fa è un'istanza di una più generale equazione su insiemi, della forma \(X = f(X)\), sulla quale possediamo un risultato importante.
 
-    Allora esiste una precisa tecnica per risolvere l'equazione \(X = f(X)\).
+Sia \(f 2^D \to 2^D\) per qualche insieme finito \(D\) e sia inoltre \( f \) monotona, vale a dire
+\begin{equation*}
+    X \subseteq Y \implies f(X) \subseteq f(Y)
+\end{equation*}
+allora esiste una precisa tecnica, basata su approssimanti successivi, per risolvere l'equazione \(X = f(X)\). Adesso vediamo meglio il teorema cui fa riferimento.
+
+\begin{theorem}
+    Sia \(S\) un insieme finito e sia \(f 2^S \to 2^S\) una funzione monotona; allora \(\exists m \in \mathbb{N}\) tale che esiste un'unica soluzione minima all'equazione \(X = f(X)\), e questa soluzione è \(f^m(\varnothing)\).
 \end{theorem}
+
+\begin{proof}
+    I due asserti andranno dimostrati separatamente; come prima cosa, vogliamo dimostrare che \(\exists m \in \mathbb{N}\) tale che \(f^m(\varnothing)\) è soluzione per \(X = f(X)\); prima di procedere è inoltre consigliabile avere ben presente la forma della funzione \(f(X)\) si veda \ref{eps-closure-set-eq}.
+
+    Per definizione stessa di \(f(X)\), possiamo subito dire che \(\varnothing \subseteq f(\varnothing)\) e, poiché \(f(X)\) è monotona, possiamo subito dire anche che \(\varnothing \subseteq f^2(\varnothing)\). Quindi, per il principio di induzione, possiamo affermare senza timore di smentita che \(f^i(\varnothing) \subseteq f^{i + 1}(\varnothing), \forall i \in \mathbb{N} \). A questo punto, possiamo quindi dire di avere una sorta di catena di relazioni tra insiemi:
+    \begin{equation*}
+        f(\varnothing) \subseteq f^2{\varnothing} \subseteq f^3(\varnothing) \subseteq \ldots
+    \end{equation*}
+    Questa successione è infinita, ma \(2^S\) è definito come finito, per cui gli insiemi della successione non possono essere tutti diversi l'uno dall'altro! Arriveremo infatti, a un certo punto, a non riuscire più a osservare cambiamenti a successive applicazioni di \(f(X)\); formalmente, troveremo un qualche indice \(m\) tale che:
+    \begin{equation*}
+        f^m(\varnothing) = f^{m + 1} (\varnothing) = f(f^m(\varnothing))
+    \end{equation*}
+    Si dice che siamo arrivate al punto di \emph{saturazione}; in questa situazione, possiamo dire che \(f^m(\varnothing)\) è una soluzione per \(X = f(X)\).
+
+    Andiamo adesso a dimostrare che \(f^m(\varnothing)\) è l'unica soluzione minima.\\
+    Per assurdo, supponiamo che esista un'altra soluzione \(A\) per \(X = f(X)\); quindi, per ipotesi, deve valere \(A = f(A)\), e quindi dovremo avere che \(A = f(A) = f^2(A) = \ldots = f^m(A)\). Sappiamo anche che \(f^m(\varnothing) \subseteq f^m(A)\), poiché naturalmente l'insieme vuoto è compreso in qualsiasi insieme (\(\varnothing \subseteq A\)) e la funzione \(f\) è monotona. Ma allora possiamo mettere assieme le due precedenti osservazioni e affermare quindi che \(f^m(\varnothing) \subseteq A\), poiché \(f^m(\varnothing) \subseteq f^m(A)\) e \(A = f^m(A)\). Per cui \(f^m(\varnothing)\) è una soluzione unica, ed è anche l'unica minima. 
+
+\end{proof}
+
+Nonostante a prima vista il significato o anche la stessa utilità di questo risultato possa non essere del tutto chiaro, vale la pena di vederlo almeno una volta, poiché tutta la teoria che riguarda la semantica dei linguaggi di programmazione è basata su questo teorema. 
+
+Ad esempio, l'esecuzione di una funzione fattoriale: essa è costituita di una sequenza di costrutti \texttt{while} tali da produrre il risultato per l'input desiderato; ogni iterazione del \texttt{while} calcola un'approssimante del risultato, che viene quindi ricostruito piano piano. È chiaro che in questo esempio non stiamo aggiungendo insiemi ma valori interi, però è utile pensarlo per avere quantomeno un'idea intuitiva di come il teorema del punto fisso sia applicato alla teoria della semantica dei linguaggi di programmazione.
 
 \section{Automa a stati finiti deterministico}
 
