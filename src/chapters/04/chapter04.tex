@@ -12,6 +12,7 @@
 Ora che abbiamo acquisito dei mezzi più potenti per affrontare questo corso, ribadiamo il concetto di analisi lessicale: dato il programma in ingresso, l'analisi lessicale restituisce una lista di stringhe che corrisponde alle parti del linguaggio identificate; questa lista di stringhe è nota come \emph{flusso dei token}.
 
 Lo studio del capitolo precedente di consente di sapere come vengono generti linguaggi come il seguente:
+
 \begin{equation*}
     \label{a^nb^n}
     \{ a^n b^n \mid n > 0 \}    
@@ -46,7 +47,7 @@ Per riconoscere parole generate da una tale grammatica il metodo di analisi natu
     \caption{Macchina a stati finiti}
 \end{figure}
 
-Il funzionamento di questi strumenti di analisi ci sarà ben più chiaro in seguito.
+\noindent Il funzionamento di questi strumenti di analisi ci sarà ben più chiaro in seguito.
 
 La grammatica che produce tutte le lettere dell’alfabeto (il linguaggio \ref{alfabeto}) è una grammatica libera, ma ha anche una caratteristica in più: è regolare. Andiamo a capire meglio di cosa si tratta.
 
@@ -146,7 +147,7 @@ Nel caso di automa a stati finiti non deterministico i calcoli sono spesso più 
 \subsection{Automa a stati finiti non deterministico}
 Un automa a stati finiti non deterministico (NFA) è rappresentabile con una tupla
 \begin{equation*}
-    (S, \mathcal{A}, mov_n, s_0, F)
+    (S, \mathcal{A}, \textrm{move}_n, s_0, F)
     \label{nfa_tupla}
 \end{equation*}
 in cui:
@@ -159,7 +160,7 @@ in cui:
 \end{itemize}
 
 \subsection{Rappresentazione grafica}
-La tupla \((S, \mathcal{A}, mov_n, s_0, F)\) può essere rappresentata con un grafo diretto seguendo queste convenzioni:
+La tupla \((S, \mathcal{A}, \textrm{move}_n, s_0, F)\) può essere rappresentata con un grafo diretto seguendo queste convenzioni:
 \begin{itemize}
     \item gli stati rappresentano i nodi;
     \item lo stato iniziale è identificato da una freccia entrante;
@@ -176,14 +177,14 @@ La tupla \((S, \mathcal{A}, mov_n, s_0, F)\) può essere rappresentata con un gr
 
 \noindent Si noti anche che, nella rappresentazione grafica, gli archi da \(S_1\) a \(S_2\) ed \(S_3\) vengono denotati da \(a\).
 
-Proponiamo ora al lettore il seguente esempio| (figura \ref{nfa_grafo_2}):
+Proponiamo ora al lettore il seguente esempio (figura \ref{nfa_grafo_2}):
 \begin{figure}
     \centering
     \includegraphics[width=.5\textwidth,keepaspectratio]{nfa_grafo_2}
     \caption{Secondo esempio di NFA}
     \label{nfa_grafo_2}
 \end{figure}
-L’elemento non deterministico è rappresentato dalle dure frecce \(a\) uscenti da \(S_0\), che potrebbero portarmi sia in \(S_1\) che in \(S_0\) di nuovo; inoltre, la \(\varepsilon\) introduce sempre indeterminismo, poiché permette di passare a uno stato successivo senza consumare un carattere del terminale (o produrre un carattere nella stringa, che dir si voglia, e quindi inserisce incertezza riguardo al percorso di derivazione compiuto).
+L’elemento non deterministico è rappresentato dalle dure frecce \(a\) uscenti da \(S_0\), che potrebbero portarmi sia in \(S_1\) che in \(S_0\) di nuovo; inoltre, la \(\varepsilon\) introduce sempre indeterminismo, poiché permette di passare a uno stato successivo senza consumare un carattere del terminale (o produrre un carattere nella stringa, che dir si voglia), e quindi inserisce incertezza riguardo al percorso di derivazione compiuto.
 
 Notiamo che dalla rappresentazione grafica si evincono tutti gli elementi che compongono l’NFA; questa è infatti una rappresentazione completa.
 Si può anche dare una descrizione tabellare delle funzioni di transizione (\(\textrm{move}_n\)) appartenenti a questo NFA:
@@ -212,10 +213,10 @@ Risolviamo, ad esempio, il linguaggio generato dall’automa descritto in figura
     \item \(a\) non appartiene al linguaggio, non esiste un percorso che mi porti ad uno stato finale attraversando un solo arco \(a\);
     \item allo stesso modo non posso trovare la parola \(b\) nel linguaggio;
     \item una parola possibile in questo linguaggio è, ad esempio, \(abb\);
-    \item tutte le parolee nella forma \(\mathcal{L}(a \mid b)^\ast abb\) sono parte del linguaggio.
+    \item tutte le parole nella forma \(\mathcal{L}(a \mid b)^\ast abb\) sono parte del linguaggio.
 \end{itemize}
 
-Proviamo a determinare il linguaggio dell'NFA descritto in figura \ref{nfa_grafo_3}:
+\noindent Proviamo a determinare il linguaggio dell'NFA descritto in figura \ref{nfa_grafo_3}:
 
 \begin{figure}
     \centering
@@ -224,20 +225,20 @@ Proviamo a determinare il linguaggio dell'NFA descritto in figura \ref{nfa_grafo
     \label{nfa_grafo_3}
 \end{figure}
 
-\noindent Il linguaggio accettato da questo NFA è \(\mathcal{L}(a a^* ) \mid ( b b^\ast )\).
+\noindent Il linguaggio accettato da questo NFA è \(\mathcal{L}((a a^* ) \mid ( b b^\ast ))\).
 
 \section{La costruzione di Thompson}
-La costruzione di Thompson è una procedura algoritmica che permette di costruire l’automa \(\mathcal{N}\) che genera lo stesso linguaggio generato da una certa espressione regolare \(r\), ovvero \(\mathcal{L}(\mathcal{N}) = \mathcal{L}(r)\).
+La costruzione di Thompson è una procedura algoritmica che permette di costruire l’automa \(\mathcal{N}\) che genera lo stesso linguaggio denotato da una certa espressione regolare \(r\), ovvero \(\mathcal{L}(\mathcal{N}) = \mathcal{L}(r)\).
 
 Anche questa costruzione è espressa in modo induttivo.
 
 \begin{description}
-    \item[Base] L'espressione regolare \(r\) è o \(\varepsilon\), oppure un simbolo dell’alfabeto \(a \in \mathcal{A}\); assumiamo di avere semrpre un NFA che riconosce \(\mathcal{L}(\varepsilon)\) e uno che riconosce \(\mathcal{L}(a) \; \forall a \in \mathcal{A}\).
+    \item[Base] L'espressione regolare \(r\) è o \(\varepsilon\), oppure un simbolo dell’alfabeto \(a \in \mathcal{A}\); assumiamo di avere sempre un NFA che riconosce \(\mathcal{L}(\varepsilon)\) e uno che riconosce \(\mathcal{L}(a) \; \forall a \in \mathcal{A}\).
     \item[Step] L'espressione regolare \(r\) è una tra le seguenti opzioni: 
     \begin{itemize}[noitemsep]
         \item \(r_1 \mid  r_2 \);
         \item \( r_1 r_2 \); 
-        \item \( r_1^\ast \);
+        \item \( r_1\) \(^\ast \);
         \item \((r_1)\);
     \end{itemize}
     e, dati gli NFA \(\mathcal{N}_1\) e \(\mathcal{N}_2\) tali che \(\mathcal{L}(\mathcal{N}_1)=\mathcal{L}(r_1)\) e \(\mathcal{L}(\mathcal{N}_2)=\mathcal{L}(r_2)\), dobbiamo definire i vari NFA per le quattro operazioni \(r_1 \mid r_2\), \(r_1 r_2\), \(r_1^*\) ed \(r_1\). Le regole per definire questi nuovi NFA sono elencate successivamente.
