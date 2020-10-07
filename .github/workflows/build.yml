@@ -20,7 +20,7 @@ jobs:
         with:
           name: build-dispensa
           path: ./src/main.pdf
-        if: ${{ success() && contains(github.event.head_commit.message, 'build') }}
+        if: ${{ success() }}
       - name: Send dispensa to Telegram Group
         uses: appleboy/telegram-action@master
         with:
@@ -28,4 +28,4 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: Tutto sembra stranamente funzionare...
           document: src/main.pdf
-        if: ${{ success() && contains(github.event.head_commit.message, 'build') }}
+        if: ${{ success() }}
