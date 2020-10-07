@@ -144,10 +144,10 @@ Vedremo due tipi diversi di automa a stati finiti: deterministico e non determin
 
 Nel caso di automa a stati finiti non deterministico i calcoli sono spesso più pesanti, perché un automa non deterministico deve vagliare più perocrsi di derivazione rispetto ai loro colleghi deterministici, i quali hanno il vantaggio di dover vagliare solo i percorsi deterministici, che sono un sottoinsieme del totale.
 
-\subsection{Automa a stati finiti non deterministico}
+\section{Automa a stati finiti non deterministico}
 Un automa a stati finiti non deterministico (NFA) è rappresentabile con una tupla
 \begin{equation*}
-    (S, \mathcal{A}, \textrm{move}_n, s_0, F)
+    \mathcal{N} := (S, \mathcal{A}, \textrm{move}_n, s_0, F)
     \label{nfa_tupla}
 \end{equation*}
 in cui:
@@ -488,6 +488,7 @@ Continuo così finché non finisco i simboli; a quel punto devo verificare se es
     Allora la \(\varepsilon\)-chiusura\((M)\) è il più piccolo insieme \(X \subseteq S\) tale che \(X\) è una soluzione alla seguene equazione:
     \begin{equation}
         X = M \cup \{ N’ \mid N \in X \land N’ \in \textrm{move}_n (N,\varepsilon)\}
+        \label{eps-closure-set-eq}
     \end{equation}
 \end{theorem}
 
@@ -503,16 +504,186 @@ Continuo così finché non finisco i simboli; a quel punto devo verificare se es
 Osserviamo con attenzione la formula appena descritta: \(X\) è \(M\) stesso, unito anche a tutti gli stati \(N’\) raggiungibili da \(N\) tramite una \(\varepsilon\)-transizione, dove \(N\) è uno stato qualsiasi in \(M\).
 
 Balza subito all'occhio come la formula per definire \(X\) dipenda da \(X\) stessa; per questo motivo non dovremmo poterla calcolare, giusto? 
-Sbagliato! In informatica possiamo risolvere queste equazioni date certe caratteristiche, ed è qui che giunge in nostro aiuto il teorema del punto fisso.
+Sbagliato! In informatica possiamo risolvere queste equazioni date certe caratteristiche, ed è qui che giunge in nostro aiuto il teorema del punto fisso. 
 
 
 \subsection{Teorema del punto fisso}
-\begin{theorem}
-    Sia \(f: 2^S \to 2^S\) per qualche insieme finito \(D\), sia inoltre \( f \) monotona (ovvero \(X \subseteq Y \implies f(X) \subseteq f(Y)\)).
+L'equazione \ref{eps-closure-set-eq} vista poco fa è un'istanza di una più generale equazione su insiemi, della forma \(X = f(X)\), sulla quale possediamo un risultato importante.
 
-    Allora esiste una precisa tecnica per risolvere l'equazione \(X = f(X)\).
+
+Sia \(f 2^D \to 2^D\) per qualche insieme finito \(D\) e sia inoltre \( f \) monotona, vale a dire
+\begin{equation*}
+    X \subseteq Y \implies f(X) \subseteq f(Y)
+\end{equation*}
+allora esiste una precisa tecnica, basata su approssimanti successivi, per risolvere l'equazione \(X = f(X)\). Adesso vediamo meglio il teorema cui fa riferimento.
+
+\begin{theorem}
+    Sia \(S\) un insieme finito e sia \(f 2^S \to 2^S\) una funzione monotona; allora \(\exists m \in \mathbb{N}\) tale che esiste un'unica soluzione minima all'equazione \(X = f(X)\), e questa soluzione è \(f^m(\varnothing)\).
 \end{theorem}
 
+\begin{proof}
+    I due asserti andranno dimostrati separatamente; come prima cosa, vogliamo dimostrare che \(\exists m \in \mathbb{N}\) tale che \(f^m(\varnothing)\) è soluzione per \(X = f(X)\); prima di procedere è inoltre consigliabile avere ben presente la forma della funzione \(f(X)\) si veda \ref{eps-closure-set-eq}.
 
+    Per definizione stessa di \(f(X)\), possiamo subito dire che \(\varnothing \subseteq f(\varnothing)\) e, poiché \(f(X)\) è monotona, possiamo subito dire anche che \(\varnothing \subseteq f^2(\varnothing)\). Quindi, per il principio di induzione, possiamo affermare senza timore di smentita che \(f^i(\varnothing) \subseteq f^{i + 1}(\varnothing), \forall i \in \mathbb{N} \). A questo punto, possiamo quindi dire di avere una sorta di catena di relazioni tra insiemi:
+    \begin{equation*}
+        f(\varnothing) \subseteq f^2{\varnothing} \subseteq f^3(\varnothing) \subseteq \ldots
+    \end{equation*}
+    Questa successione è infinita, ma \(2^S\) è definito come finito, per cui gli insiemi della successione non possono essere tutti diversi l'uno dall'altro! Arriveremo infatti, a un certo punto, a non riuscire più a osservare cambiamenti a successive applicazioni di \(f(X)\); formalmente, troveremo un qualche indice \(m\) tale che:
+    \begin{equation*}
+        f^m(\varnothing) = f^{m + 1} (\varnothing) = f(f^m(\varnothing))
+    \end{equation*}
+    Si dice che siamo arrivate al punto di \emph{saturazione}; in questa situazione, possiamo dire che \(f^m(\varnothing)\) è una soluzione per \(X = f(X)\).
+
+    Andiamo adesso a dimostrare che \(f^m(\varnothing)\) è l'unica soluzione minima.\\
+    Per assurdo, supponiamo che esista un'altra soluzione \(A\) per \(X = f(X)\); quindi, per ipotesi, deve valere \(A = f(A)\), e quindi dovremo avere che \(A = f(A) = f^2(A) = \ldots = f^m(A)\). Sappiamo anche che \(f^m(\varnothing) \subseteq f^m(A)\), poiché naturalmente l'insieme vuoto è compreso in qualsiasi insieme (\(\varnothing \subseteq A\)) e la funzione \(f\) è monotona. Ma allora possiamo mettere assieme le due precedenti osservazioni e affermare quindi che \(f^m(\varnothing) \subseteq A\), poiché \(f^m(\varnothing) \subseteq f^m(A)\) e \(A = f^m(A)\). Per cui \(f^m(\varnothing)\) è una soluzione unica, ed è anche l'unica minima. 
+
+\end{proof}
+
+Nonostante a prima vista il significato o anche la stessa utilità di questo risultato possa non essere del tutto chiaro, vale la pena di vederlo almeno una volta, poiché tutta la teoria che riguarda la semantica dei linguaggi di programmazione è basata su questo teorema. 
+
+Ad esempio, l'esecuzione di una funzione fattoriale: essa è costituita di una sequenza di costrutti \texttt{while} tali da produrre il risultato per l'input desiderato; ogni iterazione del \texttt{while} calcola un'approssimante del risultato, che viene quindi ricostruito piano piano. È chiaro che in questo esempio non stiamo aggiungendo insiemi ma valori interi, però è utile pensarlo per avere quantomeno un'idea intuitiva di come il teorema del punto fisso sia applicato alla teoria della semantica dei linguaggi di programmazione.
+
+\section{Considerazioni sull'efficienza degli algoritmi sugli NFA}
+All'inizio della trattazione sugli automi non deterministici, il nostro obiettivo era riconoscere un linguaggio regolare attraverso degli automi a stati finiti; in particolare, abbiamo detto che l'analisi lessicale utilizzerà le espressioni regolari per identificare i vari elementi del programma scritto. Dalle espressioni regolari vogliamo quindi avere degli strumenti che ci permettono di prendere come input il testo edlprogramma e ottenere in output un flusso di token, che saranno i terminali della grammatica che ha generato il nostro linguaggio.
+
+Ci chiediamo quale sia la complessità degli algoritmi che abbiamo visto per risolvere questa richiesta, anche in vista del momento in cui ci troveremo a scegliere quale tipo di automa scegliere (NFA o DFA) per assolvere diverse tipologie di compiti.
+
+\paragraph{Sunto delle procedure viste}
+Data una parola e data un'espressione regolare che denota quello stesso linguaggio, si dica se la parola appartiene a quel particolare linguaggio oppure no. Gli algoritmi che abbiamo visto ci consento di rispondere a questa richiesta applicando le seguenti operazioni:
+\begin{itemize}
+    \item consideriamo un'espressione regolare \(r\);
+    \item applichiamo la costruzione di Thompson e generiamo un NFA che riconosce esattamente il linguaggio denotato da \(r\);
+    \item lancia l'algoritmo di simulazione per l'NFA generato.
+\end{itemize}
+Andiamo quindi ad analizzare la complessità di queste procedure.
+
+\subsection{Complessità della costruzione di Thompson}
+Consideriamo la  complessità di generazione di un NFA con \(n\) nodi e \(m\) archi; conoscendo le quattro operazioni, sappiamo che, per ogni passo, aggiungeremo al massimo \(2\) nodi e \(4\) archi (dalla Kleene star, l'operazione più costosa), per cui avremo che \(n \le 2|r|\) e \(m \le 4|r|\), per cui abbiammo che la somma \(n + m\) è dell'ordine della dimensione dell'espressione regolare (\(\mathcal{O}(|r|)\)) e, poiché avremo in totale \(|r|\) passi, ciascuno dei quali eseguibile in tempo costante, possiamo felicemente comcludere che \(T(\textrm{Thompson}(r)) = \mathcal{O}(|r|)\).
+
+\subsection{Complessità del calcolo della \(\varepsilon\)-chiusura}
+Prima di analizzare il costo della simulazione, dobbiamo analizzare il costo della \(\varepsilon\)-chiusura. Teniamo in mente il listato di codice che la descrive:
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_epsilon_chiusura}
+    \caption{Algoritmo per il calcolo della \(\varepsilon\)-chiusura\((\{t\})\)}
+    \label{algoritmo_epsilon_chiusura}
+\end{figure}
+
+\noindent Evidenziamo che le strutture usate sono uno: stack (per contenere gli elementi non ancora incontrati), un vettore booleano (per tenere traccia dei visitati), e \(
+\textrm{move}_n\), al solito un vettore bidimensionale di puntatori liste linkate, ciascuna contente tutti gli stati raggiungibile a partire da uno stato \(t\) e un simbolo \(x\).
+
+In sunto, la procedura si compone dei seguenti quattro passi:
+
+\begin{enumerate}
+    \item inserimento del nodo \(t\) nello stack;
+    \item imposta \texttt{alreadyOn[t] = true};
+    \item trova un successivo nodo \(u \in \textrm{move}_n(t, \varepsilon)\);
+    \item verifica se è già stato visitato con \texttt{alreadyOn[u]}.
+\end{enumerate}
+
+\noindent Ognuna di queste operazioni opera in tempo costante, ci chiediamo quindi quante volte venga ripetuto ognuna di queste.
+
+Osserviamo che le prime due operazioni vengono ripetute a ogni chiamata della procedura, e mai più di una volta per ogni nodo, dal momento che il vettore \texttt{alreadyOn} non ci permetterà di richiamare la funzione se lanciato su un nodo già settato a \texttt{true}, e non capita mai che qualche bit venga reinizializzato a false. Per cui, il costo delle prime due operazioni è \(\mathcal{O}(n)\).
+
+La terza e la quarta oeprazione vengono eseguite per ogni nodo raggiungibile con una \(\varepsilon\)-transizione, per cui possiamo immaginare un caso pessimo in cui ogni stato possiede almeno una \(\varepsilon\)-transizione; nel caso peggiore, quindi, andremo a visitare ogni arco del grafo (\(\mathcal{O}(m)\)).
+
+Complessivamente, il costo della procedura è \(\mathcal{O}(n + m)\).
+
+\subsection{Complessità della simulazione di NFA}
+Adesso possiamo affrontare il problema dello studio della complessità della simulazione di NFA. Anche qui, teniamo presente il codice:
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_simulazione_nfa}
+    \caption{Algoritmo di simulazione per un automa}
+    \label{algoritmo_simulazione_nfa}
+\end{figure}
+
+\noindent Anche qui, un veloce recapdelle strutture dati utilizzate. Innanzitutto si tenga presente che, per tenere traccia della variabile \texttt{states}, utilizzeremo ben due stacks:
+
+\begin{itemize}
+    \item il primo (\texttt{currentStack}) è nel right value della riga \(4\) e viene utilizzato per conservare il contenuto del vettore \texttt{states} durante l'attuale iterazione dell'algoritmo;
+    \item il secondo (\texttt{nextStack}) è invece  nel left value e verrà aggiornato durante la attuale iterazione.
+\end{itemize}
+
+\noindent Abbiamo anche il nostro vettore \texttt{alreadyOn} di dimensione \(|S|\) e, naturalmente, il vettore bidimensionale per conservare \(\textrm{move}_2\).
+
+Ci rendiamo conto che il ciclo \texttt{while} domina la complessità, soprattutto perché al suo interno avviene una chiamata di \(\varepsilon\)-chiusura, completata dall'estrazione di tutti gli elementi da \texttt{nextStack} e il loro inserimento in \texttt{currentStack}, oltre alla reinizializzazione di \texttt{alreadyOn}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_simulazione_nfa_2}
+    \caption{Dettaglio di algoritmo di simulazione per un automa}
+    \label{algoritmo_simulazione_nfa_2}
+\end{figure}
+
+All'interno di ogni \texttt{while}, quindi, abbiamo uno swap degli stack, che costa \(\mathcal{O}(n)\), poiché è limitato dal numero di nodi dell'NFA; inoltre, ogni stato può essere inserito solo una volta nella pila nel secondo \texttt{foreach}; quindi, ogni ciclo del \texttt{while} costa \(\mathcal{O}(n + m)\). Questo ciclo verrà lanciato per ogni elemento della parola \(w\) analizzate, pertanto il costo complessivo della simulazione è \(\mathcal{O}(|w|(n + m))\); dal momento che il nostro NFA è stato generato da un'esecuzione di costruzione di Thompson, avremo anche che \(n + m = \mathcal{O}(|r|)\), per cui possiamo concludere che il costo  dell'intera procedura di simulazione è dell'ordine di \(\mathcal{O}(|w||r|)\).
+
+Il costo è sicuramente più basso di quello che avrei facendo del backtrack, dal momento che si parla comunque di un modello non deterministico. 
+
+\section{Automi a stati finiti deterministico}
+Possiamo pensare di utilizzare queste strutture per decidere se accettare delle parole e determinare se appartiene a un linguaggio denotate da un'espressione regolare.
+
+Introdunciamoli per differenza rispetto agli NFA. Si tenga  amente la definizione di NFA (\((S, \mathcal{A}, mov_n, s_0, F)\), dove \(\textrm{move}_n : S \times (\mathcal{A} \cup \{\varepsilon\}) \to 2^S\)). Si noti la funzione di transizione, che opera con uno stato e un simbolo dell'alfabeto, unito a \(\varepsilon\), e proprio quest'ultima apporta l'elemento di indeterminazione; inoltre, un qualunque nodo di un grafo ha tendenzialmente più archi uscenti identificati dal medesimo simbolo.
+
+Un automa a stati finiti deterministici è invece definito come segue:
+
+\begin{gather*}
+    \mathcal{D} := (S, \mathcal{A}, \textrm{move}_d, s_0, F), \textrm{ dove } \\
+    \textrm{move}_d : S \times \mathcal{A} \to S
+\end{gather*}
+
+Balza subito la differente formulazione della funzione di transizione, il cui dominio esclude la possibilità di compiere \(\varepsilon\)-transizioni. Inoltre, quest'ultima ha due modi di presentarsi: totale o parziale, e il possesso dell'una o dell'altra qualificazione inficerà la scelta delle procedure da applicare.
+
+Evidenziamo le caratteristiche dei DFA:
+
+\begin{itemize}
+    \item non presentano \(\varepsilon\)-transizioni (ma c'è un cavillo di cui ci occuperemo più avanti);
+    \item se \(\textrm{move}_d\) è \emph{totali}, allora per ogni stato c'è \textbf{esattamente} una \(a\)-transizione \(\forall a \in \mathcal{A}\);
+    \item se \(\textrm{move}_d\) è \emph{parziale}, allora per ogni stato c'è \textrm{almeno} una \(a\)-transizione \(\forall a \in \mathcal{A}\); in altre parole, per alcune coppie del dominio la funzione non è definita.
+\end{itemize}
+
+\begin{figure}[H]
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth,keepaspectratio]{DFA-move-total.png}
+        \subcaption{Esempio di funzionedi transizione totale}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth,keepaspectratio]{DFA-move-partial.png}
+        \subcaption{Esempio di funzionedi transizione parziale}
+    \end{minipage}
+    \caption{Funzioni di transizione dei DFA}
+\end{figure}
+
+\subsection{Linguaggi rionosciuti dai DFA}
+Prendiamoci un certo DFA \(\mathcal{D} = (S, \mathcal{A}, \textrm{move}_d, s_0, F)\); il linguaggio \(\mathcal{L(D)}\) da lui riconosciuto è l'insieme di parole \(w\) tale che:
+
+\begin{itemize}
+    \item o esiste un cammino, che chiamiamo qui \(w = a_1, \ldots, a_k\), con \(k \ge 1\), che vada dallo stato iniziale \(s_0\) a un qualche stato finale in \(F\);
+    \item oppure vale che \(s_0 \land w \in F\); per l'appunto, quello in cui lo stato di partenza è uno stato finale è l'unico caso in cui un DFA possiede la parola vuota.
+\end{itemize}
+
+\subsection{Simulazione di un DFA con transizione totale}
+In questo caso abbiamo la certezza che, per ogni  simbolo che leggiamo, ci sia un qualche arco che lo colleghi a uno stato successivo nel grafo, e questo semplifica di molto la procedura per determinare se una certa parola \(w\) appartenza o meno al linguaggio del nostro DFA.
+
+Per l'appunto, è sufficiente partire dallo stato iniziale \(s_0\) e seguire il cammino dato dagli elementi di \(w\); se terminiamo in un qualche stato finale in \(F\), allora \(w\) appartiene al linguaggio, altrimenti no; la complessità, pertanto, è \(\mathcal{O}(|w|)\).
+
+\subsection{Simulazione di un DFA con transizione parziale}
+Poiché qui abbiamo una funzione di transizione totale, dobbiamo considerare la possibilità di arrivare a uno stato in cui non non possiamo più proseguire. 
+
+Iniziamo comunque dallo stato iniziale e, di nuovo, seguiamo il cammino dato dallo spelling della parola \(w = a_1, a_2, \ldots, a_k\); se sto leggendo un qualche simbolo per cui non c'è una transizione "etichettato" da quel simbolo, allora posso direttamente ritornare una risposta negativa; se invece riesco a leggere tutta la parola e a raggiungere uno stato finale, posso rispondere affermativamente.
+
+\subsection{Funzioni di transizioni a confronto}
+Dato un DFA \(\mathcal{D}\) con funzione di transizione parziale, ho un modo per definire un DFA \(\mathcal{D}'\) che abbia funzione di transizione totale e che riconosca esattamente lo stesso linguaggio (\(\mathcal{L(D) = \mathcal{L}(\mathcal{D}')}\))?
+
+Posso farlo con l'uso di un \emph{sink} (anche detto dead state, o in italiano stato trappola). In sostanza vado a creare un nuovo stato che aggiungo subito agli altri stati di \(\mathcal{D}\), e questo stato sarà la destinazione di tutte le transizioni non definite dalla funzione di transizione; infine, per ogni simbolo dell'alfabeto, aggiungo al sink un \emph{self loop} su quel simbolo.
+
+In questo modo, quando vado a trovarmi in quelle situazioni in cui non potevo più proseguire, posso invece proseguire e andare nel sink; in questo modo potrò comunque continuare, esaurire la parola in uno stato non terminale e quindi tornare un risultato coerente con il linguaggio considerato.
+
+In generale si preferisce lavorare con DFA con funzione di transizione parziale, e ancora più in generale con automi che abbiamo il minor numero di stati (nodi e archi) possibile; tuttavia, l'algoritmo di minimizzazione (vedremo più avanti), che usiamo per "ridurre al minimo" il suo numero di archi e nodi, non funziona con DFA privi di funzione di transizione totale. Il motivo sta nel fatto che questa procedura lavora sulla funzione inversa di \(\textrm{move}_d\), che chiaramente non è definita se la funzione non è totale.
 
 \end{document}
