@@ -9,7 +9,7 @@
 
 \section{Introduzione}
 
-Ora che abbiamo acquisito dei mezzi più potenti per affrontare questo corso, ribadiamo il concetto di analisi lessicale: dato il programma in ingresso, quest'operazione restituisce una lista di stringhe che corrisponde alle parti del linguaggio identificate; questa lista di stringhe è nota come \emph{flusso dei token}.
+Ora che abbiamo acquisito dei mezzi più potenti per affrontare questo corso, ribadiamo il concetto di analisi lessicale: dato il programma in ingresso, l'analisi lessicale restituisce una lista di stringhe che corrisponde alle parti del linguaggio identificate; questa lista di stringhe è nota come \emph{flusso dei token}.
 
 Lo studio del capitolo precedente di consente di sapere come vengono generti linguaggi come il seguente:
 \begin{equation*}
@@ -154,7 +154,7 @@ in cui:
     \item \(\mathcal{A}\) è un alfabeto con \(\varepsilon \notin \mathcal{A}\);
     \item \(S_0 \in S\) è lo stato iniziale;
     \item \(F \subseteq S\) è l’insieme degli stati finali o accettabili;
-    \item \(move_n : S \times (\mathcal{A} \cup \{\varepsilon\}) \to 2^S\) è la funzione di transizione: da un certo stato e con un certo simbolo (che può essere anche \(\varepsilon\)), mi muovo in un certo stato compreso nei sottoinsiemi di \(S\).
+    \item \(\textrm{move}_n : S \times (\mathcal{A} \cup \{\varepsilon\}) \to 2^S\) è la funzione di transizione: da un certo stato e con un certo simbolo (che può essere anche \(\varepsilon\)), mi muovo in un certo stato compreso nei sottoinsiemi di \(S\).
 \end{itemize}
 
 \subsection{Rappresentazione grafica}
@@ -163,7 +163,7 @@ La tupla \((S, \mathcal{A}, mov_n, s_0, F)\) può essere rappresentata con un gr
     \item gli stati rappresentano i nodi;
     \item lo stato iniziale è identificato da una freccia entrante;
     \item gli stati finali sono rappresentati da un doppio cerchio;
-    \item le funzioni di transizione rappresentano gli archi, ad esempio \(move_n(S_1, a) = \{S_2, S_3\}\) si rappresenta come in figura \ref{nfa_grafo_esempio}.
+    \item le funzioni di transizione rappresentano gli archi, ad esempio \(\textrm{move}_n(S_1, a) = \{S_2, S_3\}\) si rappresenta come in figura \ref{nfa_grafo_esempio}.
 \end{itemize}
 
 \begin{figure}
@@ -185,7 +185,7 @@ Proponiamo ora al lettore il seguente esempio| (figura \ref{nfa_grafo_2}):
 L’elemento non deterministico è rappresentato dalle dure frecce \(a\) uscenti da \(S_0\), che potrebbero portarmi sia in \(S_1\) che in \(S_0\) di nuovo; inoltre, la \(\varepsilon\) introduce sempre indeterminismo, poiché permette di passare a uno stato successivo senza consumare un carattere del terminale (o produrre un carattere nella stringa, che dir si voglia, e quindi inserisce incertezza riguardo al percorso di derivazione compiuto).
 
 Notiamo che dalla rappresentazione grafica si evincono tutti gli elementi che compongono l’NFA; questa è infatti una rappresentazione completa.
-Si può anche dare una descrizione tabellare delle funzioni di transizione (\(move_n\)) appartenenti a questo NFA:
+Si può anche dare una descrizione tabellare delle funzioni di transizione (\(\textrm{move}_n\)) appartenenti a questo NFA:
 
 %TODO: sostituire con una tabella vera
 \begin{figure}
@@ -391,7 +391,7 @@ La risposta è sì, possiamo farlo! Per vedere in che modo dobbiamo prima introd
 
 
 \subsection{\(\varepsilon\)-chiusura di un automa}
-Sia \((S, \mathcal{A}, move_n, s_0, F)\) un NFA, sia \(t\) uno stato in \(S\) e \(T\) un sottoinsieme di \(S\).
+Sia \((S, \mathcal{A}, \textrm{move}_n, s_0, F)\) un NFA, sia \(t\) uno stato in \(S\) e \(T\) un sottoinsieme di \(S\).
 
 Definiamo \(\varepsilon\)-chiusura\((\{t\})\) l’insieme di stati in \(S\) che sono raggiungibili da \(t\) tramite zero o più \(\varepsilon\)-transizioni (nota che \(t\) è sempre in questo insieme).
 
@@ -406,7 +406,7 @@ Per calcolare la \(\varepsilon\)-chiusura di un nodo di un automa useremo queste
 \begin{enumerate}
     \item Uno stack;
     \item Un array booleano “alreadyOn” che ci serve per segnalare se uno stato \(t\) è già sulla pila o meno (la sua lunghezza è \(|S|\));
-    \item Un array bidimensionale per ricordare \(move_n\). Ogni entry \((t,x)\) è una lista linkata contenente tutti gli stati che sono raggiungibili con un \(x\)-transizione da \(t\).
+    \item Un array bidimensionale per ricordare \(\textrm{move}_n\). Ogni entry \((t,x)\) è una lista linkata contenente tutti gli stati che sono raggiungibili con un \(x\)-transizione da \(t\).
 \end{enumerate}
 
 Ora che sappiamo quali sono le strutture dati che andremo ad utilizzare, studiamo la fase di inizializzazione: all’inizio dei tempi non c’è niente sulla pila, poi inseriamo \(t\) e lo segnaliamo su alreadyOn
@@ -415,12 +415,18 @@ A questo punto estraiamo dalla cima dello stak, prendiamo il nodo estratto \(e\)
 
 Continuiamo così finché lo stak non si svuota. L'algoritmo appena descritto si può trovare in figura \ref{algoritmo_epsilon_chiusura}.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_epsilon_chiusura}
     \caption{Algoritmo per il calcolo della \(\varepsilon\)-chiusura\((\{t\})\)}
     \label{algoritmo_epsilon_chiusura}
 \end{figure}
+
+% \begin{algorithm}[H]
+% 	\centering
+% 	\subimport{assets/code/}{epsilon-closure-computation.tex}
+% 	\caption{Esempio di parse tree}
+% \end{algorithm}
 
 Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'algoritmo per la verifica dell'appartenenza di una parola \(w\) al linguaggio riconosciuto da un automa, ovvero l'algoritmo di simulazione (figura \ref{algoritmo_simulazione_nfa}).
 
@@ -467,11 +473,11 @@ Continuo così finché non finisco i simboli; a quel punto devo verificare se es
 
 \subsection{Nota sulla \(\varepsilon\)-chiusura}
 \begin{theorem}
-    Sia \((S, A move_n, s_0, F)\) un NFA e sia \(M \subseteq S\).
+    Sia \((S, A \textrm{move}_n, s_0, F)\) un NFA e sia \(M \subseteq S\).
     
     Allora la \(\varepsilon\)-chiusura\((M)\) è il più piccolo insieme \(X \subseteq S\) tale che \(X\) è una soluzione alla seguene equazione:
     \begin{equation}
-        X = M \cup \{ N’ \mid N \in X and N’ \in move_n (N,\varepsilon)\}
+        X = M \cup \{ N’ \mid N \in X \land N’ \in \textrm{move}_n (N,\varepsilon)\}
     \end{equation}
 \end{theorem}
 
@@ -492,7 +498,7 @@ Sbagliato! In informatica possiamo risolvere queste equazioni date certe caratte
 
 \subsection{Teorema del punto fisso}
 \begin{theorem}
-    Sia \(f 2^D \to 2^D\) per qualche insieme finito \(D\), sia inoltre \( f \) monotona (ovvero \(X \subseteq Y \implies f(X) \subseteq f(Y)\)).
+    Sia \(f: 2^D \to 2^D\) per qualche insieme finito \(D\), sia inoltre \( f \) monotona (ovvero \(X \subseteq Y \implies f(X) \subseteq f(Y)\)).
 
     Allora esiste una precisa tecnica per risolvere l'equazione \(X = f(X)\).
 \end{theorem}
