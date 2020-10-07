@@ -526,6 +526,27 @@ Nonostante a prima vista il significato o anche la stessa utilità di questo ris
 
 Ad esempio, l'esecuzione di una funzione fattoriale: essa è costituita di una sequenza di costrutti \texttt{while} tali da produrre il risultato per l'input desiderato; ogni iterazione del \texttt{while} calcola un'approssimante del risultato, che viene quindi ricostruito piano piano. È chiaro che in questo esempio non stiamo aggiungendo insiemi ma valori interi, però è utile pensarlo per avere quantomeno un'idea intuitiva di come il teorema del punto fisso sia applicato alla teoria della semantica dei linguaggi di programmazione.
 
+\section{Considerazioni sull'efficienza degli algoritmi sugli NFA}
+All'inizio della trattazione sugli automi non deterministici, il nostro obiettivo era riconoscere un linguaggio regolare attraverso degli automi a stati finiti; in particolare, abbiamo detto che l'analisi lessicale utilizzerà le espressioni regolari per identificare i vari elementi del programma scritto. Dalle espressioni regolari vogliamo quindi avere degli strumenti che ci permettono di prendere come input il testo edlprogramma e ottenere in output un flusso di token, che saranno i terminali della grammatica che ha generato il nostro linguaggio.
+
+Ci chiediamo quale sia la complessità degli algoritmi che abbiamo visto per risolvere questa richiesta, anche in vista del momento in cui ci troveremo a scegliere quale tipo di automa scegliere (NFA o DFA) per assolvere diverse tipologie di compiti.
+
+\paragraph{Sunto delle procedure viste}
+Data una parola e data un'espressione regolare che denota quello stesso linguaggio, si dica se la parola appartiene a quel particolare linguaggio oppure no. Gli algoritmi che abbiamo visto ci consento di rispondere a questa richiesta applicando le seguenti operazioni:
+\begin{itemize}
+    \item consideriamo un'espressione regolare \(r\);
+    \item applichiamo la costruzione di Thompson e generiamo un NFA che riconosce esattamente il linguaggio denotato da \(r\);
+    \item lancia l'algoritmo di simulazione per l'NFA generato.
+\end{itemize}
+Andiamo quindi ad analizzare la complessità di queste procedure.
+
+\subsection{Complessità della costruzione di Thompson}
+Consideriamo la  complessità di generazione di un NFA con \(n\) nodi e \(m\) archi; conoscendo le quattro operazioni, sappiamo che, per ogni passo, aggiungeremo al massimo \(2\) nodi e \(4\) archi (dalla Kleene star, l'operazione più costosa), per cui avremo che \(n \le 2|r|\) e \(m \le 4|r|\), per cui abbiammo che la somma \(n + m\) è dell'ordine della dimensione dell'espressione regolare (\(\mathcal{O}(|r|)\)) e, poiché avremo in totale \(|r|\) passi, ciascuno dei quali eseguibile in tempo costante, possiamo felicemente comcludere che \(T(\textrm{Thompson}(r)) = \mathcal{O}(|r|)\).
+
+\subsection{Complessità del calcolo della \(\varepsilon\)-chiusura}
+
+\subsection{Complessità della simulazione di NFA}
+
 \section{Automa a stati finiti deterministico}
 
 \end{document}
