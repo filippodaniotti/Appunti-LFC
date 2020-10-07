@@ -16,13 +16,14 @@ Lo studio del capitolo precedente di consente di sapere come vengono generti lin
     \label{a^nb^n}
     \{ a^n b^n \mid n > 0 \}    
 \end{equation*}
+
 Come detto in passato, un liguaggio con questa forma può essere utilizzato, ad esempio, nel caso in cui vogliamo avere un egual numero di parentesi aperte e chiuse.
-Il problema che vogliamo arrivare a risolvere è, più in generale, riconoscere se una stringa faccia parte o meno del linguaggio di una certa grammatica.
+Il problema che vogliamo arrivare a risolvere è, più in generale, riconoscere se una stringa faccia parte o meno del linguaggio generato da una certa grammatica.
 
 Ad esempio, per affrontare il problema del linguaggio \ref{a^nb^n} viene naturale l'utilizzo di una struttura di tipo stack:
 
 \begin{enumerate}
-    \item leggiamo i simboli uno alla volta e li inseriamo nel nostro stack stack;
+    \item leggiamo i simboli uno alla volta e li inseriamo nel nostro stack;
     \item per ogni \(a\) che leggiamo, inseriamola nella pila;
     \item se troviamo una \(b\), allora facciamo un pop dalla pila;
     \item se ad un certo punto stiamo tentando di togliere un elemento da una pila vuota o se, finita l’analisi, rimangono ancora elementi nella pila, allora c’è qualche errore;
