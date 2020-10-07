@@ -1,24 +1,37 @@
 \documentclass{standalone}
 \usepackage[utf8]{inputenc}
-\usepackage[ruled,vlined,noend]{algorithm2e}
+\usepackage[ruled,linesnumbered,vlined,noend]{algorithm2e}
 
 \begin{document}
-\begin{algorithm}[H]
-    \SetAlgoLined
-    \KwResult{help come funziona sta roba }
-    \ForEach{\( i = 1, \ldots, \mid S \mid \)} {
-        alreadyOn[i] = \textbf{false};
-    }
-    \textbf{closure}()
-    %  \While{While condition}{
-    %   instructions\;
-    %   \eIf{condition}{
-    %    instructions11\;
-    %    instructions2\;
-    %    }{
-    %    instructions3\;
-    %   }
-    %  }
-     \caption{Calcolo della \(\varepsilon\)-chiusura(\(\{t\}\))}
+    \begin{algorithm}[H]
+        \SetKwData{Stack}{\(S\)}
+        \SetKwData{T}{t}
+        \SetKwData{U}{u}
+
+        \SetKwFunction{Closure}{closure}
+
+        \ForEach{\( i = 1\) \KwTo \( | S | \)} {
+            alreadyOn[i] = \textbf{false}
+        }
+        \Closure{\T, \Stack} {
+            \Stack.push(\T)
+            alreadyOn[\T] = \textbf{true}
+            \ForEach{\U \(\in \textrm{move}_n(\textrm{\T}, \varepsilon)\)} {
+                \If{\textbf{not} alreadyOn[\U]} {
+                    \Closure{\U, \Stack}
+                }
+            }
+        }
+        
+        %  \While{While condition}{
+        %   instructions\;
+        %   \eIf{condition}{
+        %    instructions11\;
+        %    instructions2\;
+        %    }{
+        %    instructions3\;
+        %   }
+        %  }
+        \caption{Calcolo della \(\varepsilon\)-chiusura(\(\{t\}\))}
     \end{algorithm}
 \end{document}
