@@ -9,20 +9,22 @@
 
 \section{Introduzione}
 
-Ora che abbiamo acquisito dei mezzi più potenti per affrontare questo corso, ribadiamo il concetto di analisi lessicale: dato il programma in ingresso, quest'operazione restituisce una lista di stringhe che corrisponde alle parti del linguaggio identificate; questa lista di stringhe è nota come \emph{flusso dei token}.
+Ora che abbiamo acquisito dei mezzi più potenti per affrontare questo corso, ribadiamo il concetto di analisi lessicale: dato il programma in ingresso, l'analisi lessicale restituisce una lista di stringhe che corrisponde alle parti del linguaggio identificate; questa lista di stringhe è nota come \emph{flusso dei token}.
 
 Lo studio del capitolo precedente di consente di sapere come vengono generti linguaggi come il seguente:
+
 \begin{equation*}
     \label{a^nb^n}
     \{ a^n b^n \mid n > 0 \}    
 \end{equation*}
+
 Come detto in passato, un liguaggio con questa forma può essere utilizzato, ad esempio, nel caso in cui vogliamo avere un egual numero di parentesi aperte e chiuse.
-Il problema che vogliamo arrivare a risolvere è, più in generale, riconoscere se una stringa faccia parte o meno del linguaggio di una certa grammatica.
+Il problema che vogliamo arrivare a risolvere è, più in generale, riconoscere se una stringa faccia parte o meno del linguaggio generato da una certa grammatica.
 
 Ad esempio, per affrontare il problema del linguaggio \ref{a^nb^n} viene naturale l'utilizzo di una struttura di tipo stack:
 
 \begin{enumerate}
-    \item leggiamo i simboli uno alla volta e li inseriamo nel nostro stack stack;
+    \item leggiamo i simboli uno alla volta e li inseriamo nel nostro stack;
     \item per ogni \(a\) che leggiamo, inseriamola nella pila;
     \item se troviamo una \(b\), allora facciamo un pop dalla pila;
     \item se ad un certo punto stiamo tentando di togliere un elemento da una pila vuota o se, finita l’analisi, rimangono ancora elementi nella pila, allora c’è qualche errore;
@@ -45,7 +47,7 @@ Per riconoscere parole generate da una tale grammatica il metodo di analisi natu
     \caption{Macchina a stati finiti}
 \end{figure}
 
-Il funzionamento di questi strumenti di analisi ci sarà ben più chiaro in seguito.
+\noindent Il funzionamento di questi strumenti di analisi ci sarà ben più chiaro in seguito.
 
 La grammatica che produce tutte le lettere dell’alfabeto (il linguaggio \ref{alfabeto}) è una grammatica libera, ma ha anche una caratteristica in più: è regolare. Andiamo a capire meglio di cosa si tratta.
 
@@ -145,7 +147,7 @@ Nel caso di automa a stati finiti non deterministico i calcoli sono spesso più 
 \section{Automa a stati finiti non deterministico}
 Un automa a stati finiti non deterministico (NFA) è rappresentabile con una tupla
 \begin{equation*}
-    NFA := (S, \mathcal{A}, mov_n, s_0, F)
+    \mathcal{N} := (S, \mathcal{A}, \textrm{move}_n, s_0, F)
     \label{nfa_tupla}
 \end{equation*}
 in cui:
@@ -158,12 +160,12 @@ in cui:
 \end{itemize}
 
 \subsection{Rappresentazione grafica}
-La tupla \((S, \mathcal{A}, mov_n, s_0, F)\) può essere rappresentata con un grafo diretto seguendo queste convenzioni:
+La tupla \((S, \mathcal{A}, \textrm{move}_n, s_0, F)\) può essere rappresentata con un grafo diretto seguendo queste convenzioni:
 \begin{itemize}
     \item gli stati rappresentano i nodi;
     \item lo stato iniziale è identificato da una freccia entrante;
     \item gli stati finali sono rappresentati da un doppio cerchio;
-    \item le funzioni di transizione rappresentano gli archi, ad esempio \(move_n(S_1, a) = \{S_2, S_3\}\) si rappresenta come in figura \ref{nfa_grafo_esempio}.
+    \item le funzioni di transizione rappresentano gli archi, ad esempio \(\textrm{move}_n(S_1, a) = \{S_2, S_3\}\) si rappresenta come in figura \ref{nfa_grafo_esempio}.
 \end{itemize}
 
 \begin{figure}
@@ -175,17 +177,17 @@ La tupla \((S, \mathcal{A}, mov_n, s_0, F)\) può essere rappresentata con un gr
 
 \noindent Si noti anche che, nella rappresentazione grafica, gli archi da \(S_1\) a \(S_2\) ed \(S_3\) vengono denotati da \(a\).
 
-Proponiamo ora al lettore il seguente esempio| (figura \ref{nfa_grafo_2}):
+Proponiamo ora al lettore il seguente esempio (figura \ref{nfa_grafo_2}):
 \begin{figure}
     \centering
     \includegraphics[width=.5\textwidth,keepaspectratio]{nfa_grafo_2}
     \caption{Secondo esempio di NFA}
     \label{nfa_grafo_2}
 \end{figure}
-L’elemento non deterministico è rappresentato dalle dure frecce \(a\) uscenti da \(S_0\), che potrebbero portarmi sia in \(S_1\) che in \(S_0\) di nuovo; inoltre, la \(\varepsilon\) introduce sempre indeterminismo, poiché permette di passare a uno stato successivo senza consumare un carattere del terminale (o produrre un carattere nella stringa, che dir si voglia, e quindi inserisce incertezza riguardo al percorso di derivazione compiuto).
+L’elemento non deterministico è rappresentato dalle dure frecce \(a\) uscenti da \(S_0\), che potrebbero portarmi sia in \(S_1\) che in \(S_0\) di nuovo; inoltre, la \(\varepsilon\) introduce sempre indeterminismo, poiché permette di passare a uno stato successivo senza consumare un carattere del terminale (o produrre un carattere nella stringa, che dir si voglia), e quindi inserisce incertezza riguardo al percorso di derivazione compiuto.
 
 Notiamo che dalla rappresentazione grafica si evincono tutti gli elementi che compongono l’NFA; questa è infatti una rappresentazione completa.
-Si può anche dare una descrizione tabellare delle funzioni di transizione (\(move_n\)) appartenenti a questo NFA:
+Si può anche dare una descrizione tabellare delle funzioni di transizione (\(\textrm{move}_n\)) appartenenti a questo NFA:
 
 %TODO: sostituire con una tabella vera
 \begin{figure}
@@ -211,10 +213,10 @@ Risolviamo, ad esempio, il linguaggio generato dall’automa descritto in figura
     \item \(a\) non appartiene al linguaggio, non esiste un percorso che mi porti ad uno stato finale attraversando un solo arco \(a\);
     \item allo stesso modo non posso trovare la parola \(b\) nel linguaggio;
     \item una parola possibile in questo linguaggio è, ad esempio, \(abb\);
-    \item tutte le parolee nella forma \(\mathcal{L}(a \mid b)^\ast abb\) sono parte del linguaggio.
+    \item tutte le parole nella forma \(\mathcal{L}(a \mid b)^\ast abb\) sono parte del linguaggio.
 \end{itemize}
 
-Proviamo a determinare il linguaggio dell'NFA descritto in figura \ref{nfa_grafo_3}:
+\noindent Proviamo a determinare il linguaggio dell'NFA descritto in figura \ref{nfa_grafo_3}:
 
 \begin{figure}
     \centering
@@ -223,23 +225,24 @@ Proviamo a determinare il linguaggio dell'NFA descritto in figura \ref{nfa_grafo
     \label{nfa_grafo_3}
 \end{figure}
 
-\noindent Il linguaggio accettato da questo NFA è \(\mathcal{L}(a a^* ) \mid ( b b^\ast )\).
+\noindent Il linguaggio accettato da questo NFA è \(\mathcal{L}((a a^* ) \mid ( b b^\ast ))\).
 
 \section{La costruzione di Thompson}
-La costruzione di Thompson è una procedura algoritmica che permette di costruire l’automa \(\mathcal{N}\) che genera lo stesso linguaggio generato da una certa espressione regolare \(r\), ovvero \(\mathcal{L}(\mathcal{N}) = \mathcal{L}(r)\).
+La costruzione di Thompson è una procedura algoritmica che permette di costruire l’automa \(\mathcal{N}\) che genera lo stesso linguaggio denotato da una certa espressione regolare \(r\), ovvero \(\mathcal{L}(\mathcal{N}) = \mathcal{L}(r)\).
 
+\subsection{Definizione}
 Anche questa costruzione è espressa in modo induttivo.
 
 \begin{description}
-    \item[Base] L'espressione regolare \(r\) è o \(\varepsilon\), oppure un simbolo dell’alfabeto \(a \in \mathcal{A}\); assumiamo di avere semrpre un NFA che riconosce \(\mathcal{L}(\varepsilon)\) e uno che riconosce \(\mathcal{L}(a) \; \forall a \in \mathcal{A}\).
+    \item[Base] L'espressione regolare \(r\) è o \(\varepsilon\), oppure un simbolo dell’alfabeto \(a \in \mathcal{A}\); assumiamo di avere sempre un NFA che riconosce \(\mathcal{L}(\varepsilon)\) e uno che riconosce \(\mathcal{L}(a) \; \forall a \in \mathcal{A}\).
     \item[Step] L'espressione regolare \(r\) è una tra le seguenti opzioni: 
     \begin{itemize}[noitemsep]
         \item \(r_1 \mid  r_2 \);
         \item \( r_1 r_2 \); 
-        \item \( r_1^\ast \);
+        \item \( r_1\) \(^\ast \);
         \item \((r_1)\);
     \end{itemize}
-    e, dati gli NFA \(\mathcal{N}_1\) e \(\mathcal{N}_2\) tali che \(\mathcal{L}(\mathcal{N}_1)=\mathcal{L}(r_1)\) e \(\mathcal{L}(\mathcal{N}_2)=\mathcal{L}(r_2)\), dobbiamo definire i vari NFA per le quattro operazioni \(r_1 \mid r_2\), \(r_1 r_2\), \(r_1^*\) ed \(r_1\). Le regole per definire questi nuovi NFA sono elencate successivamente.
+    e, dati gli NFA \(\mathcal{N}_1\) e \(\mathcal{N}_2\) tali che \(\mathcal{L}(\mathcal{N}_1)=\mathcal{L}(r_1)\) e \(\mathcal{L}(\mathcal{N}_2) = \mathcal{L}(r_2)\), dobbiamo definire i vari NFA per le quattro operazioni \(r_1 \mid r_2\), \(r_1 r_2\), \(r_1\) \(^\ast\) ed \(r_1\). Le regole per definire questi nuovi NFA sono elencate successivamente.
 \end{description}
 
 \noindent A questo punto possiamo fare due osservazioni sulla costruzione di Thompson.
@@ -249,6 +252,7 @@ Anche questa costruzione è espressa in modo induttivo.
     \item In ogni stato intermedio dell’NFA c’è esattamente uno stato finale, e inoltre lo stato iniziale non ha nessun arco entrante e lo stato finale non ha alcun arco uscente. 
 \end{enumerate}
 
+\subsection{Spiegazione in dettaglio}
 Vediamo ora la rappresentazione grafica di questo algoritmo. Partiamo dai passi base.
 
 \begin{figure}
@@ -268,23 +272,26 @@ Vediamo ora la rappresentazione grafica di questo algoritmo. Partiamo dai passi 
 \end{figure}
 Supponiamo di avere \(\mathcal{N}(r_1)\) e \(\mathcal{N}(r_2)\) descritti come in precedenza, discutiamo le applicazioni di Thompson descritte in in figura \ref{Thompson_step}.
 
+\subsubsection{Alternation}
 Guardiamo il primo caso, l'operazione di addizione \(r = r_1 \mid r_2\).\\
 Vogliamo creare un automa che accetta parole di \(\mathcal{L}(r_1)\) o anche parole di \(\mathcal{L}(r_2)\).
 Abbiamo i due \(\mathcal{N}\), che rappresentano gli stati intermedi; li posizioniamo uno sopra all’altro. Ora possiamo creare uno stato vuoto e usarlo come stato iniziale per entrambi gli \(\mathcal{N}\), e quindi collegarlo a questi ultimi tramite una \(\varepsilon\)-trasformazione; allo stesso modo possiamo creare uno stato finale raggiungibile dai due \(\mathcal{N}\) tramite una \(\varepsilon\)-trasformazione.
 
+\subsubsection{Concatenation}
 Guardiamo ora l’operazione di concatenazione \(r = r_1 r_2\).\\
 Per la nostra ipotesi induttiva, sappiamo di poter far affidamento sui due automi \(\mathcal{N}(r_1)\) ed \(\mathcal{N}(r_2)\); in questo momento ci viene in aiuto la proprietà della costruzione, che dice che i passi intermedi (i due \(\mathcal{N}\)) hanno esattamente uno stato finale ed uno stato iniziale, senza alcun arco entranto nello stato iniziale e nessun arco uscente dagli stati finali. 
 In questo modo possiamo far coincidere lo stato iniziale di \(\mathcal{N}(r_2)\) con lo stato finale di \(\mathcal{N}(r_1)\). 
 Di conseguenza, una parola riesce ad arrivare allo stato terminale blu solo se riesce a passare sia da \(\mathcal{N}(r_1)\) che da \(\mathcal{N}(r_2)\).
 
+\subsubsection{Kleene Star}
 Guardiamo il caso della Kleene star \(r = r_1^*\).\\
 Vogliamo un automa che riconosce o \(\varepsilon\) o tutte le parole che sono composte dalla ripetizione di altre parole appartenenti al linguaggio \(\mathcal{L}(r_1)\).
 Posseggo l’automa \(\mathcal{N}(r_1)\), che ha un solo stato iniziale ed un solo stato finale; aggiungo due stati che serviranno come nuovo stato iniziale e nuovo stato finale.
 Siccome voglio poter avere \(\varepsilon\) come parola possibile, introduco un nuovo arco \(\varepsilon\) che collega il nuovo stato iniziale al nuovo stato finale, quindi implemento la ripetizione con degli altri archi \(\varepsilon\) come in figura; la spiegazione è abbastanza banale.
 
-Guardiamo il caso della parentesizzazione \(r = ( r_1 )\), il quale risulta estremamente banale.\\
-% Ah no aspetta, non lo guardiamo davvero.
-\\
+\subsubsection{Parentheses}
+Guardiamo il caso della parentesizzazione \(r = ( r_1 )\), il quale risulta estremamente banale, così tanto che in realtà non lo guardiamo davvero scherzone lol.
+
 Questo è il modo di utilizzare il processo di Thompson per costruire automi complessi, ci renderemo conto più avanti di quante \(\varepsilon\) questo ci costringe ad utilizzare e di cosa questo comporti.
 
 \subsection{Applicazione di Thompson}
@@ -304,7 +311,7 @@ In primis applichiamo la regola di base (\ref{Thompson_base}).
     \label{esempio_Thompson_0}
 \end{figure}
 
-Concentriamoci ora sulla prima espressione, \( a \mid b = r_1 |\mid r_2 = r_3\); applichiamo la costruzione di Thompson per l’alternanza ai due automi per \(r_1\) e \(r_2\), otteniamo quindi l’automa per \(r_3\).
+Concentriamoci ora sulla prima espressione, \( a \mid b = r_1 \mid r_2 = r_3\); applichiamo la costruzione di Thompson per l’alternanza ai due automi per \(r_1\) e \(r_2\), otteniamo quindi l’automa per \(r_3\).
 
 \begin{figure}
     \centering
@@ -360,7 +367,7 @@ Il prossimo passaggio è la traduzione dell'operatore di parentesi, il che è ba
     \label{esempio_Thompson_4}
 \end{figure}
 
-Possiamo notare come il risultato cui giungiamo sia pieno di \(\varepsilon\);la costruzione di Thompson ci dà sicuramente un risultato esatto, ma non è detto che sia il risultato migliore, anzi; abbiamo già visto in passato un automa che riconosce lo stesso linguaggio di questo, e quell'automa era più semplice ed elegante (vedi \ref{nfa_grafo_2}).
+Possiamo notare come il risultato cui giungiamo sia pieno di \(\varepsilon\); la costruzione di Thompson ci dà sicuramente un risultato esatto, ma non è detto che sia il risultato migliore, anzi; abbiamo già visto in passato un automa che riconosce lo stesso linguaggio di questo, e quell'automa era più semplice ed elegante (vedi \ref{nfa_grafo_2}).
 
 Notiamo che comunque l’algoritmo di Thompson garantisce dei limiti superiori sulla complessità dell’automa che genera: ad ogni passo si aggiungono al massimo \(2\) nuovi nodi.
 La lunghezza dell’automa finale infatti è limitata da \(2n\), con \(n\) che rappresenta il numero di simboli nell’espressione regolare, dove con simboli si intende sia simboli del vocabolario che operatori.
@@ -391,13 +398,13 @@ La risposta è sì, possiamo farlo! Per vedere in che modo dobbiamo prima introd
 
 
 \subsection{\(\varepsilon\)-chiusura di un automa}
-Sia \((S, \mathcal{A}, move_n, s_0, F)\) un NFA, sia \(t\) uno stato in \(S\) e \(T\) un sottoinsieme di \(S\).
+Sia \((S, \mathcal{A}, \textrm{move}_n, s_0, F)\) un NFA, sia \(t\) uno stato in \(S\) e \(T\) un sottoinsieme di \(S\).
 
 Definiamo \(\varepsilon\)-chiusura\((\{t\})\) l’insieme di stati in \(S\) che sono raggiungibili da \(t\) tramite zero o più \(\varepsilon\)-transizioni (nota che \(t\) è sempre in questo insieme).
 
 Definiamo \(\varepsilon\)-chiusura\((T)\) nel seguente modo:
 \begin{equation}
-    \varepsilon-chiusura(T) = \bigcup_{t \in T} \;\varepsilon-chiusura(\{t\})
+    \varepsilon \textrm{-chiusura}(T) = \bigcup_{t \in T} \;\varepsilon\textrm{-chiusura}(\{t\})
 \end{equation} 
 
 \subsubsection{Calcolo della \(\varepsilon\)-chiusura}
@@ -406,21 +413,30 @@ Per calcolare la \(\varepsilon\)-chiusura di un nodo di un automa useremo queste
 \begin{enumerate}
     \item Uno stack;
     \item Un array booleano “alreadyOn” che ci serve per segnalare se uno stato \(t\) è già sulla pila o meno (la sua lunghezza è \(|S|\));
-    \item Un array bidimensionale per ricordare \(move_n\). Ogni entry \((t,x)\) è una lista linkata contenente tutti gli stati che sono raggiungibili con un \(x\)-transizione da \(t\).
+    \item Un array bidimensionale per ricordare \(\textrm{move}_n\). Ogni entry \((t,x)\) è una lista linkata contenente tutti gli stati che sono raggiungibili con un \(x\)-transizione da \(t\).
 \end{enumerate}
 
-Ora che sappiamo quali sono le strutture dati che andremo ad utilizzare, studiamo la fase di inizializzazione: all’inizio dei tempi non c’è niente sulla pila, poi inseriamo \(t\) e lo segnaliamo su alreadyOn
+Ora che sappiamo quali sono le strutture dati che andremo ad utilizzare, studiamo la fase di inizializzazione: 
 
-A questo punto estraiamo dalla cima dello stak, prendiamo il nodo estratto \(e\) e cerchiamo tutti i nodi che da \(e\) si raggiugono tramite un \(\varepsilon\)-arco; inseriamo tutti questi nello stak (se non sono già presenti) e ne segnaliamo l'inserimento settando il loro flag su alreadyOn.
+\begin{itemize}
+    \item all’inizio dei tempi non c’è niente sulla pila, poi inseriamo \(t\) e lo segnaliamo su alreadyOn;
+    \item a questo punto estraiamo dalla cima dello stak, prendiamo il nodo estratto \(e\) e cerchiamo tutti i nodi che da \(e\) si raggiugono tramite un \(\varepsilon\)-arco; inseriamo tutti questi nello stak (se non sono già presenti) e ne segnaliamo l'inserimento settando il loro flag su alreadyOn.
+\end{itemize}
 
 Continuiamo così finché lo stak non si svuota. L'algoritmo appena descritto si può trovare in figura \ref{algoritmo_epsilon_chiusura}.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_epsilon_chiusura}
     \caption{Algoritmo per il calcolo della \(\varepsilon\)-chiusura\((\{t\})\)}
     \label{algoritmo_epsilon_chiusura}
 \end{figure}
+
+% \begin{algorithm}[H]
+% 	\centering
+% 	\subimport{assets/code/}{epsilon-closure-computation.tex}
+% 	\caption{Esempio di parse tree}
+% \end{algorithm}
 
 Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'algoritmo per la verifica dell'appartenenza di una parola \(w\) al linguaggio riconosciuto da un automa, ovvero l'algoritmo di simulazione (figura \ref{algoritmo_simulazione_nfa}).
 
@@ -431,14 +447,14 @@ Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'a
     \label{algoritmo_simulazione_nfa}
 \end{figure}
 
-Dove \$ è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \$).
-Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(s_0\) e la aggiungiamo all'insieme \(states\); prendiamo il primo simbolo nella parola e poi entriamo nel ciclo che compone il corpo della procedura.
+Dove \texttt{\$} è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \texttt{\$}).
+Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(s_0\) e la aggiungiamo all'insieme \texttt{states}; prendiamo il primo simbolo nella parola e poi entriamo nel ciclo che compone il corpo della procedura.
 
-In questo corpo si utilizza la \(\varepsilon\)-chiusura per salvare in \texttt{states} la \(\varepsilon\)-chiusura di tutti gli stati che posso raggiungere tramite una \(symbol\)-transizione (una transizione marcata con \(symbol\)); una volta trovati questi nodi passo \texttt{symbol} prende il valore del prossimo carattere di \(w\).
+In questo corpo si utilizza la \(\varepsilon\)-chiusura per salvare in \texttt{states} la \(\varepsilon\)-chiusura di tutti gli stati che posso raggiungere tramite una \texttt{symbol}-transizione (una transizione marcata con \texttt{symbol}); una volta trovati questi nodi passo \texttt{symbol} prende il valore del prossimo carattere di \(w\).
 
-Una volta che \texttt{symbol} prende il valore di \$, mi fermo e controllo il contenuto di \texttt{states}.
+Una volta che \texttt{symbol} prende il valore di \texttt{\$}, mi fermo e controllo il contenuto di \texttt{states}.
 
-Se \texttt{states}\(\cap F \neq \Phi\), allora significa che esiste uno stato in \texttt{states} che è anche uno stato finale dell'automa e quindi abbiamo trovato un percorso che riconosce la parola \(w\) e termina in uno stato finale (ammissibile). Ottimo, abbiamo appena dimostrato che \(w\) appartiene al linguaggio riconosciuto dall'automa.
+Se \(\textrm{\texttt{states}} \; \cap \; F \neq \Phi\), allora significa che esiste uno stato in \texttt{states} che è anche uno stato finale dell'automa e quindi abbiamo trovato un percorso che riconosce la parola \(w\) e termina in uno stato finale (ammissibile). Ottimo, abbiamo appena dimostrato che \(w\) appartiene al linguaggio riconosciuto dall'automa.
 
 Se invece la condizione precedente non è verificata, allora si è avverato uno dei seguenti casi (o anche entrambi): o non esistono percorsi che riconoscono \(w\), o non esistono percorsi che riconoscono \(w\) e terminano in uno stato finale.
 
@@ -467,11 +483,11 @@ Continuo così finché non finisco i simboli; a quel punto devo verificare se es
 
 \subsection{Nota sulla \(\varepsilon\)-chiusura}
 \begin{theorem}
-    Sia \((S, A move_n, s_0, F)\) un NFA e sia \(M \subseteq S\).
+    Sia \((S, \mathcal{A}, \textrm{move}_n, s_0, F)\) un NFA e sia \(M \subseteq S\).
     
     Allora la \(\varepsilon\)-chiusura\((M)\) è il più piccolo insieme \(X \subseteq S\) tale che \(X\) è una soluzione alla seguene equazione:
     \begin{equation}
-        X = M \cup \{ N’ \mid N \in X and N’ \in move_n (N,\varepsilon)\}
+        X = M \cup \{ N’ \mid N \in X \land N’ \in \textrm{move}_n (N,\varepsilon)\}
         \label{eps-closure-set-eq}
     \end{equation}
 \end{theorem}
@@ -485,7 +501,7 @@ Continuo così finché non finisco i simboli; a quel punto devo verificare se es
     \label{nfa_ciclico}
 \end{figure}
 
-Osserviamo con attenzione la formula appena descritta: \(X\) è \(M\) stesso, unito anche a tutti gli stati \(N’\) raggiungibili da \(N\) tramite una \(\varepsilon\)-transizione,dove \(N\) è uno stato qualsiasi in \(M\).
+Osserviamo con attenzione la formula appena descritta: \(X\) è \(M\) stesso, unito anche a tutti gli stati \(N’\) raggiungibili da \(N\) tramite una \(\varepsilon\)-transizione, dove \(N\) è uno stato qualsiasi in \(M\).
 
 Balza subito all'occhio come la formula per definire \(X\) dipenda da \(X\) stessa; per questo motivo non dovremmo poterla calcolare, giusto? 
 Sbagliato! In informatica possiamo risolvere queste equazioni date certe caratteristiche, ed è qui che giunge in nostro aiuto il teorema del punto fisso. 
@@ -493,6 +509,7 @@ Sbagliato! In informatica possiamo risolvere queste equazioni date certe caratte
 
 \subsection{Teorema del punto fisso}
 L'equazione \ref{eps-closure-set-eq} vista poco fa è un'istanza di una più generale equazione su insiemi, della forma \(X = f(X)\), sulla quale possediamo un risultato importante.
+
 
 Sia \(f 2^D \to 2^D\) per qualche insieme finito \(D\) e sia inoltre \( f \) monotona, vale a dire
 \begin{equation*}
@@ -613,7 +630,7 @@ Introdunciamoli per differenza rispetto agli NFA. Si tenga  amente la definizion
 Un automa a stati finiti deterministici è invece definito come segue:
 
 \begin{gather*}
-    \textrm{DFA} := (S, \mathcal{A}, \textrm{move}_d, s_0, F), \textrm{ dove } \\
+    \mathcal{D} := (S, \mathcal{A}, \textrm{move}_d, s_0, F), \textrm{ dove } \\
     \textrm{move}_d : S \times \mathcal{A} \to S
 \end{gather*}
 
