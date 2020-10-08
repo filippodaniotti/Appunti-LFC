@@ -1,0 +1,45 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage[table]{xcolor}
+
+\setlength\lightrulewidth{0.1pt}
+\providecommand\lightrule{%
+	\arrayrulecolor{black!30}%
+	\midrule[\lightrulewidth]%
+	\arrayrulecolor{black}}
+
+\begin{document}
+\begin{tabularx}{\textwidth}{XXX}
+		Stati (determinisitci) & \(\varepsilon\)-chiusura dei punti di arrivo delle a-transizioni & \(\varepsilon\)-chiusura dei punti di arrivo delle b-transizioni \\
+    \midrule
+        \(T0 = \varepsilon-cl(\{1\}) = \{1,2,4\}\) \newline
+        (stato iniziale) \newline
+        (2 \(\implies\) stato finale)
+        &
+        \(T1 = \varepsilon-cl(\{3\}) = \{3\} \) \newline
+        [T1 unmarked]
+        &
+        \(T2 = \varepsilon-cl(\{5\}) = \{5\}\) \newline 
+        [T2 unmarked]
+        \\ \lightrule
+        \(T1 = \{3\}\) \newline
+        (stato finale perché c’è 3)
+        &
+        \(T3 = \varepsilon-cl(\{3\}) = \{3\} = T1\) \newline
+        T1 già nella collezione, non lo rimetto
+        &
+        \(\Phi\)
+        \\ \lightrule
+        \(T2 = \{5\}\) \newline
+        (stato finale perché c’è 5)
+        &
+        \(\Phi\)
+        &
+        \(T4 = \varepsilon-cl(\{5\}) = \{5\} = T2\)
+        T1 già nella collezione, non lo rimetto
+        \\
+\end{tabularx}
+\end{document}

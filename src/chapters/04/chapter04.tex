@@ -710,7 +710,6 @@ Si individua qual è lo stato iniziale dell'NFA, diciamo \(s_0\), si prende come
 Un fatto da tenere sempre ben presente è che gli stati del DFA che otteniamo in questo modo sono insiemi di stati dell'NFA di partenza. Il \(T\) appena descritto è un sottoinsieme degli stati dell'NFA di partenza.
 
 Dopo questa piccola introduzione passiamo a visualizzare subito il codice dell'algoritmo di Subset Construction (figura \ref{algoritmo_subset_construction}).
-
 \begin{figure}
     \centering
     \includegraphics[width=.8\textwidth,keepaspectratio]{subset_construction_algorithm.jpg}
@@ -760,7 +759,106 @@ Tuttavia per applicazioni con tempo di vita più limitato spesso non ha senso cr
 
 
 \subsection{Esercizi di applicazione della Subset Construction}
+\subsubsection*{Esercizio 1}
+Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_1} calcola tramite l'algoritmo di Subset Construction un automa a stati finiti deterministico che riconosce lo stesso linguaggio.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{e1_subset_construction.jpg}
+    \label{es_sc_1}
+    \caption{Esercizio 1: NFA}
+\end{figure}
+Il modo più semplice e chiaro per risolvere questo tipo di esercizi è quello di utilizzare una tabella per scrivere i vari passaggi, riportiamo qui sotto la soluzione all'esercizio in tale forma, seguita da un esteso commento della procedura seguita.
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{exercise1.tex}
+    \caption{Soluzione esercizio 1}
+    \label{Esercizio 1}
+\end{table} 
+Lo stato iniziale dell'NFA è 1, quindi per calcolare lo iniziale del DFA devo calcolare la \(\varepsilon\)-chiusura di 1, questo passaggio è riportato a riga 1 colonna 0.
+
+Poi entro nel vivo del \texttt{while}: estraggo \(T0\) e devo trovare tutti gli stati raggiungibili da \(T0\) tramite una \(a\)-transizione, ottengo lo stato 3; di questo insieme di stati (\(\{3\}\)) devo calcolare la \(\varepsilon\)-chiusura, questa sarà il nuovo insieme \(T1\); aggiungo la transizione \(move_d(T0, a)=\{T1\}\), segno \(T1\) come unmarked e passo avanti.
+
+Devo trovare, ora, tutti gli stati raggiungibili da \(T0\) attraverso una \(b\)-transizione: in questo caso ottengo solo lo stato 5; di questo insieme (\(\{5\}\)) calcolo la \(\varepsilon\)-chiusura che risulta essere \(\{5\}\), ho appena trovato \(T2\). Segno \(T2\) come unmarked, aggiungo la transizione \(move_d(T0, b)=\{T2\}\).
+
+Passo infine ad analizzare lo stato \(T1\). Estraggo \(T1\) da \(R\), vado a cercare la \(\varepsilon\)-chiusura dei punti di arrivo delle \(a\)-transizioni che partono da \(T1\); trovo che l'unica \(a\)-transizione che parte da \(T1\) mi porta allo stato 3, e la \(\varepsilon\)-chiusura di \(\{3\}\) mi ritorna esattamente \(T1\), quindi altro non faccio che aggiungere la transizione \(move_d(T1, a)=\{T1\}\) al nostro DFA, ma dato che \(T1\) è già marked non lo riaggiungo ad \(R\) e termino qui la mia analisi.
+
+Passo ora alla \(\varepsilon\)-chiusura dei punti di arrivo delle \(b\)-transizioni. Da \(T1\) non parte nessuna \(b\)-transizione, quindi termino qui l'analisi di \(T1\) e passo a \(T2\).
+Per \(T2\) compio banalmente le stesse azioni che ho svolto per \(T1\), che quindi non sono qui riportate.
+
+Alla fine della fiera, devo trovare quali sono gli stati finali del nostro automa deterministico, quindi faccio le varie intersezioni (come descritto dall'algoritmo) e segno come stati (deterministici) finali tutti quegli stati (deterministici) che contengono almeno uno stato (non deterministico) che sia esso stesso finale nell'NFA.
+
+Una volta terminata questa operazione abbiamo trovato quindi l’automa a stati finiti deterministico che riconosce lo stesso linguaggio dell’NFA di partenza, lo possiamo vedere raffigurato in figura \ref{sol_sc_1}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{s1_subset_construction.jpg}
+    \label{sol_sc_1}
+    \caption{Esercizio 1: DFA}
+\end{figure}
 
 
+\subsubsection*{Esercizio 2}
+Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_2} calcola tramite l'algoritmo di Subset Construction un automa a stati finiti deterministico che riconosce lo stesso linguaggio.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth,keepaspectratio]{e2_subset_construction.jpg}
+    \label{es_sc_2}
+    \caption{Esercizio 2: NFA}
+\end{figure}
+È riportata in seguito la tabella risolutiva per questo esercizio.
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{exercise2.tex}
+    \caption{Soluzione esercizio 2}
+    \label{Esercizio 2}
+\end{table} 
+Dato che lo svolgimento dei pass dell'algoritmo non presenta né novità né difficoltà in questo esempio, non è fornita una spiegazione estesa dei passaggi.
+
+A questo punto abbiamo considerato tutti gli stati in \(R\) quindi ora è il momento di determinare quali sono gli stati (deterministici) finali.
+
+L’unico stato finale nell'NFA è \(E\), quindi tutti e solo gli stati deterministici che contengono \(E\) sono stati deterministici finali. \(T0\), \(T1\) e \(T2\) sono tutti stati finali.
+
+Il DFA risultante si può ammirare in figura \ref{sol_sc_2}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth,keepaspectratio]{s2_subset_construction.jpg}
+    \label{sol_sc_2}
+    \caption{Esercizio 2: DFA}
+\end{figure}
+
+\subsubsection*{Esercizio 3}
+Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_3} calcola tramite l'algoritmo di Subset Construction un automa a stati finiti deterministico che riconosce lo stesso linguaggio.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth,keepaspectratio]{e3_subset_construction.jpg}
+    \label{es_sc_3}
+    \caption{Esercizio 3: NFA}
+\end{figure}
+Come per l'esercizio precedente, è riportata in seguito la tabella risolutiva.
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{exercise3.tex}
+    \caption{Soluzione esercizio 3}
+    \label{Esercizio 3}
+\end{table}
+Quindi abbiamo ben 5 stati per il DFA questa volta! È giunto il momento di capire quali di questi sono stati finali. Solo quelli che contengono lo stato 10 dell'NFA, ovvero solo \(T4\) è uno stato finale per il DFA ricavato, tale DFA si può vedere in figura \ref{sol_sc_3}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth,keepaspectratio]{s3_subset_construction.jpg}
+    \label{sol_sc_3}
+    \caption{Esercizio 3: DFA}
+\end{figure}
+
+Il lettore attento avrà notato però che a suo tempo avevamo già visto l'automa non deterministico in figura \ref{es_sc_3} e a suo tempo avevamo già osservato come questo automa riconosca tutte le parole scritte secondo questa formulazione \((a \mid b)^* abb\).
+
+Il fatto interessante è che avevamo anche visto un altro automa che riconosce lo stesso linguaggio, il quale presentava solo 4 stati ed era molto più semplice e compatto di quello che abbiamo appena ricavato. Questo automa è riportato in figura \ref{sol_sc_3_v2} per completezza.
+
+Questo va detto per sottolineare come l'algoritmo di Subset Construction sia un algoritmo che produce \emph{una} soluzione al problema di traduzione DFA \(\to\) NFA, ma non è detto che produca la soluzione \emph{migliore} per questo problema.
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\textwidth,keepaspectratio]{nfa_grafo_2.png}
+    \label{sol_sc_3_v2}
+    \caption{Esercizio 3: soluzione alternativa}
+\end{figure}
+Da notare che l'automa a stati finiti riportato in figura non è deterministico, ma solo per la presenza di una \(\varepsilon\)-transizione futile che può essere tranquillamente trascurata.
 
 \end{document}

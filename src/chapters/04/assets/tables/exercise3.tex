@@ -1,0 +1,65 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage[table]{xcolor}
+
+\setlength\lightrulewidth{0.1pt}
+\providecommand\lightrule{%
+	\arrayrulecolor{black!30}%
+	\midrule[\lightrulewidth]%
+	\arrayrulecolor{black}}
+
+\begin{document}
+\begin{tabularx}{\textwidth}{XXX}
+		Stati (determinisitci) & \(\varepsilon\)-chiusura dei punti di arrivo delle a-transizioni & \(\varepsilon\)-chiusura dei punti di arrivo delle b-transizioni \\
+    \midrule
+        Stato iniziale n.d. : 0 \newline
+        \(T0 = e-cl(\{0\}) = \{0, 1, 2, 4, 7\}\)
+        &
+        Stati tramite \(a\)-transizione \{3,8\} \newline
+        \(\varepsilon-cl(\{3,8\}) = \{1,2,3,4,6,7,8\} = T1\) \newline
+        [T1 unmarked]
+        &
+        Stati raggiunti tramite \(b\)-transizione \{5\} \newline
+        \(\varepsilon-cl(\{5\}) = \{1,2,4,5,6,7\} = T2\) \newline
+        [T2 unmarked]
+        \\ \lightrule
+        \(T1 = \{1,2,3,4,6,7,8\}\)
+        &
+        \(\{3, 8\}\) \newline
+        \(\varepsilon-cl(\{3,8\}) = T1\) \newline
+        [T1 già analizzato]
+        &
+        \(\{5, 9\}\) \newline
+        \(\varepsilon-cl(\{5,9\}) = \{1,2,4,5,6,7,9\} = T3\) \newline
+        [T3 unmarked]
+        \\ \lightrule
+        \(T2 = \{1,2,4,5,6,7\}\)
+        &
+        \(\{3,8\}\) \newline
+        [T1 già analizzato]
+        &
+        \(\{5\}\) \newline
+        [T2 già analizzato]
+        \\ \lightrule
+        \(T3 = \{1,2,4,5,6,7,9\}\)
+        &
+        \(\{3,8\}\) \newline
+        [T1 già analizzato]
+        &
+        \(\{5, 10\}\) \newline
+        \(\varepsilon-cl(\{5, 10\}) = \{1,2,4,5,6,7,10\} = T4\)
+        [T4 unmarked]
+        \\ \lightrule
+        \(T4 = \{1,2,4,5,6,7,10\}\)
+        &
+        \(\{3,8\}\) \newline
+        [T1 già analizzato]
+        &
+        \(\{5\}\) \newline
+        [T2 già analizzato]
+        \\
+\end{tabularx}
+\end{document}
