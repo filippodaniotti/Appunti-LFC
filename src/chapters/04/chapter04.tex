@@ -446,6 +446,7 @@ Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'a
     \caption{Algoritmo di simulazione per un automa}
     \label{algoritmo_simulazione_nfa}
 \end{figure}
+\subimport{assets/code/}{nfa-simulation.tex}
 
 Dove \texttt{\$} è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \texttt{\$}).
 Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(s_0\) e la aggiungiamo all'insieme \texttt{states}; prendiamo il primo simbolo nella parola e poi entriamo nel ciclo che compone il corpo della procedura.

@@ -1,0 +1,34 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+
+\begin{document}
+    \begin{algorithm}[H]
+        \DontPrintSemicolon
+
+        \SetKwData{States}{states}
+        \SetKwData{Symb}{symbol}
+
+        \SetKwFunction{Closure}{\(\varepsilon\)-closure}
+        \SetKwFunction{NC}{nextChar}
+        \SetKwFunction{Move}{\(\textrm{move}_n\)}
+
+        
+
+        \States = \Closure{\(\{s_0\}\)}\;
+        \Symb = \NC{}\;
+        \While{\Symb \(\neq\) \texttt{\$}} {
+            \States = \Closure{\(\bigcup_{t \in \textrm{\States}}\) \Move{t, \Symb}}\;
+            \Symb = \NC{}\;
+        }
+        \eIf{\States \(\cap \textrm{ } F \ne \emptyset\)}
+            {
+                \Return{true}\;
+            }
+            {  
+                \Return{false}\;
+            }
+
+        \caption{SimulazioneDFA(DFA \(\mathcal{N}\), \textsc{Word} \(w\))}
+    \end{algorithm}
+\end{document}
