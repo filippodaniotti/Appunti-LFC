@@ -1,0 +1,19 @@
+% \usepackage{forest}
+\tikzset{
+node distance=2cm, % specifies the minimum distance between two nodes. Change if necessary.
+every state/.style = {
+        draw,
+        % thick,
+        fill = blue!10,
+        minimum size = 4mm,
+        inner sep=1pt
+	},
+	every edge/.style = {
+		draw,
+		->, >=stealth', % makes the arrow heads bold
+		shorten >= 1pt,
+		thin,
+		on grid,
+	},
+initial text=inizio, % sets the text that appears on the start arrow
+}
