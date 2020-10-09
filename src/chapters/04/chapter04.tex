@@ -425,27 +425,28 @@ Ora che sappiamo quali sono le strutture dati che andremo ad utilizzare, studiam
 
 Continuiamo così finché lo stak non si svuota. L'algoritmo appena descritto si può trovare in figura \ref{algoritmo_epsilon_chiusura}.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_epsilon_chiusura}
-    \caption{Algoritmo per il calcolo della \(\varepsilon\)-chiusura\((\{t\})\)}
-    \label{algoritmo_epsilon_chiusura}
-\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_epsilon_chiusura}
+%     \caption{Algoritmo per il calcolo della \(\varepsilon\)-chiusura\((\{t\})\)}
+%     \label{algoritmo_epsilon_chiusura}
+% \end{figure}
 
 % \begin{algorithm}[H]
 % 	\centering
-	\subimport{assets/code/}{epsilon-closure-computation.tex}
+	\subimport{assets/code/}{ec-wrapper.tex}
+	\subimport{assets/code/}{ec-computation.tex}
 	% \caption{Esempio di parse tree}
 % \end{algorithm}
 
 Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'algoritmo per la verifica dell'appartenenza di una parola \(w\) al linguaggio riconosciuto da un automa, ovvero l'algoritmo di simulazione (figura \ref{algoritmo_simulazione_nfa}).
 
-\begin{figure}
-    \centering
-    \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_simulazione_nfa}
-    \caption{Algoritmo di simulazione per un automa}
-    \label{algoritmo_simulazione_nfa}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_simulazione_nfa}
+%     \caption{Algoritmo di simulazione per un automa}
+%     \label{algoritmo_simulazione_nfa}
+% \end{figure}
 \subimport{assets/code/}{nfa-simulation.tex}
 
 Dove \texttt{\$} è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \texttt{\$}).
@@ -612,12 +613,13 @@ Adesso possiamo affrontare il problema dello studio della complessità della sim
 
 Ci rendiamo conto che il ciclo \texttt{while} domina la complessità, soprattutto perché al suo interno avviene una chiamata di \(\varepsilon\)-chiusura, completata dall'estrazione di tutti gli elementi da \texttt{nextStack} e il loro inserimento in \texttt{currentStack}, oltre alla reinizializzazione di \texttt{alreadyOn}.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_simulazione_nfa_2}
-    \caption{Dettaglio di algoritmo di simulazione per un automa}
-    \label{algoritmo_simulazione_nfa_2}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_simulazione_nfa_2}
+%     \caption{Dettaglio di algoritmo di simulazione per un automa}
+%     \label{algoritmo_simulazione_nfa_2}
+% \end{figure}
+\subimport{assets/code}{nfa-sim-line4.tex}
 
 All'interno di ogni \texttt{while}, quindi, abbiamo uno swap degli stack, che costa \(\mathcal{O}(n)\), poiché è limitato dal numero di nodi dell'NFA; inoltre, ogni stato può essere inserito solo una volta nella pila nel secondo \texttt{foreach}; quindi, ogni ciclo del \texttt{while} costa \(\mathcal{O}(n + m)\). Questo ciclo verrà lanciato per ogni elemento della parola \(w\) analizzate, pertanto il costo complessivo della simulazione è \(\mathcal{O}(|w|(n + m))\); dal momento che il nostro NFA è stato generato da un'esecuzione di costruzione di Thompson, avremo anche che \(n + m = \mathcal{O}(|r|)\), per cui possiamo concludere che il costo  dell'intera procedura di simulazione è dell'ordine di \(\mathcal{O}(|w||r|)\).
 

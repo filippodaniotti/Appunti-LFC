@@ -6,11 +6,14 @@
 \begin{document}
     \begin{algorithm}[H]
         \DontPrintSemicolon
+        
+        \SetKwData{t}{\textbf{true}}
+        \SetKwData{f}{\textbf{false}}
 
         \SetKwData{States}{states}
         \SetKwData{Symb}{symbol}
 
-        \SetKwFunction{Closure}{\(\varepsilon\)-closure}
+        \SetKwFunction{Closure}{\(\varepsilon\)-chiusura}
         \SetKwFunction{Mark}{mark}
         \SetKwFunction{Unmark}{unmark}
         \SetKwFunction{NC}{nextChar}
@@ -37,21 +40,6 @@
                 set \(T \in E\)\;
             }
         }
-
-        % \States = \Closure{\(\{s_0\}\)}\;
-        % \Symb = \NC{}\;
-        % \While{\Symb \(\neq\) \texttt{\$}} {
-        %     \States = \Closure{\(\bigcup_{t \in \textrm{\States}}\) \Move{t, \Symb}}\;
-        %     \Symb = \NC{}\;
-        % }
-        % \eIf{\States \(\cap \textrm{ } F \ne \emptyset\)}
-        %     {
-        %         \Return{true}\;
-        %     }
-        %     {  
-        %         \Return{false}\;
-        %     }
-
-        \caption{subsetConstruction(NFA \(\mathcal{N}\)}
+        \caption{DFA subsetConstruction(NFA \(\mathcal{N}\))}
     \end{algorithm}
 \end{document}

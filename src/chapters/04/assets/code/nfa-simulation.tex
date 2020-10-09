@@ -6,29 +6,32 @@
     \begin{algorithm}[H]
         \DontPrintSemicolon
 
+        \SetKwData{t}{\textbf{true}}
+        \SetKwData{f}{\textbf{false}}
+        \SetKwData{not}{\textbf{not}}
+
         \SetKwData{States}{states}
         \SetKwData{Symb}{symbol}
-
-        \SetKwFunction{Closure}{\(\varepsilon\)-closure}
+        \SetKwFunction{Closure}{\(\varepsilon\)-chiusura}
         \SetKwFunction{NC}{nextChar}
-        \SetKwFunction{Move}{\(\textrm{move}_n\)}
+        \SetKwFunction{Moven}{\(\textrm{move}_n\)}
 
         
 
         \States = \Closure{\(\{s_0\}\)}\;
         \Symb = \NC{}\;
         \While{\Symb \(\neq\) \texttt{\$}} {
-            \States = \Closure{\(\bigcup_{t \in \textrm{\States}}\) \Move{t, \Symb}}\;
+            \States = \Closure{\(\bigcup_{t \in \textrm{\States}}\) \Moven{t, \Symb}}\;
             \Symb = \NC{}\;
         }
         \eIf{\States \(\cap \textrm{ } F \ne \emptyset\)}
             {
-                \Return{true}\;
+                \Return{\t}\;
             }
             {  
-                \Return{false}\;
+                \Return{\f}\;
             }
 
-        \caption{SimulazioneDFA(DFA \(\mathcal{N}\), \textsc{Word} \(w\))}
+        \caption{\textbf{boolean} SimulazioneDFA(DFA \(\mathcal{N}\), \textsc{Word} \(w\))}
     \end{algorithm}
 \end{document}

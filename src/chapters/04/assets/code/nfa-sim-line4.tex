@@ -1,0 +1,38 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[ruled,linesnumbered,vlined]{algorithm2e}
+
+\begin{document}
+    \begin{algorithm}[H]
+        \DontPrintSemicolon
+
+        \SetKwData{t}{\textbf{true}}
+        \SetKwData{f}{\textbf{false}}
+        \SetKwData{not}{\textbf{not}}
+
+        \SetKwData{Symb}{symbol}
+        \SetKwData{CS}{\(currentStack\)}
+        \SetKwData{NS}{\(nextStack\)}
+        \SetKwArray{aOn}{alreadyOn}
+        \SetKwFunction{Push}{push}
+        \SetKwFunction{Pop}{pop}
+        \SetKwFunction{Moven}{\(\textrm{move}_n\)}
+        \SetKwFunction{Closure}{\(\varepsilon\)-chiusura}
+
+        \ForEach{t \(\in\) \CS} {
+            \ForEach{u \(\in\) \Moven{t, \Symb}}{
+                \If{\not \aOn{u}} {
+                    \Closure{u, \NS}\;
+                }
+            }
+            \CS.\Pop{t}\;
+        }
+
+        \ForEach{s \(\in\) \NS} {
+            \NS.\Pop{s}\;
+            \CS.\Push{s}\;
+            \aOn{s} = \f\;
+        }
+        
+    \end{algorithm}
+\end{document}
