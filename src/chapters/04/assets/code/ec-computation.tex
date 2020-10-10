@@ -1,0 +1,30 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[ruled,linesnumbered,vlined]{algorithm2e}
+
+\begin{document}
+    \begin{algorithm}[H]
+        \DontPrintSemicolon
+
+        \SetKwData{t}{\textbf{true}}
+        \SetKwData{f}{\textbf{false}}
+        \SetKwData{not}{\textbf{not}}
+        
+        \SetKwArray{aOn}{alreadyOn}
+        \SetKwFunction{Push}{push}
+        \SetKwFunction{Pop}{pop}
+        \SetKwFunction{Moven}{\(\textrm{move}_n\)}
+        \SetKwFunction{Closure}{\(\varepsilon\)-chiusura}
+
+        \tcp{Assumiamo la struttura \Moven globale}
+        \(S\).\Push{t}\;
+        \aOn{t} = \t\;
+        \ForEach{\(u \in \) \Moven{t, \(\varepsilon\)}} {
+            \If{\not \aOn{u}} {
+                \Closure{u, S}
+            }
+        }   
+        
+        \caption{\(\varepsilon\)-chiusura(\textsc{State} \(\{t\}\), \textsc{Stack} \(S\))}
+    \end{algorithm}
+\end{document}
