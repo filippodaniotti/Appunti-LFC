@@ -190,12 +190,18 @@ Notiamo che dalla rappresentazione grafica si evincono tutti gli elementi che co
 Si può anche dare una descrizione tabellare delle funzioni di transizione (\(\textrm{move}_n\)) appartenenti a questo NFA:
 
 %TODO: sostituire con una tabella vera
-\begin{figure}
-    \centering
-    \includegraphics[width=.4\textwidth,keepaspectratio]{tabella}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.4\textwidth,keepaspectratio]{tabella}
+%     \caption{Tabella}
+%     \label{tabella}
+% \end{figure}
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{nfa2-table.tex}
     \caption{Tabella}
-    \label{tabella}
-\end{figure}
+    \label{nfa2-table}
+\end{table} 
 
 Qual è quindi il linguaggio accettato da un automa di questo tipo?\label{linguaggio_definito_da_un_automa} 
 Un NFA \(\mathcal{N}\) accetta (o riconosce) una parola \(w\) se e solo se esiste almeno un cammino che parte dallo stato iniziale di \(\mathcal{N}\) ed arriva a \(w\).
@@ -267,7 +273,7 @@ Vediamo ora la rappresentazione grafica di questo algoritmo. Partiamo dai passi 
 \begin{figure}
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{Thompson_step}
-    \caption{Thompson per lo step iduttivo}
+    \caption{Thompson per lo step induttivo}
     \label{Thompson_step}
 \end{figure}
 Supponiamo di avere \(\mathcal{N}(r_1)\) e \(\mathcal{N}(r_2)\) descritti come in precedenza, discutiamo le applicazioni di Thompson descritte in in figura \ref{Thompson_step}.
@@ -435,7 +441,7 @@ Continuiamo così finché lo stak non si svuota. L'algoritmo appena descritto si
 % \begin{algorithm}[H]
 % 	\centering
 	\subimport{assets/code/}{ec-wrapper.tex}
-	\subimport{assets/code/}{ec-computation.tex}
+	\subimport{assets/code/}{ec-computation.tex}\label{algoritmo_epsilon_chiusura}
 	% \caption{Esempio di parse tree}
 % \end{algorithm}
 
@@ -447,7 +453,7 @@ Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'a
 %     \caption{Algoritmo di simulazione per un automa}
 %     \label{algoritmo_simulazione_nfa}
 % \end{figure}
-\subimport{assets/code/}{nfa-simulation.tex}
+\subimport{assets/code/}{nfa-simulation.tex}\label{algoritmo_simulazione_nfa}
 
 Dove \texttt{\$} è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \texttt{\$}).
 Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(s_0\) e la aggiungiamo all'insieme \texttt{states}; prendiamo il primo simbolo nella parola e poi entriamo nel ciclo che compone il corpo della procedura.
@@ -469,6 +475,13 @@ Applichiamo ora, come esempio, l'algoritmo di simulazione di un NFA dato, verifi
     \caption{Esempio di applicazione dell'algoritmo di simulazione}
     \label{simulazione_es_1}
 \end{figure}
+
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{simulazione-nfa-ex1.tex}
+    \caption{}
+    \label{simulazione-nfa-ex1}
+\end{table} 
 
 \noindent In seguito una breve descrizione della rappresentazione dell'algoritmo.
 

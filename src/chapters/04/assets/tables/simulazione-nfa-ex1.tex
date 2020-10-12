@@ -1,0 +1,48 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+
+\newcolumntype{b}{>{\hsize=.78\hsize}X}
+\newcolumntype{s}{>{\hsize=.5\hsize}X}
+\newcolumntype{m}{>{\hsize=.25\hsize}X}
+\newcolumntype{h}{>{\hsize=.6\hsize}X}
+
+\setlength\lightrulewidth{0.1pt}
+\providecommand\lightrule{%
+	\arrayrulecolor{black!30}%
+	\midrule[\lightrulewidth]%
+	\arrayrulecolor{black}}
+
+\begin{document}
+\begin{tabularx}{\textwidth}{bmhs}
+        \texttt{states} & \texttt{symbol} & \(\bigcup_t \textrm{move}_n(t, \textrm{\texttt{symbol}})\) & \(\varepsilon\)-chiusura \\
+        \midrule
+            \(T0 = \{ 0, 1, 2, 4, 7\}\) \newline
+            \(T1 = \{ 1, 2, 3, 4, 6, 7, 8\}\) \newline
+            \(T2 = \{ 1, 2, 4, 5, 6, 7, 9\}\) \newline
+            \(T1\) \newline
+            \(T2\) \newline
+            \(T3 = \{ 1, 2, 4, 5, 6, 7, 10\}\)
+            &
+            \(a\) \newline
+            \(b\) \newline
+            \(a\) \newline
+            \(b\) \newline
+            \(b\) \newline
+            \texttt{\$}
+            &
+            \(\{3, 8\}\) \newline
+            \(\{5, 9\}\) \newline
+            \(\{3, 8\}\) \newline
+            \newline
+            \(\{5, 10\}\)
+            &
+            \(\{1, 2, 3, 4, 6, 7, 8\}\) \newline
+            \(\{1, 2, 4, 5, 6, 7, 9\}\) \newline
+            \(T1\) \newline
+            \(T2\) \newline
+            \(\{ 1, 2, 4, 5, 6, 7, 10\}\)
+\end{tabularx}
+\end{document}
