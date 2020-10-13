@@ -1,0 +1,37 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+
+\setlength\lightrulewidth{0.1pt}
+\providecommand\lightrule{%
+	\arrayrulecolor{black!30}%
+	\midrule[\lightrulewidth]%
+	\arrayrulecolor{black}}
+
+\begin{document}
+\begin{tabularx}{\textwidth}{XXXX}
+        & \(\varepsilon\) & \(a\) & \(b\) \\
+        \midrule
+            \(S_0\) \newline
+            \(S_1\) \newline
+            \(S_2\) \newline
+            \(S_3\)
+            &
+            \(\emptyset\) \newline
+            \(\emptyset\) \newline
+            \(\emptyset\) \newline
+            \(\{ S_3 \}\)
+            &
+            \(\{ S_0, S_1 \}\) \newline
+            \(\emptyset\) \newline
+            \(\emptyset\) \newline
+            \(\emptyset\)
+            &
+            \(\{S_0\}\) \newline
+            \(\{S_2\}\) \newline
+            \(\{S_2\}\) \newline
+            \(\emptyset\)
+\end{tabularx}
+\end{document}

@@ -191,12 +191,18 @@ Notiamo che dalla rappresentazione grafica si evincono tutti gli elementi che co
 Si può anche dare una descrizione tabellare delle funzioni di transizione (\(\textrm{move}_n\)) appartenenti a questo NFA:
 
 %TODO: sostituire con una tabella vera
-\begin{figure}
-    \centering
-    \includegraphics[width=.4\textwidth,keepaspectratio]{tabella}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.4\textwidth,keepaspectratio]{tabella}
+%     \caption{Tabella}
+%     \label{tabella}
+% \end{figure}
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{nfa2-table.tex}
     \caption{Tabella}
-    \label{tabella}
-\end{figure}
+    \label{nfa2-table}
+\end{table} 
 
 Qual è quindi il linguaggio accettato da un automa di questo tipo?\label{linguaggio_definito_da_un_automa} 
 Un NFA \(\mathcal{N}\) accetta (o riconosce) una parola \(w\) se e solo se esiste almeno un cammino che parte dallo stato iniziale di \(\mathcal{N}\) ed arriva a \(w\).
@@ -268,7 +274,7 @@ Vediamo ora la rappresentazione grafica di questo algoritmo. Partiamo dai passi 
 \begin{figure}
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{Thompson_step}
-    \caption{Thompson per lo step iduttivo}
+    \caption{Thompson per lo step induttivo}
     \label{Thompson_step}
 \end{figure}
 Supponiamo di avere \(\mathcal{N}(r_1)\) e \(\mathcal{N}(r_2)\) descritti come in precedenza, discutiamo le applicazioni di Thompson descritte in in figura \ref{Thompson_step}.
@@ -426,27 +432,29 @@ Ora che sappiamo quali sono le strutture dati che andremo ad utilizzare, studiam
 
 Continuiamo così finché lo stak non si svuota. L'algoritmo appena descritto si può trovare in figura \ref{algoritmo_epsilon_chiusura}.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_epsilon_chiusura}
-    \caption{Algoritmo per il calcolo della \(\varepsilon\)-chiusura\((\{t\})\)}
-    \label{algoritmo_epsilon_chiusura}
-\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_epsilon_chiusura}
+%     \caption{Algoritmo per il calcolo della \(\varepsilon\)-chiusura\((\{t\})\)}
+%     \label{algoritmo_epsilon_chiusura}
+% \end{figure}
 
 % \begin{algorithm}[H]
 % 	\centering
-	\subimport{assets/code/}{epsilon-closure-computation.tex}
+	\subimport{assets/code/}{ec-wrapper.tex}
+	\subimport{assets/code/}{ec-computation.tex}\label{algoritmo_epsilon_chiusura}
 	% \caption{Esempio di parse tree}
 % \end{algorithm}
 
 Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'algoritmo per la verifica dell'appartenenza di una parola \(w\) al linguaggio riconosciuto da un automa, ovvero l'algoritmo di simulazione (figura \ref{algoritmo_simulazione_nfa}).
 
-\begin{figure}
-    \centering
-    \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_simulazione_nfa}
-    \caption{Algoritmo di simulazione per un automa}
-    \label{algoritmo_simulazione_nfa}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_simulazione_nfa}
+%     \caption{Algoritmo di simulazione per un automa}
+%     \label{algoritmo_simulazione_nfa}
+% \end{figure}
+\subimport{assets/code/}{nfa-simulation.tex}\label{algoritmo_simulazione_nfa}
 
 Dove \texttt{\$} è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \texttt{\$}).
 Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(s_0\) e la aggiungiamo all'insieme \texttt{states}; prendiamo il primo simbolo nella parola e poi entriamo nel ciclo che compone il corpo della procedura.
@@ -468,6 +476,13 @@ Applichiamo ora, come esempio, l'algoritmo di simulazione di un NFA dato, verifi
     \caption{Esempio di applicazione dell'algoritmo di simulazione}
     \label{simulazione_es_1}
 \end{figure}
+
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{simulazione-nfa-ex1.tex}
+    \caption{}
+    \label{simulazione-nfa-ex1}
+\end{table} 
 
 \noindent In seguito una breve descrizione della rappresentazione dell'algoritmo.
 
@@ -612,12 +627,13 @@ Adesso possiamo affrontare il problema dello studio della complessità della sim
 
 Ci rendiamo conto che il ciclo \texttt{while} domina la complessità, soprattutto perché al suo interno avviene una chiamata di \(\varepsilon\)-chiusura, completata dall'estrazione di tutti gli elementi da \texttt{nextStack} e il loro inserimento in \texttt{currentStack}, oltre alla reinizializzazione di \texttt{alreadyOn}.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_simulazione_nfa_2}
-    \caption{Dettaglio di algoritmo di simulazione per un automa}
-    \label{algoritmo_simulazione_nfa_2}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_simulazione_nfa_2}
+%     \caption{Dettaglio di algoritmo di simulazione per un automa}
+%     \label{algoritmo_simulazione_nfa_2}
+% \end{figure}
+\subimport{assets/code}{nfa-sim-line4.tex}
 
 All'interno di ogni \texttt{while}, quindi, abbiamo uno swap degli stack, che costa \(\mathcal{O}(n)\), poiché è limitato dal numero di nodi dell'NFA; inoltre, ogni stato può essere inserito solo una volta nella pila nel secondo \texttt{foreach}; quindi, ogni ciclo del \texttt{while} costa \(\mathcal{O}(n + m)\). Questo ciclo verrà lanciato per ogni elemento della parola \(w\) analizzate, pertanto il costo complessivo della simulazione è \(\mathcal{O}(|w|(n + m))\); dal momento che il nostro NFA è stato generato da un'esecuzione di costruzione di Thompson, avremo anche che \(n + m = \mathcal{O}(|r|)\), per cui possiamo concludere che il costo  dell'intera procedura di simulazione è dell'ordine di \(\mathcal{O}(|w||r|)\).
 
