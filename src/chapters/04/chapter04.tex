@@ -44,8 +44,8 @@ Per riconoscere parole generate da una tale grammatica il metodo di analisi natu
 \begin{figure}[htb]
 	\centering
 	\subimport{assets/figures/}{msf.tex}
-	\label{macchina_a_stati_finiti}
     \caption{Macchina a stati finiti}
+	\label{macchina_a_stati_finiti}
 \end{figure}
 
 \noindent Il funzionamento di questi strumenti di analisi ci sarà ben più chiaro in seguito.
@@ -172,8 +172,8 @@ La tupla \((S, \mathcal{A}, \textrm{move}_n, s_0, F)\) può essere rappresentata
 \begin{figure}[htb]
 	\centering
 	\subimport{assets/figures/}{nfa1.tex}
-	\label{nfa_grafo_esempio}
     \caption{Grafo rappresentante un NFA}
+	\label{nfa_grafo_esempio}
 \end{figure}
 
 \noindent Si noti anche che, nella rappresentazione grafica, gli archi da \(S_1\) a \(S_2\) ed \(S_3\) vengono denotati da \(a\).
@@ -714,8 +714,8 @@ Dopo questa piccola introduzione passiamo a visualizzare subito il codice dell'a
 \begin{figure}
     \centering
     \includegraphics[width=.8\textwidth,keepaspectratio]{subset_construction_algorithm.jpg}
-    \label{algoritmo_subset_construction}
     \caption{Algoritmo di Subset Construction}
+    \label{algoritmo_subset_construction}
 \end{figure}
 Procediamo quindi ora con una spiegazione discorsiva di questo algoritmo.
 \paragraph*{Input}
@@ -765,8 +765,8 @@ Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_1} calcola 
 \begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{e1_subset_construction.jpg}
-    \label{es_sc_1}
     \caption{Esercizio 1: NFA}
+    \label{es_sc_1}
 \end{figure}
 Il modo più semplice e chiaro per risolvere questo tipo di esercizi è quello di utilizzare una tabella per scrivere i vari passaggi, riportiamo qui sotto la soluzione all'esercizio in tale forma, seguita da un esteso commento della procedura seguita.
 \begin{table}[H]
@@ -792,8 +792,8 @@ Una volta terminata questa operazione abbiamo trovato quindi l’automa a stati 
 \begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{s1_subset_construction.jpg}
-    \label{sol_sc_1}
     \caption{Esercizio 1: DFA}
+    \label{sol_sc_1}
 \end{figure}
 
 
@@ -802,8 +802,8 @@ Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_2} calcola 
 \begin{figure}[H]
     \centering
     \includegraphics[width=.8\textwidth,keepaspectratio]{e2_subset_construction.jpg}
-    \label{es_sc_2}
     \caption{Esercizio 2: NFA}
+    \label{es_sc_2}
 \end{figure}
 È riportata in seguito la tabella risolutiva per questo esercizio.
 \begin{table}[H]
@@ -822,8 +822,8 @@ Il DFA risultante si può ammirare in figura \ref{sol_sc_2}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=.8\textwidth,keepaspectratio]{s2_subset_construction.jpg}
-    \label{sol_sc_2}
     \caption{Esercizio 2: DFA}
+    \label{sol_sc_2}
 \end{figure}
 
 \subsubsection*{Esercizio 3}
@@ -831,8 +831,8 @@ Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_3} calcola 
 \begin{figure}[H]
     \centering
     \includegraphics[width=.8\textwidth,keepaspectratio]{e3_subset_construction.jpg}
-    \label{es_sc_3}
     \caption{Esercizio 3: NFA}
+    \label{es_sc_3}
 \end{figure}
 Come per l'esercizio precedente, è riportata in seguito la tabella risolutiva.
 \begin{table}[H]
@@ -845,8 +845,8 @@ Quindi abbiamo ben 5 stati per il DFA questa volta! È giunto il momento di capi
 \begin{figure}[H]
     \centering
     \includegraphics[width=.8\textwidth,keepaspectratio]{s3_subset_construction.jpg}
-    \label{sol_sc_3}
     \caption{Esercizio 3: DFA}
+    \label{sol_sc_3}
 \end{figure}
 
 Il lettore attento avrà notato però che a suo tempo avevamo già visto l'automa non deterministico in figura \ref{es_sc_3} e a suo tempo avevamo già osservato come questo automa riconosca tutte le parole scritte secondo questa formulazione \((a \mid b)^* abb\).
@@ -857,8 +857,8 @@ Questo va detto per sottolineare come l'algoritmo di Subset Construction sia un 
 \begin{figure}
     \centering
     \includegraphics[width=.5\textwidth,keepaspectratio]{nfa_grafo_2.png}
-    \label{sol_sc_3_v2}
     \caption{Esercizio 3: soluzione alternativa}
+    \label{sol_sc_3_v2}
 \end{figure}
 Da notare che l'automa a stati finiti riportato in figura non è deterministico, ma solo per la presenza di una \(\varepsilon\)-transizione futile che può essere tranquillamente trascurata.
 
