@@ -885,104 +885,124 @@ Questo va detto per sottolineare come l'algoritmo di Subset Construction sia un 
 Da notare che l'automa a stati finiti riportato in figura non è deterministico, ma solo per la presenza di una \(\varepsilon\)-transizione e di due transizioni da \(S_{0}\) col simbolo \(a\)
 
 \section{Minimizzazione di DFA}
-Spesso e volentieri, non siamo interessati ad un generico \(D\), che genera un linguaggio \(\mathcal{L(D)}\), ma siamo invece interessati  ad avere il DFA minimo, \(D'\) con numero minimo di stati, tale che  \(\mathcal{L(D)} = \mathcal{L(D')}\) 
+Spesso e volentieri non siamo interessati ad un generico DFA \(\mathcal{D}\) che generi un altrettanto generico linguaggio \(\mathcal{L(D)}\), ma desideriamo invece il DFA \(\mathcal{D}'\) minimo, ovvero quello con numero minimo di stati tale che \(\mathcal{L(D)} = \mathcal{L(D')}\). 
 
 
-Prima di procedere, dobbiamo definire la nozione di \emph{State Equivalence}
+Prima di procedere, dobbiamo definire la nozione di \emph{State Equivalence}.
 
-Sia \(D = (S,A,\textrm{move}_{d},s_{0},F)\) un DFA con funzione di transizione \emph{totale}. Allora due stati \(s,t \in S\)) si dicono equivalenti se e solo se la seguente condizione è verificata:
+\subsection{Definizione di State Equivalence}
 
+\begin{definition}
+    Sia \(\mathcal{D} = (S,\mathcal{A},\textrm{move}_{d},s_{0},F)\) un DFA con funzione di transizione totale. Allora due stati \(s,t \in S\) si dicono equivalenti se e solo se la seguente condizione è verificata:
 
-\(\textrm{move}_{d}^{*}(s,x) \in F\) se e solo se \(\textrm{move}_{d}^{*}(t,x) \in F  \forall x \in A^{*}\) 
-dove la funzione multi-passo \(\textrm{move}_{d}^{*}\) è definita per induzione nel seguente modo:
+    \begin{equation}
+        \textrm{move}_{d}\!^{*}(s,x) \in F \iff \textrm{move}_{d}\!^{*}(t,x) \in F,  \forall x \in \mathcal{A}^{*} 
+    \end{equation}
+    
+    \noindent dove la funzione multi-passo \(\textrm{move}_{d}\!^{*}\) è definita per induzione sulla lunghezza della stringa considerata nel seguente modo:
 
+    \begin{description}
+        \item[base] \(\textrm{move}_{d}\!^{*}(s,\epsilon)=s\) 
+        \item[step] \(\textrm{move}_{d}\!^{*}(s,wa)= \textrm{move}_{d}(\textrm{move}_{d}\!^{*}(s,w),a)\)
+    \end{description}    
+\end{definition}
 
-\(\textrm{move}_{d}^{*}(s,\epsilon)=s\) 
+L'idea generale su cui si basa l'algoritmo di minimizzazione qui proposto è che alcuni stati sono ridondanti, e per questo possono essere rimossi senza perdere informazione, vale a dire senza modificare il linguaggio riconosciuto dal DFA. Per eliminare questi stati in eccesso, utilizziamo la procedura di \emph{partition refinement}
 
-\(\textrm{move}_{d}^{*}(s,wa)= \textrm{move}_{d}(\textrm{move}_{d}^{*}(s,w),a)\)
+\subsection{Partition Refinement}
+Grazie a questa procedura arriveremo a partizionare gli stati in \(2\) blocchi, dove per blocchi intendiamo dei sottinsiemi di stati disgiunti.
 
-L'idea generale dell'algoritmo di minimizzazione qui proposta è che alcuni stati siano ridondanti, e che dunque possano essere rimossi senza perdere informazione, ovvero senza modificare il linguaggio riconosciuto dal DFA.
+\begin{itemize}
+    \item Iniziamo con \(2\) blocchi generici, \(B_{1}=F\) e \(B_{2}=S\setminus F\). Questa scelta fa sì che i due blocchi non abbiano stati equivalenti, poiché se consideriamo due stati \(s, t\) tali che \(s\in B_{1}\) e \(t\in B_{2}\), allora vale che \(\textrm{move}_{d}\!^{*}(s,\varepsilon)\in F\) e \(\textrm{move}_{d}\!^{*}(t,\epsilon)\notin F\).
+    \item Proseguiamo controllando se un blocco ha stati non equivalenti; se sì, li dividiamo in blocchi distinti, separando tra di loro gli stati non equivalenti; se no, analizziamo altri blocchi. Ripetiamo quest'operazione fino a quando non vi sono più blocchi con stati non equivalenti.
+    \item In maniera formale, se tutti gli stati \(B_{i}=\{s_{1}, \ldots, s_{k}\}\) di un blocco sono equivalenti, per ogni transizione \(a \in \mathcal{A}\) il target di tale transazione appartiene allo stesso blocco.
+    \item Il blocco \(B_{i}\) può essere spezzato in due se per qualche \(s,t \in B_{i}\) vale \(\textrm{move}_{d}(s,a)\in B_{j}\) e \(\textrm{move}_{d}(t,a)\notin B_{j}\), ossia se ci sono due stati non equivalenti.
+    \item Nel concreto, dividere un certo blocco \(B_{i}\) rispetto a \(a,B_{j}\) consiste nel sostituire \(B_{i}\) con due nuovi blocchi:
+    \begin{itemize}
+        \item \( B_{i_1} = \{s \in B_{j} \mid \textrm{move}_{d}(s,a)\in B\}\);
+        \item \( B_{i_2} = \{s \in B_{j} \mid \textrm{move}_{d}(s,a)\notin B\}\).
+    \end{itemize}
+\end{itemize}
 
-Per eliminare gli stati in eccesso, utilizziamo la procedura di \emph{partition refinement}
-\paragraph{Partition Refinement}
-Partizioniamo gli stati in 2 blocchi ( insiemi di stati disgiunti)\\
-Iniziamo con 2 blocchi \(B_{1}=F\) e \(B_{2}=S\setminus F\). Questa scelta fa sì che i due blocchi non abbiano stati equivalenti in quanto con \(s\in B_{1}\) e \(t\in B_{2}\) vale che \(\textrm{move}_{d}^{*}(s,\epsilon)\in F\) e \(\textrm{move}_{d}^{*}(t,\epsilon)\notin F\)\\
-Proseguiamo controllando se un blocco ha stati non equivalenti, se sì li dividiamo in blocchi  distinti, separando tra di loro gli stati non equivalenti, se no, analizziamo altri blocchi. Ripetiamo fino a quando non vi sono più blocchi con stati non equivalenti
-
-In maniera formale, se tutti gli stati \(B_{i}=\{s_{1},...,s_{k}\}\)di un blocco sono equivalenti, per ogni a transizione \(a \in A\) il target di tale transazione appartiene allo stesso blocco.
-Il blocco \(B_{i}\) può essere spezzato in due se per qualche \(s,t \in B_{i}\) vale \(\textrm{move}_{d}(s,a)\in B_{j}\) e \(\textrm{move}_{d}(t,a)\notin B_{j}\)
-
-La divisione consiste di \(B_{i}\) considerando \(a,B_{j}\) consiste nel sostituire \(B_{i}\) con due blocchi, \( B_{i1} = {s \in B_{j} | \textrm{move}_{d}(s,a)\in B}\) e \( B_{i2} = {s \in B_{j} | \textrm{move}_{d}(s,a)\notin B}\)
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth,keepaspectratio]{algoritmo partiton refinement.png}
 	\label{partition refinement}
 	\caption{Pseudocodice}
 \end{figure}
-\subsection{Esercizio 1}
-Passiamo ad applicare la procedura di minimizzazione ad uno degli esempi già visti in passato
+
+\subsection{Esercizi sulla minimizzazione DFA}
+\subsubsection{Esercizio 1}
+Passiamo ad applicare la procedura di minimizzazione ad uno degli esempi già visti in passato.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth,keepaspectratio]{s3_subset_construction.jpg}
-	\label{es_1}
+	\label{mindfa-es-1}
 	\caption{Esercizio 1}
 \end{figure}
-Iniziamo con due blocchi iniziali, \(B_{1}=\{E\}\) dato dallo stato finale e \(B_{2}=\{A,B,C,D\}\)
-Notiamo che \((b,B_{1})\) spezza \(B_{2}\), da cui abbiamo due blocchi \(B_{21}=\{D\}\) e \(B_{22}=\{A,B,C\}\)
-Notiamo ancora che è possibile spezzare \(B_{22}\) in \(B_{221}=\{B\}\) e \(B_{222}=\{A,C\}\)
 
-Da cui abbiamo il minimo 
+Iniziamo con due blocchi iniziali: \(B_{1}=\{E\}\), dato dallo stato finale, e \(B_{2}=\{A,B,C,D\}\). Notiamo che \((b,B_{1})\) spezza \(B_{2}\), per cui abbiamo due blocchi \(B_{21}=\{D\}\) e \(B_{22}=\{A,B,C\}\). Notiamo ancora che è possibile spezzare \(B_{22}\) in \(B_{221}=\{B\}\) e \(B_{222}=\{A,C\}\). Otteniamo quindi il DFA minimo illustrato in figura \ref{mindfa-es1-sol}. 
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_1.png}
-	\label{es_1_sol}
-	\caption{Esercizio 1, MIN DFA}
+	\label{mindfa-es1-sol}
+	\caption{Soluzione di questo primo esercizio}
 \end{figure}
-\subsection{Esercizio 2}
-Proviamo con questo altro esercizio
+
+\subsubsection{Esercizio 2}
+Proviamo con questo altro esercizio:
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_2.png}
-	\label{es_2}
-	\caption{Esercizio 2}
+	\label{mindfa-es-2}
+	\caption{DFA dell'esercizio 2}
 \end{figure}
-In questo caso, la funzione di transizione non è \emph{totale}. Quindi dobbiamo trasformarla in una funzione di transizione \emph{totale} aggiungendo un nodo \(Sink\) a cui facciamo arrivare ogni coppia stato,simbolo mancante dalla funzione \emph{parziale}
+
+In questo caso la funzione di transizione non è totale; dobbiamo quindi renderla tale aggiungendo un nodo \(sink\) a cui facciamo arrivare ogni coppia \(stato, simbolo\) mancante dall'equivalente funzione di transizione parziale.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_3.png}
-	\label{es_2_tot}
-	\caption{Esercizio 2, totale}
+	\label{minndfa-es-2-tot}
+	\caption{DFA dell'esercizio 2 con transizione totale}
 \end{figure}
-Dopo aver realizzato questo, iniziamo con
-\(B_{1}=\{D\}\}\) e \(B_{2}=\{A,B,D,Sink\}\)
-possiamo fare uno \emph{split} di \(B_{2}\) in quanto \(\textrm{move}_{d}(A,a) \in B_{2} \) e \(\textrm{move}_{d}(B,a) \notin B_{2} \)
-da cui otteniamo i nuovi blocchi \(B_{21}=\{A,Sink\}\) e \(B_{22}=\{B,C\}\).
-Possiamo fare un ulteriore \emph{split} di \(B_{22}\) in quanto \(\textrm{move}_{d}(B,b) \in B_{22} \) e \(\textrm{move}_{d}(C,b) \notin B_{22} \)
-da cui otteniamo i blocchi \(B_{221}=\{B\}\) e \(B_{222}=\{C\}\).
-Infine notiamo che è possibile uno \emph{split} di \(B_{21}\) in quanto \(\textrm{move}_{d}(A,a) \in B_{221} \) e \(\textrm{move}_{d}(Sink,a) \notin B_{221} \). 
-Otteniamo i blocchi \(B_{211}=\{A\}\) e \(B_{212}=\{Sink\}\)
-La situazione finale diventa 
-\(B_{1}=\{D\}\}\), \(B_{211}=\{A\}\), \(B_{212}=\{Sink\}\), \(B_{221}=\{B\}\), \(B_{222}=\{C\}\).
-Da questo eliminiamo il blocco \(B_{212}\) in quanto \emph{Sink} e possiamo costruire il nostro nuovo min-DFA, che è lo stesso di partenza. Il DFA era già minimo.  
+
+Dopo aver realizzato questo, iniziamo con gli insiemi \(B_{1}=\{D\}\) e \(B_{2}=\{A,B,D,sink\}\). Possiamo fare uno \emph{split} di \(B_{2}\), in quanto \(\textrm{move}_{d}(A,a) \in B_{2} \) e \(\textrm{move}_{d}(B,a) \notin B_{2} \); da questo split otteniamo i nuovi blocchi \(B_{21}=\{A,sink\}\) e \(B_{22}=\{B,C\}\).
+
+Possiamo fare un ulteriore \emph{split} di \(B_{22}\), poiché \(\textrm{move}_{d}(B,b) \in B_{22} \) e \(\textrm{move}_{d}(C,b) \notin B_{22} \); da questo otteniamo i blocchi \(B_{221}=\{B\}\) e \(B_{222}=\{C\}\).
+
+Infine notiamo che è possibile uno \emph{split} di \(B_{21}\), dal momento che \(\textrm{move}_{d}(A,a) \in B_{221} \) e \(\textrm{move}_{d}(Sink,a) \notin B_{221} \). Otteniamo quindi i blocchi \(B_{211}=\{A\}\) e \(B_{212}=\{sink\}\).
+La situazione finale diventa \(B_{1}=\{D\}\), \(B_{211}=\{A\}\), \(B_{212}=\{sink\}\), \(B_{221}=\{B\}\), \(B_{222}=\{C\}\).
+
+Da questo eliminiamo il blocco \(B_{212}\), in quanto il blocco \emph{Sink} non trova posto nel nostro DFA minimo; notiamo però che il DFA minimo che otteniamo è identico a quello di partenza. Il DFA, infatti, era già minimo.  
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_2.png}
-	\label{es_2_sol}
-	\caption{Esercizio 2, MIN DFA}
+	\label{mindfa-es-2-sol}
+	\caption{Soluzione Esercizio 2}
 \end{figure}
-\subsection{Esercizio 3}
-\begin{figure}[H]
+
+\subsubsection{Esercizio 3}
+\begin{figure}[htb]
 	\centering
-	\includegraphics[width=.8\textwidth,keepaspectratio]{nfa_grafo_2.png}
-	\label{es_3}
+    \subimport{assets/figures/}{nfa2.tex}
+	\label{mindfa-es-3}
 	\caption{Esercizio 3}
 \end{figure}
-Passiamo a questo esercizio più completo. Si richiede di trasformare questo NFA in un DFA e successivamente in un min DFA
+
+Passiamo a questo esercizio più completo. Si richiede di trasformare questo NFA in un DFA e successivamente in un min DFA.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth,keepaspectratio]{tabella_es_3.png}
 	\label{es_3_tab}
-	\caption{Esercizio 3, tabella}
+	\caption{Tabella risolutiva dell'esercizio \(3\)}
 \end{figure}
-A questo punto dobbiamo costruirne il DFA e trovarne il minimo
+
+\noindent A questo punto dobbiamo costruirne il DFA e trovarne il minimo.
+
 \end{document}
