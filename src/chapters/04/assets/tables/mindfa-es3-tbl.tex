@@ -1,0 +1,53 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+
+\setlength\lightrulewidth{0.1pt}
+\providecommand\lightrule{%
+	\arrayrulecolor{black!30}%
+	\midrule[\lightrulewidth]%
+	\arrayrulecolor{black}}
+
+\begin{document}
+\begin{tabularx}{\textwidth}{XXXX}
+        &  & \(a\) & \(b\) \\
+        \midrule
+            \(T1 = \{1\}\) \newline
+            \(T2 = \{1,2\}\) \newline
+            \(T3 = \{1,2,3\}\) \newline
+            \(T4 = \{1,3\}\) \newline
+            \(T5 = \{1,2,3,4\}\) \newline
+            \(T6 = \{1,3,4\}\) \newline
+            \(T7 = \{1,2,4\}\) \newline
+            \(T8 = \{1,4\}\)
+            &
+            Initial \newline
+            \newline
+            \newline
+            \newline
+            Final \newline
+            Final \newline
+            Final \newline
+            Final
+            &
+            \(T2\) \newline
+            \(T3\) \newline
+            \(T5\) \newline
+            \(T7\) \newline
+            \(T5\) \newline
+            \(T7\) \newline
+            \(T3\) \newline
+            \(T2\)
+            &
+            \(T1\) \newline
+            \(T4\) \newline
+            \(T6\) \newline
+            \(T8\) \newline
+            \(T6\) \newline
+            \(T8\) \newline
+            \(T4\) \newline
+            \(T1\)
+\end{tabularx}
+\end{document}
