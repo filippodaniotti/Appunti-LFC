@@ -875,7 +875,7 @@ Come per l'esercizio precedente, è riportata in seguito la tabella risolutiva.\
 Quindi abbiamo ben \(5\) stati per il DFA questa volta! Ora, gli stati finali sono solo quelli che contengono lo stato \(10\) dell'NFA, il che significa che solo \(T4\) è uno stato finale per il DFA ricavato; tale DFA si può vedere in figura \ref{sol_sc_3}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth,keepaspectratio]{s3_subset_construction.jpg}
+    \subimport{assets/figures/}{es1_DFA_minimization.tex}
     \caption{Esercizio 3: DFA}
     \label{sol_sc_3}
 \end{figure}
@@ -953,7 +953,7 @@ Passiamo ad applicare la procedura di minimizzazione ad uno degli esempi già vi
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.8\textwidth,keepaspectratio]{s3_subset_construction.jpg}
+    \subimport{assets/figures/}{es1_DFA_minimization.tex}
 	\caption{Esercizio 1}
 	\label{mindfa-es-1}
 \end{figure}
@@ -962,7 +962,7 @@ Iniziamo con due blocchi iniziali: \(B_{1}=\{E\}\), dato dallo stato finale, e \
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_1.png}
+    \subimport{assets/figures/}{sol_es1_DFA_minimization.tex}
 	\caption{Soluzione di questo primo esercizio}
   \label{mindfa-es1-sol}
 \end{figure}
@@ -972,7 +972,7 @@ Proviamo con questo altro esercizio:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_2.png}
+    \subimport{assets/figures/}{es2_DFA_minimization.tex}
 	\caption{DFA dell'esercizio 2}
   \label{mindfa-es-2}
 \end{figure}
@@ -981,7 +981,7 @@ In questo caso la funzione di transizione non è totale; dobbiamo quindi renderl
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_3.png}
+    \subimport{assets/figures/}{es2_DFA_minimization_total_transition.tex}
 	\caption{DFA dell'esercizio 2 con transizione totale}
   \label{minndfa-es-2-tot}
 \end{figure}
@@ -997,7 +997,7 @@ Da questo eliminiamo il blocco \(B_{212}\), in quanto il blocco \emph{Sink} non 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_2.png}
+    \subimport{assets/figures/}{es2_DFA_minimization.tex}
 	\caption{Soluzione Esercizio 2}
   \label{mindfa-es-2-sol}
 \end{figure}
