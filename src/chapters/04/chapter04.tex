@@ -12,12 +12,12 @@
 
 Ora che abbiamo acquisito dei mezzi più potenti per affrontare questo corso, ribadiamo il concetto di analisi lessicale: dato il programma in ingresso, l'analisi lessicale restituisce una lista di stringhe che corrisponde alle parti del linguaggio identificate; questa lista di stringhe è nota come \emph{flusso dei token}.
 
-Lo studio del capitolo precedente di consente di sapere come vengono generti linguaggi come il seguente:
+Lo studio del capitolo precedente di consente di sapere come vengono generati linguaggi come il seguente:
 
-\begin{equation*}
+\begin{equation}
     \label{a^nb^n}
     \{ a^n b^n \mid n > 0 \}    
-\end{equation*}
+\end{equation}
 
 Come detto in passato, un liguaggio con questa forma può essere utilizzato, ad esempio, nel caso in cui vogliamo avere un egual numero di parentesi aperte e chiuse.
 Il problema che vogliamo arrivare a risolvere è, più in generale, riconoscere se una stringa faccia parte o meno del linguaggio generato da una certa grammatica.
@@ -39,7 +39,7 @@ La precedente strategia sicuramente è ottima quando il linguaggio ha una forma 
     S \to a \mid b \mid … \mid z \mid aS \mid bS \mid … \mid zS
 \end{equation}
 
-Per riconoscere parole generate da una tale grammatica il metodo di analisi naturale è una macchina a stati come quella in figura\ref{macchina_a_stati_finiti}.
+Per riconoscere parole generate da una tale grammatica il metodo di analisi naturale è una macchina a stati come quella in figura \ref{macchina_a_stati_finiti}.
 
 \begin{figure}[htb]
 	\centering
@@ -55,7 +55,7 @@ La grammatica che produce tutte le lettere dell’alfabeto (il linguaggio \ref{a
 
 \section{Grammatiche regolari}
 
-Le grammatiche regolari sono un sottoinsieme delle grammatiche libere che rispettano le seguenti restrizioni rispetto alle loro produzioni:
+Le grammatiche regolari sono un sottoinsieme delle grammatiche libere che rispetta le seguenti restrizioni rispetto alle loro produzioni:
 
 \begin{itemize}
     \item o il body è un solo terminale (\(A \to a\));
@@ -141,7 +141,7 @@ Ecco presentati in veloce sequenza una serie di semplici esercizi sulle operazio
 
 \section{Automa a stati finiti}
 Gli automi a stati finiti sono usati per decidere se le parole appartengono ad un linguaggio denotato da una certa espressione regolare.
-Vedremo due tipi diversi di automa a stati finiti: deterministico e non deterministico; di questi tipi poi studieremo i casidi utilizzo ottimali.
+Vedremo due tipi diversi di automa a stati finiti: deterministico e non deterministico; di questi tipi poi studieremo i casi di utilizzo ottimali.
 
 Nel caso di automa a stati finiti non deterministico i calcoli sono spesso più pesanti, perché un automa non deterministico deve vagliare più perocrsi di derivazione rispetto ai loro colleghi deterministici, i quali hanno il vantaggio di dover vagliare solo i percorsi deterministici, che sono un sottoinsieme del totale.
 
@@ -200,7 +200,7 @@ Si può anche dare una descrizione tabellare delle funzioni di transizione (\(\t
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{nfa2-table.tex}
-    \caption{Tabella}
+    \caption{Tabella della funzione di transizione per l'automa \ref{nfa_grafo_2}}
     \label{nfa2-table}
 \end{table} 
 
@@ -723,7 +723,7 @@ L’algoritmo di Subset Construction serve per ricavare un DFA dato un certo NFA
 L'idea di base è quella di utilizzare la \(\varepsilon\)-chiusura per mappare sottoinsiemi degli stati del dato NFA (che in seguito chiameremo rozzamente \emph{stati non deterministici}, o \emph{snd}) in stati per il nuovo DFA (che in seguito chiameremo rozzamente \emph{stati deterministici} o \emph{sd}).
 
 Per dare un'idea di come lavora questo algoritmo descriviamone i primi passi.\\
-Si individua qual è lo stato iniziale dell'NFA, diciamo \(s_0\), lo si prende come punto di partenza e se ne calcola la \(\varepsilon\)-chiusura \(T\); sarà proprio \(T\) ad essere lo stato iniziale del DFA. Ora dovrebbe essere più chiaro quello che si fa in questo algoritmo: si eliminano tutte le \(\varepsilon\)-transizioni per ottenere un set di transizioni \(\textrm{move}_d\) che contiene solo transizioni "deterministiche".
+Si individua qual è lo stato iniziale dell'NFA, diciamo \(S_0\), lo si prende come punto di partenza e se ne calcola la \(\varepsilon\)-chiusura \(T\); sarà proprio \(T\) ad essere lo stato iniziale del DFA. Ora dovrebbe essere più chiaro quello che si fa in questo algoritmo: si eliminano tutte le \(\varepsilon\)-transizioni per ottenere un set di transizioni \(\textrm{move}_d\) che contiene solo transizioni "deterministiche".
 
 Un fatto da tenere sempre ben presente è che gli stati del DFA che otteniamo in questo modo sono insiemi di stati dell'NFA di partenza. Il \(T\) appena descritto è un sottoinsieme degli stati dell'NFA di partenza.
 
@@ -761,8 +761,7 @@ In questa fase si scorrono tutti gli elementi \(a\) dell'alfabeto \(\mathcal{A}\
 \paragraph*{Foreach finale}
 Questa fase serve per definire quali sono gi stati (sd) finali del nuovo insieme di stati \(R\), ovvero quali sono gli stati finali del DFA \(\mathcal{D}\). Questi stati (ribadiamo, sd) si identificano perché contengono \emph{almeno uno} stato (snd) finale, ovvero uno stato \(T \in R\) è uno stato finale per \(\mathcal{D}\) se \(T \cap F \neq \Phi\).
 
-
-\noindent Arriva però il momento di porsi un'importante domanda: qual è la complessità di questo algoritmo?
+Arriva però il momento di porsi un'importante domanda: qual è la complessità di questo algoritmo?
 Poniamo le basi per affrontare una risposta: supponiamo che l’NFA abbia \(n\) stati ed \(m\) archi, mentre supponiamo che il DFA abbia \(n_d\) stati.
 \begin{itemize}
     \item Osserviamo che il ciclo dominante naturalmente è il primo \texttt{while}; quest'ultimmo  è ritpetuto \(n_d\) volte, ma quanto vale \(n_d\)? Questo è un aspetto che affronteremo nel prossimo futuro.
@@ -902,8 +901,8 @@ Prima di procedere, dobbiamo definire la nozione di \emph{State Equivalence}.
     \noindent dove la funzione multi-passo \(\textrm{move}_{d}\!^{*}\) è definita per induzione sulla lunghezza della stringa considerata nel seguente modo:
 
     \begin{description}
-        \item[base] \(\textrm{move}_{d}\!^{*}(s,\epsilon)=s\) 
-        \item[step] \(\textrm{move}_{d}\!^{*}(s,wa)= \textrm{move}_{d}(\textrm{move}_{d}\!^{*}(s,w),a)\)
+        \item[Base] \(\textrm{move}_{d}\!^{*}(s,\epsilon)=s\) 
+        \item[Step] \(\textrm{move}_{d}\!^{*}(s,wa)= \textrm{move}_{d}(\textrm{move}_{d}\!^{*}(s,w),a)\)
     \end{description}    
 \end{definition}
 
