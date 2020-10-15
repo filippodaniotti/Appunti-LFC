@@ -1,0 +1,24 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+ 
+\usepackage{../../../../style_automata}
+
+\begin{document}
+    \begin{tikzpicture}
+        \node[state, initial] (ac) {$A,C$};
+        \node[state, right of=ac] (b) {$B$};
+        \node[state, right of=b] (d) {$D$};
+        \node[state, accepting, right of=d] (e) {$E$};
+	    \draw (ac) edge [loop below] node{b} (A)
+	    (ac) edge [above] node{a} (b)
+	    (b) edge [loop above] node{a} (b)
+	    (b) edge [below, bend right=30] node{b} (d)
+	    (d) edge [above, bend right=30] node{a} (b)
+	    (d) edge [above] node{b} (e)
+	    (e) edge [below, bend left=50] node{b} (ac)
+	    (e) edge [above, bend right=50] node{b} (b)
+	    ;
+    \end{tikzpicture}
+\end{document}

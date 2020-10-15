@@ -1,0 +1,20 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+ 
+\usepackage{../../../../style_automata}
+
+\begin{document}
+    \begin{tikzpicture}
+        \node[state, initial] (a) {$A$};
+        \node[state, right of=a] (b) {$B$};
+        \node[state, right of=b] (c) {$C$};
+        \node[state, accepting, below of=b] (d) {$D$};
+	    \draw (a) edge[above] node{a} (b)
+        (b) edge[above] node{b} (c)
+        (b) edge[left, bend right=30] node{a} (d)
+        (c) edge[below] node{a} (d)
+        (d) edge[left, bend right=30] node{b} (b);
+    \end{tikzpicture}
+\end{document}
