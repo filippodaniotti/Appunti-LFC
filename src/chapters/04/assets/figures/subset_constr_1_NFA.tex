@@ -6,18 +6,20 @@
 \usepackage{../../../../style_automata}
 
 \begin{document}
+    \tikzset{
+    node distance=2cm, % specifies the minimum distance between two nodes.
+    }
     \begin{tikzpicture}
         \node[state, initial] (1) {$1$};
-        \node[state, above right of=1] (2) {$2$};
-        \node[state, right of=2] (3) {$3$};
+        \node[state, accepting, above right of=1] (2) {$2$};
+        \node[state, accepting, right of=2] (3) {$3$};
         \node[state, below right of=1] (4) {$4$};
-        \node[state, right of=4] (5) {$5$};
-        \node[state, accepting, below right of=3] (6) {$6$};
+        \node[state, accepting, right of=4] (5) {$5$};
         \draw (1) edge[above left] node{\(\varepsilon\)} (2)
         (2) edge[above] node{a} (3)
         (1) edge[below left] node{\(\varepsilon\)} (4)
         (4) edge[below] node{b} (5)
-        (3) edge[above right] node{\(\varepsilon\)} (6)
-        (5) edge[below right] node{\(\varepsilon\)} (6);
+        (3) edge[loop right] node{a} (3)
+        (5) edge[loop right] node{b} (5);
     \end{tikzpicture}
 \end{document}

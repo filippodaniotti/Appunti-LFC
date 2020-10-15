@@ -1,0 +1,18 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+
+\usepackage{../../../../style_automata}
+
+\begin{document}
+    \tikzset{
+    node distance=2.5cm, % specifies the minimum distance between two nodes.
+    }
+    \begin{tikzpicture}
+        \node[state, initial] (s0) {$S_0$};
+        \node[state, accepting, right of=s0] (s1) {$S_1$};
+        \draw (s0) edge[bend right, below] node{a} (s1)
+        (s1) edge[bend right, above] node{a} (s0);
+    \end{tikzpicture}
+\end{document}
