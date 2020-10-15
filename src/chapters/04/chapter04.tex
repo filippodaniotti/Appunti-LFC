@@ -472,15 +472,14 @@ Applichiamo ora, come esempio, l'algoritmo di simulazione di un NFA dato, verifi
 
 \begin{figure}
     \centering
-    \includegraphics[width=.6\textwidth,keepaspectratio]{simulazione_es_1}
-    \caption{Esempio di applicazione dell'algoritmo di simulazione}
+    \subimport{assets/figures/}{thompson4_conc.tex}
     \label{simulazione_es_1}
 \end{figure}
 
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{simulazione-nfa-ex1.tex}
-    \caption{}
+    \caption{Esempio di applicazione dell'algoritmo di simulazione}
     \label{simulazione-nfa-ex1}
 \end{table} 
 
@@ -668,17 +667,18 @@ Evidenziamo le caratteristiche dei DFA:
     \item se \(\textrm{move}_d\) è \emph{parziale}, allora per ogni stato c'è \textrm{almeno} una \(a\)-transizione \(\forall a \in \mathcal{A}\); in altre parole, per alcune coppie del dominio la funzione non è definita.
 \end{itemize}
 
+% TODO prova ad usare il pacchetto subfigure
 \begin{figure}[H]
-    \begin{minipage}{0.4\textwidth}
+    \begin{minipage}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth,keepaspectratio]{DFA-move-total.png}
-        \subcaption{Esempio di funzionedi transizione totale}
+        \subimport{assets/figures/}{dfa_total_transition.tex}
+        \subcaption{Esempio di funzione di transizione totale}
     \end{minipage}
     \hfill
-    \begin{minipage}{0.4\textwidth}
+    \begin{minipage}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth,keepaspectratio]{DFA-move-partial.png}
-        \subcaption{Esempio di funzionedi transizione parziale}
+        \subimport{assets/figures/}{dfa_partial_transition.tex}
+        \subcaption{Esempio di funzione di transizione parziale}
     \end{minipage}
     \caption{Funzioni di transizione dei DFA}
 \end{figure}
@@ -780,7 +780,7 @@ Tuttavia per applicazioni con tempo di vita più limitato spesso non ha senso cr
 Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_1} calcola tramite l'algoritmo di Subset Construction un automa a stati finiti deterministico che riconosce lo stesso linguaggio.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{e1_subset_construction.jpg}
+    \subimport{assets/figures/}{subset_constr_1_NFA.tex}
     \caption{Esercizio 1: NFA}
     \label{es_sc_1}
 \end{figure}
@@ -807,7 +807,7 @@ Alla fine della fiera, devo trovare quali sono gli stati finali del nostro autom
 Una volta terminata questa operazione abbiamo trovato quindi l’automa a stati finiti deterministico che riconosce lo stesso linguaggio dell’NFA di partenza, lo possiamo vedere raffigurato in figura \ref{sol_sc_1}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{s1_subset_construction.jpg}
+    \subimport{assets/figures/}{subset_constr_1_DFA.tex}
     \caption{Esercizio 1: DFA}
     \label{sol_sc_1}
 \end{figure}
@@ -817,7 +817,7 @@ Una volta terminata questa operazione abbiamo trovato quindi l’automa a stati 
 Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_2} calcola tramite l'algoritmo di Subset Construction un automa a stati finiti deterministico che riconosce lo stesso linguaggio.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth,keepaspectratio]{e2_subset_construction.jpg}
+    \subimport{assets/figures/}{subset_constr_2_NFA.tex}
     \caption{Esercizio 2: NFA}
     \label{es_sc_2}
 \end{figure}
@@ -837,7 +837,7 @@ L’unico stato finale nell'NFA è \(E\), quindi tutti e solo gli stati determin
 Il DFA risultante si può ammirare in figura \ref{sol_sc_2}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth,keepaspectratio]{s2_subset_construction.jpg}
+    \subimport{assets/figures/}{subset_constr_2_DFA.tex}
     \caption{Esercizio 2: DFA}
     \label{sol_sc_2}
 \end{figure}
@@ -846,7 +846,7 @@ Il DFA risultante si può ammirare in figura \ref{sol_sc_2}.
 Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_3} calcola tramite l'algoritmo di Subset Construction un automa a stati finiti deterministico che riconosce lo stesso linguaggio.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth,keepaspectratio]{e3_subset_construction.jpg}
+    \subimport{assets/figures/}{thompson4_conc.tex}
     \caption{Esercizio 3: NFA}
     \label{es_sc_3}
 \end{figure}
