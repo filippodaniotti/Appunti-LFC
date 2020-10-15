@@ -12,12 +12,12 @@
 
 Ora che abbiamo acquisito dei mezzi più potenti per affrontare questo corso, ribadiamo il concetto di analisi lessicale: dato il programma in ingresso, l'analisi lessicale restituisce una lista di stringhe che corrisponde alle parti del linguaggio identificate; questa lista di stringhe è nota come \emph{flusso dei token}.
 
-Lo studio del capitolo precedente di consente di sapere come vengono generti linguaggi come il seguente:
+Lo studio del capitolo precedente di consente di sapere come vengono generati linguaggi come il seguente:
 
-\begin{equation*}
+\begin{equation}
     \label{a^nb^n}
     \{ a^n b^n \mid n > 0 \}    
-\end{equation*}
+\end{equation}
 
 Come detto in passato, un liguaggio con questa forma può essere utilizzato, ad esempio, nel caso in cui vogliamo avere un egual numero di parentesi aperte e chiuse.
 Il problema che vogliamo arrivare a risolvere è, più in generale, riconoscere se una stringa faccia parte o meno del linguaggio generato da una certa grammatica.
@@ -39,7 +39,7 @@ La precedente strategia sicuramente è ottima quando il linguaggio ha una forma 
     S \to a \mid b \mid … \mid z \mid aS \mid bS \mid … \mid zS
 \end{equation}
 
-Per riconoscere parole generate da una tale grammatica il metodo di analisi naturale è una macchina a stati come quella in figura\ref{macchina_a_stati_finiti}.
+Per riconoscere parole generate da una tale grammatica il metodo di analisi naturale è una macchina a stati come quella in figura \ref{macchina_a_stati_finiti}.
 
 \begin{figure}[htb]
 	\centering
@@ -55,7 +55,7 @@ La grammatica che produce tutte le lettere dell’alfabeto (il linguaggio \ref{a
 
 \section{Grammatiche regolari}
 
-Le grammatiche regolari sono un sottoinsieme delle grammatiche libere che rispettano le seguenti restrizioni rispetto alle loro produzioni:
+Le grammatiche regolari sono un sottoinsieme delle grammatiche libere che rispetta le seguenti restrizioni rispetto alle loro produzioni:
 
 \begin{itemize}
     \item o il body è un solo terminale (\(A \to a\));
@@ -141,7 +141,7 @@ Ecco presentati in veloce sequenza una serie di semplici esercizi sulle operazio
 
 \section{Automa a stati finiti}
 Gli automi a stati finiti sono usati per decidere se le parole appartengono ad un linguaggio denotato da una certa espressione regolare.
-Vedremo due tipi diversi di automa a stati finiti: deterministico e non deterministico; di questi tipi poi studieremo i casidi utilizzo ottimali.
+Vedremo due tipi diversi di automa a stati finiti: deterministico e non deterministico; di questi tipi poi studieremo i casi di utilizzo ottimali.
 
 Nel caso di automa a stati finiti non deterministico i calcoli sono spesso più pesanti, perché un automa non deterministico deve vagliare più perocrsi di derivazione rispetto ai loro colleghi deterministici, i quali hanno il vantaggio di dover vagliare solo i percorsi deterministici, che sono un sottoinsieme del totale.
 
@@ -200,7 +200,7 @@ Si può anche dare una descrizione tabellare delle funzioni di transizione (\(\t
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{nfa2-table.tex}
-    \caption{Tabella}
+    \caption{Tabella della funzione di transizione per l'automa \ref{nfa_grafo_2}}
     \label{nfa2-table}
 \end{table} 
 
@@ -719,10 +719,11 @@ Un mezzo per raggiungere questo scopo è l’utilizzo di una sorta di meccanismo
 
 \subsection{Algoritmo di Subset Costruction}
 L’algoritmo di Subset Construction serve per ricavare un DFA dato un certo NFA.
+
 L'idea di base è quella di utilizzare la \(\varepsilon\)-chiusura per mappare sottoinsiemi degli stati del dato NFA (che in seguito chiameremo rozzamente \emph{stati non deterministici}, o \emph{snd}) in stati per il nuovo DFA (che in seguito chiameremo rozzamente \emph{stati deterministici} o \emph{sd}).
 
-Per dare un'idea di come lavora questo algoritmo descriviamone i primi passi:\\
-Si individua qual è lo stato iniziale dell'NFA, diciamo \(s_0\), si prende come punto di partenza e se ne calcola la \(\varepsilon\)-chiusura \(T\); sarà proprio \(T\) ad essere lo stato iniziale del DFA. Ora dovrebbe essere più chiaro quello che si fa in questo algoritmo: si eliminano tutte le \(\varepsilon\)-transizioni per ottenere un set di transizioni \(move_d\) che contiene solo transizioni "deterministiche".
+Per dare un'idea di come lavora questo algoritmo descriviamone i primi passi.\\
+Si individua qual è lo stato iniziale dell'NFA, diciamo \(S_0\), lo si prende come punto di partenza e se ne calcola la \(\varepsilon\)-chiusura \(T\); sarà proprio \(T\) ad essere lo stato iniziale del DFA. Ora dovrebbe essere più chiaro quello che si fa in questo algoritmo: si eliminano tutte le \(\varepsilon\)-transizioni per ottenere un set di transizioni \(\textrm{move}_d\) che contiene solo transizioni "deterministiche".
 
 Un fatto da tenere sempre ben presente è che gli stati del DFA che otteniamo in questo modo sono insiemi di stati dell'NFA di partenza. Il \(T\) appena descritto è un sottoinsieme degli stati dell'NFA di partenza.
 
@@ -741,70 +742,72 @@ L'algoritmo prende come input un NFA specificato dalla tupla \(\mathcal{N} := (S
 L'algoritmo ritorna come output un DFA specificato dalla tupla \(\mathcal{D} := (R, \mathcal{A}, \textrm{move}_d, s_0, E)\) tale da soddisfare la condizione \(\mathcal{L}(\mathcal{D}) = \mathcal{L}(\mathcal{N})\).
 
 \paragraph*{Introduzione}
-Per prima cosa si calcola quello che sarà lo stato iniziale del DFA, ovvero \(T_0\); esso è uguale, come già detto in precedenza, alla \(\varepsilon\)-chiusura dello stato iniziale dell'NFA \(S_0\).
-
-Una volta calcolato \(T_0\) lo si inserisce nell'insieme \(R\) e lo si segna come unmarked.
+Per prima cosa si calcola quello che sarà lo stato iniziale del DFA, ovvero \(T_0\); esso è coinciderà, come già detto in precedenza, con la \(\varepsilon\)-chiusura dello stato iniziale dell'NFA \(S_0\). Una volta calcolato questo \(T_0\),  lo si inserisce nell'insieme \(R\) e lo si segna come unmarked.
 
 \paragraph*{Ciclo while}
-Qui inizia il corpo centrale dell'algoritmo, questo ciclo serve per iterare su tutti gli stati che si stanno inserendo mano a mano nell'insieme degli stati del DFA. Di fatto dentro al ciclo si scorrono tutti gli stati in \(R\) e ci si sofferma sugli stati \(T \in R\) che sono segnati come unmarked. Una volta che se ne è identificato uno lo si marca, così che non venga più elaborato in seguito, e si procede con l'elaborazione.
+Qui inizia il corpo centrale dell'algoritmo: questo ciclo serve per iterare su tutti gli stati che si stanno inserendo mano a mano nell'insieme degli stati del DFA. 
 
-\paragraph*{Foreach I}
-In questa fase si scorrono tutti gli elementi \(a\) dell'alfabeto \(\mathcal{A}\) poi si prosegue in questo modo:
-si prendono tutti gli stati (snd) raggiungibili dallo stato (sd) \(T\) che soddisfino la seguente condizione \(\cup_{t \in T} move_n(t,a)\), ovvero tutti gli stati in \(S\) raggiungibili tramite una \(a\)-transizione da uno degli stati in \(T\).
+Di fatto, dentro al ciclo si scorrono tutti gli stati in \(R\) e ci si sofferma sugli stati \(T \in R\) segnati come \texttt{unmarked}. Di volta in volta, quando se ne identifica uno, lo si marca, dimodoché che non venga più elaborato in seguito, e si procede con l'elaborazione.
 
-\paragraph*{Foreach II}
-Di questi stati poi si calcola la \(\varepsilon\)-chiusura e la si salva nella variabile \(T'\).
-Una volta calcolato \(T'\) si verifica se questo è vuoto, in tal caso si passa alla prossima iterazionde del \texttt{Foreach} altrimenti si aggiunge all'insieme delle transizioni ("deterministiche") \(move_d\) la transizione \(move_d(T, a) = T'\); in seguito se \(T'\) non è già presente in \(R\) allora ve lo si aggiunge e si segna come unmarked.
+\paragraph*{Foreach interno al ciclo while}
+In questa fase si scorrono tutti gli elementi \(a\) dell'alfabeto \(\mathcal{A}\) e si prosegue quindi in questo modo:
+\begin{itemize}
+    \item si prendono tutti gli stati (snd) raggiungibili dallo stato (sd) \(T\) che soddisfino la seguente condizione \(\cup_{t \in T} \textrm{move}_n(t,a)\), ovvero tutti gli stati in \(S\) raggiungibili tramite una \(a\)-transizione da uno degli stati in \(T\), se ne calcola la \(\varepsilon\)-chiusura e la si salva nella variabile \(T'\);
+    \item una volta calcolato \(T'\) si verifica se questo è vuoto, e se lo è si passa alla prossima iterazionde del \texttt{foreach};
+    \item altrimenti, si aggiunge all'insieme delle transizioni ("deterministiche") \(\textrm{move}_d\) la transizione \(\textrm{move}_d(T, a) = T'\);
+    \item infine, se \(T'\) non è già presente in \(R\) allora ve lo si aggiunge e si segna come unmarked.
+\end{itemize}
 
 \paragraph*{Foreach finale}
-Questa fase serve per definire quali sono gi stati (sd) finali del nuovo insieme di stati \(R\), ovvero quali sono gli stati finali del DFA \(\mathcal{D}\). Questi stati (ribadiamp, sd) si identificano perché contengono \emph{almeno uno} stato (snd) finale, ovvero uno stato \(T \in R\) è uno stato finale per \(\mathcal{D}\) se \(T \cap F \neq \Phi\).
+Questa fase serve per definire quali sono gi stati (sd) finali del nuovo insieme di stati \(R\), ovvero quali sono gli stati finali del DFA \(\mathcal{D}\). Questi stati (ribadiamo, sd) si identificano perché contengono \emph{almeno uno} stato (snd) finale, ovvero uno stato \(T \in R\) è uno stato finale per \(\mathcal{D}\) se \(T \cap F \neq \Phi\).
 
-
-\noindent Arriva però il momento di porsi un'importante domanda: Qual è la complessità di questo algoritmo?
+Arriva però il momento di porsi un'importante domanda: qual è la complessità di questo algoritmo?
 Poniamo le basi per affrontare una risposta: supponiamo che l’NFA abbia \(n\) stati ed \(m\) archi, mentre supponiamo che il DFA abbia \(n_d\) stati.
+\begin{itemize}
+    \item Osserviamo che il ciclo dominante naturalmente è il primo \texttt{while}; quest'ultimmo  è ritpetuto \(n_d\) volte, ma quanto vale \(n_d\)? Questo è un aspetto che affronteremo nel prossimo futuro.
+    \item All'interno del \texttt{while} troviamo il nostro caro \texttt{foreach} \(a \in \mathcal{A}\), che viene ripetuto \(|A|\) volte.
+    \item L'ultimo fattore di peso rilevante è la chiamata alla funzione di calcolo della \(\varepsilon\)-chiusura, la quale ha costo \(\mathcal{O}(n+m)\).
+\end{itemize}
+La complessità globale è quindi \( \mathcal{O}(n_d \cdot |A| \cdot (n+m))\).
 
-Osserviamo che il ciclo dominante naturalmente è il primo \texttt{while}, esso è ritpetuto \(n_d\) volte, ma quanto vale \(n_d\)? Questo è un aspetto che affronteremo nel prossimo futuro. \\
-All'interno del \texttt{while} troviamo il nostro caro \texttt{foreach} \(a \in \mathcal{A}\), esso viene ripetuto \(|A|\) volte.\\
-L'ultimo fattore di peso rilevante è la chiamata alla funzione di calcolo della \(\varepsilon\)-chiusura, essa costa \(\mathcal{O}(n+m)\).
+Ora la domanda si fa più pressante: quanto vale effettivamente \(n_d\)?
+Fin massa... possiamo già anticipare che esso è un \(\mathcal{O}(2^n)\). Nonostante questo possa essere oltremodo sconfortante, è opportuno specificare che quella appena vista è la complessità per \emph{creare} il DFA, un'operazione che viene effettuata una tantum solamente in sede di creazione del compilatore; è vero, è una grossa spesa iniziale, ma permette di avere grandi vantaggi in tutti gli utilizzi successivi.
 
-La complessità globale è quindi \( \mathcal{O}(n_d \times |A| \times (n+m))\).
-
-Ora la domanda si fa più pressante, quanto vale effettivamente \(n_d\)?
-Un totale... possiamo anticipar già che esso è un \(\mathcal{O}(2^n)\); però quella appena vista è la complessità per \emph{creare} il DFA, che è una operazione che viene effettuata una tantum quando si crea il compilatore, quindi è una grossa spesa iniziale che permette di avere grandi vantaggi in seguito per tutti gli utilizzi.
-
-Tuttavia per applicazioni con tempo di vita più limitato spesso non ha senso creare il DFA, poiché non si avrebbe il tempo di compensare la spesa iniziale, è questa la ragione per cui ad esempio \href{https://it.wikipedia.org/wiki/Grep}{grep} utilizza NFA.
+Tuttavia per applicazioni con tempo di vita più limitato spesso non ha senso creare il DFA, poiché non si avrebbe il tempo di compensare la spesa iniziale; è questa la ragione per cui ad esempio \href{https://it.wikipedia.org/wiki/Grep}{grep} utilizza NFA.
 
 
 \subsection{Esercizi di applicazione della Subset Construction}
 \subsubsection*{Esercizio 1}
-Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_1} calcola tramite l'algoritmo di Subset Construction un automa a stati finiti deterministico che riconosce lo stesso linguaggio.
+Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_1}, calcola, tramite l'algoritmo di Subset Construction, un automa a stati finiti deterministico che riconosca lo stesso linguaggio.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{e1_subset_construction.jpg}
     \caption{Esercizio 1: NFA}
     \label{es_sc_1}
 \end{figure}
-Il modo più semplice e chiaro per risolvere questo tipo di esercizi è quello di utilizzare una tabella per scrivere i vari passaggi, riportiamo qui sotto la soluzione all'esercizio in tale forma, seguita da un esteso commento della procedura seguita.
+
+Il modo più semplice e chiaro per risolvere questo tipo di esercizi è quello di utilizzare una tabella per scrivere i vari passaggi; noi riportiamo qui sotto la soluzione dell'esercizio in tale forma, seguita da un esteso commento della procedura seguita.
 \begin{table}[H]
 	\centering
-	\subimport{assets/tables/}{exercise1.tex}
+	\subimport{assets/tables/}{sol-sc-ex1.tex}
     \caption{Soluzione esercizio 1}
-    \label{Esercizio 1}
+    \label{sol-sc-ex1}
 \end{table} 
-Lo stato iniziale dell'NFA è 1, quindi per calcolare lo iniziale del DFA devo calcolare la \(\varepsilon\)-chiusura di 1, questo passaggio è riportato a riga 1 colonna 0.
+Lo stato iniziale dell'NFA è \(1\), quindi per calcolare lo iniziale del DFA devo calcolare la \(\varepsilon\)-chiusura di \(1\); questo passaggio è riportato a riga \(1\), colonna \(0\).
 
-Poi entro nel vivo del \texttt{while}: estraggo \(T0\) e devo trovare tutti gli stati raggiungibili da \(T0\) tramite una \(a\)-transizione, ottengo lo stato 3; di questo insieme di stati (\(\{3\}\)) devo calcolare la \(\varepsilon\)-chiusura, questa sarà il nuovo insieme \(T1\); aggiungo la transizione \(move_d(T0, a)=\{T1\}\), segno \(T1\) come unmarked e passo avanti.
+Poi entro nel vivo del \texttt{while}: estraggo \(T0\) e devo trovare tutti gli stati raggiungibili da \(T0\) tramite una \(a\)-transizione. In questo modo ottengo lo stato \(3\); di questo insieme di stati (\(\{3\}\)) devo calcolare la \(\varepsilon\)-chiusura, e questa sarà il nuovo insieme \(T1\); aggiungo la transizione \(\textrm{move}_d(T0, a)=\{T1\}\), segno \(T1\) come unmarked e passo avanti.
 
-Devo trovare, ora, tutti gli stati raggiungibili da \(T0\) attraverso una \(b\)-transizione: in questo caso ottengo solo lo stato 5; di questo insieme (\(\{5\}\)) calcolo la \(\varepsilon\)-chiusura che risulta essere \(\{5\}\), ho appena trovato \(T2\). Segno \(T2\) come unmarked, aggiungo la transizione \(move_d(T0, b)=\{T2\}\).
+Adesso devo trovare tutti gli stati raggiungibili da \(T0\) attraverso una \(b\)-transizione. In questo caso ottengo solo lo stato \(5\), e di questo insieme (\(\{5\}\)) calcolo la \(\varepsilon\)-chiusura; questa risulta essere \(\{5\}\). Ho appena trovato \(T2\), lo segno come unmarked e aggiungo la transizione \(\textrm{move}_d(T0, b)=\{T2\}\).
 
-Passo infine ad analizzare lo stato \(T1\). Estraggo \(T1\) da \(R\), vado a cercare la \(\varepsilon\)-chiusura dei punti di arrivo delle \(a\)-transizioni che partono da \(T1\); trovo che l'unica \(a\)-transizione che parte da \(T1\) mi porta allo stato 3, e la \(\varepsilon\)-chiusura di \(\{3\}\) mi ritorna esattamente \(T1\), quindi altro non faccio che aggiungere la transizione \(move_d(T1, a)=\{T1\}\) al nostro DFA, ma dato che \(T1\) è già marked non lo riaggiungo ad \(R\) e termino qui la mia analisi.
+Passo infine ad analizzare lo stato \(T1\). Estraggo \(T1\) da \(R\) e vado a cercare la \(\varepsilon\)-chiusura dei punti di arrivo delle \(a\)-transizioni che partono da \(T1\); trovo che l'unica \(a\)-transizione che, partendo da \(T1\), mi porta allo stato \(3\), e la \(\varepsilon\)-chiusura di \(\{3\}\) mi ritorna esattamente \(T1\). Quindi, quello che sto facendo altro non è che aggiungere la transizione \(move_d(T1, a)=\{T1\}\) al nostro DFA, ma dato che \(T1\) è già marked non lo riaggiungo ad \(R\) e termino qui la mia analisi.
 
 Passo ora alla \(\varepsilon\)-chiusura dei punti di arrivo delle \(b\)-transizioni. Da \(T1\) non parte nessuna \(b\)-transizione, quindi termino qui l'analisi di \(T1\) e passo a \(T2\).
 Per \(T2\) compio banalmente le stesse azioni che ho svolto per \(T1\), che quindi non sono qui riportate.
 
 Alla fine della fiera, devo trovare quali sono gli stati finali del nostro automa deterministico, quindi faccio le varie intersezioni (come descritto dall'algoritmo) e segno come stati (deterministici) finali tutti quegli stati (deterministici) che contengono almeno uno stato (non deterministico) che sia esso stesso finale nell'NFA.
 
-Una volta terminata questa operazione abbiamo trovato quindi l’automa a stati finiti deterministico che riconosce lo stesso linguaggio dell’NFA di partenza, lo possiamo vedere raffigurato in figura \ref{sol_sc_1}.
+Una volta terminata questa operazione abbiamo trovato quindi l’automa a stati finiti deterministico che riconosce lo stesso linguaggio dell’NFA di partenza; possiamo vederne una raffigurazione in figura \ref{sol_sc_1}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{s1_subset_construction.jpg}
@@ -814,27 +817,25 @@ Una volta terminata questa operazione abbiamo trovato quindi l’automa a stati 
 
 
 \subsubsection*{Esercizio 2}
-Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_2} calcola tramite l'algoritmo di Subset Construction un automa a stati finiti deterministico che riconosce lo stesso linguaggio.
+Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_2}, calcola tramite l'algoritmo di Subset Construction un automa a stati finiti deterministico che riconosce lo stesso linguaggio.
 \begin{figure}[H]
     \centering
     \includegraphics[width=.8\textwidth,keepaspectratio]{e2_subset_construction.jpg}
     \caption{Esercizio 2: NFA}
     \label{es_sc_2}
 \end{figure}
-È riportata in seguito la tabella risolutiva per questo esercizio.
+È riportata in seguito la tabella risolutiva per questo esercizio.\\
+
 \begin{table}[H]
 	\centering
-	\subimport{assets/tables/}{exercise2.tex}
+	\subimport{assets/tables/}{sol-sc-ex2.tex}
     \caption{Soluzione esercizio 2}
-    \label{Esercizio 2}
+    \label{sol-sc-ex2}
 \end{table} 
+
 Dato che lo svolgimento dei pass dell'algoritmo non presenta né novità né difficoltà in questo esempio, non è fornita una spiegazione estesa dei passaggi.
 
-A questo punto abbiamo considerato tutti gli stati in \(R\) quindi ora è il momento di determinare quali sono gli stati (deterministici) finali.
-
-L’unico stato finale nell'NFA è \(E\), quindi tutti e solo gli stati deterministici che contengono \(E\) sono stati deterministici finali. \(T0\), \(T1\) e \(T2\) sono tutti stati finali.
-
-Il DFA risultante si può ammirare in figura \ref{sol_sc_2}.
+A questo punto abbiamo considerato tutti gli stati in \(R\) quindi ora è il momento di determinare quali sono gli stati (deterministici) finali. L’unico stato finale nell'NFA è \(E\), quindi tutti e solo gli stati deterministici che contengono \(E\) sono stati deterministici finali. \(T0\), \(T1\) e \(T2\) sono tutti stati finali. Il DFA risultante si può ammirare in figura \ref{sol_sc_2}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=.8\textwidth,keepaspectratio]{s2_subset_construction.jpg}
@@ -843,21 +844,23 @@ Il DFA risultante si può ammirare in figura \ref{sol_sc_2}.
 \end{figure}
 
 \subsubsection*{Esercizio 3}
-Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_3} calcola tramite l'algoritmo di Subset Construction un automa a stati finiti deterministico che riconosce lo stesso linguaggio.
+Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_3}, calcola tramite l'algoritmo di Subset Construction un automa a stati finiti deterministico che riconosce lo stesso linguaggio.
 \begin{figure}[H]
     \centering
     \includegraphics[width=.8\textwidth,keepaspectratio]{e3_subset_construction.jpg}
     \caption{Esercizio 3: NFA}
     \label{es_sc_3}
 \end{figure}
-Come per l'esercizio precedente, è riportata in seguito la tabella risolutiva.
+Come per l'esercizio precedente, è riportata in seguito la tabella risolutiva.\\
+
 \begin{table}[H]
 	\centering
-	\subimport{assets/tables/}{exercise3.tex}
+	\subimport{assets/tables/}{sol-sc-ex3.tex}
     \caption{Soluzione esercizio 3}
-    \label{Esercizio 3}
+    \label{sol-sc-ex3}
 \end{table}
-Quindi abbiamo ben 5 stati per il DFA questa volta! È giunto il momento di capire quali di questi sono stati finali. Solo quelli che contengono lo stato 10 dell'NFA, ovvero solo \(T4\) è uno stato finale per il DFA ricavato, tale DFA si può vedere in figura \ref{sol_sc_3}.
+
+Quindi abbiamo ben \(5\) stati per il DFA questa volta! Ora, gli stati finali sono solo quelli che contengono lo stato \(10\) dell'NFA, il che significa che solo \(T4\) è uno stato finale per il DFA ricavato; tale DFA si può vedere in figura \ref{sol_sc_3}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=.8\textwidth,keepaspectratio]{s3_subset_construction.jpg}
@@ -865,123 +868,140 @@ Quindi abbiamo ben 5 stati per il DFA questa volta! È giunto il momento di capi
     \label{sol_sc_3}
 \end{figure}
 
-Il lettore attento avrà notato però che a suo tempo avevamo già visto l'automa non deterministico in figura \ref{es_sc_3} e a suo tempo avevamo già osservato come questo automa riconosca tutte le parole scritte secondo questa formulazione \((a \mid b)^* abb\).
+Il lettore attento avrà notato che, a suo tempo, avevamo già visto l'automa non deterministico in figura \ref{es_sc_3}, e in quel momento avevamo già osservato come questo automa riconosca tutte le parole scritte secondo la formulazione \((a \mid b)^* abb\).
 
-Il fatto interessante è che avevamo anche visto un altro automa che riconosce lo stesso linguaggio, il quale presentava solo 4 stati ed era molto più semplice e compatto di quello che abbiamo appena ricavato. Questo automa è riportato in figura \ref{sol_sc_3_v2} per completezza.
+Il fatto interessante è che avevamo anche incontrato un altro automa che riconosce lo stesso linguaggio, il quale presentava solo \(4\) stati ed era molto più semplice e compatto di quello che abbiamo appena ricavato. Questo automa è riportato in figura \ref{sol_sc_3_v2} per completezza.
 
 Questo va detto per sottolineare come l'algoritmo di Subset Construction sia un algoritmo che produce \emph{una} soluzione al problema di traduzione DFA \(\to\) NFA, ma non è detto che produca la soluzione \emph{migliore} per questo problema.
-\begin{figure}
+
+\begin{figure}[htb]
     \centering
-    \includegraphics[width=.5\textwidth,keepaspectratio]{nfa_grafo_2.png}
+    \subimport{assets/figures/}{nfa2.tex}
     \caption{Esercizio 3: soluzione alternativa}
     \label{sol_sc_3_v2}
 \end{figure}
 
 Da notare che l'automa a stati finiti riportato in figura non è deterministico, ma solo per la presenza di una \(\varepsilon\)-transizione e di due transizioni da \(S_{0}\) col simbolo \(a\)
 
-
-
-
-
 \section{Minimizzazione di DFA}
-Spesso e volentieri, non siamo interessati ad un generico \(D\), che genera un linguaggio \(\mathcal{L(D)}\), ma siamo invece interessati  ad avere il DFA minimo, \(D'\) con numero minimo di stati, tale che  \(\mathcal{L(D)} = \mathcal{L(D')}\) 
+Spesso e volentieri non siamo interessati ad un generico DFA \(\mathcal{D}\) che generi un altrettanto generico linguaggio \(\mathcal{L(D)}\), ma desideriamo invece il DFA \(\mathcal{D}'\) minimo, ovvero quello con numero minimo di stati tale che \(\mathcal{L(D)} = \mathcal{L(D')}\). 
 
 
-Prima di procedere, dobbiamo definire la nozione di \emph{State Equivalence}
+Prima di procedere, dobbiamo definire la nozione di \emph{State Equivalence}.
 
-Sia \(D = (S,A,move_{d},s_{0},F)\) un DFA con funzione di transizione \emph{totale}. Allora due stati \(s,t \in S\)) si dicono equivalenti se e solo se la seguente condizione è verificata:
+\subsection{Definizione di State Equivalence}
 
+\begin{definition}
+    Sia \(\mathcal{D} = (S,\mathcal{A},\textrm{move}_{d},s_{0},F)\) un DFA con funzione di transizione totale. Allora due stati \(s,t \in S\) si dicono equivalenti se e solo se la seguente condizione è verificata:
 
-\(move_{d}^{*}(s,x) \in F\) se e solo se \(move_{d}^{*}(t,x) \in F  \forall x \in A^{*}\) 
-dove la funzione multi-passo \(move_{d}^{*}\) è definita per induzione nel seguente modo:
+    \begin{equation}
+        \textrm{move}_{d}\!^{*}(s,x) \in F \iff \textrm{move}_{d}\!^{*}(t,x) \in F,  \forall x \in \mathcal{A}^{*} 
+    \end{equation}
+    
+    \noindent dove la funzione multi-passo \(\textrm{move}_{d}\!^{*}\) è definita per induzione sulla lunghezza della stringa considerata nel seguente modo:
 
+    \begin{description}
+        \item[Base] \(\textrm{move}_{d}\!^{*}(s,\epsilon)=s\) 
+        \item[Step] \(\textrm{move}_{d}\!^{*}(s,wa)= \textrm{move}_{d}(\textrm{move}_{d}\!^{*}(s,w),a)\)
+    \end{description}    
+\end{definition}
 
-\(move_{d}^{*}(s,\epsilon)=s\) 
+L'idea generale su cui si basa l'algoritmo di minimizzazione qui proposto è che alcuni stati sono ridondanti, e per questo possono essere rimossi senza perdere informazione, vale a dire senza modificare il linguaggio riconosciuto dal DFA. Per eliminare questi stati in eccesso, utilizziamo la procedura di \emph{partition refinement}
 
-\(move_{d}^{*}(s,wa)= move_{d}(move_{d}^{*}(s,w),a)\)
+\subsection{Partition Refinement}
+Grazie a questa procedura arriveremo a partizionare gli stati in \(2\) blocchi, dove per blocchi intendiamo dei sottinsiemi di stati disgiunti.
 
-L'idea generale dell'algoritmo di minimizzazione qui proposta è che alcuni stati siano ridondanti, e che dunque possano essere rimossi senza perdere informazione, ovvero senza modificare il linguaggio riconosciuto dal DFA.
+\begin{itemize}
+    \item Iniziamo con \(2\) blocchi generici, \(B_{1}=F\) e \(B_{2}=S\setminus F\). Questa scelta fa sì che i due blocchi non abbiano stati equivalenti, poiché se consideriamo due stati \(s, t\) tali che \(s\in B_{1}\) e \(t\in B_{2}\), allora vale che \(\textrm{move}_{d}\!^{*}(s,\varepsilon)\in F\) e \(\textrm{move}_{d}\!^{*}(t,\epsilon)\notin F\).
+    \item Proseguiamo controllando se un blocco ha stati non equivalenti; se sì, li dividiamo in blocchi distinti, separando tra di loro gli stati non equivalenti; se no, analizziamo altri blocchi. Ripetiamo quest'operazione fino a quando non vi sono più blocchi con stati non equivalenti.
+    \item In maniera formale, se tutti gli stati \(B_{i}=\{s_{1}, \ldots, s_{k}\}\) di un blocco sono equivalenti, per ogni transizione \(a \in \mathcal{A}\) il target di tale transazione appartiene allo stesso blocco.
+    \item Il blocco \(B_{i}\) può essere spezzato in due se per qualche \(s,t \in B_{i}\) vale \(\textrm{move}_{d}(s,a)\in B_{j}\) e \(\textrm{move}_{d}(t,a)\notin B_{j}\), ossia se ci sono due stati non equivalenti.
+    \item Nel concreto, dividere un certo blocco \(B_{i}\) rispetto a \(a,B_{j}\) consiste nel sostituire \(B_{i}\) con due nuovi blocchi:
+    \begin{itemize}
+        \item \( B_{i_1} = \{s \in B_{j} \mid \textrm{move}_{d}(s,a)\in B\}\);
+        \item \( B_{i_2} = \{s \in B_{j} \mid \textrm{move}_{d}(s,a)\notin B\}\).
+    \end{itemize}
+\end{itemize}
 
-Per eliminare gli stati in eccesso, utilizziamo la procedura di \emph{partition refinement}
-\paragraph{Partition Refinement}
-Partizioniamo gli stati in 2 blocchi ( insiemi di stati disgiunti)\\
-Iniziamo con 2 blocchi \(B_{1}=F\) e \(B_{2}=S\setminus F\). Questa scelta fa sì che i due blocchi non abbiano stati equivalenti in quanto con \(s\in B_{1}\) e \(t\in B_{2}\) vale che \(move_{d}^{*}(s,\epsilon)\in F\) e \(move_{d}^{*}(t,\epsilon)\notin F\)\\
-Proseguiamo controllando se un blocco ha stati non equivalenti, se sì li dividiamo in blocchi  distinti, separando tra di loro gli stati non equivalenti, se no, analizziamo altri blocchi. Ripetiamo fino a quando non vi sono più blocchi con stati non equivalenti
-
-In maniera formale, se tutti gli stati \(B_{i}=\{s_{1},...,s_{k}\}\)di un blocco sono equivalenti, per ogni a transizione \(a \in A\) il target di tale transazione appartiene allo stesso blocco.
-Il blocco \(B_{i}\) può essere spezzato in due se per qualche \(s,t \in B_{i}\) vale \(move_{d}(s,a)\in B_{j}\) e \(move_{d}(t,a)\notin B_{j}\)
-
-La divisione consiste di \(B_{i}\) considerando \(a,B_{j}\) consiste nel sostituire \(B_{i}\) con due blocchi, \( B_{i1} = {s \in B_{j} | move_{d}(s,a)\in B}\) e \( B_{i2} = {s \in B_{j} | move_{d}(s,a)\notin B}\)
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth,keepaspectratio]{algoritmo partiton refinement.png}
 	\label{partition refinement}
 	\caption{Pseudocodice}
 \end{figure}
-\subsection{Esercizio 1}
-Passiamo ad applicare la procedura di minimizzazione ad uno degli esempi già visti in passato
+
+\subsection{Esercizi sulla minimizzazione DFA}
+\subsubsection{Esercizio 1}
+Passiamo ad applicare la procedura di minimizzazione ad uno degli esempi già visti in passato.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth,keepaspectratio]{s3_subset_construction.jpg}
-	\label{es_1}
+	\label{mindfa-es-1}
 	\caption{Esercizio 1}
 \end{figure}
-Iniziamo con due blocchi iniziali, \(B_{1}=\{E\}\) dato dallo stato finale e \(B_{2}=\{A,B,C,D\}\)
-Notiamo che \((b,B_{1})\) spezza \(B_{2}\), da cui abbiamo due blocchi \(B_{21}=\{D\}\) e \(B_{22}=\{A,B,C\}\)
-Notiamo ancora che è possibile spezzare \(B_{22}\) in \(B_{221}=\{B\}\) e \(B_{222}=\{A,C\}\)
 
-Da cui abbiamo il minimo 
+Iniziamo con due blocchi iniziali: \(B_{1}=\{E\}\), dato dallo stato finale, e \(B_{2}=\{A,B,C,D\}\). Notiamo che \((b,B_{1})\) spezza \(B_{2}\), per cui abbiamo due blocchi \(B_{21}=\{D\}\) e \(B_{22}=\{A,B,C\}\). Notiamo ancora che è possibile spezzare \(B_{22}\) in \(B_{221}=\{B\}\) e \(B_{222}=\{A,C\}\). Otteniamo quindi il DFA minimo illustrato in figura \ref{mindfa-es1-sol}. 
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_1.png}
-	\label{es_1_sol}
-	\caption{Esercizio 1, MIN DFA}
+	\label{mindfa-es1-sol}
+	\caption{Soluzione di questo primo esercizio}
 \end{figure}
-\subsection{Esercizio 2}
-Proviamo con questo altro esercizio
+
+\subsubsection{Esercizio 2}
+Proviamo con questo altro esercizio:
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_2.png}
-	\label{es_2}
-	\caption{Esercizio 2}
+	\label{mindfa-es-2}
+	\caption{DFA dell'esercizio 2}
 \end{figure}
-In questo caso, la funzione di transizione non è \emph{totale}. Quindi dobbiamo trasformarla in una funzione di transizione \emph{totale} aggiungendo un nodo \(Sink\) a cui facciamo arrivare ogni coppia stato,simbolo mancante dalla funzione \emph{parziale}
+
+In questo caso la funzione di transizione non è totale; dobbiamo quindi renderla tale aggiungendo un nodo \(sink\) a cui facciamo arrivare ogni coppia \(stato, simbolo\) mancante dall'equivalente funzione di transizione parziale.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_3.png}
-	\label{es_2_tot}
-	\caption{Esercizio 2, totale}
+	\label{minndfa-es-2-tot}
+	\caption{DFA dell'esercizio 2 con transizione totale}
 \end{figure}
-Dopo aver realizzato questo, iniziamo con
-\(B_{1}=\{D\}\}\) e \(B_{2}=\{A,B,D,Sink\}\)
-possiamo fare uno \emph{split} di \(B_{2}\) in quanto \(move_{d}(A,a) \in B_{2} \) e \(move_{d}(B,a) \notin B_{2} \)
-da cui otteniamo i nuovi blocchi \(B_{21}=\{A,Sink\}\) e \(B_{22}=\{B,C\}\).
-Possiamo fare un ulteriore \emph{split} di \(B_{22}\) in quanto \(move_{d}(B,b) \in B_{22} \) e \(move_{d}(C,b) \notin B_{22} \)
-da cui otteniamo i blocchi \(B_{221}=\{B\}\) e \(B_{222}=\{C\}\).
-Infine notiamo che è possibile uno \emph{split} di \(B_{21}\) in quanto \(move_{d}(A,a) \in B_{221} \) e \(move_{d}(Sink,a) \notin B_{221} \). 
-Otteniamo i blocchi \(B_{211}=\{A\}\) e \(B_{212}=\{Sink\}\)
-La situazione finale diventa 
-\(B_{1}=\{D\}\}\), \(B_{211}=\{A\}\), \(B_{212}=\{Sink\}\), \(B_{221}=\{B\}\), \(B_{222}=\{C\}\).
-Da questo eliminiamo il blocco \(B_{212}\) in quanto \emph{Sink} e possiamo costruire il nostro nuovo min-DFA, che è lo stesso di partenza. Il DFA era già minimo.  
+
+Dopo aver realizzato questo, iniziamo con gli insiemi \(B_{1}=\{D\}\) e \(B_{2}=\{A,B,D,sink\}\). Possiamo fare uno \emph{split} di \(B_{2}\), in quanto \(\textrm{move}_{d}(A,a) \in B_{2} \) e \(\textrm{move}_{d}(B,a) \notin B_{2} \); da questo split otteniamo i nuovi blocchi \(B_{21}=\{A,sink\}\) e \(B_{22}=\{B,C\}\).
+
+Possiamo fare un ulteriore \emph{split} di \(B_{22}\), poiché \(\textrm{move}_{d}(B,b) \in B_{22} \) e \(\textrm{move}_{d}(C,b) \notin B_{22} \); da questo otteniamo i blocchi \(B_{221}=\{B\}\) e \(B_{222}=\{C\}\).
+
+Infine notiamo che è possibile uno \emph{split} di \(B_{21}\), dal momento che \(\textrm{move}_{d}(A,a) \in B_{221} \) e \(\textrm{move}_{d}(Sink,a) \notin B_{221} \). Otteniamo quindi i blocchi \(B_{211}=\{A\}\) e \(B_{212}=\{sink\}\).
+La situazione finale diventa \(B_{1}=\{D\}\), \(B_{211}=\{A\}\), \(B_{212}=\{sink\}\), \(B_{221}=\{B\}\), \(B_{222}=\{C\}\).
+
+Da questo eliminiamo il blocco \(B_{212}\), in quanto il blocco \emph{Sink} non trova posto nel nostro DFA minimo; notiamo però che il DFA minimo che otteniamo è identico a quello di partenza. Il DFA, infatti, era già minimo.  
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_2.png}
-	\label{es_2_sol}
-	\caption{Esercizio 2, MIN DFA}
+	\label{mindfa-es-2-sol}
+	\caption{Soluzione Esercizio 2}
 \end{figure}
-\subsection{Esercizio 3}
-\begin{figure}[H]
+
+\subsubsection{Esercizio 3}
+\begin{figure}[htb]
 	\centering
-	\includegraphics[width=.8\textwidth,keepaspectratio]{nfa_grafo_2.png}
-	\label{es_3}
+    \subimport{assets/figures/}{nfa2.tex}
+	\label{mindfa-es-3}
 	\caption{Esercizio 3}
 \end{figure}
-Passiamo a questo esercizio più completo. Si richiede di trasformare questo NFA in un DFA e successivamente in un min DFA
+
+Passiamo a questo esercizio più completo. Si richiede di trasformare questo NFA in un DFA e successivamente in un min DFA.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth,keepaspectratio]{tabella_es_3.png}
 	\label{es_3_tab}
-	\caption{Esercizio 3, tabella}
+	\caption{Tabella risolutiva dell'esercizio \(3\)}
 \end{figure}
-A questo punto dobbiamo costruirne il DFA e trovarne il minimo
+
+\noindent A questo punto dobbiamo costruirne il DFA e trovarne il minimo.
+
 \end{document}
