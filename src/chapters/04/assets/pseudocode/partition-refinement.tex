@@ -1,0 +1,34 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+
+\begin{document}
+    \begin{algorithm}[H]
+        \DontPrintSemicolon
+
+        \SetKwData{t}{\textbf{true}}
+        \SetKwData{f}{\textbf{false}}
+        \SetKwData{not}{\textbf{not}}
+
+        \SetKwData{Bu}{\(B_1\)}
+        \SetKwData{Bd}{\(B_2\)}
+        \SetKwData{Pst}{\(P\)}
+        \SetKwFunction{Ins}{insert}
+        \SetKwFunction{Rm}{remove}
+        \SetKwFunction{Moved}{\(\textrm{move}_d\)}
+
+        \textsc{Set} \Bu \(= F\)\;
+        \textsc{Set} \Bd \(= S \setminus F\)\;
+        \textsc{Set} \Pst = \{\Bu, \Bd\}\;
+        \While{Qualche \(B_i \in\) \Pst può essere spezzato rispetto a qualche \((a, B_j)\)} {
+            \Pst.\Rm{\(B_i\)}\;
+            \Pst.\Ins{\(\{s \in B_{j} \mid\) \Moved{s,a} \(\in B_j\}\)}\;
+            \Pst.\Ins{\(\{s \in B_{j} \mid\) \Moved{s,a} \(\notin B_j\}\)}\;
+            % Update \(P\) by removing \(B_i\) and adding the two blocks \(\{s \in B_{j} \mid \textrm{move}_{d}(s,a)\in B_j\}\) and \(\{s \in B_{j} \mid \textrm{move}_{d}(s,a)\notin B_j\}\)\;
+        }
+
+        \caption{partitionRefinement(DFA \(\mathcal{D}\))}
+        % \label{part-ref-code}
+    \end{algorithm}
+\end{document}
