@@ -14,9 +14,9 @@
         \node[state, above right of=s0] (s3) {$S_3$};
         \node[state, below right of=s0] (s1) {$S_1$};
         \node[state, below right of=s3] (s2) {$S_2$};
-        \draw (s0) edge[below] node{\(\varepsilon\)} (s1)
-        (s1) edge[below] node{\(\varepsilon\)} (s2)
-        (s2) edge[above] node{\(\varepsilon\)} (s3)
-        (s3) edge[above] node{\(\varepsilon\)} (s0);
+        \draw (s0) edge[below left] node{\(\varepsilon\)} (s1)
+        (s1) edge[below right] node{\(\varepsilon\)} (s2)
+        (s2) edge[above right] node{\(\varepsilon\)} (s3)
+        (s3) edge[above left] node{\(\varepsilon\)} (s0);
     \end{tikzpicture}
 \end{document}

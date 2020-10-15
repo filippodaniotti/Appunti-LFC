@@ -19,11 +19,11 @@
         \node[state, right of=s5] (s6) {$S_6$};
         \node[state, right of=s6] (s7) {$S_7$};
         \node[state, accepting, right of=s7] (s8) {$S_8$};
-        \draw (s0) edge[above] node{\(\varepsilon\)} (s1)
+        \draw (s0) edge[above left] node{\(\varepsilon\)} (s1)
         (s1) edge[above] node{b} (s2)
         (s0) edge[above] node{\(\varepsilon\)} (s3)
         (s3) edge[above] node{b} (s4)
-        (s0) edge[below] node{\(\varepsilon\)} (s5)
+        (s0) edge[below left] node{\(\varepsilon\)} (s5)
         (s5) edge[above] node{b} (s6)
         (s6) edge[above] node{b} (s7)
         (s7) edge[above] node{b} (s8);

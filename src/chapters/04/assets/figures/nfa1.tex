@@ -14,7 +14,7 @@ node distance=1.5cm, % specifies the minimum distance between two nodes.
         \node[state] (s1) {$S_1$};
         \node[state, above right of=s1] (s2) {$S_2$};
         \node[state, below right of=s1] (s3) {$S_3$};
-        \draw (s1) edge[above] node{a} (s2)
-        (s1) edge[below] node{a} (s3);
+        \draw (s1) edge[above left] node{a} (s2)
+        (s1) edge[below left] node{a} (s3);
     \end{tikzpicture}
 \end{document}

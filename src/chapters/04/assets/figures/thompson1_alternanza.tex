@@ -13,11 +13,11 @@
         \node[state, below right of=1] (4) {$4$};
         \node[state, right of=4] (5) {$5$};
         \node[state, accepting, below right of=3] (6) {$6$};
-        \draw (1) edge[above] node{\(\varepsilon\)} (2)
+        \draw (1) edge[above left] node{\(\varepsilon\)} (2)
         (2) edge[above] node{a} (3)
-        (1) edge[below] node{\(\varepsilon\)} (4)
+        (1) edge[below left] node{\(\varepsilon\)} (4)
         (4) edge[below] node{b} (5)
-        (3) edge[above] node{\(\varepsilon\)} (6)
-        (5) edge[below] node{\(\varepsilon\)} (6);
+        (3) edge[above right] node{\(\varepsilon\)} (6)
+        (5) edge[below right] node{\(\varepsilon\)} (6);
     \end{tikzpicture}
 \end{document}
