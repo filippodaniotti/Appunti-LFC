@@ -441,8 +441,8 @@ Continuiamo così finché lo stak non si svuota. L'algoritmo appena descritto si
 
 % \begin{algorithm}[H]
 % 	\centering
-	\subimport{assets/code/}{ec-wrapper.tex}
-	\subimport{assets/code/}{ec-computation.tex}\label{algoritmo_epsilon_chiusura}
+	\subimport{assets/pseudocode/}{ec-wrapper.tex}
+	\subimport{assets/pseudocode/}{ec-computation.tex}\label{algoritmo_epsilon_chiusura}
 	% \caption{Esempio di parse tree}
 % \end{algorithm}
 
@@ -454,7 +454,7 @@ Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'a
 %     \caption{Algoritmo di simulazione per un automa}
 %     \label{algoritmo_simulazione_nfa}
 % \end{figure}
-\subimport{assets/code/}{nfa-simulation.tex}\label{algoritmo_simulazione_nfa}
+\subimport{assets/pseudocode/}{nfa-simulation.tex}\label{algoritmo_simulazione_nfa}
 
 Dove \texttt{\$} è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \texttt{\$}).
 Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(s_0\) e la aggiungiamo all'insieme \texttt{states}; prendiamo il primo simbolo nella parola e poi entriamo nel ciclo che compone il corpo della procedura.
@@ -468,20 +468,26 @@ Se \(\textrm{\texttt{states}} \; \cap \; F \neq \Phi\), allora significa che esi
 Se invece la condizione precedente non è verificata, allora si è avverato uno dei seguenti casi (o anche entrambi): o non esistono percorsi che riconoscono \(w\), o non esistono percorsi che riconoscono \(w\) e terminano in uno stato finale.
 
 \subsection{Esempi di simulazione}
-Applichiamo ora, come esempio, l'algoritmo di simulazione di un NFA dato, verificando se accetta la parola \(w  = ababb\). Lo svolgimento è rappresentato in figura \ref{simulazione_es_1}.
+Applichiamo ora, come esempio, l'algoritmo di simulazione di un NFA dato, verificando se accetta la parola \(w  = ababb\). Lo svolgimento è rappresentato nella tabella \ref{es-sim-1-tbl}.
 
 \begin{figure}
     \centering
-    \includegraphics[width=.6\textwidth,keepaspectratio]{simulazione_es_1}
-    \caption{Esempio di applicazione dell'algoritmo di simulazione}
-    \label{simulazione_es_1}
+    \subimport{assets/figures/}{thompson4_conc.tex}
+    \caption{Esempio di simulazione}
+    \label{es-sim-1}
 \end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.6\textwidth,keepaspectratio]{simulazione_es_1}
+%     \caption{Esempio di applicazione dell'algoritmo di simulazione}
+%     \label{simulazione_es_1}
+% \end{figure}
 
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{simulazione-nfa-ex1.tex}
-    \caption{}
-    \label{simulazione-nfa-ex1}
+    \caption{Tabella risolutiva della simulazione sull'automa \ref{es-sim-1}}
+    \label{es-sim-1-tbl}
 \end{table} 
 
 \noindent In seguito una breve descrizione della rappresentazione dell'algoritmo.
@@ -577,14 +583,16 @@ Andiamo quindi ad analizzare la complessità di queste procedure.
 Consideriamo la  complessità di generazione di un NFA con \(n\) nodi e \(m\) archi; conoscendo le quattro operazioni, sappiamo che, per ogni passo, aggiungeremo al massimo \(2\) nodi e \(4\) archi (dalla Kleene star, l'operazione più costosa), per cui avremo che \(n \le 2|r|\) e \(m \le 4|r|\), per cui abbiammo che la somma \(n + m\) è dell'ordine della dimensione dell'espressione regolare (\(\mathcal{O}(|r|)\)) e, poiché avremo in totale \(|r|\) passi, ciascuno dei quali eseguibile in tempo costante, possiamo felicemente comcludere che \(T(\textrm{Thompson}(r)) = \mathcal{O}(|r|)\).
 
 \subsection{Complessità del calcolo della \(\varepsilon\)-chiusura}
-Prima di analizzare il costo della simulazione, dobbiamo analizzare il costo della \(\varepsilon\)-chiusura. Teniamo in mente il listato di codice che la descrive:
+Prima di analizzare il costo della simulazione, dobbiamo analizzare il costo della \(\varepsilon\)-chiusura. Teniamo in mente il listato di codice che ne descrive l'algoritmo:
 
-\begin{figure}
-    \centering
-    \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_epsilon_chiusura}
-    \caption{Algoritmo per il calcolo della \(\varepsilon\)-chiusura\((\{t\})\)}
-    \label{algoritmo_epsilon_chiusura}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_epsilon_chiusura}
+%     \caption{Algoritmo per il calcolo della \(\varepsilon\)-chiusura\((\{t\})\)}
+%     \label{algoritmo_epsilon_chiusura}
+% \end{figure}
+\subimport{assets/pseudocode/}{ec-wrapper.tex}
+\subimport{assets/pseudocode/}{ec-computation.tex}
 
 \noindent Evidenziamo che le strutture usate sono uno: stack (per contenere gli elementi non ancora incontrati), un vettore booleano (per tenere traccia dei visitati), e \(
 \textrm{move}_n\), al solito un vettore bidimensionale di puntatori liste linkate, ciascuna contente tutti gli stati raggiungibile a partire da uno stato \(t\) e un simbolo \(x\).
@@ -609,12 +617,13 @@ Complessivamente, il costo della procedura è \(\mathcal{O}(n + m)\).
 \subsection{Complessità della simulazione di NFA}
 Adesso possiamo affrontare il problema dello studio della complessità della simulazione di NFA. Anche qui, teniamo presente il codice:
 
-\begin{figure}
-    \centering
-    \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_simulazione_nfa}
-    \caption{Algoritmo di simulazione per un automa}
-    \label{algoritmo_simulazione_nfa}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_simulazione_nfa}
+%     \caption{Algoritmo di simulazione per un automa}
+%     \label{algoritmo_simulazione_nfa}
+% \end{figure}
+\subimport{assets/pseudocode/}{nfa-simulation.tex}
 
 \noindent Anche qui, un veloce recapdelle strutture dati utilizzate. Innanzitutto si tenga presente che, per tenere traccia della variabile \texttt{states}, utilizzeremo ben due stacks:
 
@@ -633,7 +642,7 @@ Ci rendiamo conto che il ciclo \texttt{while} domina la complessità, soprattutt
 %     \caption{Dettaglio di algoritmo di simulazione per un automa}
 %     \label{algoritmo_simulazione_nfa_2}
 % \end{figure}
-\subimport{assets/code}{nfa-sim-line4.tex}
+\subimport{assets/pseudocode/}{nfa-sim-line4.tex}
 
 All'interno di ogni \texttt{while}, quindi, abbiamo uno swap degli stack, che costa \(\mathcal{O}(n)\), poiché è limitato dal numero di nodi dell'NFA; inoltre, ogni stato può essere inserito solo una volta nella pila nel secondo \texttt{foreach}; quindi, ogni ciclo del \texttt{while} costa \(\mathcal{O}(n + m)\). Questo ciclo verrà lanciato per ogni elemento della parola \(w\) analizzate, pertanto il costo complessivo della simulazione è \(\mathcal{O}(|w|(n + m))\); dal momento che il nostro NFA è stato generato da un'esecuzione di costruzione di Thompson, avremo anche che \(n + m = \mathcal{O}(|r|)\), per cui possiamo concludere che il costo  dell'intera procedura di simulazione è dell'ordine di \(\mathcal{O}(|w||r|)\).
 
@@ -664,7 +673,7 @@ Evidenziamo le caratteristiche dei DFA:
 
 \begin{itemize}
     \item non presentano \(\varepsilon\)-transizioni (ma c'è un cavillo di cui ci occuperemo più avanti);
-    \item se \(\textrm{move}_d\) è \emph{totali}, allora per ogni stato c'è \textbf{esattamente} una \(a\)-transizione \(\forall a \in \mathcal{A}\);
+    \item se \(\textrm{move}_d\) è \emph{totale}, allora per ogni stato c'è \textbf{esattamente} una \(a\)-transizione \(\forall a \in \mathcal{A}\);
     \item se \(\textrm{move}_d\) è \emph{parziale}, allora per ogni stato c'è \textrm{almeno} una \(a\)-transizione \(\forall a \in \mathcal{A}\); in altre parole, per alcune coppie del dominio la funzione non è definita.
 \end{itemize}
 
@@ -727,14 +736,17 @@ Si individua qual è lo stato iniziale dell'NFA, diciamo \(S_0\), lo si prende c
 
 Un fatto da tenere sempre ben presente è che gli stati del DFA che otteniamo in questo modo sono insiemi di stati dell'NFA di partenza. Il \(T\) appena descritto è un sottoinsieme degli stati dell'NFA di partenza.
 
-Dopo questa piccola introduzione passiamo a visualizzare subito il codice dell'algoritmo di Subset Construction (figura \ref{algoritmo_subset_construction}).
-\begin{figure}
-    \centering
-    \includegraphics[width=.8\textwidth,keepaspectratio]{subset_construction_algorithm.jpg}
-    \caption{Algoritmo di Subset Construction}
-    \label{algoritmo_subset_construction}
-\end{figure}
-Procediamo quindi ora con una spiegazione discorsiva di questo algoritmo.
+Dopo questa piccola introduzione passiamo a visualizzare subito il codice dell'algoritmo di Subset Construction.
+
+%  (figura \ref{algoritmo_subset_construction})
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.8\textwidth,keepaspectratio]{subset_construction_algorithm.jpg}
+%     \caption{Algoritmo di Subset Construction}
+%     \label{algoritmo_subset_construction}
+% \end{figure}
+\subimport{assets/pseudocode/}{subset-construction.tex} 
+\noindent Procediamo quindi ora con una spiegazione discorsiva di questo algoritmo.
 \paragraph*{Input}
 L'algoritmo prende come input un NFA specificato dalla tupla \(\mathcal{N} := (S, \mathcal{A}, \textrm{move}_n, s_0, F)\)
 
@@ -779,7 +791,6 @@ Tuttavia per applicazioni con tempo di vita più limitato spesso non ha senso cr
 \subsection{Esercizi di applicazione della Subset Construction}
 \subsubsection*{Esercizio 1}
 Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_1}, calcola, tramite l'algoritmo di Subset Construction, un automa a stati finiti deterministico che riconosca lo stesso linguaggio.
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{e1_subset_construction.jpg}
@@ -918,17 +929,20 @@ Grazie a questa procedura arriveremo a partizionare gli stati in \(2\) blocchi, 
     \item Il blocco \(B_{i}\) può essere spezzato in due se per qualche \(s,t \in B_{i}\) vale \(\textrm{move}_{d}(s,a)\in B_{j}\) e \(\textrm{move}_{d}(t,a)\notin B_{j}\), ossia se ci sono due stati non equivalenti.
     \item Nel concreto, dividere un certo blocco \(B_{i}\) rispetto a \(a,B_{j}\) consiste nel sostituire \(B_{i}\) con due nuovi blocchi:
     \begin{itemize}
-        \item \( B_{i_1} = \{s \in B_{j} \mid \textrm{move}_{d}(s,a)\in B\}\);
-        \item \( B_{i_2} = \{s \in B_{j} \mid \textrm{move}_{d}(s,a)\notin B\}\).
+        \item \( B_{i_1} = \{s \in B_{j} \mid \textrm{move}_{d}(s,a)\in B_j\}\);
+        \item \( B_{i_2} = \{s \in B_{j} \mid \textrm{move}_{d}(s,a)\notin B_j\}\).
     \end{itemize}
 \end{itemize}
+Di seguito lo pseudocodice per la procedura appena descritta.
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=.8\textwidth,keepaspectratio]{algoritmo partiton refinement.png}
-	\label{partition refinement}
-	\caption{Pseudocodice}
-\end{figure}
+%  (pseudocodice \ref{part-ref-code}).
+% \begin{figure}[H]
+% 	\centering
+% 	\includegraphics[width=.8\textwidth,keepaspectratio]{algoritmo partiton refinement.png}
+% 	\label{partition refinement}
+% 	\caption{Pseudocodice}
+% \end{figure}
+\subimport{assets/pseudocode/}{partition-refinement.tex}
 
 \subsection{Esercizi sulla minimizzazione DFA}
 \subsubsection{Esercizio 1}
@@ -995,12 +1009,12 @@ Da questo eliminiamo il blocco \(B_{212}\), in quanto il blocco \emph{Sink} non 
 
 Passiamo a questo esercizio più completo. Si richiede di trasformare questo NFA in un DFA e successivamente in un min DFA.
 
-\begin{figure}[H]
+\begin{table}[H]
 	\centering
-	\includegraphics[width=.8\textwidth,keepaspectratio]{tabella_es_3.png}
-	\label{es_3_tab}
+	\subimport{assets/tables/}{mindfa-es3-tbl.tex}
+	\label{mindfa-es-3-tab}
 	\caption{Tabella risolutiva dell'esercizio \(3\)}
-\end{figure}
+\end{table}
 
 \noindent A questo punto dobbiamo costruirne il DFA e trovarne il minimo.
 

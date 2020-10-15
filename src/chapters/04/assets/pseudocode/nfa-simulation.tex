@@ -8,7 +8,9 @@
 
         \SetKwData{t}{\textbf{true}}
         \SetKwData{f}{\textbf{false}}
-        \SetKwData{not}{\textbf{not}}
+        % \SetKwData{not}{\textbf{not}}
+        \SetKwData{mrk}{\texttt{\$}}
+        \SetKwData{noteq}{\(\neq\)}
 
         \SetKwData{States}{states}
         \SetKwData{Symb}{symbol}
@@ -20,11 +22,11 @@
 
         \States = \Closure{\(\{s_0\}\)}\;
         \Symb = \NC{}\;
-        \While{\Symb \(\neq\) \texttt{\$}} {
+        \While{\Symb \noteq \mrk} {
             \States = \Closure{\(\bigcup_{t \in \textrm{\States}}\) \Moven{t, \Symb}}\;
             \Symb = \NC{}\;
         }
-        \eIf{\States \(\cap \textrm{ } F \ne \emptyset\)}
+        \eIf{\States \(\cap \textrm{ } F\) \noteq \(\emptyset\)}
             {
                 \Return{\t}\;
             }
