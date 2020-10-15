@@ -995,27 +995,230 @@ Da questo eliminiamo il blocco \(B_{212}\), in quanto il blocco \emph{Sink} non 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_2.png}
-	\label{mindfa-es-2-sol}
 	\caption{Soluzione Esercizio 2}
+	\label{mindfa-es-2-sol}
 \end{figure}
 
 \subsubsection{Esercizio 3}
+Passiamo ora ad un esercizio più completo. Si richiede di trasformare l'NFA in Fig.\ref{mindfa-es-3} in un DFA e successivamente in un min DFA.
 \begin{figure}[htb]
 	\centering
     \subimport{assets/figures/}{nfa2.tex}
-	\label{mindfa-es-3}
 	\caption{Esercizio 3}
+	\label{mindfa-es-3}
 \end{figure}
-
-Passiamo a questo esercizio più completo. Si richiede di trasformare questo NFA in un DFA e successivamente in un min DFA.
-
+Procediamo dunque, come da prassi, con lo svolgimento della procedura di subset construction per creare un DFA corrispondente. La tabella che riassume tale procedimento è riportata come Tab.\ref{mindfa-es-3-tab}.
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{mindfa-es3-tbl.tex}
+	\caption{Tabella per la subset construction}
 	\label{mindfa-es-3-tab}
-	\caption{Tabella risolutiva dell'esercizio \(3\)}
 \end{table}
+A questo punto dobbiamo costruirne la rappresentazione del DFA, che si può osservare in Fig.\ref{dfa-sc-es-3-mindfa}, e trovarne il minimo.
+\begin{figure}
+	\centering
+	\includegraphics[width=.7\textwidth,keepaspectratio]{esercizio-min-dfa-3_dfa_da_sc.png}
+	\caption{DFA ottenuto con subset construction}
+	\label{dfa-sc-es-3-mindfa}
+\end{figure}
+Procediamo ora con l’algoritmo di partition refinement per minimizzare il precedetne DFA.
 
-\noindent A questo punto dobbiamo costruirne il DFA e trovarne il minimo.
+Il primo passo è quello di dividere in due blocchi: gli stati finali (\(B2\)) e gli stati non finali (\(B1\)).
+In questo caso la partizione è la seguente:
+\begin{equation*}
+    B1 = \{A,B,C,D\} \textrm{ e } B2 = \{E,F,G,H\}
+\end{equation*}
+
+A questo punto procediamo con le raffinazioni successive. Se all’interno dello stesso blocco troviamo due stati che tramite una \(a\)-transizione portano a due blocchi distinti (con \(a\) terminale qualsiasi dell’alfabeto \(\mathcal{A}\)).
+
+\noindent Nota: la scelta di quale blocco splittare influisce molto sull’efficienza dell’algoritmo, gli algoritmi più efficienti svolgono questa scelta in maniera mirata.
+
+Decidiamo di splittare \(B1\) secondo \(move_d (A,a) \), dato che osservo che \(move_d (C,a)\)non ha lo stesso blocco target di \(move_d (A,a) \) (con una \(a\)-transizione da \(A\) raggiungo\(B1\), con una \(a\)-transizione da \(C\) raggiungo \(B2\) ).
+
+In questo caso il risultato della partizione è il seguente:
+\begin{equation*}
+    \{A, B\};\; \{C, D\};\; \{E,F,G,H\}
+\end{equation*}
+Questa nuova partizione è ulteriormente splittabile?
+Sì! Posso performare uno split su \(move_d(A, a)\), dato che attraverso una \(a\)-transizione da \(A\) mi muovo in \(\{A,B\}\) mentre da \(B\) mi muovo in \(\{C,D\}\) splitto il blocco \(\{A,B\}\).
+Ottengo quindi questa nuova suddivisione:
+\begin{equation*}
+    \{A\};\; \{B\};\; \{C, D\};\; \{E,F,G,H\}
+\end{equation*}
+Ora procediamo ad oltranza con i raffinamenti successivi.
+
+Posso splittare su \(move_d(G,b)\) e \(move_d(H,b)\); ottengo quindi:
+\begin{equation*}
+    \{A\};\; \{B\};\; \{C, D\};\; \{E,F,H\};\; \{G\}
+\end{equation*}
+Il prossimo è lo split su \(move_d(C, a)\) e \(move_d(D, a)\), che mi porta ad ottenere:
+\begin{equation*}
+    \{A\};\; \{B\};\; \{C\};\; \{D\};\; \{E,F,H\};\; \{G\}
+\end{equation*}
+Ed ora splitto su \(move_d(E, a)\) e \(move_d(H, a)\):
+\begin{equation*}
+    \{A\};\; \{B\};\; \{C\};\; \{D\};\; \{E,F\};\; \{H\};\; \{G\}
+\end{equation*}
+Infine posso splittare anche su \(move_d(E, a)\) ed \(move_d(F, a)\), quindi arrivo al raffinamento con la seguente forma:
+\begin{equation*}
+    \{A\};\; \{B\};\; \{C\};\; \{D\};\; \{E\};\; \{F\};\; \{H\};\; \{G\}
+\end{equation*}
+A questo punto ho raggiunto una partizione in cui tutti i blocchi contengono un solo stato.
+
+In tal caso ho terminato lo svolgimento dell'algoritmo di partition refinement: questo significa che il DFA da cui sono partito (ottenuto da subset construction) era esattamente minimo.
+
+\subsubsection[Tutta da risistemare]{Discussione: “Qual è la scelta ottimale per lo split?”}
+Domanda interessante. La discussione, essendo un trivia, verrà trascritta in un secondo momento.
+% L’idea alla base dell’algoritmo più efficiente è andare a splittare i blocchi che sono splittabili per archi entranti nei blocchi più piccoli.
+% Un algoritmo non efficientissimo ma davvero semplice da scrivere è il seguente
+% Algoritmo di Brzozowski
+% % min(D) = sub_c(rev(sub_c(rev(D))))
+% Precondizione: il DFA può avere un set di stati iniziali
+% (non cambia molto per la sub_c: invece di avere lo stato S_0 si ha un insieme di stati T_0, di conseguenza invece che la e-chiusura di S_0 si usa la e-chiusura di T_0)
+% Provando ad applicare questo algoritmo su 2/3 automi diversi si dovrebbe arrivare a capire quali sono le scelte migliori per applicare lo split.
+
+\subsubsection{Lemma sulla dimensione di un DFA}
+\begin{lemma}
+    Per ogni \(n \in  \mathbb{N}^+\) esiste un NFA con \((n+1)\) stati il cui DFA minimo equivalente ha almeno \(2^n\) stati.
+\end{lemma}
+\begin{proof}
+    Prendiamo ad esempio il linguaggio 
+    \begin{equation}
+        \mathcal{L} = \mathcal{L}((a\mid b)^* a (a\mid b)^{n-1})  
+        \label{linguaggio_lemma_limiti_dfa}
+    \end{equation}
+    Essendo questo un linguaggio regolare può essere rappresentato utilizzando un automa a stati finiti.
+    Esiste un NFA con esattamente \(n+1\) stati che accetta il linguaggio \(\mathcal{L}\), questo automa è rappresentiato in Fig.\ref{nfa_lemma_limiti_dfa}.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=.7\textwidth,keepaspectratio]{nfa_lemma_limiti_dfa.png}
+        \caption{NFA rappresentante il linguaggio \ref{linguaggio_lemma_limiti_dfa}}
+        \label{nfa_lemma_limiti_dfa}
+    \end{figure}
+    Supponiamo per assurdo che esista un DFA minimo, diaciamo \(\mathcal{D}\), che accetti il linguaggio \(\mathcal{L}\) ed abbia \(k<2^n\) stati.
+
+    Sappiamo esserci esattamente \(2^n\) parole distinte su \(\{a, b\}\) la ui lunghezza è \(n\).\\
+    Esistono quindi 2 percorsi in \(\mathcal{D}\) tali che:
+    \begin{itemize}
+        \item La loro lunghezza è \(n\)
+        \item Compongono rispettivamente le parole \(w_1\) e \(w_2\), con \(w_1 \neq w_2\)
+        \item Condividono almeno un arco
+    \end{itemize}
+    Se non esistessero allora i nodi sarebbero proprio \(2^n\).
+    Di conseguenza per qualche \(x_1\), \(x_2\) e \(x\) vale una delle due opzioni seguenti:
+    \begin{enumerate}
+        \item \(w_1 = x_1 a x\) e \(w_2 = x_2 b x\)
+        \item \(w_1 = x_1 b x\) e \(w_2 = x_2 a x\)
+    \end{enumerate}
+    altrimenti le due parole \(w_1\) e \(w_2\) sarebbero uguali.\\
+    Supponiamo in questo caso che sia valida la condizione 
+    \begin{equation*}
+        w_1 = x_1 a x \textrm{ e } w_2 = x_2 b x
+    \end{equation*}
+    Allora possiamo definire \(w_1'\) in questo modo
+    \begin{equation*}
+        w_1' = x_1 a b^{n-1} \in \mathcal{L}(\mathcal{D})
+    \end{equation*}
+    Di conseguenza lo stato riaggiunto da \(w_1'\) in \(\mathcal{D}\) è uno stato finale.\\
+    Questa è una contraddizione: lo stato non può essere finale perchè può essere raggiunto anche tramite \(x_2 b b^{n-1}\) ma 
+    \begin{equation*}
+        x_2 b b^{n-1} \notin \mathcal{L}(\mathcal{D})
+    \end{equation*}
+    questo è l'assurdo che prova la validità del lemma.
+\end{proof}
+Tutto il lemma gioca sul fatto che un DFA ha bisogno esattamente di tutti quanti i possibili cammini che siano comporti da \(n-1\) alternanze di \(a\) e di \(b\) per esprimere lo stesso linguaggio espresso dall'NFA.
+
+Questo lemma quindi ci offre una stima per il numero minimo di stati di un DFA che rappresenta un certo altro NFA.
+
+\subsubsection{Pumpkin Lemma per linguaggi regolari}
+\begin{lemma}
+    Sia \(\mathcal{L}\) un linguaggio regolare, allora si ha che:
+    \begin{itemize}
+        \item \(\exists p \in \mathbb{N}^+\) tale che 
+        \item \(\forall z \in \mathcal{L}\) tali che \(|z|>p\)
+        \item \(\exists \;u, v, w\) tale che
+        \begin{itemize}
+            \item \(z = uvw\)  e
+            \item \(|uv| \le p\)  e
+            \item \(|v| \ge 0\)  e
+            \item \(\forall i \in \mathbb{N} \; . \; uv^iw \in \mathcal{L}\)
+        \end{itemize}
+    \end{itemize}
+\end{lemma}
+Ovvero, come il lettore avrà ben notato, questo è il corrispettivo del pumping lemma per i linguaggi regolari.
+
+Illustriamo ora la dimostrazione di questo lemma.
+\begin{proof}
+    Dato che \(\mathcal{L}\) è un linguaggio regolare, sappiamo che esiste un DFA \(\mathcal{D} = (S,A,move_d ,s_0, F)\) tale per cui \(\mathcal{L} = \mathcal{L}(\mathcal{D})\).
+
+    Fissiamo quindi \(p=|S|-1\); ciò significa che tutti i cammini che partono da \(s_0\) ed arrivano ad uno stato finale, passando per ogni stato al massimo una volta, hanno lunghezza limitata da \(p\).
+
+    Quindi se per una parola \(z\) vale \(|z|>p\), allora possiamo scomporre \(z\) in \(z = a_1 \dots a_p z'\) ed abbiamo la certezza che almeno uno stato, diciamo \(s^*\), sia attraversato più di una colta lungo il cammino \(a_1 \dots a_p\).
+
+    Questo significa che esiste un ciclo in \(\mathcal{D}\) che parte da \(s^*\) e torna in \(s^*\) e questo ciclo si può indicare come \(a_{i+} \dots a_j\), con \(i<j\le p\).
+
+    Definiamo ora \(u\), \(v\) e \(w\):
+    \begin{itemize}
+        \item \(u = a_1 \dots a_i\)
+        \item \(v = a_{i+} \dots a_j\) \textrm{(quindi \(v\) rappresenta il ciclo)}
+        \item \(w = 
+        \begin{cases}
+            z'                   & \textrm{if } j = p\\ 
+            a_{j+1} \dots a_pz'  & \textrm{if } j < p
+        \end{cases}\)
+    \end{itemize}
+
+    Quindi possiamo tranquillamente affermare che \(|uv| \le p\) e che la lunghezza di \(v\) è almeno 1 (per definizione un ciclo ha almeno un nodo). Inoltre, essendo \(v\) il ciclo, esso è ripetibile (pumping) un numero indefinito di volte con la garanzia che \(uv^iw\) sia accettato da \(\mathcal{D}\) per ogni valore \(i \in \mathbb{N}\). 
+\end{proof}
+Abbiamo quindi dimostrato questa versione del pumping lemma per i linguaggi regolari, ora la domanda che sorge spontanea è: per cosa si utilizza questo lemma?
+
+Come nel caso dei linguaggi liberi questo lemma viene utilizzato per dimostrare, tramite la contraddizione, che un linguaggio \emph{non} è regolare.
+
+Ovvero si assume che un dato linguaggio \(\mathcal{L}\) sia regolare, se si riesce a dimostrare che per quel linguaggio la tesi non è soddisfatta (il negato della tesi è soddisfatto), allora si può constatare che \(\mathcal{L}\) in realtà non è un linguaggio regolare.
+
+Ripetiamo, per amor di chiarezza, la tesi e ne scriviamo in seguito la negazione.
+\begin{description}
+    \item[Tesi] 
+    \(\exists p \in \mathbb{N}^+ . \;\forall z \in \mathcal{L}:|z|>p . \; \exists \;u, v, w . \; P\) \\
+    dove\\
+    \(P \equiv (z = uvw \textrm{ and } |uv| \le p \textrm{ and } |v| \ge 0 \textrm{ and } \forall i \in \mathbb{N} . \; uv^iw \in \mathcal{L}) \)
+    \item[Negato]
+    \(\forall p \in \mathbb{N}^+ . \;\exists z \in \mathcal{L}:|z|>p . \; \forall \;u, v, w . \; Q\) \\
+    dove\\
+    \(Q \equiv (z = uvw \textrm{ and } |uv| \le p \textrm{ and } |v| \ge 0) \implies (\exists i \in \mathbb{N} . \; uv^iw \notin \mathcal{L}) \) 
+\end{description}
+
+\subsubsection{Applicazioni del pumping lemma per linguaggi regolari}
+Vediamo subito come possiamo applicare il lemma per dimostrare la seguente affermazione:
+\begin{equation}
+    \mathcal{L} = \{a^n b^n \mid n>0\} \textrm{ non è regolare}
+    \label{pl_regular_languages_ex_1}
+\end{equation}
+Prima di proseguire con la dimostrazione formale proviamo a spiegare che intuizione potrebbe dirci che ci troviamo davanti ad un linguaggio non regolare.
+
+Se \(\mathcal{L}\) fosse un linguaggio regolare dovrebbe essere possbile rappresentarlo con un NFA o un DFA; proviamo ad immaginare il DFA che riconosce questo linguaggio, come dovrebbe essere?
+
+Per bilanciare il numero di \(b\) e di \(a\) dovrebbe in qualche modo obbligare l’inserimento di una \(b\) per ogni \(a\) inserita in precedenza, ma questo non si può fare a meno di inserire infiniti stati, il che è impossibile.
+
+Procediamo quindi con la dimostrazione tramite pumping lemma. Supponiamo \(\mathcal{L}\) regolare, prendiamo \(p\) intero positivo arbitrario (il negato della tesi deve valere per ogni \(p\)).
+
+Ora, costruiamo la parola \(z=a^p b^p\), abbiamo che \(|z|>p\).
+Osserviamo che:
+\begin{equation*}
+    \forall \; u,v,w \textrm{ se } (z = uvw \textrm{ e })|uv| \le p \textrm{ e } |v| > 0
+\end{equation*}
+sappiamo che:
+\begin{itemize}
+    \item la componente \(v\) contiene almeno una \(a\) (da \(|v| > 0\))
+    \item la componente \(v\) può contenere solamente \(a\) (altrimenti violerebbe \(|uv| \le p\))
+\end{itemize}
+Se noi ora definiamo \(j > 0\) tele per cui 
+\begin{equation*}
+    uv^2w = a^pa^jb^p 
+\end{equation*}
+abbiamo che \(uv^2w \notin \mathcal{L}\), il che contraddice il pumping lemma per i linguaggi regolari.
+
+Abbiamo quindi dimostrato per contraddizione del pumping lemma per linguaggi regolari che l'affermazione in Eq.\ref{pl_regular_languages_ex_1} è verificata.
+
 
 \end{document}
