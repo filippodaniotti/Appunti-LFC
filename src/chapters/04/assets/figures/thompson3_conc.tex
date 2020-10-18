@@ -17,12 +17,12 @@
         \node[state, right of=6] (7) {$7$};
         \node[state, accepting, right of=7] (8) {$8$};
         \draw (0) edge[below] node{\(\varepsilon\)} (1)
-        (1) edge[above] node{\(\varepsilon\)} (2)
+        (1) edge[above left] node{\(\varepsilon\)} (2)
         (2) edge[above] node{a} (3)
-        (1) edge[below] node{\(\varepsilon\)} (4)
+        (1) edge[below left] node{\(\varepsilon\)} (4)
         (4) edge[below] node{b} (5)
-        (3) edge[above] node{\(\varepsilon\)} (6)
-        (5) edge[below] node{\(\varepsilon\)} (6)
+        (3) edge[above right] node{\(\varepsilon\)} (6)
+        (5) edge[below right] node{\(\varepsilon\)} (6)
         (6) edge[below] node{\(\varepsilon\)} (7)
         (6) edge[above, bend right=130, looseness=2] node{\(\varepsilon\)} (1)
         (0) edge[below, bend right=70] node{\(\varepsilon\)} (7)

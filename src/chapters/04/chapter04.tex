@@ -677,17 +677,18 @@ Evidenziamo le caratteristiche dei DFA:
     \item se \(\textrm{move}_d\) è \emph{parziale}, allora per ogni stato c'è \textrm{almeno} una \(a\)-transizione \(\forall a \in \mathcal{A}\); in altre parole, per alcune coppie del dominio la funzione non è definita.
 \end{itemize}
 
+% TODO prova ad usare il pacchetto subfigure
 \begin{figure}[H]
-    \begin{minipage}{0.4\textwidth}
+    \begin{minipage}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth,keepaspectratio]{DFA-move-total.png}
-        \subcaption{Esempio di funzionedi transizione totale}
+        \subimport{assets/figures/}{dfa_total_transition.tex}
+        \subcaption{Esempio di funzione di transizione totale}
     \end{minipage}
     \hfill
-    \begin{minipage}{0.4\textwidth}
+    \begin{minipage}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth,keepaspectratio]{DFA-move-partial.png}
-        \subcaption{Esempio di funzionedi transizione parziale}
+        \subimport{assets/figures/}{dfa_partial_transition.tex}
+        \subcaption{Esempio di funzione di transizione parziale}
     \end{minipage}
     \caption{Funzioni di transizione dei DFA}
 \end{figure}
@@ -793,7 +794,7 @@ Tuttavia per applicazioni con tempo di vita più limitato spesso non ha senso cr
 Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_1}, calcola, tramite l'algoritmo di Subset Construction, un automa a stati finiti deterministico che riconosca lo stesso linguaggio.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{e1_subset_construction.jpg}
+    \subimport{assets/figures/}{subset_constr_1_NFA.tex}
     \caption{Esercizio 1: NFA}
     \label{es_sc_1}
 \end{figure}
@@ -821,7 +822,7 @@ Alla fine della fiera, devo trovare quali sono gli stati finali del nostro autom
 Una volta terminata questa operazione abbiamo trovato quindi l’automa a stati finiti deterministico che riconosce lo stesso linguaggio dell’NFA di partenza; possiamo vederne una raffigurazione in figura \ref{sol_sc_1}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{s1_subset_construction.jpg}
+    \subimport{assets/figures/}{subset_constr_1_DFA.tex}
     \caption{Esercizio 1: DFA}
     \label{sol_sc_1}
 \end{figure}
@@ -831,7 +832,7 @@ Una volta terminata questa operazione abbiamo trovato quindi l’automa a stati 
 Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_2}, calcola tramite l'algoritmo di Subset Construction un automa a stati finiti deterministico che riconosce lo stesso linguaggio.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth,keepaspectratio]{e2_subset_construction.jpg}
+    \subimport{assets/figures/}{subset_constr_2_NFA.tex}
     \caption{Esercizio 2: NFA}
     \label{es_sc_2}
 \end{figure}
@@ -849,7 +850,7 @@ Dato che lo svolgimento dei pass dell'algoritmo non presenta né novità né dif
 A questo punto abbiamo considerato tutti gli stati in \(R\) quindi ora è il momento di determinare quali sono gli stati (deterministici) finali. L’unico stato finale nell'NFA è \(E\), quindi tutti e solo gli stati deterministici che contengono \(E\) sono stati deterministici finali. \(T0\), \(T1\) e \(T2\) sono tutti stati finali. Il DFA risultante si può ammirare in figura \ref{sol_sc_2}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth,keepaspectratio]{s2_subset_construction.jpg}
+    \subimport{assets/figures/}{subset_constr_2_DFA.tex}
     \caption{Esercizio 2: DFA}
     \label{sol_sc_2}
 \end{figure}
@@ -858,7 +859,7 @@ A questo punto abbiamo considerato tutti gli stati in \(R\) quindi ora è il mom
 Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_3}, calcola tramite l'algoritmo di Subset Construction un automa a stati finiti deterministico che riconosce lo stesso linguaggio.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth,keepaspectratio]{e3_subset_construction.jpg}
+    \subimport{assets/figures/}{thompson4_conc.tex}
     \caption{Esercizio 3: NFA}
     \label{es_sc_3}
 \end{figure}
@@ -874,7 +875,7 @@ Come per l'esercizio precedente, è riportata in seguito la tabella risolutiva.\
 Quindi abbiamo ben \(5\) stati per il DFA questa volta! Ora, gli stati finali sono solo quelli che contengono lo stato \(10\) dell'NFA, il che significa che solo \(T4\) è uno stato finale per il DFA ricavato; tale DFA si può vedere in figura \ref{sol_sc_3}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth,keepaspectratio]{s3_subset_construction.jpg}
+    \subimport{assets/figures/}{es1_DFA_minimization.tex}
     \caption{Esercizio 3: DFA}
     \label{sol_sc_3}
 \end{figure}
@@ -944,24 +945,26 @@ Di seguito lo pseudocodice per la procedura appena descritta.
 % \end{figure}
 \subimport{assets/pseudocode/}{partition-refinement.tex}
 
+La divisione consiste di \(B_{i}\) considerando \(a,B_{j}\) consiste nel sostituire \(B_{i}\) con due blocchi, \( B_{i1} = {s \in B_{j} | move_{d}(s,a)\in B}\) e \( B_{i2} = {s \in B_{j} | move_{d}(s,a)\notin B}\)
+
 \subsection{Esercizi sulla minimizzazione DFA}
 \subsubsection{Esercizio 1}
 Passiamo ad applicare la procedura di minimizzazione ad uno degli esempi già visti in passato.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.8\textwidth,keepaspectratio]{s3_subset_construction.jpg}
-	\label{mindfa-es-1}
+    \subimport{assets/figures/}{es1_DFA_minimization.tex}
 	\caption{Esercizio 1}
+	\label{mindfa-es-1}
 \end{figure}
 
 Iniziamo con due blocchi iniziali: \(B_{1}=\{E\}\), dato dallo stato finale, e \(B_{2}=\{A,B,C,D\}\). Notiamo che \((b,B_{1})\) spezza \(B_{2}\), per cui abbiamo due blocchi \(B_{21}=\{D\}\) e \(B_{22}=\{A,B,C\}\). Notiamo ancora che è possibile spezzare \(B_{22}\) in \(B_{221}=\{B\}\) e \(B_{222}=\{A,C\}\). Otteniamo quindi il DFA minimo illustrato in figura \ref{mindfa-es1-sol}. 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_1.png}
-	\label{mindfa-es1-sol}
+    \subimport{assets/figures/}{sol_es1_DFA_minimization.tex}
 	\caption{Soluzione di questo primo esercizio}
+  \label{mindfa-es1-sol}
 \end{figure}
 
 \subsubsection{Esercizio 2}
@@ -969,18 +972,18 @@ Proviamo con questo altro esercizio:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_2.png}
-	\label{mindfa-es-2}
+    \subimport{assets/figures/}{es2_DFA_minimization.tex}
 	\caption{DFA dell'esercizio 2}
+  \label{mindfa-es-2}
 \end{figure}
 
 In questo caso la funzione di transizione non è totale; dobbiamo quindi renderla tale aggiungendo un nodo \(sink\) a cui facciamo arrivare ogni coppia \(stato, simbolo\) mancante dall'equivalente funzione di transizione parziale.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_3.png}
-	\label{minndfa-es-2-tot}
+    \subimport{assets/figures/}{es2_DFA_minimization_total_transition.tex}
 	\caption{DFA dell'esercizio 2 con transizione totale}
+  \label{minndfa-es-2-tot}
 \end{figure}
 
 Dopo aver realizzato questo, iniziamo con gli insiemi \(B_{1}=\{D\}\) e \(B_{2}=\{A,B,D,sink\}\). Possiamo fare uno \emph{split} di \(B_{2}\), in quanto \(\textrm{move}_{d}(A,a) \in B_{2} \) e \(\textrm{move}_{d}(B,a) \notin B_{2} \); da questo split otteniamo i nuovi blocchi \(B_{21}=\{A,sink\}\) e \(B_{22}=\{B,C\}\).
@@ -994,16 +997,16 @@ Da questo eliminiamo il blocco \(B_{212}\), in quanto il blocco \emph{Sink} non 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.8\textwidth,keepaspectratio]{dfa_grafo_2.png}
+    \subimport{assets/figures/}{es2_DFA_minimization.tex}
 	\caption{Soluzione Esercizio 2}
-	\label{mindfa-es-2-sol}
+  \label{mindfa-es-2-sol}
 \end{figure}
 
 \subsubsection{Esercizio 3}
 Passiamo ora ad un esercizio più completo. Si richiede di trasformare l'NFA in Fig.\ref{mindfa-es-3} in un DFA e successivamente in un min DFA.
 \begin{figure}[htb]
 	\centering
-    \subimport{assets/figures/}{nfa2.tex}
+  \subimport{assets/figures/}{nfa2.tex}
 	\caption{Esercizio 3}
 	\label{mindfa-es-3}
 \end{figure}
