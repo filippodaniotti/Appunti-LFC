@@ -1029,21 +1029,23 @@ In questo caso le partizioni sono le seguenti:
     B1 = \{A,B,C,D\} \quad \textrm{e} \quad B2 = \{E,F,G,H\}
 \end{equation*}
 
-A questo punto procediamo con le raffinazioni successive. Se all’interno dello stesso blocco troviamo due stati che, tramite una \(a\)-transizione, portano a due blocchi distinti (con \(a\) terminale qualsiasi dell’alfabeto \(\mathcal{A}\)), allora [apodosi del periodo ipotetico]. Preme sottolineare che la scelta di quale blocco splittare influisce molto sull’efficienza dell’algoritmo, e gli algoritmi più efficienti svolgono questa scelta in maniera mirata.
+A questo punto procediamo con le raffinazioni successive. Se all’interno dello stesso blocco troviamo due stati che, tramite una \(a\)-transizione, portano a due blocchi distinti (con \(a\) terminale qualsiasi dell’alfabeto \(\mathcal{A}\)), allora splittiamo questo blocco in due nuovi blocchi nel seguente modo:
+\begin{enumerate}
+    \item identifichiamo i due stati \(s_1\) e \(s_2\) che con una \(a\)-transizione portano rispettivamente uno in un blocco \(By\) e l’altro in un blocco \(Bz\);
+    \item creiamo due nuovi sottoblocchi di \(Bx\): \(Bx_{1}\) conterrà tutti gli stati che da \(Bx\) arrivano a \(By\) con una \(a\)-transizione e \(Bx_{2}\) conterrà tutti gli stati in \(Bx \setminus Bx_{1}\).
+\end{enumerate} 
+Preme sottolineare che la scelta di quale blocco splittare influisce molto sull’efficienza dell’algoritmo, e gli algoritmi più efficienti svolgono questa scelta in maniera mirata.
 
-Osservo che \(\textrm{move}_d (C,a)\) non ha lo stesso blocco target di \(\textrm{move}_d (A,a) \): infatti, con una \(a\)-transizione da \(A\) raggiungo \(B1\), con una \(a\)-transizione da \(C\) raggiungo \(B2\). Decido quindi di splittare \(B1\) secondo \(\textrm{move}_d (A,a) \).
-
-In questo caso il risultato della partizione è il seguente:
+Osservo che \(\textrm{move}_d (C,a)\) non ha lo stesso blocco target di \(\textrm{move}_d (A,a) \): infatti, con una \(a\)-transizione da \(A\) raggiungo \(B1\), con una \(a\)-transizione da \(C\) raggiungo \(B2\). Decido quindi di splittare \(B1\) secondo \(\textrm{move}_d (A,a) \). In questo caso il risultato della partizione è il seguente:
 \begin{equation*}
     \{A, B\};\; \{C, D\};\; \{E,F,G,H\}
 \end{equation*}
+
 Questa nuova partizione è ulteriormente splittabile? Sì! Posso eseguire uno split su \(\textrm{move}_d(A, a)\), dato che attraverso una \(a\)-transizione da \(A\) mi muovo in \(\{A,B\}\), mentre da \(B\) mi muovo in \(\{C,D\}\). Splitto quindi il blocco \(\{A,B\}\) e ottengo questa nuova suddivisione:
 \begin{equation*}
     \{A\};\; \{B\};\; \{C, D\};\; \{E,F,G,H\}
 \end{equation*}
-Ora procediamo ad oltranza con i raffinamenti successivi.
-
-Posso splittare su \(\textrm{move}_d(G,b)\) e \(\textrm{move}_d(H,b)\), ottenendo:
+Ora procediamo ad oltranza con i raffinamenti successivi. Posso splittare su \(\textrm{move}_d(G,b)\) e \(\textrm{move}_d(H,b)\), ottenendo:
 \begin{equation*}
     \{A\};\; \{B\};\; \{C, D\};\; \{E,F,H\};\; \{G\}
 \end{equation*}
