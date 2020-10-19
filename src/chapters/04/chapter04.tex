@@ -1209,79 +1209,90 @@ abbiamo che \(uv^2w \notin \mathcal{L}\), il che contraddice il pumping lemma pe
 Abbiamo quindi dimostrato per contraddizione del pumping lemma per linguaggi regolari che l'affermazione in equazione \ref{pl_regular_languages_ex_1} è verificata.
 
 \section{Training}
-\subsection{Es 1}
+\subsection{Esercizio 1}
 Sia \(\mathcal{L}_1\) il linguaggio delle parole su \(\{a, b\}\) con un numero dispari di occorrenze di \(b\). \(\mathcal{L}_1\) è regolare?
 
 Proponiamo di seguito delle espressioni regolari e dei DFA che sono stati selezionati durante la lezione con una breve spiegazione a riguardo 
 
 \begin{itemize}
-    \item l'espressione regolare \((a^*(bb)^*)^* b(a^*(bb)^*)^*\) non può denotare il linguaggio descritto poichè \(ababab \notin \mathcal{L}_1\)
-    \item definiamo un'automa con due stati \(A\) iniziale e \(B\) finale. \(A\) presenta una \(a\)-transizione in \(A\) ed una \(b\)-transizione in \(B\) mentre \(B\) ha una \(a\)-transizione in \(B\) e una \(b\)-transizione in \(A\). Notare che lo stato \(A\) rappresenta il caso in cui sono state lette un numero pari di \(b\) mentre \(B\) quello in cui sono state lette un numero dispari di \(b\): nel caso iniziale infatti si è obbligati ad aggiungere almeno una \(b\) per raggiungere lo stato finale ma, nel caso in cui si voglia aggiungere un'altra \(b\) è necessario ritornare nello stato \(A\) e rifare il procedimento descritto. Considerando che in entrambi gli stati è possibile mettere un numero arbitrario di \(a\) possiamo dichiarare questa soluzione come corretta
-    \item l'espressione regolare \((a^*(b)a^*)(a^*(b)a^*(b)a^*)^*\) sembrerebbe essere corretta in quanto sicuramente accetterò parole composte da almeno una \(b\) e un numero arbitrario di \(a\) prima e dopo; nel caso in cui volessi aumentare il numero di \(b\) sono obbligato a farlo a coppie con la possibilità di interporre prima, in mezzo o alla fine un numero arbitrario di \(a\). 
+    \item l'espressione regolare \((a^*(bb)^*)^* b(a^*(bb)^*)^*\) non può denotare il linguaggio descritto poiché \(ababab \notin \mathcal{L}_1\).
+    \item definiamo un automa con due stati \(A\) iniziale e \(B\) finale. \(A\) presenta una \(a\)-transizione in \(A\) ed una \(b\)-transizione in \(B\) mentre \(B\) ha una \(a\)-transizione in \(B\) e una \(b\)-transizione in \(A\). Notare che lo stato \(A\) rappresenta il caso in cui sono state lette un numero pari di \(b\) mentre \(B\) quello in cui sono state lette un numero dispari di \(b\): nel caso iniziale, infatti, si è obbligati ad aggiungere almeno una \(b\) per raggiungere lo stato finale ma, nel caso in cui si voglia aggiungere un'altra \(b\), è necessario ritornare nello stato \(A\) e rifare il procedimento descritto. Considerando che in entrambi gli stati è possibile mettere un numero arbitrario di \(a\), possiamo dichiarare questa soluzione come corretta.
+    \item l'espressione regolare \((a^*(b)a^*)(a^*(b)a^*(b)a^*)^*\) sembrerebbe essere corretta in quanto sicuramente accetterò parole composte da almeno una \(b\) e un numero arbitrario di \(a\) prima e dopo; nel caso in cui volessi aumentare il numero di \(b\), sono obbligato a farlo a coppie con la possibilità di interporre un numero arbitrario di \(a\) prima, in mezzo o alla fine. 
 \end{itemize}
 
-In questo caso, visto che siamo stati in grado di trovare un DFA con un numero finito di stati, possiamo affermare che \(\mathcal{L}_1\) è un linguaggio regolare.
-
-Come possiamo però essere certi del fatto che ad esempio l'espressione regolare \((a^*(b)a^*)(a^*(b)a^*(b)a^*)^*\) denota il linguaggio \(\mathcal{L}_1\) e che quindi è anch'essa soluzione del quesito? Il modo corretto di procedere è il seguente
+In questo caso, visto che siamo stati in grado di trovare un DFA con un numero finito di stati, possiamo affermare che \(\mathcal{L}_1\) è un linguaggio regolare. Come possiamo però essere certi del fatto che, ad esempio, l'espressione regolare \((a^*(b)a^*)(a^*(b)a^*(b)a^*)^*\) denoti il linguaggio \(\mathcal{L}_1\) e che quindi sia anch'essa soluzione al quesito? Il modo corretto di procedere è il seguente:
 
 \begin{enumerate}
-    \item Si utilizza la \emph{Thompson's Construction} per generare l'NFA corrispondente
-    \item Si applica l'algoritmo di \emph{Subset Construction} per trasformare l'NFA in un DFA
-    \item Si applica l'algoritmo per la \emph{DFA minimization} (aggiungendo dunque lo stato pozzo se necessario) per ridurre il numero di stati
-    \item Si osserva se il DFA ridotto è in realtà un isomorfismo del DFA proposto come soluzione
+    \item si utilizza la \emph{Thompson's Construction} per generare l'NFA corrispondente;
+    \item si applica l'algoritmo di \emph{Subset Construction} per trasformare l'NFA in un DFA;
+    \item si applica l'algoritmo per la \emph{DFA minimization} (aggiungendo dunque lo stato sink se necessario) per ridurre il numero di stati;
+    \item si osserva se il DFA ridotto è in realtà un isomorfismo del DFA proposto come soluzione.
 \end{enumerate}
 
-Notare che in questo caso una soluzione possibile (proposta dalla prof.ssa) è \((b a^*b \mid a)^* ba^*\)
+\noindent Notare che in questo caso una soluzione possibile (proposta dalla professoressa) è \((b a^*b \mid a)^* ba^*\)
 
-\subsection{Es 2}
+\subsection{Esercizio 2}
 Sia \(\mathcal{L}_2\) il linguaggio delle parole su \(\{a, b\}\) con un numero pari di occorrenze di \(a\). \(\mathcal{L}_2\) è regolare?
 
 Per rispondere a tale quesito si potrebbe pensare di costruire un DFA con lo stesso ragionamento di prima: uno stato il caso in cui le occorrenze di \(a\) sono pari mentre l'altro in cui sono dispari.
 
-Visto che 0 è considerato pari in questo caso lo stato iniziale coincide con quello finale. Le transizioni devono essere opportunamente costruite per cui se voglio aggiungere una \(a\) alla mia parola devo essere costretto a seguire una \(a\)-transizione in uno stato non finale per poi tornare in quello finale con un'ulteriore \(a\)-transizione in modo da assicurare che le condizioni siano rispettate. Ovviamente deve esservi sempre la possibilità di inserire un numero arbitrario di \(b\) tra le \(a\) per cui in entrambi gli stati si ha una \(b\)-transizione sullo stesso stato. Analogamente all'esercizio precedente si ha che \(\mathcal{L}_2\) è un linguaggio regolare.
-
-In questo caso l'espressione regolare proposta è stata \((b^*ab^*ab^*)^*\) 
+Poiché \(0\) è considerato pari, in questo caso lo stato iniziale coincide con quello finale. Le transizioni devono essere opportunamente costruite, per cui se voglio aggiungere una \(a\) alla mia parola sono costretto a seguire una \(a\)-transizione in uno stato non finale per poi tornare in quello finale con un'ulteriore \(a\)-transizione, in modo da assicurare che le condizioni siano rispettate. Ovviamente, deve esservi sempre la possibilità di inserire un numero arbitrario di \(b\) tra le varie occorrenze di \(a\), per cui in entrambi gli stati si ha una \(b\)-transizione sullo stesso stato. Analogamente all'esercizio precedente si ha che \(\mathcal{L}_2\) è un linguaggio regolare. In questo caso l'espressione regolare proposta è stata \((b^*ab^*ab^*)^*\) .
 % (P.S. ho provato a fare l'isomorfismo di questo grafo e non viene mai nella vita identico a quello precedente, potrei avere tranquillamente sbagliato ma l'abbiamo fatto in 3 e non risulta quindi o c'è qualcosa che mi sfugge o IDK)
 
-\subsection{Es 3}  
+\subsection{Esercizio 3}  
 Sia \(\mathcal{L}_3\) il linguaggio delle parole su \(\{a, b\}\) con un numero dispari di occorrenze di \(b\) \textbf{oppure} un numero pari di occorrenze di \(a\). \(\mathcal{L}_3\) è regolare?
 
-Una soluzione tanto banale quanto funzionale consiste nel utilizzare la Thompson's Construction per poter concatenare gli automi descritti negli esercizi precedenti con l'operazione di \emph{Alternation}. A livello formale questo si traduce come \(\mathcal{L}(r_1 \mid r_2) = \mathcal{L}(r_1) \cup \mathcal{L}(r_2)\). Essendo che \(\mathcal{L}_1\) e \(\mathcal{L}_2\) sono linguaggi regolari, l'unione dei due così descritta non può che essere anch'essa un linguaggio regolare.
+Una soluzione tanto banale quanto efficace consiste nel utilizzare la Thompson's Construction per poter concatenare gli automi descritti negli esercizi precedenti con l'operazione di \emph{Alternation}. A livello formale questo si traduce come:
+\begin{equation*}
+    \mathcal{L}(r_1 \mid r_2) = \mathcal{L}(r_1) \cup \mathcal{L}(r_2)
+\end{equation*}
+Essendo che \(\mathcal{L}_1\) e \(\mathcal{L}_2\) sono linguaggi regolari, l'unione dei due così descritta non può che essere anch'essa un linguaggio regolare.
 
 Nel caso in cui fosse stato richiesto di verificare un linguaggio dove valessero \textbf{entrambe} le condizioni precedenti avremmo dovuto procedere in modo diverso. Sono dati i seguenti casi:
 \begin{itemize}
-    \item abbiamo un numero di \(a\) pari e di \(b\) pari
-    \item abbiamo un numero di \(a\) pari e di \(b\) dispari
-    \item abbiamo un numero di \(a\) dispari e di \(b\) pari
-    \item abbiamo un numero di \(a\) dispari e di \(b\) dispari
+    \item abbiamo un numero di \(a\) pari e di \(b\) pari;
+    \item abbiamo un numero di \(a\) pari e di \(b\) dispari;
+    \item abbiamo un numero di \(a\) dispari e di \(b\) pari;
+    \item abbiamo un numero di \(a\) dispari e di \(b\) dispari.
 \end{itemize}
-Ovviamente il nostro stato iniziale non può essere altro che quello dove si hanno 0 occorrenze di \(a\) e di \(b\) (il primo descritto) mentre lo stato finale dovrà per forza essere il secondo dell'elenco.
+Ovviamente il nostro stato iniziale non può essere altro che quello dove si hanno \(0\) occorrenze di \(a\) e di \(b\) (il primo descritto), mentre lo stato finale dovrà per forza essere il secondo dell'elenco. Dunque quello che abbiamo appena immaginato di costruire è un'automa che possiede \(4\) possibili stati di cui soltanto uno deve essere considerato quello finale. 
 
-Dunque quello che abbiamo appena immaginato di costruire è un'automa che possiede 4 possibili stati di cui soltanto uno deve essere considerato quello finale.
-
-C'era un modo per arrivare direttamente alla soluzione senza dover fare un ragionamento di questo tipo ma pensando all'intersezione: immaginiamo di avere una parola \(w\) a disposizione e di poter, contemporaneamente, muoverci su entrambi i cammini degli automi descritti come soluzioni di \(\mathcal{L}_1\) e di \(\mathcal{L}_2\). Continuiamo a spostarci eseguendo le transizioni coerentemente con la parola \(w\) scelta fino a che non arriviamo al carattere terminatore; a questo punto sono dati due casi:
-
-\begin{itemize}
+Sicuramente l'idea precedente è corretta, ma c'era un altro modo per arrivare direttamente alla soluzione senza dover fare un ragionamento di quel tipo, ma pensando invece all'intersezione: immaginiamo di avere una parola \(w\) a disposizione e di poterci contemporaneamente muovere su entrambi i cammini degli automi descritti come soluzioni di \(\mathcal{L}_1\) e di \(\mathcal{L}_2\). Continuiamo a spostarci eseguendo le transizioni coerentemente alla parola \(w\) scelta, fino a che non arriviamo al carattere terminatore. A questo punto sono dati due casi:
+\begin{enumerate}
     \item se mi trovo in entrambi gli automi su uno stato finale allora \(w \in \mathcal{L}\)
     \item se uno dei due stati su cui mi trovo non è uno stato finale allora \(w \notin \mathcal{L}\)
-\end{itemize}
-
+\end{enumerate}
 Per poter semplificare la procedura possiamo immaginare di fare il prodotto cartesiano degli stati dei due automi.
 
 \section{Proprietà di chiusura nei linguaggi regolari}
 
-I linguaggi regolari sono chiusi wrt
-
+I linguaggi regolari sono chiusi rispetto alle seguenti operazioni:
 \begin{itemize}
-	\item unione, perchè se prendiamo due linguaggi regolari l'unione di questi linguaggi è ancora un linguaggio regolare. Come nel caso precedente essendo che i linguaggi sono regolari allora è possibile costruire un DFA sia per il primo che per il secondo, se a questo punto si prendono i due automi così costruiti e legano tramite una \(\epsilon\)-transizione, per l'operazione di \emph{Alternation} si ottiene nuovamente un linguaggio regolare
-	\item concatenazione, perchè è possibile sfruttare l'operazione di \emph{Concatenation} della  Thompson's Construction ed ottenere ancora una volta un'automa che denota un linguaggio regolare 
-	\item complementazione, perchè se \(\mathcal{L}\) è un linguaggio regolare su un certo alfabeto \(\mathcal{A}\), la complementazione è data dal linguaggio delle parole su \(\mathcal{A} \setminus \mathcal{L}\). Se un linguaggio è regolare anche il suo complemento è regolare. 
-	\item intersezione, perchè è derivabile dall'unione utilizzando \emph{De Morgan}: \(\mathcal{L}_1 \cap \mathcal{L}_2 = \lnot (\lnot (L1 \cap L2)) = \lnot (\lnot \mathcal{L}_1 \cup \lnot \mathcal{L}_2)\).
+	\item unione;
+	\item concatenazione;
+	\item complementazione;
+	\item intersezione.
 \end{itemize}
+Andiamo a vedere più da vicino le motivazioni per ciascuna di queste.
 
-In precedenza abbiamo visto l'automa per riconoscere \(\mathcal{L}_2\), cioè che accettasse tutte quelle parole dove \(a\) occorreva un numero pari di volte. Il complementare di tale automa corrisponde a quello per cui si hanno parole con un numero dispari di occorrenze. Utilizzando l'automa che denota \(\mathcal{L}_2\), vi è la possibilità di applicare una particolare operazione per trasformarlo nel suo complementare? E' possibile fare quanto descritto semplicemente rendendo finali tutti quegli stati che prima non lo erano e non finali tutti quelli che prima lo erano.
+\paragraph{Unione}
+Se prendiamo due linguaggi regolari e ne operiamo l'unione, il risultato di questa è ancora un linguaggio regolare. Come nel caso precedente, essendo che i linguaggi sono regolari, allora è possibile costruire un DFA sia per il primo che per il secondo; se a questo punto si prendono i due automi così costruiti e li si lega tramite una \(\epsilon\)-transizione, per l'operazione di \emph{Alternation} si ottiene nuovamente 
+un linguaggio regolare.
 
-Relativamente questo procedimento è però necessario fare una precisazione e cioè che tale metodo funziona solamente se il DFA presenta una funzione di transizione \textbf{totale}: intuitivamente è necessario riconoscere tutte quelle parole che non appartengono al linguaggio regolare in quanto queste apparterranno al linguaggio del DFA complementare; se per assurdo si avesse la mancanza di una \(a\)-transizione (non fondamentale nel primo DFA) non si avrebbe la possibilità di costruire il set completo delle parole.
+\paragraph{Concatenazione}
+È possibile eseguire l'operazione di \emph{Concatenation} della Thompson's Construction e ottenere ancora una volta un'automa che denota un linguaggio regolare.
 
+\paragraph{Complementazione}
+Se \(\mathcal{L}\) è un linguaggio regolare su un certo alfabeto \(\mathcal{A}\), la complementazione è data dal linguaggio delle parole su \(\mathcal{A} \setminus \mathcal{L}\). Se un linguaggio è regolare allora anche il suo complemento è regolare. 
+
+\paragraph{Intersezione}
+È derivabile dall'unione utilizzando le regole di \emph{De Morgan}: 
+\begin{equation*}
+    \mathcal{L}_1 \cap \mathcal{L}_2 = \lnot (\lnot (L1 \cap L2)) = \lnot (\lnot \mathcal{L}_1 \cup \lnot \mathcal{L}_2)
+\end{equation*}
+
+In precedenza abbiamo visto l'automa che riconosce \(\mathcal{L}_2\), ovvero che accetta tutte quelle parole dove \(a\) occorre un numero pari di volte. Il complementare di tale automa corrisponde a quello per cui si hanno parole con un numero dispari di occorrenze. Utilizzando l'automa che denota \(\mathcal{L}_2\), vi è la possibilità di applicare una particolare operazione per trasformarlo nel suo complementare? Sì, è possibile: basta semplicemente rendere finali tutti quegli stati che prima non lo erano e, simmetricamente, non finali tutti quelli che prima lo erano.
+
+Relativamente questo procedimento è però necessario fare una precisazione: tale metodo funziona solamente se il DFA presenta una funzione di transizione \textbf{totale}: intuitivamente, è necessario riconoscere tutte quelle parole che non appartengono al linguaggio regolare in quanto queste apparterranno al linguaggio del DFA complementare; se per assurdo si avesse la mancanza di una \(a\)-transizione (non fondamentale nel primo DFA) non si avrebbe la possibilità di costruire il set completo delle parole.
 
 \end{document}
