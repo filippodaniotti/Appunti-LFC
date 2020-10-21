@@ -1,0 +1,23 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+ 
+\usepackage{../../../../style_automata}
+
+\begin{document}
+    \tikzset{
+    node distance=2cm, % specifies the minimum distance between two nodes.
+    }
+    \begin{tikzpicture}
+        \node[state, initial] (s0) {$S_0$};
+        \node[state, right of=s0] (s1) {$S_1$};
+        \node[state, right of=s1] (s2) {$S_2$};
+        \node[state, accepting, right of=s2] (s3) {$S_3$};
+        \draw (s0) edge[above] node{a} (s1)
+        (s1) edge[above] node{b} (s2)
+        (s2) edge[above] node{b} (s3)
+        (s0) edge[loop below] node{a, b} (s0)
+        (s3) edge[loop below] node{\(\varepsilon\)} (s3);
+    \end{tikzpicture}
+\end{document}

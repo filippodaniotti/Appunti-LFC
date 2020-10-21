@@ -1,0 +1,35 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+ 
+\usepackage{../../../../style_automata}
+
+\begin{document}
+    \begin{tikzpicture}
+        \node[state, initial] (0) {$0$};
+        \node[state, right of=0] (1) {$1$};
+        \node[state, above right of=1] (2) {$2$};
+        \node[state, right of=2] (3) {$3$};
+        \node[state, below right of=1] (4) {$4$};
+        \node[state, right of=4] (5) {$5$};
+        \node[state, below right of=3] (6) {$6$};
+        \node[state, right of=6] (7) {$7$};
+        \node[state, right of=7] (8) {$8$};
+        \node[state, right of=8] (9) {$9$};
+        \node[state, accepting, right of=9] (10) {$10$};
+        \draw (0) edge[below] node{\(\varepsilon\)} (1)
+        (1) edge[above left] node{\(\varepsilon\)} (2)
+        (2) edge[above] node{a} (3)
+        (1) edge[below left] node{\(\varepsilon\)} (4)
+        (4) edge[below] node{b} (5)
+        (3) edge[above right] node{\(\varepsilon\)} (6)
+        (5) edge[below right] node{\(\varepsilon\)} (6)
+        (6) edge[below] node{\(\varepsilon\)} (7)
+        (6) edge[above, bend right=130, looseness=2] node{\(\varepsilon\)} (1)
+        (0) edge[below, bend right=70] node{\(\varepsilon\)} (7)
+        (7) edge[above] node{a} (8)
+        (8) edge[above] node{b} (9)
+        (9) edge[above] node{b} (10);
+    \end{tikzpicture}
+\end{document}

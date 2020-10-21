@@ -19,8 +19,10 @@ tenuto nell’Università degli studi di Trento durante il primo semestre dell�
     - Filippo Daniotti
     - Samuele Conti
 - Scrittori
-    - Michele Yin
+    - Simone Alghisi
 - Tecnici
     - Francesco Bozzo
+    - Federico  Izzo
 - Revisori
+    - Michele Yin
     - Giacomo Zanolli
