@@ -1,0 +1,27 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+ 
+\usepackage{../../../../style_automata}
+
+\begin{document}
+    \tikzset{
+    node distance=2.5cm, % specifies the minimum distance between two nodes.
+    }
+    \begin{tikzpicture}
+        \node[state, initial] (0) {$A_pB_p$};
+        \node[state, accepting, right of=0] (1) {$A_pB_d$};
+        \node[state, below of=1] (2) {$A_dB_d$};
+        \node[state, left of=2] (3) {$A_dB_p$};
+        \draw (0) edge[above, bend left=10] node{b} (1)
+        (0) edge[left, bend right=10] node{a} (3)
+        (1) edge[below, bend left=10] node{b} (0)
+        (1) edge[left, bend right=10] node{a} (2)
+        (2) edge[right, bend right=10] node{a} (1)
+        (2) edge[below, bend left=10] node{b} (3)
+        (3) edge[above, bend left=10] node{b} (2)
+        (3) edge[right, bend right=10] node{a} (0)
+        ;
+    \end{tikzpicture}
+\end{document}

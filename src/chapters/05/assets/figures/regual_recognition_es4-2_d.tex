@@ -1,0 +1,31 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+ 
+\usepackage{../../../../style_automata}
+
+\begin{document}
+    \tikzset{
+    node distance=2.5cm, % specifies the minimum distance between two nodes.
+    greenText/.style={text=red},
+    greenNode/.style={greenText, draw=red}
+    }
+    \begin{tikzpicture}
+        \node[greenText, align=center] at (-0.7, 0.2) {{$\omega$}};
+        \node[greenText, align=center] at (-0.7, -2.3) {{$\omega$}};
+        \node[greenText, align=center] at (4, 0) {Lettera a};
+        \node[state, initial] (0) {A};
+        \node[greenNode, state, accepting, right of=0] (1) {B};
+        \node[state, below of=1] (2) {B};
+        \node[greenNode, state, initial, accepting, left of=2] (3) {A};
+        \draw (0) edge[above, bend left=20] node{b} (1);
+        \draw (0) edge[loop above] node{a} (0);
+        \draw (1) edge[below, bend left=20] node{b} (0);
+        \draw[red] (1) edge[loop above] node{a} (1);
+        \draw[red] (2) edge[below, bend left=20] node{a} (3);
+        \draw (2) edge[loop above] node{b} (2);
+        \draw (3) edge[above, bend left=20] node{a} (2);
+        \draw (3) edge[loop above] node{b} (3);
+    \end{tikzpicture}
+\end{document}

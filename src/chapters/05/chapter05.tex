@@ -300,7 +300,7 @@ Procediamo dunque, come da prassi, con lo svolgimento della procedura di subset 
 A questo punto dobbiamo costruirne la rappresentazione del DFA, che si può osservare in Fig.\ref{dfa-sc-es-3-mindfa}, e trovarne il minimo.
 \begin{figure}
 	\centering
-	\includegraphics[width=.7\textwidth,keepaspectratio]{esercizio-min-dfa-3_dfa_da_sc.png}
+    \subimport{assets/figures/}{subset_constr_3_DFA.tex}
 	\caption{DFA ottenuto con subset construction}
 	\label{dfa-sc-es-3-mindfa}
 \end{figure}
@@ -371,7 +371,7 @@ Domanda interessante. La discussione, essendo un trivia, verrà trascritta in un
     Dal momento che è un linguaggio regolare, questo può essere rappresentato utilizzando un automa a stati finiti. Esiste un NFA con esattamente \(n+1\) stati che accetta il linguaggio \(\mathcal{L}\); tale automa è rappresentiato in figura \ref{nfa_lemma_limiti_dfa}.
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.7\textwidth,keepaspectratio]{nfa_lemma_limiti_dfa.png}
+        \subimport{assets/figures/}{dfa_dimension.tex}
         \caption{NFA rappresentante il linguaggio \ref{linguaggio_lemma_limiti_dfa}}
         \label{nfa_lemma_limiti_dfa}
     \end{figure}
@@ -494,7 +494,7 @@ Abbiamo quindi dimostrato per contraddizione del pumping lemma per linguaggi reg
 Sia \(\mathcal{L}_1\) il linguaggio delle parole su \(\{a, b\}\) con un numero dispari di occorrenze di \(b\). \(\mathcal{L}_1\) è regolare?
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.4\textwidth,keepaspectratio]{b_dispari}
+    \subimport{assets/figures/}{regual_recognition_es1.tex}
     \caption{DFA che riconosce un numero dispari di occorrenze di \(b\) in un linguaggio su \(\{a,b\}\)}
     \label{b_dispari}
 \end{figure}
@@ -522,7 +522,7 @@ In questo caso, visto che siamo stati in grado di trovare un DFA con un numero f
 Sia \(\mathcal{L}_2\) il linguaggio delle parole su \(\{a, b\}\) con un numero pari di occorrenze di \(a\). \(\mathcal{L}_2\) è regolare?
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.4\textwidth,keepaspectratio]{a_pari}
+    \subimport{assets/figures/}{regual_recognition_es2.tex}
     \caption{DFA che riconosce un numero pari di occorrenze di \(a\) in un linguaggio su \(\{a,b\}\)}
     \label{a_pari}
 \end{figure}
@@ -542,14 +542,14 @@ Una soluzione tanto banale quanto efficace consiste nel utilizzare la Thompson's
 \begin{figure}[H]
     \begin{minipage}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth,keepaspectratio]{nfa-b_odd-or-a_even}
+        \subimport{assets/figures/}{regual_recognition_es3_a.tex}
         \subcaption{NFA che riconosce un numero dispari di occorrenze di \(b\) \textbf{oppure} un numero pari di occorrenze di \(a\) in un linguaggio su \(\{a,b\}\)}
     \label{nfa-b_odd-or-a_even}
     \end{minipage}
     \hfill
     \begin{minipage}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth,keepaspectratio]{dfa-b_odd-or-a_even}
+        \subimport{assets/figures/}{regual_recognition_es3_b.tex}
         \subcaption{DFA che riconosce un numero dispari di occorrenze di \(b\) \textbf{oppure} un numero pari di occorrenze di \(a\) in un linguaggio su \(\{a,b\}\)}
         \label{dfa-b_odd-or-a_even}
     \end{minipage}
@@ -569,7 +569,7 @@ Ovviamente il nostro stato iniziale non può essere altro che quello dove si han
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.4\textwidth,keepaspectratio]{dfa-b_odd-and-a_even}
+    \subimport{assets/figures/}{regual_recognition_es4.tex}
     \caption{DFA che riconosce un numero dispari di occorrenze di \(b\) \textbf{e} un numero pari di occorrenze di \(a\) su un linguaggio su \(\{a,b\}\)}
     \label{dfa-b_odd-and-a_even}
 \end{figure}
@@ -582,28 +582,28 @@ Sicuramente l'idea precedente è corretta, ma c'era un altro modo per arrivare d
 \begin{figure}[H]
     \begin{minipage}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth,keepaspectratio]{pl-es4-sbs_1}
+        \subimport{assets/figures/}{regual_recognition_es4-2_a.tex}
         \subcaption{step by step by mike by bisognaspiegarlo}
         \label{pl-es4-sbs_1}
     \end{minipage}
     \hfill
     \begin{minipage}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth,keepaspectratio]{pl-es4-sbs_2}
+        \subimport{assets/figures/}{regual_recognition_es4-2_b.tex}
         \subcaption{step by step by mike by bisognaspiegarlo 2}
         \label{pl-es4-sbs_2}
     \end{minipage}
 
     \begin{minipage}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth,keepaspectratio]{pl-es4-sbs_3}
+        \subimport{assets/figures/}{regual_recognition_es4-2_c.tex}
         \subcaption{step by step by mike by bisognaspiegarlo 3}
         \label{pl-es4-sbs_3}
     \end{minipage}
     \hfill
     \begin{minipage}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=\textwidth,keepaspectratio]{pl-es4-sbs_4}
+        \subimport{assets/figures/}{regual_recognition_es4-2_d.tex}
         \subcaption{step by step by mike by bisognaspiegarlo 4}
         \label{pl-es4-sbs_4}
     \end{minipage}
