@@ -16,13 +16,15 @@ tenuto nell’Università degli studi di Trento durante il primo semestre dell�
 
 ## La squadra
 - Curatori
-    - Filippo Daniotti
-    - Samuele Conti
+    - [Filippo Daniotti](https://github.com/filippodaniotti)
+    - [Samuele Conti](https://github.com/samaretas)
 - Scrittori
-    - Simone Alghisi
+    - [Simone Alghisi](https://github.com/Simone-Alghisi)
+    - [Emauele Beozzo](https://github.com/emanuelebeozzo)
+    - [Samuele Bortolotti](https://github.com/samuelebortolotti)
 - Tecnici
-    - Francesco Bozzo
-    - Federico  Izzo
+    - [Francesco Bozzo](https://github.com/FrancescoBozzo)
+    - [Federico Izzo](https://github.com/fedeizzo)
 - Revisori
-    - Michele Yin
-    - Giacomo Zanolli
+    - [Michele Yin](https://github.com/BigEmperor26)
+    - [Giacomo Zanolli](https://github.com/civts)
