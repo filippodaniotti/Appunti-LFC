@@ -185,4 +185,296 @@ Dal momento che tutte le coppie \texttt{pattern \{azione\}} sono scritte in ling
     \item[\texttt{\{\}}] espressioni regolari scritte nel preambolo
 \end{labeling}
 
+\subsection{File per FLEX}
+Tutti i file predisposti per flex si compongono da tre sezioni separate da coppie di \%. Nel preambolo si inseriscono delle definizioni come le define che servono e i pattern (espressioni regolari per i lessemi che vogliamo inserire). I pattern sono inseriti insieme all'azione nella parte centrale. In fondo si inseriscono le routine dell'utente che vengono copiate nel file lex.yy.c: un testo minimale è l'invocazione della routine yylex() che se non viene inserita viene chiamata in automatico. I comandi, qualora non si usi flex con byson (analizzatore sintattico in pipeline con flex), sono
+\begin{itemize}
+    \item flex file.l
+    \item gcc lex.yy.c lfl
+    \item ./a
+\end{itemize}
+
+\subsubsection{file0.l}
+        
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{file0.l.png}
+    \caption{file0.l}
+    \label{file0.l}
+\end{figure}
+
+
+In qusto primo esempio non sono presenti delle define o del codice c nel preambolo e, visto che non sono presenti routine inserite dall'utente, verrà invocato il \emph{yylex()} all'esecuzione.
+
+Basandoci sulla sintassi di FLEX vista precedentemente analizziamo la parte centrale costituita da una sola coppia pattern-azione:
+\begin{itemize}
+    \item il pattern è dato dalla regular expression composta solo da ., il che significa che l'azione seguente farà riferimento a tutti i caratteri incontrati tranne quello di \emph{new line}
+    \item l'azione è \emph{printf("hello world!")} che consiste banalmente nello stampare hello world ogni volta che viene eseguito un match sul pattern
+\end{itemize}
+
+Il tutto si traduce nell'andare a sostituire ad ogni carattere incontrato diverso da new line un'occorrenza di hello world. In pratica ciò significa che
+\begin{itemize}
+    \item \(a\) diventa hello world!
+    \item \(aa\) diventa hello world!hello world!
+\end{itemize}
+
+Una cosa molto interessante che è possibile notare è che solitamente per poter utilizzare lo standard output nei programmi c è necessario includere all'interno del file la libreria stdout mentre nel file0.l non vi è nemmeno l'ombra di un inlcude: è flex che si preoccupa di aggiungere in un secondo momento tutti i dettagli necessari per l'output.
+
+\subsubsection{file1.l}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{file1.l.png}
+    \caption{file1.l}
+    \label{file1.l}
+\end{figure}
+
+In questo caso osserviamo che il preambolo del file1.l non è vuoto come nel caso precedente e si compone invece di quelle che possiamo identificare come due sezioni
+
+\begin{enumerate}
+    \item la prima (in questo caso vuota) è identificata dal simbolo di apertura \%\{ e cui può seguire del codice C
+    \item la seconda invece è successiva al simbolo di chiusura \%\} e contiene quelli che sono gli shorthands per i pattern, cioè degli alias per delle regular expression
+\end{enumerate}
+
+Rifacendoci sempre alla sintassi di FLEX, possiamo analizzare l'espressione regolare definita nel preambolo e arrivare alla conclusione che faccia riferimento a quell'insieme di caratteri ([ ]) che si ripetono 0 o più volte (*) e che sono diversi (\^{}) da ' ', '\textbackslash t' e '\textbackslash n': questo significa che comporteranno un match tutte quelle sequenze di caratteri che sono separate da spazi, tab o new line o, più semplicemnte, le parole.
+
+Come descritto precedentemente nella parte centrale i pattern sono associati alle relative azioni, in questo caso
+\begin{itemize}
+    \item non\_white comporta l'esecuzione della macro ECHO di flex, che è equivalente a  printf ("\%s", yytext), e stamperà a video esattamente la sequenza di caratteri che ha fatto match
+    \item un qualunque carattere diverso da \textbackslash n (.) verrà eliminato
+    \item new line (\textbackslash n) verrà anch'esso eliminato
+\end{itemize}
+
+Complessivamente il risultato ottenuto dall'esecuzione di un programma compilato a partire dal file discusso porterà all'eliminazione di ' ', '\textbackslash t' e '\textbackslash n' dal testo passato in input e quindi ad una sequenza continua di caratteri (e.g. ab c d e      f g \emph{diventerà} abcdefg)
+
+\subsubsection{file2.l}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{file2.l.png}
+    \caption{file2.l}
+    \label{file2.l}
+\end{figure}
+
+In questo esempio invece possiamo vedere nel preambolo la presenza di codice C compreso nel blocco indicato da \%\{ e \%\}, in particolare la dichiarazione di un intero chiamato lineno ed inizializzato al valore 1.
+
+A seguire abbiamo la parte centrale del file dove 
+
+\begin{itemize}
+    \item all'espressione regolare \^{}.*\textbackslash n, che identifica tutte quelle sequenze di caratteri che iniziano per un carattere differente da new line ripetuto zero o più volte e finiscono per new line o, più semplicemente, le parole sulla stessa riga
+    \item  viene associata l'azione printf("\%4d)\textbackslash t\%s", lineno++, yytext), che stampa il valore dell'intero lineno seguito dal simbolo ) e dal contenuto del buffer yytext (che contiene l'input fino ad ora riconosciuto) ed infine esegue il postincremento di lineno.
+\end{itemize}
+
+In sostanza dunque il programma si occuperà di stampare tutte le parole sulla stessa riga anteponendo il numero della riga a cui fa riferimento; ciò vuol dire che il seguente testo
+
+\begin{itemize}
+    \item[] \emph{Autem quo ea. Voluptatum saepe porro. Quibusdam illo eum.}
+
+    \item[] \emph{Quia aperiam nesciunt. Qui est voluptate. Aut temporibus perspiciatis.}
+
+    \item[] \emph{Repudiandae delectus omnis. Modi earum doloribus. Quis eaque quidem.}
+\end{itemize}
+verrà dunque riscritto nel seguente modo
+
+\begin{enumerate}
+    \item[1)] \emph{Autem quo ea. Voluptatum saepe porro. Quibusdam illo eum.}
+    \item[2)] \emph{Quia aperiam nesciunt. Qui est voluptate. Aut temporibus perspiciatis.}
+    \item[3)] \emph{Repudiandae delectus omnis. Modi earum doloribus. Quis eaque quidem.}
+\end{enumerate}
+
+\subsubsection{file3.l}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{file3.l.jpg}
+    \caption{file3.l}
+    \label{file3.l}
+\end{figure}
+
+Nel quarto esempio combiniamo quanto visto precedentemente aggiungendo anche una routine custom scrivendo del codice ad hoc nell'epilogo del file.
+
+Nel prologo abbiamo la dichiarazione di tre variabili che ci serviranno nelle routine come contatori e in più di una shorthand, chiamata word, la cui espressione regolare include tutte quelle sequenze di uno o più caratteri (+) che non contengono ' ', \textbackslash t, \textbackslash n.
+
+Nella parte centrale del file abbiamo invece le seguenti associazioni pattern-azione, in particolare
+
+\begin{itemize}
+    \item word comporta l'esecuzione del seguente pezzo di codice \{wordCount++; charCount+=yyleng; \}, dove la variabile wordCount viene postincrementata mentre alla variabile charCount viene sommato un numero pari a yyleng, che contiene la lunghezza della stringa riconosciuta e, per via dell'espressione regolare alla base della shorthand, equivalente a quella della parola
+    \item [\textbackslash n], cioè nel caso in cui si trovi una sequenza di caratteri composta solamente da una new line, è legata all'azione \{charCount++; lineCount++; \} dove si postincrementano sia charCount che lineCount
+    \item . infine comporta solamente il postincremento della variabile charCount
+\end{itemize}
+
+In sostanza il programma che stiamo descrivendo mediante i pattern discussi si occupa di contare complessivamente quanti caratteri, parole e righe sono state individuate in un certo testo: nel caso di un match con una parola avviene un incremento proporzionale al numero di caratteri che la costituiscono e si aggiorna anche il numero di parole che sono contenute nel testo; ogni volta che si trova una new line si incrementano di un'unità il numero di righe oltre che al numero di caratteri; infine ogni volta che si trova uno spazio o un tab viene incrementato solamente il numero di caratteri. 
+
+\subsubsection{file4.l}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{file4.l.jpg}
+    \caption{file4.l}
+    \label{file4.l}
+\end{figure}
+
+L'ultimo esempio proposto fa uso di quanto discusso fino ad ora per analizzare un csv e restituire i dati sotto forma di una tabella in formato html:
+
+\begin{itemize}
+    \item Nel preambolo viene dichiarata una variabile intera comma inizializzata a 0 che servirà per controllare le entry vuote nel csv passato in input date da virgole consecutive
+    \item Nella parte centrale si hanno le seguenti coppie pattern-azione
+    \begin{itemize}
+        \item La regular expression [a-zA-Z0-9]+, che indica la sequenza di uno o più caratteri alfanumerici, comporta l'esecuzione di 
+        
+        \{printf("\(<\)td\(>\) "); ECHO; comma=0; \} 
+        
+        dove viene creata una nuova colonna per la tabella, viene inserita la sequenza appena letta e viene impostato il valore dell'intero comma a 0
+        \item ",", cioè trovare il carattere che corrisponde alla virgola e che nel csv server per separare i dati, comporta l'esecuzione del blocco di codice
+        \{
+        
+        if (comma) \{
+        
+        printf("\(<\)td\(>\) \(<\)/td\(>\)"); 
+        
+        \} else \{ 
+        
+        printf("\(</\)td\(>\)");
+        
+        \}
+            
+            comma = 1;
+                 
+        \}
+        
+        dove viene verificato il numero di virgole incontrate fino a quel punto: se si sono incontrate 0 virgole allora si chiude semplicemente la colonna precedentemente aperta; se invece si è già incontrata 1 virgola e consecutivamente se ne legge un'altra (o comunque le due occorrenze risultano essere separate da sequenze non alfanumeriche), viene creata una colonna vuota in quanto nel csv non vi sono dati rilevanti. In ogni caso alla fine del blocco viene impostato il valore di comma ad 1
+        \item \textbackslash n, cioè per ogni new line, viene eseguito il blocco di codice \{printf("\(<\)/tr\(>\) \textbackslash n \(<\)tr\(>\)"); comma = 0;\} dove viene chiusa la riga precedente ed aperta quella successiva
+    \end{itemize}
+    \item Nell'epilogo possiamo trovare una routine custom dove viene creato l'html di base per creare la tabella e, tra le varie cose, viene anche aperta la prima riga. Dopo aver stampato lo scheletro della struttura viene invocato il \emph{yylex()} che cerca i pattern nel testo ed infine viene chiusa la tabella
+\end{itemize}
+
+\subsection{Di più relativamente a flex}
+Quando abbiamo discusso del funzionamento dell'analisi lessicale basata sull'utilizzo di NFA o DFA abbiamo anche parlato del fatto che, quando si tenta di riconoscere il pattern di una determinata parola, è possibile che avvengano dei match su più stati finali dell'automa e che quindi si possa avere il dubbio su quale azione eseguire: come si riflette tutto ciò su flex? 
+
+Per risolvere a tale problematica si utilizza la regola del \emph{longest match}: dalla lista di pattern si va a recuperare quello più lungo che ha portato ad un match.
+
+Cosa succede invece se ci sono più pattern che a parità di lunghezza comportano un match (i.e. i due pattern hanno la stessa lunghezza)? In questo caso si sceglie sempre il primo della lista. Da qui si intuisce dunque che anche l'ordine in cui si scrive la sequenza dei pattern ha una sua importanza: lo stesso file.l potrebbe non generare lo stesso risultato se si eseguisse uno shuffle dei pattern.
+
+\section{Parsing}
+Data una grammatica \(\mathcal{G} = (V, T, S, \mathcal{P})\) e una parola \(w\) dobbiamo dire se \(w \in \mathcal{L(G)}\) e, se così fosse, fornire il suo albero di derivazione.
+
+Le classi di parsing che solitamente vengono prese in considerazione nell'ambito dei linguaggi di programmazione: 
+
+\begin{itemize}
+    \item \textbf{Top-Down}, consiste nella costruzione di una derivazione leftmost da uno start symbol della grammatica e quindi procede dalla radice verso le foglie dell'albero di derivazione
+    \item \textbf{Bottom-Up}, consiste invece nella costruzione di una derivazione rightmost (in ordine inverso) della stringa dalle foglie alla radice
+\end{itemize}
+
+A prima vista l'approccio più intuitivo è ovviamente il top-down
+
+A questo punto è necessario aggiungere che il parsing non si limita a queste dei classi ma esiste anche in forma più generale utilizzando delle tattiche che vengono impiegate nel caso dei linguaggi naturali. Gli approcci descritti non permettono di considerare tutti i possibili linguaggi liberi ma solamente delle sottoclassi: per questo si ha un'analisi sintattica estremamente efficiente dal punto di vista computazionale.
+
+\subsection{Top-Down Parsing}
+\subsubsection{Es 1}
+Sia \(w\) = \(bd\) e sia \(\mathcal{G}\): 
+\begin{itemize}
+    \item[] \(S \rightarrow Ad \mid Bd\)
+    \item[] \(A \rightarrow a\)
+    \item[] \(B \rightarrow b\)
+\end{itemize}
+
+Per verificare se \(w \in \mathcal{L(G)}\) dobbiamo ottenere una derivazione leftmost (in quanto stiamo utilizzando un approccio di tipo Top-Down) a partire dallo starting symbol. Ovviamente si noterà subito che non è possibile scegliere \(Ad\) come derivazione iniziale dello starting symbol poichè otterremmo soltanto la parola \(aa\); dobbiamo invece optare per la seconda derivazione. La derivazione completa ci porta a
+
+\(S \Rightarrow Bd \Rightarrow bd\)
+
+Visto che abbiamo dimostrato che \(w \in \mathcal{L(G)}\) e che tale derivazione esiste, allora possiamo fornire il suo derivation tree.
+
+\subsubsection{Es 2}
+Sia \(w\) = \(id + id * id\) e sia \(\mathcal{G}\):
+\begin{itemize}
+    \item[] \(E \rightarrow TE'\)
+    \item[] \(E' \rightarrow +TE' \mid \epsilon\)
+    \item[] \(T \rightarrow FT'\)
+    \item[] \(T' \rightarrow *FT' \mid \epsilon\)
+    \item[] \(F \rightarrow (E) \mid id\)
+\end{itemize}
+
+Qui non è così intuitivo riuscire a dire se esiste una derivazione leftmost: che cosa mi conviene espandere? Avremo modo di parlare meglio di questo esempio non appena introdurremo il \textbf{Predictive top-down parsing}.
+
+\subsubsection{Es 3}
+Sia \(w\) = \(cad\) e sia \(\mathcal{G}\):
+\begin{itemize}
+    \item[] \(S \rightarrow cAd\)
+    \item[] \(A \rightarrow ab \mid a\)
+\end{itemize}
+
+Nonostante questo esempio sia molto intuitivo, dobbiamo sforzarci di ragionare nei panni dell'algoritmo di parsing: dopo la prima derivazione infatti entrambe le opzioni che vengono proposte per poter derivare il non terminale \(A\) sono apparentemente valide in quanto iniziano entrambe per \(a\). Quale delle due dovrei dunque scegliere? Quanto devo continuare l'esecuzione prima di accorgermi se ho fatto una scelta corretta oppure no? Il nostro algoritmo potrebbe anche trovarsi nel caso di dover fare \emph{backtrack} perchè non vi era un modo semplice e generale per capire cosa dover scegliere: ovviamente questo tipo di tecnica funziona ma vogliamo un approccio efficiente e il backtrack non ci aiuta.
+
+\subsection{Predictive Top-Down Parsing}
+
+Nel caso del Predictive top-down parsing non è mai necessario applicare la tecnica del backtrack poichè fa riferimento ad una classe particolari di grammatiche che vengono definite \textbf{LL(1) grammars} chiamate così perchè vengono analizzate
+\begin{itemize}
+    \item guardando le parole da sinistra a destra
+    \item facendo una produzione leftmost
+    \item guardando un solo simbolo (non-terminale)
+\end{itemize}
+
+Tali grammatiche prevedono una tipologia di parsing per cui non è necessario backtrack ed è \textbf{completamente deterministica}.
+
+Queste grammatiche vengono classificate a seconda del grado di determinismo che ci permettono: all'inizio del corso abbiamo visto la differenza tra le grammatiche senza contesto e quelle contestuali; le classi che incontreremo da oggi in poi si differenzieranno esclusivamente per il tipo di analizzatore con cui possiamo riconoscere le parole generate da queste grammatiche. 
+
+In questo caso il parsing si basa sul fatto che possiamo costruire una tabella di parsing che ci guida nell'analisi della parola che ci viene data in input, ci permette molto efficacemente di dire se la parola appartiene oppure no al linguaggio e, nel caso positivo, di costruire la derivazione leftmost richiesta (e di conseguenza l'albero di derivazione). 
+
+Prendiamo come esempio il caso che abbiamo lasciato in sospeso precedentemente:
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{parsingTopDownTable.jpg}
+    \caption{parsingTopDownTable}
+    \label{parsingTopDownTable}
+\end{figure}
+
+La tabella è così costruita:
+\begin{itemize}
+    \item si ha una \textbf{riga} per ogni non-terminale della grammatica
+    \item ed una \textbf{colonna} per ogni terminale della grammatica a cui si aggiunge il simbolo \$ che viene aggiunto alla parola fornita in input ed utilizzato come terminatore
+    \item le entry vuote all'interno della tabella identificano i casi di errore.
+\end{itemize}
+
+Avendo a disposizione la tabella di parsing, la cui costruzione verrà trattata successivamente, è possibile utilizzarla per il parsing top-down predittivo.
+
+\subsubsection{Algoritmo per il Predictive Top-Down Parsing}
+\begin{itemize}
+    \item Input: Una stringa \(w\), una tabella \(M\) di parsing top-down per la grammatica \(\mathcal{G} = (V, T, S, \mathcal{P})\)
+    \item Output: La derivazione leftmost della stringa \(w \iff w \in \mathcal{L(G)}\) altrimenti \emph{error()}
+    \item Inizializzazione: si posiziona \(w\$\) nell'input buffer e, nella pila che viene utilizzata per inserire ed analizzare gli elementi parziali, viene inserito il simbolo \$ con in cima \(S\) (Start Symbol)
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{PredictiveTopDownAlgorithm.png}
+    \caption{PredictiveTopDownAlgorithm}
+    \label{PredictiveTopDownAlgorithm}
+\end{figure}
+
+Nell'algoritmo di parsing si utilizza la variabile \(b\) come primo simbolo delle parola w\$ e si inizializza la variabile X con la cima dello stack (il caso base corrisponde ad avere \(X = S\)). Finchè \(X \neq \$\) (sostanzialmente finchè non ho svuotato completamente la pila), sono dati i seguenti casi
+
+\begin{enumerate}
+    \item se \(X = b\) allora tolgo l'elemento dalla cima della pila e imposto \(b\) al simbolo successivo nell'input buffer. Questo corrisponde al caso in cui nella derivazione della costruzione parziale ho ottenuto un match con un terminale nella parola
+    \item se invece X è comunque un terminale allora deve essere che \(X \neq b\) ma ciò produce un errore
+    \item se invece X è un non-terminale allora è necessario verificare la tabella di top-down parsing in posizione \(M[X, b]\) e possono valere le seguenti
+    \begin{itemize}
+        \item \(M[X, b]\) = \emph{error} e allora viene restituito error()
+        \item \(M[X, b] = X \rightarrow Y_1...Y_k\) e quindi è una produzione che verrà utilizzata per continuare la derivazione: questa viene stampata in output, viene rimosso l'elemento \(X\) dalla testa della pila e infine viene inserito il body della produzione in ordine inverso (cioè in modo che \(Y_1\) sia l'elemento in cima allo stack).
+    \end{itemize}
+\end{enumerate}
+
+Infine come ultima operazione \(X\) viene assegnato all'elemento in cima alla pila e si ripete.
+
+A seguire un esempio che fa uso dell'algoritmo appena descritto.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{TopDownExercise.png}
+    \caption{TopDownExercise}
+    \label{TopDownExercise}
+\end{figure}
+
+\subsection{Parsing Tables}
+La domanda ora è: come riempiamo la tabella? % Bella domanda ce lo dice quando ci ri-zoomiamo
+
 \end{document}
