@@ -20,7 +20,7 @@ tenuto nell’Università degli studi di Trento durante il primo semestre dell�
     - [Samuele Conti](https://github.com/samaretas)
 - Scrittori
     - [Simone Alghisi](https://github.com/Simone-Alghisi)
-    - [Emauele Beozzo](https://github.com/emanuelebeozzo)
+    - [Emanuele Beozzo](https://github.com/emanuelebeozzo)
     - [Samuele Bortolotti](https://github.com/samuelebortolotti)
 - Tecnici
     - [Francesco Bozzo](https://github.com/FrancescoBozzo)
