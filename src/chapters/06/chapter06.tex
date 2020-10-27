@@ -186,7 +186,7 @@ Dal momento che tutte le coppie \texttt{pattern \{azione\}} sono scritte in ling
 \end{labeling}
 
 \subsection{Esempi di file per Flex}
-Tutti i file predisposti per Flex si compongono da tre sezioni separate da coppie di \%. Nel preambolo si inseriscono delle definizioni come le define che servono e i pattern (espressioni regolari per i lessemi che vogliamo inserire). I pattern sono inseriti insieme all'azione nella parte centrale. In fondo si inseriscono le routine dell'utente che vengono copiate nel file lex.yy.c: un testo minimale è l'invocazione della routine yylex() che se non viene inserita viene chiamata in automatico. I comandi, qualora non si usi Flex con byson (analizzatore sintattico in pipeline con Flex), sono
+Facciamo un breve riepilogo di quanto abbiamo visto: tutti i file predisposti per Flex si compongono da tre sezioni, ciascuna separata da coppie di \%. Nel preambolo si inseriscono delle definizioni come le \texttt{define} che servono e i pattern (espressioni regolari per i lessemi che vogliamo inserire). I pattern sono inseriti insieme all'azione nella parte centrale. In fondo si inseriscono le routine dell'utente che vengono copiate nel file \texttt{lex.yy.c}: un testo minimale è l'invocazione della routine \texttt{yylex()} che se non viene inserita viene chiamata in automatico. I comandi, qualora non si usi Flex con Bison (analizzatore sintattico in pipeline con Flex), sono i seguenti:
 \begin{itemize}
     \item Flex file.l
     \item gcc lex.yy.c lfl
@@ -363,13 +363,18 @@ Sia \(w\) = \(bd\) e sia \(\mathcal{G}\):
     B &\rightarrow b
 \end{align*}
 
-Per verificare se \(w \in \mathcal{L(G)}\) con un approccio top-down dobbiamo ottenere una derivazione leftmost a partire dallo starting symbol. Ovviamente, si noterà subito che non è possibile scegliere \(Ad\) come derivazione iniziale dello starting symbol, perché a quel punto l'unica parola ottenibile sarebbe parola \(aa\); dobbiamo invece optare per la seconda derivazione. La derivazione completa ci porta a
+Per verificare se \(w \in \mathcal{L(G)}\) con un approccio top-down dobbiamo ottenere una derivazione leftmost a partire dallo starting symbol. Ovviamente, si noterà subito che non è possibile scegliere \(Ad\) come derivazione iniziale dello starting symbol, perché a quel punto l'unica parola ottenibile sarebbe parola \(ad\); dobbiamo invece optare per la seconda derivazione. La derivazione completa ci porta a
 \begin{align*}
     S \Rightarrow Bd \Rightarrow bd
 \end{align*}
-Visto che abbiamo dimostrato che \(w \in \mathcal{L(G)}\) e che tale derivazione esiste, allora possiamo fornire il suo derivation tree.
+Visto che abbiamo dimostrato che \(w \in \mathcal{L(G)}\) e che tale derivazione esiste, allora possiamo fornire il suo derivation tree che, per questo esempio, risulta davvero molto semplice.
 
-% derivation tree con forest
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.15\textwidth,keepaspectratio]{par-td-es1.png}
+    \caption{Albero di derivazione per esercizio 1}
+    \label{par-td-es1}
+\end{figure}
 
 \subsubsection{Esempio 2}
 Sia \(w\) = \(id + id * id\) e sia \(\mathcal{G}\):
@@ -413,7 +418,7 @@ Prendiamo come esempio il caso che abbiamo lasciato in sospeso precedentemente:
     T' &\rightarrow *FT' \mid \varepsilon \\
     F &\rightarrow (E) \mid id
 \end{align*}
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{parsingTopDownTable.jpg}
     \caption{parsingTopDownTable}
@@ -435,7 +440,7 @@ Avendo a disposizione la tabella di parsing, la cui costruzione verrà trattata 
     \item Output: La derivazione leftmost della stringa \(w \iff w \in \mathcal{L(G)}\), altrimenti \emph{error()}.
 \end{itemize}
 Inizializziamo la procedura posizionando \(w\$\) nell'input buffer e, nella pila che viene utilizzata per inserire e analizzare gli elementi parziali, inseriamo il simbolo \$ con lo starting symbol \(S\) in cima.
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{PredictiveTopDownAlgorithm.png}
     \caption{PredictiveTopDownAlgorithm}
@@ -456,7 +461,7 @@ Nell'algoritmo di parsing si utilizza la variabile \(b\) come primo simbolo dell
 
 Infine, come ultima operazione \(X\) viene assegnato all'elemento in cima alla pila e si ripete. A seguire un esempio che fa uso dell'algoritmo appena descritto.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{TopDownExercise.png}
     \caption{TopDownExercise}
