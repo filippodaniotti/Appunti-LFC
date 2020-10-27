@@ -15,4 +15,6 @@ _minted*
 .envrc
 shell.nix
 
+*.drawio
+
 util
