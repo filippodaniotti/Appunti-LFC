@@ -9,16 +9,17 @@
 
 \section{Analisi lessicale}
 \subsection{Introduzione}
-Dopo i precedenti due capitoli, nei quali abbiamo introdotto e approfondito un buono numero di concetti, algoritmi e modelli necessari alla comprensione di come l'impostazione teorica dei linguaggi formali sia fondamentale nella progettazione dei compilatori, andiamo a tuffarci in quella che è la prima fase di compilazione: l'analisi lessicale.
+Dopo i precedenti due capitoli, nei quali abbiamo introdotto e approfondito un buon numero di concetti, algoritmi e modelli necessari alla comprensione di come l'impostazione teorica dei linguaggi formali sia fondamentale nella progettazione dei compilatori, andiamo a tuffarci in quella che è la prima fase di compilazione: l'analisi lessicale.
 
 
-Ricordiamo che questa è la fase in cui vogliamo identificare quali parti del sorgente che abbiamo scritto corrispondono alle keyword, quali agli identificatori,alle costanti, e via di questo passo; per essere più formali, questi elementi che vogliamo riconoscere portano il nome di \emph{lessemi}, e trasformare quindi il sorgente in un flusso di tokens, i quali costituiscono i terminali della grammatica che genera il nostro linguaggio di programmazione.
+Ricordiamo che questa è la fase in cui vogliamo identificare quali parti del sorgente che abbiamo scritto corrispondono alle keyword, quali agli identificatori, alle costanti e via di questo passo; per essere più formali, questi elementi che vogliamo riconoscere portano il nome di \emph{lessemi}. 
+Il nostro obiettivo in questa fase è trasformare quindi il sorgente in un flusso di tokens, i quali costituiscono i terminali della grammatica che genera il nostro linguaggio di programmazione.
 
-La grammaticafi un linguaggio ci dirà quali sono le forme che un'espressione deve avere per essere considerata ben formata rispetto a quel linguaggio. Ad esempio, una grammatica ci può dire che la seguente forma denota un'espressione valida:\\
+Ricordiamo per l'ennesima volta che la grammatica di un linguaggio ci dirà quali sono le forme che un'espressione deve avere per essere considerata ben formata rispetto a quel linguaggio. Ad esempio, una grammatica ci può dire che la seguente forma denota un'espressione valida:\\
 % begin minted
 Identificatore      simbolo di assegnamento    numero\\
 % end minted
-e che quindi espressioni ome la seguente sono grammaticali e ben formate secondo il linguaggio.\\
+e che quindi espressioni come la seguente sono grammaticali e ben formate secondo il linguaggio.\\
 % begin minted
 pippo = 2\\
 % end minted8
@@ -26,27 +27,27 @@ Il mestiere dell'analizzatore lessicale è proprio quello di ricevere in input u
 
 % L’analizzatore lessicale lavora in tandem (pipeline) con l’analizzatore sintattico per non si sa bene come o perché
 \subsection{Esempio: la grammatica di C99}
-Andiamo a vedere da vicino la grammatica di un reale linguaggio, anzi, del linguaggio preferito di tutti noi, ossia il C (nella versione \(99\), scritta per il parser \emph{Bison}); il lettore interessato ad approfondire può trovare lo stesso file cliccando \href{./assets/files/c99.y}{qui} (fonte: \url{http://www.quut.com/c/ANSI-C-grammar-y-1999.html}).
+Andiamo a vedere da vicino la grammatica di un reale linguaggio, anzi, del linguaggio preferito di tutti noi, ossia il C (nella versione \(99\), scritta per il parser \emph{Bison}); il lettore interessato ad approfondire può trovare lo stesso file cliccando \url{http://www.quut.com/c/ANSI-C-grammar-y-1999.html}{qui}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=.4\textwidth,keepaspectratio]{c99-ex1}
     \caption{}
-    % \label{dfa-b_odd-and-a_even}
+    % \label{...}
 \end{figure}
 Notiamo subito alcune differenze rispetto alla notazione che abbiamo impiegato finora: 
 \begin{itemize}
     \item la freccia ( \(\to\) ) è rappresentata da un altro simbolo, i due punti ( \(:\) );
-    \item il pipe ( \(\mid\) ), invece, possiede il medesimo significato;
-    \item i terminali possono essere indicati precisamente con '';
-    \item inoltre, la convenzione rispetto alla capitalizzazione è invertita: qui osserviamo che gli elementi in maiuscolo sono i terminali, mentre invece quelli in minuscolo rappresentano non terminali; ad esempio, in figura sopra possiamo notare che il non-letterale \texttt{primary\_expression} ha una produzione per cui può risultare o in una serie di letterali (\texttt{IDENTIFIER}, \texttt{CONSTANT}), oppure in una forma \texttt{'(' expression ')'}, dove \texttt{expression} è un altro non letterale, che a sua volta avrà altre produzioni.
+    \item il pipe ( \(\mid\) ), invece, possiede l'abituale significato;
+    \item i terminali possono essere indicati precisamente se inseriti tra singoli apici '\emph{terminale}';
+    \item inoltre, la convenzione rispetto alla capitalizzazione è invertita: qui osserviamo che gli elementi in maiuscolo indicano i terminali, mentre invece quelli in minuscolo rappresentano non terminali; ad esempio, in figura sopra possiamo notare che il non-letterale \texttt{primary\_expression} ha una produzione per cui può risultare o in una serie di letterali (\texttt{IDENTIFIER}, \texttt{CONSTANT}), oppure in una forma \texttt{'(' expression ')'}, dove \texttt{expression} è un altro non-letterale, che a sua volta avrà altre produzioni.
 \end{itemize}
 
-Questo file, inoltre, è pensato per essere utilizzato in tandem con un analizzatore sintattico; per questo motivo, nell'intestazione dello stesso possiamo trovare le dichiarazione di quelli che sono i token (vale a dire, lo ripetiamo, i terminali della grammatica descritta). Saranno espressi in questa forma:
+Questo file, inoltre, è pensato per essere utilizzato in tandem con un analizzatore sintattico; per questo motivo, nell'intestazione dello stesso possiamo trovare le dichiarazione di quelli che sono i token (vale a dire, lo ripetiamo, i terminali della grammatica descritta). Saranno espressi nella forma rappresentata in Fig.\ref{token_c99}:
 \begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{c99-ex2}
     \caption{}
-    % \label{dfa-b_odd-and-a_even}
+    \label{token_c99}
 \end{figure}
 
 Un'altra cosa che possiamo osservare è la dichiarazione di quello che è lo starting symbol della grammatica:\\
@@ -55,21 +56,21 @@ Un'altra cosa che possiamo osservare è la dichiarazione di quello che è lo sta
 % end minted
 Questa dichiarazione in realtà potrebbe non essere presente su alcuni file contenenti grammatiche, dal momento che, in sua assenza, non otteniamo degli errori, bensì viene preso il non-letterale della prima produzione listata a seguito come starting symbol.
 
-Il ruolo dell’analizzatore lessicale è quindi analizzare il sorgente e decidere, di volta in volta, quale derivazione può essere applicata a ciascuna delle righe del sorgente analizzato. Una volta completato l'albero di derivazione e quindi arrivato presso un terminale (ad esempio \texttt{IDENTIFIER}), l'analizzatore lessicale andrà anche ad associargli un valore, dal momento che è necessario distinguere quell'\texttt{IDENTIFIER} da un altro; questo è necessario, perché nel programma potremmo tranquillamente avere due \texttt{IDENTIFIER} di diverso tipo, o in ogni caso potremmo comunque voler conservare delle informazioni aggiuntive di qualche tipo (nome, scope e altro ancora). Tutte queste informazioni vengono conservate in una \emph{symbol table}.
+Il ruolo dell’analizzatore lessicale è quindi analizzare il sorgente e decidere, di volta in volta, quale derivazione può essere applicata a ciascuna delle righe del sorgente analizzato. Una volta completato l'albero di derivazione e quindi arrivato presso un terminale (ad esempio \texttt{IDENTIFIER}), l'analizzatore lessicale andrà anche ad associargli informazioni come valre e tipo, dal momento che è necessario distinguere quell'\texttt{IDENTIFIER} da un altro. Nel programma potremmo appunto avere due \texttt{IDENTIFIER} di diverso tipo, ma in ogni caso dovremo conservare delle informazioni aggiuntive di qualche tipo (nome, tipo, scope e altro ancora). Tutte queste informazioni vengono conservate in una \emph{symbol table}.
 
 Infine, le ultime rihe del file contengono informazioni utili al particolare analizzatore sintattico utilizzato; avremo modo di parlarne nel dettaglio in futuro.
 
 \subsection{Classi di tokens}
 Si potrebbe a ragione considerare superfluo specificare che ogni diversa grammatica (e quindi ogni linguaggio) presenta diverse categorie di tokens; banalmente, il lettore è probabilmente ben cosciente che linguaggi diversi possiedono generalmente keyword diverse. Ad ogni modo, a seguito presentiamo alcune tra le scelte più ricorrenti:
 \begin{itemize}
-    \item un token per ogni keyword, quindi un token per ogni nome di base già presente nel linguaggio (\texttt{if}, \texttt{while}, \texttt{for} e via dicendo;
+    \item un token per ogni keyword, quindi un token per ogni nome di base già presente nel linguaggio (\texttt{if}, \texttt{while}, \texttt{for} e via dicendo);
     \item un token per ogni operatore (o anche per classe di operatori), quindi in C ne avremo uno per \texttt{+} ma anche uno dedicato per \texttt{++}; 
     \item un unico token per gli identificatori, valido per tutti quanti;
     \item un token per ogni simbolo di punteggiatura. 
 \end{itemize}
 
-\subsection{Il lavoro dell'analizzatore lessicale}
-L'obiettivo dell'analalizzatore lessicale è quindi riconoscere i cosiddetti \emph{lessemi}, ossia quelle parti del programma che corrispondono ai token, e ritornarli. Ciascuno di questi, di solito, vengono ritornati sotto forma di coppia \texttt{<token-name>: <token-value>}, dove:
+\subsection{Il compito dell'analizzatore lessicale}
+L'obiettivo dell'analalizzatore lessicale è quindi riconoscere i cosiddetti \emph{lessemi}, ossia quelle parti del programma che corrispondono ai token, e ritornarli. Ciascuno di questi, di solito, viene ritornato sotto forma di coppia \texttt{<token-name>: <token-value>}, dove:
 \begin{itemize}
     \item \texttt{<token-name>} è il nome scelto per denotare quel preciso token; seguendo l'esempio della grammatica precedente, \texttt{IDENTIFIER} è un \texttt{<token-name>};
     \item \texttt{<token-value>} è tipicamente un puntatore a una entry della symbol table, in cui si va a salvare tutte le informazioni relative a quel preciso token di tipo\footnote{In questo caso la parola "tipo" è chiaramente impropria, ma è molto utile per rendere la natura astratta di classe di token.} \texttt{<token-name>}.
@@ -94,19 +95,20 @@ Quindi questi lessemi, essendo descritti da delle espressioni regolari, possono 
 È molto semplice intuire graficamente che ciascun percorso che termini in uno stato finale ritorna un token, sotto forma di coppia, in cui il \texttt{token-name} è appunto quello della classe \texttt{relop}, mentre il \texttt{token-value} indica qual è l'elemento della classe da ritornare.
 
 \paragraph{Retract}
-Possiamo notare che i due stati finali il cui arco entrante è marcato come \(other\) hanno anche un asterisco: questo indica che, quando consumo quella transizione, devo ricordarmi di tornare indietro di una parola, perché quest'ultima parola \(other\) (cioè che non fa parti di alcun elemento appartenente alla classe \texttt{relop}) potrebbe essere un elemento di un token successivo, e se non compiano quanto detto sopra rischieremmo di saltarla nell'analisi e ottenere un flusso di token incorretto. Questa operazione è detta \(retract\).
+Possiamo notare che i due stati finali il cui arco entrante è marcato come \(other\) hanno anche un asterisco: questo indica che, quando consumo quella transizione, devo ricordarmi di tornare indietro di un simbolo, perché quest'ultimo simbolo \(other\) (cioè che non fa parti di alcun elemento appartenente alla classe \texttt{relop}) potrebbe essere un elemento di un token successivo, e se non compiano quanto detto sopra rischieremmo di saltarla nell'analisi e ottenere un flusso di token incorretto. Questa operazione è detta \(retract\).
 
-L'operazione di retract è unodei tanti elementi legati alla gestione dell'input e del buffer che ci fanno pensare che la macchina a stati è un modello molto vicino al più noto, per noi, automa a stati finiti, ma quanto è profondo questo legame?
+L'operazione di retract è uno dei tanti elementi legati alla gestione dell'input e del buffer che ci fanno pensare che la macchina a stati è un modello molto vicino al più noto, per noi, automa a stati finiti, ma quanto è profondo questo legame?
 
 \subsection{Pattern matching basato su NFA}
 Immaginiamo di avere delle espressioni regolari che denotano il linguaggio dei lessemi che siamo interessati a riconoscere. Si pensi ad esempio all'espressione regolare che denota il lessema \texttt{IDENTIFIER}, ossia l'espressione regolare che denota tutte le possibili combinazioni di lettere maiuscole e minuscole (con le dovute peculiarità di ciascun linguaggio); oppure, si pensi a un'espressione regolare che denoti il lessema degli operatori relazionali, o ancora un'altra che denoti la scrittura dei floating numbers. In sostanza, per ciascuna categoria sintattica abbiamo un'espressione regolare che la denota.
 
-Sappiamo anche che, avendo delle espressioni regolari, per ciascuna di queste possiamo costruire degli NFA che riconoscono il linguaggio denotato dall'espressione considerata; possiamo a questo punto immaginare di far collidere questi NFA inserendo uno stato iniziale extra e collegandolo a ciascun NFA tramite una \(\varepsilon\)-transizione, come mostrato in figura sotto.
+Sappiamo anche che, avendo delle espressioni regolari, per ciascuna di queste possiamo costruire un NFA che riconosce il linguaggio denotato dall'espressione considerata; possiamo a questo punto immaginare di far collidere questi NFA inserendo uno stato iniziale extra e collegandolo a ciascun NFA tramite una \(\varepsilon\)-transizione, come mostrato in Fig.\ref{nfa_for_grammar_regular_expressions} sotto.
+Da notare che nel caso d'uso del compilatore ci sono delle azioni associate agli stati finali (se l'analizzatore legge un assegnamento compie, appunto, le azioni per registrare l'assegnamento).
 \begin{figure}[H]
     \centering
     \includegraphics[width=.4\textwidth,keepaspectratio]{lec-14-2}
     \caption{}
-    % \label{dfa-b_odd-and-a_even}
+    \label{nfa_for_grammar_regular_expressions}
 \end{figure}
 Una struttura di questo tipo può riconoscere i linguaggi denotati da tutte le espressioni regolari per cui abbiamo costruito degli NFA. 
 
@@ -115,13 +117,12 @@ Adesso dobbiamo pensare come ottimizzare l'uso di una struttura simile per l'ana
 Il procedimento che seguiamo è il seguente:
 \begin{enumerate}
     \item innanzitutto simuliamo l'NFA creato come sopra descritto;
-    \item ci sono delle azioni associate agli stati finali;
-    \item nel caso di ambiguità, ossia di situazioni come quella descritta sopra tra \texttt{if}e \texttt{iffoff},  la convenzione è di preoseguire la simulazione finché nessun’altra transizione è possibile, solitamente quando incontriamo uno spazio o un \texttt{\(\backslash\)n} (si parla di cercare il \emph{longest match});
-    \item se nell'insieme di stato che abbiamo raggiunto ci sono delle azioni disponibili, allora ciascuna azione avrà una priorità, e noi andremo a eseguire quella con più alta priorità;
+    \item nel caso di ambiguità, ossia di situazioni come quella descritta sopra tra \texttt{if} e \texttt{iffoff}, la convenzione è di preoseguire la simulazione finché nessun’altra transizione è possibile, solitamente quando incontriamo uno spazio o un \texttt{\(\backslash\)n}, privilegiando quindi il match più lungo (si parla di cercare il \emph{longest match});
+    \item se nell'insieme di stati che abbiamo raggiunto ci sono delle azioni disponibili, allora andremo ad eseguire quella appartenente al longest match, in caso di pareggio ciascuna azione avrà una priorità, e noi eseguiremo quella con più alta priorità;
     \item se nessun'azione è disponibile, invece dobbiamo torniamo indietro nella sequenza di stati percorsi, fermarci nel primo insieme di stati che presenta almeno uno stato finale e delle azioni associate e cercare di nuovo quella prioritaria; per ognuno di questi passi all'indietro, dobbiamo ricordari di aggiornare il puntatore all'input buffer.
 \end{enumerate}
 
-Tutto questo funziona in maniera analoga se utilizzassimo un DFA: dovremmo semplicemente costruire il DFA a partire dal NFA, dimodoché l'insieme degli stati del DFA sia un sottoinsieme di quello dell'NFA corrispondente.
+Tutto questo funzionerebbe in maniera analoga se utilizzassimo un DFA: dovremmo semplicemente costruire il DFA a partire dal NFA, dimodoché l'insieme degli stati del DFA sia un sottoinsieme di quello dell'NFA corrispondente.
 
 \subsection{Generatori di analizzatori lessicali}
 Andiamo a parlare quindi di questi generatori. L'idea di creare un generatore di analizzatori lessicali è nata in concomitanza con la prima definizione e implementazione del compilatore del C, e l'idea era di evitare di dover scrivere ogni volta, per ogni programma, un analizzatore lessicale e uno sintattico a mano.
