@@ -26,6 +26,6 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: Orco, sta volta si è inceppato qualcosa...
+          message: Le github actions di Bozzo si meritano un messaggio più simpatico di questo
           document: src/main.pdf
         if: ${{ success() }}
