@@ -15,25 +15,27 @@ Dopo i precedenti due capitoli, nei quali abbiamo introdotto e approfondito un b
 Ricordiamo che questa è la fase in cui vogliamo identificare quali parti del sorgente che abbiamo scritto corrispondono alle keyword, quali agli identificatori, alle costanti e via di questo passo; per essere più formali, questi elementi che vogliamo riconoscere portano il nome di \emph{lessemi}. 
 Il nostro obiettivo in questa fase è trasformare quindi il sorgente in un flusso di tokens, i quali costituiscono i terminali della grammatica che genera il nostro linguaggio di programmazione.
 
-Ricordiamo per l'ennesima volta che la grammatica di un linguaggio ci dirà quali sono le forme che un'espressione deve avere per essere considerata ben formata rispetto a quel linguaggio. Ad esempio, una grammatica ci può dire che la seguente forma denota un'espressione valida:\\
-% begin minted
-Identificatore      simbolo di assegnamento    numero\\
-% end minted
+Ricordiamo per l'ennesima volta che la grammatica di un linguaggio ci dirà quali sono le forme che un'espressione deve avere per essere considerata ben formata rispetto a quel linguaggio. Ad esempio, una grammatica ci può dire che la seguente forma denota un'espressione valida:
+\begin{equation*}
+    \textrm{<identificatore> \quad <simbolo di assegnamento> \quad <numero>}
+\end{equation*}
 e che quindi espressioni come la seguente sono grammaticali e ben formate secondo il linguaggio.\\
-% begin minted
-pippo = 2\\
-% end minted8
+\begin{minted}[breaklines, tabsize = 2]{c}
+    pippo = 2;
+\end{minted}
 Il mestiere dell'analizzatore lessicale è proprio quello di ricevere in input un \texttt{pippo} qualsiasi (che è un token) e, in output, determinare che è un \emph{identificatore}, ossia la categoria più astratta (lessema) di cui \texttt{pippo} è istanza.
 
 % L’analizzatore lessicale lavora in tandem (pipeline) con l’analizzatore sintattico per non si sa bene come o perché
 \subsection{Esempio: la grammatica di C99}
-Andiamo a vedere da vicino la grammatica di un reale linguaggio, anzi, del linguaggio preferito di tutti noi, ossia il C (nella versione \(99\), scritta per il parser \emph{Bison}); il lettore interessato ad approfondire può trovare lo stesso file cliccando \url{http://www.quut.com/c/ANSI-C-grammar-y-1999.html}{qui}.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.4\textwidth,keepaspectratio]{c99-ex1}
-    \caption{}
-    % \label{...}
-\end{figure}
+Andiamo a vedere da vicino la grammatica di un reale linguaggio, anzi, del linguaggio preferito di tutti noi, ossia il C (nella versione \(99\), scritta per il parser \emph{Bison}); il lettore interessato ad approfondire può trovare lo stesso file al seguente indirizzo: \url{http://www.quut.com/c/ANSI-C-grammar-y-1999.html}. Andiamo a vedere un frammento di quel codice:
+\begin{minted}[breaklines, tabsize = 2]{c}
+    primary_expression
+        : IDENTIFIER
+        | CONSTANT
+        | STRING_LITERAL
+        | '(' expression ')'
+        ;
+\end{minted}
 Notiamo subito alcune differenze rispetto alla notazione che abbiamo impiegato finora: 
 \begin{itemize}
     \item la freccia ( \(\to\) ) è rappresentata da un altro simbolo, i due punti ( \(:\) );
@@ -43,17 +45,31 @@ Notiamo subito alcune differenze rispetto alla notazione che abbiamo impiegato f
 \end{itemize}
 
 Questo file, inoltre, è pensato per essere utilizzato in tandem con un analizzatore sintattico; per questo motivo, nell'intestazione dello stesso possiamo trovare le dichiarazione di quelli che sono i token (vale a dire, lo ripetiamo, i terminali della grammatica descritta). Saranno espressi nella forma rappresentata in Fig.\ref{token_c99}:
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{c99-ex2}
-    \caption{}
-    \label{token_c99}
-\end{figure}
+\begin{minted}[linenos, breaklines, tabsize = 2]{c}
+%token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
+%token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
+%token AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
+%token SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
+%token XOR_ASSIGN OR_ASSIGN TYPE_NAME
 
-Un'altra cosa che possiamo osservare è la dichiarazione di quello che è lo starting symbol della grammatica:\\
-% begin minted
-\% start translation\_unit\\
-% end minted
+%token TYPEDEF EXTERN STATIC AUTO REGISTER INLINE RESTRICT
+%token CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
+%token BOOL COMPLEX IMAGINARY
+%token STRUCT UNION ENUM ELLIPSIS
+
+%token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
+\end{minted}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.7\textwidth,keepaspectratio]{c99-ex2}
+%     \caption{}
+%     \label{token_c99}
+% \end{figure}
+
+Un'altra cosa che possiamo osservare è la dichiarazione di quello che è lo starting symbol della grammatica:
+\begin{minted}[breaklines, tabsize = 2]{c}
+    % start translation_unit
+\end{minted}
 Questa dichiarazione in realtà potrebbe non essere presente su alcuni file contenenti grammatiche, dal momento che, in sua assenza, non otteniamo degli errori, bensì viene preso il non-letterale della prima produzione listata a seguito come starting symbol.
 
 Il ruolo dell’analizzatore lessicale è quindi analizzare il sorgente e decidere, di volta in volta, quale derivazione può essere applicata a ciascuna delle righe del sorgente analizzato. Una volta completato l'albero di derivazione e quindi arrivato presso un terminale (ad esempio \texttt{IDENTIFIER}), l'analizzatore lessicale andrà anche ad associargli informazioni come valre e tipo, dal momento che è necessario distinguere quell'\texttt{IDENTIFIER} da un altro. Nel programma potremmo appunto avere due \texttt{IDENTIFIER} di diverso tipo, ma in ogni caso dovremo conservare delle informazioni aggiuntive di qualche tipo (nome, tipo, scope e altro ancora). Tutte queste informazioni vengono conservate in una \emph{symbol table}.
@@ -63,8 +79,8 @@ Infine, le ultime rihe del file contengono informazioni utili al particolare ana
 \subsection{Classi di tokens}
 Si potrebbe a ragione considerare superfluo specificare che ogni diversa grammatica (e quindi ogni linguaggio) presenta diverse categorie di tokens; banalmente, il lettore è probabilmente ben cosciente che linguaggi diversi possiedono generalmente keyword diverse. Ad ogni modo, a seguito presentiamo alcune tra le scelte più ricorrenti:
 \begin{itemize}
-    \item un token per ogni keyword, quindi un token per ogni nome di base già presente nel linguaggio (\texttt{if}, \texttt{while}, \texttt{for} e via dicendo);
-    \item un token per ogni operatore (o anche per classe di operatori), quindi in C ne avremo uno per \texttt{+} ma anche uno dedicato per \texttt{++}; 
+    \item un token per ogni keyword, quindi un token per ogni nome di base già presente nel linguaggio (\mintinline{c}{if}, \mintinline{c}{while}, \mintinline{c}{for} e via dicendo);
+    \item un token per ogni operatore (o anche per classe di operatori), quindi in C ne avremo uno per \mintinline{c}{+} ma anche uno dedicato per \mintinline{c}{++}; 
     \item un unico token per gli identificatori, valido per tutti quanti;
     \item un token per ogni simbolo di punteggiatura. 
 \end{itemize}
@@ -112,12 +128,12 @@ Da notare che nel caso d'uso del compilatore ci sono delle azioni associate agli
 \end{figure}
 Una struttura di questo tipo può riconoscere i linguaggi denotati da tutte le espressioni regolari per cui abbiamo costruito degli NFA. 
 
-Adesso dobbiamo pensare come ottimizzare l'uso di una struttura simile per l'analisi lessicale. Potremmo trovarci infatti a gestire problemi di diversa natura, in particolare relativi all'input buffering: ad esempio, come posso fare a sapere se i due caratteri \texttt{i} e \texttt{f} che ho appena letto stanno a indicare la keyword \texttt{if} e non un ipotetico identificatore \texttt{iffoff}? Detto in maniera informale, come decido quando fermarmi, quando tornare indietro, quando e se ho letto più di quanto mi serviva?
+Adesso dobbiamo pensare come ottimizzare l'uso di una struttura simile per l'analisi lessicale. Potremmo trovarci infatti a gestire problemi di diversa natura, in particolare relativi all'input buffering: ad esempio, come posso fare a sapere se i due caratteri \texttt{i} e \texttt{f} che ho appena letto stanno a indicare la keyword \mintinline{c}{if} e non un ipotetico identificatore \mintinline{c}{iffoff}? Detto in maniera informale, come decido quando fermarmi, quando tornare indietro, quando e se ho letto più di quanto mi serviva?
 
 Il procedimento che seguiamo è il seguente:
 \begin{enumerate}
     \item innanzitutto simuliamo l'NFA creato come sopra descritto;
-    \item nel caso di ambiguità, ossia di situazioni come quella descritta sopra tra \texttt{if} e \texttt{iffoff}, la convenzione è di preoseguire la simulazione finché nessun’altra transizione è possibile, solitamente quando incontriamo uno spazio o un \texttt{\(\backslash\)n}, privilegiando quindi il match più lungo (si parla di cercare il \emph{longest match});
+    \item nel caso di ambiguità, ossia di situazioni come quella descritta sopra tra \mintinline{c}{if} e \mintinline{c}{iffoff}, la convenzione è di preoseguire la simulazione finché nessun’altra transizione è possibile, solitamente quando incontriamo uno spazio o un \texttt{\(\backslash\)n}, privilegiando quindi il match più lungo (si parla di cercare il \emph{longest match});
     \item se nell'insieme di stati che abbiamo raggiunto ci sono delle azioni disponibili, allora andremo ad eseguire quella appartenente al longest match, in caso di pareggio ciascuna azione avrà una priorità, e noi eseguiremo quella con più alta priorità;
     \item se nessun'azione è disponibile, invece dobbiamo torniamo indietro nella sequenza di stati percorsi, fermarci nel primo insieme di stati che presenta almeno uno stato finale e delle azioni associate e cercare di nuovo quella prioritaria; per ognuno di questi passi all'indietro, dobbiamo ricordari di aggiornare il puntatore all'input buffer.
 \end{enumerate}
@@ -135,29 +151,33 @@ Il funzionamento è il seguente:
     \item a quel punto, possiamo comiplare \texttt{file.l} utilizzando il comando \texttt{Flex}, e questo ci restituirà un file di nome \texttt{lex.yy.c}\footnote{La ragione di questo nome è puramente convenzionale e deriva dal fatto che, storicamente, il generatore Flex è stato usato in coppia all'analizzatore \emph{Yacc}};
     \item compilando questo \texttt{lex.yy.c} con il compilatore \texttt{gcc} otteniamo il lexer, cioè quel signore che si occupa di gestire l'input buffering, di fare le operazioni di retract e altro ancora.
 \end{itemize} 
-% begin minted
-Flex file.l
-gcc lex.yy.c -lfl
-./a
-% end minted
+\begin{minted}[breaklines, tabsize = 2]{bash}
+    $   Flex file.l
+    $   gcc lex.yy.c -lfl
+    $   ./a
+\end{minted}
 Si tenga bene a mente che queste tre righe descrivono come utilizzare Flex da solo; tuttavia, quest'ultima è un'eventualità piuttosto rara, dal momento che Flex è nato per essere usato in pipeline con un generatore di analizzatore di analisi sintattica, ma poiché questi sono elementi ancora sconosciuti per noi, al momento non ce ne preoccupiamo.
 
 \subsection{Struttura del \texttt{file.l}}
 I file con estensione \texttt{.l} che diamo da fagocitare a Flex hanno la seguente struttura:
-% begin minted
-...(Preambolo)
-% { code
-% } %
-shorthand for patterns
-%%
-(Parte centrale)
-pattern-1 {action-1};
-pattern-2 {action-2};
-...
-%%
-(Epilogo)
-user rountes
-% end minted
+\begin{minted}[breaklines, tabsize = 2]{bash}
+    ...(Preambolo)
+    % { code
+    % } %
+    // shorthand for patterns
+    %%
+    /*
+    (Parte centrale)
+    pattern-1 {action-1};
+    pattern-2 {action-2};
+    ...
+    */
+    %%
+    /*
+    (Epilogo)
+    user rountes
+    */
+\end{minted}
 Il contenuto di queste tre macrosezioni è ben determinato, andiamo a vederlo più da vicino:
 \begin{labeling}{Parte centrale}
     \item[Preambolo] qui ci andrà del codice C,in particolare le inizializzazioni di variabili, o delle abbreviazioni per indicare dei particolari pattern nelle espressioni regolari che andremo a utilizzare sotto;
@@ -187,26 +207,27 @@ Dal momento che tutte le coppie \texttt{pattern \{azione\}} sono scritte in ling
 \end{labeling}
 
 \subsection{Esempi di file per Flex}
-Facciamo un breve riepilogo di quanto abbiamo visto: tutti i file predisposti per Flex si compongono da tre sezioni, ciascuna separata da coppie di \%. Nel preambolo si inseriscono delle definizioni come le \texttt{define} che servono e i pattern (espressioni regolari per i lessemi che vogliamo inserire). I pattern sono inseriti insieme all'azione nella parte centrale. In fondo si inseriscono le routine dell'utente che vengono copiate nel file \texttt{lex.yy.c}: un testo minimale è l'invocazione della routine \texttt{yylex()} che se non viene inserita viene chiamata in automatico. I comandi, qualora non si usi Flex con Bison (analizzatore sintattico in pipeline con Flex), sono i seguenti:
-\begin{itemize}
-    \item Flex file.l
-    \item gcc lex.yy.c lfl
-    \item ./a
-\end{itemize}
+Facciamo un breve riepilogo di quanto abbiamo visto: tutti i file predisposti per Flex si compongono da tre sezioni, ciascuna separata da coppie di \%. Nel preambolo si inseriscono delle definizioni come le \mintinline{c}{define} che servono e i pattern (espressioni regolari per i lessemi che vogliamo inserire). I pattern sono inseriti insieme all'azione nella parte centrale. In fondo si inseriscono le routine dell'utente che vengono copiate nel file \texttt{lex.yy.c}: un testo minimale è l'invocazione della routine \mintinline{c}{yylex()} che se non viene inserita viene chiamata in automatico. I comandi, qualora non si usi Flex con Bison (analizzatore sintattico in pipeline con Flex), sono i seguenti:
+\begin{minted}[breaklines, tabsize = 2]{bash}
+    $   Flex file.l
+    $   gcc lex.yy.c -lfl
+    $   ./a
+\end{minted}
 
 \subsubsection{file0.l}
+\inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file0.l}
         
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{file0.l.png}
-    \caption{file0.l}
-    \label{file0.l}
-\end{figure}
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=.7\textwidth,keepaspectratio]{file0.l.png}
+%     \caption{file0.l}
+%     \label{file0.l}
+% \end{figure}
 
 In qusto primo esempio vediamo che nel preambolo non sono presenti né delle \texttt{define} né del codice; dal momento che non sono presenti routine inserite dall'utente, verrà invocata la procedura \texttt{yylex()} all'esecuzione. Basandoci sulla sintassi di Flex vista precedentemente, andiamo ad analizzare la parte centrale costituita da una sola coppia pattern-azione:
 \begin{itemize}
     \item il pattern è dato dalla regular expression composta solo da \texttt{.}, il che significa che l'azione seguente farà riferimento a tutti i caratteri incontrati, tranne quello di \texttt{\(\backslash\)n} (\emph{new line});
-    \item l'azione è quel \texttt{printf("hello world!")}, il che consiste banalmente nello stampare la stringa hello world ogni volta che viene eseguito un match sul pattern.
+    \item l'azione è quel \mintinline{c}{printf("hello world!")}, il che consiste banalmente nello stampare la stringa hello world ogni volta che viene eseguito un match sul pattern.
 \end{itemize}
 In sostanza, questo file ci farà sì che, nella lettura, qualsiasi carattere incontriamo, ad eccezione del new line, verrà sostituito da un'occorrenza della stringa \texttt{"hello world!"}; quindi, ad esempio:
 \begin{itemize}
@@ -214,17 +235,16 @@ In sostanza, questo file ci farà sì che, nella lettura, qualsiasi carattere in
     \item \(aa\) diventerà \texttt{hello world!hello world!}.
 \end{itemize}
 
-Possiamo notare anche un'altra cosa molto interessante: solitamente, per poter utilizzare lo standard output nei programmi C, è necessario includere all'interno del file la libreria stdout \texttt{stdio.h}, ma nel \texttt{file0.l} non vi è nemmeno l'ombra di un inlcude: è lo stesso Flex a occuparsi di aggiungere in un secondo momento tutti i dettagli necessari per la gestione dell'output.
+Possiamo notare anche un'altra cosa molto interessante: solitamente, per poter utilizzare lo standard output nei programmi C, è necessario includere all'interno del file la libreria \mintinline{c}{stdio.h}, ma nel \texttt{file0.l} non vi è nemmeno l'ombra di un inlcude: è lo stesso Flex a occuparsi di aggiungere in un secondo momento tutti i dettagli necessari per la gestione dell'output.
 
 \subsubsection{file1.l}
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{file1.l.png}
-    \caption{file1.l}
-    \label{file1.l}
-\end{figure}
-
-
+\inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file1.l}
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=.7\textwidth,keepaspectratio]{file1.l.png}
+%     \caption{file1.l}
+%     \label{file1.l}
+% \end{figure}
 \paragraph{Preambolo}
 Diversamente dall'esempio precedente, in questo \texttt{file1.l} abbiamo del contenuto nel preambolo. Andiamo a vederlo da vicino cosa ci troviamo:
 
@@ -238,7 +258,7 @@ Rifacendoci sempre alla sintassi di Flex, possiamo analizzare l'espressione rego
 \paragraph{Parte centrale}
 Come descritto precedentemente, nella parte centrale i pattern sono associati alle relative azioni; in questo caso, le coppie che troviamo sono le seguenti:
 \begin{itemize}
-    \item \texttt{non\_white} comporta l'esecuzione della macro \texttt{echo} di Flex, che è equivalente a \texttt{printf("\%s", yytext)} in linguaggio C, e stamperà a video esattamente la sequenza di caratteri che ha causato il match;
+    \item \texttt{non\_white} comporta l'esecuzione della macro \mintinline{c}{echo} di Flex, che è equivalente a \mintinline{c}{printf("\%s", yytext)} in linguaggio C, e stamperà a video esattamente la sequenza di caratteri che ha causato il match;
     \item un qualunque carattere diverso da \texttt{\textbackslash n (.)} verrà eliminato;
     \item new line (\texttt{\textbackslash n}) verrà anch'esso eliminato
 \end{itemize}
@@ -246,13 +266,13 @@ Come descritto precedentemente, nella parte centrale i pattern sono associati al
 Complessivamente, il risultato ottenuto dall'esecuzione di un programma compilato a partire dal file discusso porterà all'eliminazione di '\texttt{ }', '\texttt{\textbackslash t}' e '\texttt{\textbackslash n}' dal testo passato in input e ci farà ottenere ad una sequenza continua di caratteri (ad esempio, una stringa del tipo "\texttt{ ab c d e \hspace{.8cm} f g}" diventerà "\texttt{abcdefg}").
 
 \subsubsection{file2.l}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{file2.l.png}
-    \caption{file2.l}
-    \label{file2.l}
-\end{figure}
+\inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file2.l}
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=.7\textwidth,keepaspectratio]{file2.l.png}
+%     \caption{file2.l}
+%     \label{file2.l}
+% \end{figure}
 
 \paragraph{Preambolo}
 In questo esempio, invece, troviamo finalmente del codice C nel preambolo; in particolare, troviamo la dichiarazione di un intero chiamato \texttt{lineno} ed inizializzato al valore \(1\). 
@@ -262,7 +282,7 @@ A seguire abbiamo la parte centrale del file, dove:
 
 \begin{itemize}
     \item all'espressione regolare \texttt{\^{}.*\textbackslash n}, che identifica tutte quelle sequenze di caratteri che iniziano per un carattere differente da new line ripetuto zero o più volte e finiscono per new line o, più semplicemente, le parole sulla stessa riga
-    \item  viene associata l'azione \texttt{printf("\%4d)\textbackslash t\%s", lineno++, yytext)}, che stampa il valore dell'intero lineno seguito dal simbolo ) e dal contenuto del buffer yytext (che contiene l'input fino ad ora riconosciuto) ed infine esegue il postincremento di lineno.
+    \item  viene associata l'azione \mintinline{c}{printf("\%4d)\t\%s", lineno++, yytext)}, che stampa il valore dell'intero lineno seguito dal simbolo ) e dal contenuto del buffer \mintinline{c}{yytext} (che contiene l'input fino ad ora riconosciuto) ed infine esegue il postincremento di lineno.
 \end{itemize}
 
 \noindent Quindi, il nostro programma si occuperà di stampare tutte le parole sulla stessa riga anteponendo il numero della riga a cui fa riferimento; in altre parole, se avessimo un testo come il seguente:
@@ -279,12 +299,13 @@ Allora avremmo che verrebbe riscritto come segue:
 \end{enumerate}
 
 \subsubsection{file3.l}
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{file3.l.jpg}
-    \caption{file3.l}
-    \label{file3.l}
-\end{figure}
+\inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file3.l}
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=.7\textwidth,keepaspectratio]{file3.l.jpg}
+%     \caption{file3.l}
+%     \label{file3.l}
+% \end{figure}
 In questo quarto esercizio andiamo a combinare quanto visto precedentemente, aggiungendo anche una routine custom scrivendo del codice ad hoc nell'epilogo del file.
 
 \paragraph{Preambolo}
@@ -294,51 +315,48 @@ Nel preambolo abbiamo la dichiarazione di tre variabili che ci serviranno nelle 
 Nella parte centrale del file abbiamo invece le seguenti associazioni pattern-azione:
 
 \begin{itemize}
-    \item \texttt{word} comporta l'esecuzione del seguente pezzo di codice \texttt{\{wordCount++; charCount += yyleng; \}}, dove la variabile \texttt{wordCount} viene postincrementata, mentre alla variabile \texttt{charCount} viene sommato un numero pari a \texttt{yyleng}, che contiene la lunghezza della stringa riconosciuta e, per via dell'espressione regolare alla base della shorthand, equivalente a quella della parola;
-    \item il secondo pattern è \texttt{\textbackslash n}, cioè nel caso in cui si trovi una sequenza di caratteri composta solamente da una new line; l'azione legata è il blocco \texttt{\{charCount++; lineCount++; \}}, dove si postincrementano sia \texttt{charCount} che \texttt{lineCount};
-    \item infine, l'ultimo pattern, il punto (\texttt{.}), comporta solamente il postincremento della variabile \texttt{charCount}.
+    \item \texttt{word} comporta l'esecuzione del seguente pezzo di codice \mintinline{c}{{wordCount++; charCount += yyleng; }}, dove la variabile \texttt{wordCount} viene postincrementata, mentre alla variabile \texttt{charCount} viene sommato un numero pari a \texttt{yyleng}, che contiene la lunghezza della stringa riconosciuta e, per via dell'espressione regolare alla base della shorthand, equivalente a quella della parola;
+    \item il secondo pattern è \texttt{\textbackslash n}, cioè nel caso in cui si trovi una sequenza di caratteri composta solamente da una new line; l'azione legata è il blocco \mintinline{c}{{charCount++; lineCount++; }}, dove si postincrementano sia \mintinline{c}{charCount} che \mintinline{c}{lineCount};
+    \item infine, l'ultimo pattern, il punto (\texttt{.}), comporta solamente il postincremento della variabile \mintinline{c}{charCount}.
 \end{itemize}
 
 In sostanza, il programma che stiamo descrivendo con questi pattern si occupa di contare complessivamente quanti caratteri, parole e righe sono state individuate in un dato testo; qualora avessimo un match con una parola, allora avviene un incremento proporzionale al numero di caratteri che costituiscono quella stessa parola e, inoltre, si aggiorna il numero di parole totali che sono contenute nel testo; ogni volta che si trova una new line si incrementano di un'unità il numero di righe e di caratteri e, infine, ogni volta che si trova uno spazio o un tab viene incrementato solamente il numero di caratteri. 
 
-\subsubsection{file4.l}
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{file4.l.jpg}
-    \caption{file4.l}
-    \label{file4.l}
-\end{figure}
+\subsubsection{file4.l} 
+\inputminted[linenos, breaklines, fontsize=\footnotesize ,tabsize = 2]{c}{assets/code-fragments/file4.l}
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=.7\textwidth,keepaspectratio]{file4.l.jpg}
+%     \caption{file4.l}
+%     \label{file4.l}
+% \end{figure}
 L'ultimo esempio proposto fa uso di quanto discusso fino ad ora per analizzare un \texttt{csv} e restituire i dati sotto forma di una tabella in formato \texttt{html}.
 
 \paragraph{Preambolo}
-Nel preambolo viene dichiarata una variabile intera \texttt{comma}, che è inizializzata a \(0\); servirà per controllare le entry vuote nel \texttt{csv} passato in input date da virgole consecutive.
+Nel preambolo viene dichiarata una variabile intera \mintinline{c}{comma}, che è inizializzata a \(0\); servirà per controllare le entry vuote nel \texttt{csv} passato in input date da virgole consecutive.
 
 \paragraph{Parte centrale}
 Andiamo a vedere da vicino le coppie pattern-azione che troviamo nella parte centrale.
 \begin{itemize}
-    \item La regular expression \texttt{[a-zA-Z0-9]+}, che indica la sequenza di uno o più caratteri alfanumerici, comporta l'esecuzione di 
-    
-    \{printf("\(<\)td\(>\) "); ECHO; comma = 0;\} 
-        
-    dove viene creata una nuova colonna per la tabella, viene inserita la sequenza appena letta e viene impostato il valore dell'intero \texttt{comma} a \(0\).
+    \item La regular expression \mintinline{c}{[a-zA-Z0-9]+}, che indica la sequenza di uno o più caratteri alfanumerici, comporta l'esecuzione di \mintinline{c}{{printf("\(<\)td\(>\) "); ECHO; comma = 0;}}, dove viene creata una nuova colonna per la tabella, viene inserita la sequenza appena letta e viene impostato il valore dell'intero \mintinline{c}{comma} a \(0\).
     \item La seconda espressione è "\texttt{,}", che vuol dire che bisogna trovare il carattere che corrisponde alla virgola e che nel \texttt{csv} serve per separare i dati, comporta l'esecuzione del blocco di codice
-        % \begin{minted}[linenos, breaklines, tabsize = 2]{c}
-        % {            
-        % if (comma) {
-        %     printf("<td> </td>"); 
-        % } else { 
-        %     printf("</td>");
-        % }       
-        % comma = 1;
-        % }
-        % \end{minted}
+    \begin{minted}[linenos, breaklines, tabsize = 2]{c}
+    {            
+    if (comma) {
+        printf("<td> </td>"); 
+    } else { 
+        printf("</td>");
+    }       
+        comma = 1;
+    }
+    \end{minted}
         
     dove viene verificato il numero di virgole incontrate fino a quel punto: se si sono incontrate 0 virgole, allora si chiude semplicemente la colonna precedentemente aperta; se invece si è già incontrata \(1\) virgola e, consecutivamente, se ne legge un'altra (o comunque le due occorrenze risultano essere separate da sequenze non alfanumeriche), viene creata una colonna vuota, in quanto nel \texttt{csv} non vi sono dati rilevanti. In ogni caso alla fine del blocco viene impostato il valore di comma ad \(1\).
-    \item In ultimo, \texttt{\textbackslash n}, cioè per ogni new line viene eseguito il blocco di codice \{printf("\(<\)/tr\(>\) \textbackslash n \(<\)tr\(>\)"); comma = 0;\} dove viene chiusa la riga precedente ed aperta quella successiva.
+    \item In ultimo, \texttt{\textbackslash n}, cioè per ogni new line viene eseguito il blocco di codice \mintinline{c}{{printf("\(<\)/tr\(>\) \n \(<\)tr\(>\)"); comma = 0;}} dove viene chiusa la riga precedente ed aperta quella successiva.
 \end{itemize}
 
 \paragraph{Epilogo}
-Nell'epilogo troviamo una routine custom dove viene creato l'html di base per creare la tabella e, tra le varie cose, viene anche aperta la prima riga. Dopo aver stampato lo scheletro della struttura viene invocata la procedura \texttt{yylex()}, la quale cerca i pattern nel testo; infine, la tabella viene chiusa.
+Nell'epilogo troviamo una routine custom dove viene creato l'html di base per creare la tabella e, tra le varie cose, viene anche aperta la prima riga. Dopo aver stampato lo scheletro della struttura viene invocata la procedura \mintinline{c}{yylex()}, la quale cerca i pattern nel testo; infine, la tabella viene chiusa.
 
 \subsection{Ulteriori informazioni su Flex}
 Quando abbiamo discusso del funzionamento dell'analisi lessicale basata sull'utilizzo di NFA o DFA abbiamo anche parlato del fatto che, quando si tenta di riconoscere il pattern di una determinata parola, è possibile che avvengano dei match su più stati finali dell'automa e che quindi si possa avere il dubbio su quale azione eseguire: come si riflette tutto ciò in Flex? 
