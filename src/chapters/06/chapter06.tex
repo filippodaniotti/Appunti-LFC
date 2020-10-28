@@ -469,7 +469,181 @@ Infine, come ultima operazione \(X\) viene assegnato all'elemento in cima alla p
     \label{TopDownExercise}
 \end{figure}
 
-\subsection{Parsing Tables}
-La domanda ora è: come riempiamo la tabella? % Bella domanda ce lo dice quando ci ri-zoomiamo
+\subsection{Parsing Table}
+
+L'algoritmo di Parsing Predittivo ha una complessità lineare ma come costruiamo le Parsing Table? In quale posizione dobbiamo mettere le produzioni della grammatica per fare sì che l'algoritmo funzioni?
+
+Ricordiamo che la cella \(M[A, b]\) della Parsing Table viene consultata per espandere il non-terminale \(A\) sapendo che il prossimo terminale nell'input buffer è \(b\).
+
+Andiamo dunque a valorizzare la cella \(M[A, b]\) = \(A \rightarrow \alpha\) se
+
+\begin{itemize}
+    \item il body della nostra produzione che ha driver \(A\) è tale per cui esiste una derivazione del tipo \(\alpha \Rightarrow^* b \beta\), cioè partendo da \(\alpha\) si riesce, con zero o più passi, ad ottenere una stringa che inizia per \(b\).
+    \item oppure \(\alpha \Rightarrow^* \epsilon\) ed è possibile avere \(S \Rightarrow^* w A \gamma\) (ottenuta da una derivazione di tipo leftmost) con \(\gamma \Rightarrow^* b \beta\)
+\end{itemize}
+
+Le celle per cui non è possibile inserire una produzione (cioè quelle vuote) verranno valorizzate a \emph{error()}.
+
+\subsubsection{Es 1}
+
+Sia data la seguente grammatica
+\begin{itemize}
+    \item[] \(S \rightarrow aA \mid bB\)
+    \item[] \(A \rightarrow c\)
+    \item[] \(B \rightarrow c\)
+\end{itemize}
+
+Come riempiamo la tabella? Il linguaggio denotato dalla seguente grammatica include semplicemente due parole che sono \(ac\) oppure \(bc\). Se applichiamo la definizione precedente abbiamo che \(M[S, a] = S \rightarrow aA\) in quanto solamente utilizzando quella produzione riusciremmo ad avere una stringa che comincia per \(a\) (i.e. \(aA \Rightarrow ac\)). Lo stesso ragionamento può essere applicato per \(M[S, b] = S \rightarrow bB\) e, visto che non è possibile creare delle stringhe che cominciano per il terminale \(c\), \(M[S, c] = error()\). A questo punto è possibile passare agli altri due non-terminali della grammatica: nel caso di \(A\) è possibile notare che esiste una sola produzione che permette di ottenere soltanto \(c\) e quindi avremo che \(M[A, c] = A \rightarrow c\); nel secondo caso è possibile applicare la stessa logica e quindi si ha che \(M[B, c] = B \rightarrow c\).
+
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{filling-parsing-table1.tex}
+    \caption{Riempimento Parsing Table - Es 1}
+    \label{filling-parsing-table1}
+\end{table} 
+
+Ricordiamoci che non è possibile che più produzioni possano essere inserite all'interno della stessa cella in quanto ci stiamo occupando delle grammatiche LL1 in cui quindi è possibile applicare un parsing di tipo deterministico. 
+
+Quando si arriva ad una error entry vuol dire che sulla testa della pila c'è un non-terminale che, indipendentemente da come decida di espanderlo, non mi porterà mai alla stringa che sto cercando di ottenere. 
+
+\subsubsection{Es 2}
+Sia data la seguente grammatica
+\begin{itemize}
+    \item[] \(S \rightarrow aAb\)
+    \item[] \(A \rightarrow \epsilon\)
+\end{itemize}
+
+In questo esempio invece il linguaggio denotato dalla grammatica precedentemente citata è costituito solamente dalla parola \(ab\). Per la definizione di \(\alpha\) l'unica cella che ha come non terminale (nonchè starting symbol) \(S\) è \(M[S, a] = S \rightarrow aAb\) perchè l'unica stringa che è possibile ottenere inizia per \(a\). Da qui è possibile intuire anche che per ottenere la parola \(ab\) è necessario che \(M[A, b] = S \rightarrow \epsilon\); in tutti gli altri casi verrà ritornato un errore in quanto tale parola non appartiene al linguaggio denotato dalla grammatica. 
+
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{filling-parsing-table2.tex}
+    \caption{Riempimento Parsing Table - Es 2}
+    \label{filling-parsing-table2}
+\end{table}
+
+\subsection{First(\(\alpha\))}
+
+Insieme di terminali che sono posti all'inizio delle stringhe derivate da \(\alpha\)
+
+Inoltre, se \(\alpha \Rightarrow^* \epsilon\) allora \(\epsilon \in\) first(\(\alpha\)): ciò vuol dire che \(\alpha\) è un non-terminale annullabile (nullable) e quindi che dopo una serie di passi sarà pari a \(\epsilon\).
+
+Il concetto di first può essere applicato come segue
+
+\begin{itemize}
+    \item first(\(\epsilon\)) = \{\(\epsilon\)\}
+    \item first(\(a\)) = \{\(a\)\}
+    \item first(\(A\)) = \(\cup_{A \rightarrow \alpha}\)first(\(\alpha\))
+\end{itemize}
+
+Nell'ultimo caso, quello ricorsivo, si ha che first(\(A\)) è dato dall'unione di tutti i first(\(\alpha\)) con \(\alpha\) body delle produzioni della grammatica che hanno \(A\) come driver.
+
+\subsubsection{Algoritmo first(\(\alpha\))}
+
+Mostriamo ora un algoritmo che ci permette di calcolare first(\(Y_1...Y_n\)).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{first-algorithm.png}
+    \caption{Algoritmo per calcolare first(\(\alpha\))}
+    \label{first-algorithm}
+\end{figure}
+
+L'idea è la seguente: finchè non abbiamo esaminato tutti gli \(Y_j : 1 \leq j \leq n\), si aggiunge first(\(Y_j\)) \(\setminus\) \{\(\epsilon\)\} ai first(\(Y_1...Y_n\)) e poi si controlla se \(\epsilon \in\) first(\(Y_j\)). Se il controllo restituisce true allora vuol dire che è necessario continuare la ricerca dei first perchè è possibile che in almeno un caso \(Y_j = \epsilon\) e quindi è possibile che nessuno dei first(\(Y_j\)) \(\in\) first(\(Y_1...Y_n\)). Se il controllo restituisce invece false allora possiamo fermarci in quanto abbiamo trovato tutti i first(\(Y_1...Y_n\)). L'ultimo controllo serve per verificare se \(\forall\) \( Y_j \in (Y_1...Y_n)\) non sono in realtà tutti dei nullable e quindi è necessario aggiungere anche \(\epsilon\) ai first(\(Y_1...Y_n\)) in quanto anche \((Y_1...Y_n)\) è nullable.
+
+\subsubsection{Training}
+
+Sia data la seguente grammatica
+
+\begin{itemize}
+    \item[] \(E \rightarrow TE'\)
+    \item[] \(E' \rightarrow +TE' \mid \epsilon\)
+    \item[] \(T \rightarrow FT'\)
+    \item[] \(T' \rightarrow *FT' \mid \epsilon\)
+    \item[] \(F \rightarrow (E) \mid id\)
+\end{itemize}
+
+L'idea generale è quella dunque di partire dai casi base e quindi da quelle produzioni che hanno come body un terminale oppure \(\epsilon\). Nel nostro caso dunque, secondo la definizione espressa precedentemente, possiamo affermare con certezza che \{\(\epsilon\)\} \(\in\) first(\(E'\)), \{\(\epsilon\)\} \(\in\) first(\(T'\)) e \{\(id\)\} \(\in\) first(\(F\)). A questo punto dobbiamo applicare l'algoritmo per ogni produzione: ad esempio, per calcolare first(\(F\)) dobbiamo fare l'unione di tutte le produzioni del tipo \(F \rightarrow \alpha\), nel nostro caso abbiamo \(F \rightarrow (E) \cup F \rightarrow id\). Nel primo caso sappiamo che \((E) = Y_1Y_2Y_3\) e dunque dobbiamo analizzare first(\(Y_1\)), tuttavia \(Y_1\) = ( è un terminale per cui first(\(Y_1\)) = \{\(Y_1\)\} e \{\(Y_1\} \neq \epsilon\) per cui possiamo aggiungerlo a first(F) e possiamo fermare subito l'algoritmo. Nel secondo caso invece ci troviamo di fronte al caso base first(\(id\)) = \(\{id\}\) e dunque possiamo aggiungerlo a first(F).
+
+In questo caso il risultato finale è dunque first(F) = \(\{(\} \cup \{id\} = \{(, id\}\).
+
+Il miglior modo per procedere nell'algoritmo è, in mancanza di casi base, trovare una produzione del tipo \(A \rightarrow F\alpha\) per cui è possibile sfruttare la conoscenza appena ottenuta relativamente a first(F). Applicando dunque l'algoritmo per first(T) è necessario analizzare \(T \rightarrow FT' = Y_1Y_2\) per cui è necessario controllare per primo first(\(Y_1\)). Essendo che però abbiamo già calcolato first(F) e, essendo che \(\epsilon \notin\) first(F), possiamo direttamente arrestare l'algoritmo e affermare che first(T) = first(F) = \(\{(, id\}\).
+
+Svolgendo dunque l'esercizio nella sua interezza è possibile ottenere il seguente risultato
+
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{computing-first.tex}
+    \caption{Esercizio sui first}
+    \label{computing-first}
+\end{table}
+
+Cosa sarebbe successo se la produzione di T fosse stata T -> T’F ?
+Allora, considerando tutto il resto invariato andiamo a rivedere i first di T:
+In questo caso abbiamo tutti i first di T’, ottengo { “eps”, “*” }, quindi eps è contenuto! L’algoritmo non si ferma (anche se non aggiunge ancora “eps” ai first di T ) e procedo ad aggiungere ai first di T anche i first di F { “id”, “(“ }; a questo punto i first non contengono epsilon e quindi termino riportando come first di T { “*”, “id”, “(“ }
+
+
+\subsection{Follow(\(A\))}
+
+A differenza dei first, che sono definiti per stringhe generiche di terminali e non terminali, i \emph{follow} sono computati solamente per i non terminali infatti scriveremo follow(\(A\)).
+
+Con follow(\(A\)) indichiamo l'insieme dei terminali che possono seguire A in qualche derivazione.
+
+I first evidenziano quali sono i terminali per cui iniziano le stringhe derivabili da certi elementi (stringhe o non terminali), i follow invece indicano quali sono i terminali che possono seguire.
+
+\subsubsection{Algoritmo Follow(\(A\))}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{follow-algorithm.png}
+    \caption{Algoritmo per calcolare follow(\(A\))}
+    \label{follow-algorithm}
+\end{figure}
+
+L'algoritmo comincia impostando follow(\(S\)) = \$ perchè tutte le perole inziano partendo dallo starting symbol e dunque viene direttamente inserito il terminatore. %not so sure
+
+Negli altri casi invece \(\forall\) \(A : A\) è un non terminale \(\Rightarrow\) follow(\(A\)) = \(\emptyset\).
+
+A questo punto è necessario sottoloneare che ci interessano le produzioni della grammatica per cui il simbolo A non compare come driver della grammatica ma come body: dato dunque \(B \rightarrow \alpha A \beta\), si seseguono le sequenti operazioni: 
+
+\begin{itemize}
+    \item se \(\beta \neq \epsilon\) allora aggiungiamo first(\(\beta\)) \(\setminus \epsilon\) a follow(\(A\)), questo perchè siamo interessati a sapere quali possano essere i possibili terminali che seguono \(A\)
+    \item se \(\beta = \epsilon\) or \(\epsilon \in\) first(\(\beta\)) allora aggiungiamo follow(\(B\)) a follow(\(A\)) %il perchè giuro non l'ho capito
+\end{itemize}
+
+%Se si immagina un albero di derivazione qusto è formato da un sottoalbero per alpha, poi abbiamo un sottoalbero di A e poi quello di beta che contiene tutto quello che derivad a beta: tutti i terminali che sono diversi da epsilon e derivano da beta allora li mettiamo in A. Se invece beta è uguale a epsilon oppure epsilon appartiene ai first di beta allora dobbiamo aggiungere i follow di B ai follow di A perchè ciò che segue B potrà anche seguire A perchè se noi andiamo a considerare i sottoalberi che vengono generati andiamo a scoprire che A è la radice dell'utlimo sottoalbero della B e quindi quello che può seguire questa particolare occorrenza di B ... Si procede aggiungendo degli elementi ogni volta che andiamo a considerare delle partciolari istanze nella nostra grammatica e ci fermiamo fino a quando non possiamo inserire altro. 
+
+\subsubsection{Training}
+
+Utilizziamo sempre la grammatica dell'esempio precedente e definiamo i follow
+
+\begin{enumerate}
+    \item Dall'algoritmo sappiamo follow(E) = \$
+    \item Iniziamo guardando la prima produzione, cioè \(E \rightarrow TE'\): se poniamo \(A = E'\), allora \(\beta = \epsilon\) dunque devo aggiungere i follow(\(E\)) (quelli del driver) a follow(\(E'\)) (quelli del body)
+    \item Sempre soffermandoci sulla stessa produzione poniamo \(A = T\), questo vuol dire che \(\beta = E' \neq \epsilon\) e quindi, ricadendo nel primo caso, aggiungo first(\(E'\)) \(\setminus \{\epsilon\} = \{+\}\) a follow(\(T\)), tuttavia, essendo che \(\epsilon \in\) first(\(E'\)) allora ricadiamo anche nel secondo caso per cui aggiungiamo follow(\(E\)) a follow(\(T\))
+    \item Passiamo ora alla produzione \(E' \rightarrow +TE' \mid \epsilon\): poniamo quindi \(A = E'\) e, essendo che \(\beta = \epsilon\) ricadiamo nel secondo caso dunque dobbiamo aggiungere follow(\(E'\)) a follow(\(E'\)): dato che questo non fornisce informazioni aggiuntive scartiamo questa informazione.
+    \item Possiamo ora esaminare il caso per la produzione precedente in cui \(A = T\) e quindi \(\beta = E'\) ma tale caso è già stato esaminato al punto 3
+    \item L'ultimo elemento che non abbiamo esaminato nella produzione è terminale \(+\) ma, in quanto terminale, non possiamo calcolare follow(\(+\))
+    \item Continuiamo ad applicare l'algoritmo come visto nei punti precedenti per computare i follow delle produzioni rimanenti...
+    \item Un caso che potrebbe risultare interessante riguarda la produzione \(F \rightarrow (E)\). Poniamo come fatto precedentemente \(A = E\) e, essendo che \(\beta = (\) \(\neq \epsilon\), è necessario aggiungere first(\(\beta\)) \(\setminus \{\epsilon\} = \{)\}\) a follow(\(E\)) e, visto che la seconda condizione non è vera, possiamo fermarci ed affermare che follow(\(E\)) = \{\$, )\}
+\end{enumerate}
+
+Il risultato finale verrà rappresentato come segue:
+
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{computing-follow.tex}
+    \caption{Esercizio sui follow - step intermedio}
+    \label{computing-follow}
+\end{table}
+
+A questo punto è possibile eliminare mano a mano le dipendenze e le varie ripetizioni presenti all'interno delle computazioni dei follow e ottenere quanto segue: 
+
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{follow.tex}
+    \caption{Esercizio sui follow - risultato finale}
+    \label{follow}
+\end{table}
 
 \end{document}
