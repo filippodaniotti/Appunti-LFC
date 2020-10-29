@@ -419,12 +419,18 @@ Prendiamo come esempio il caso che abbiamo lasciato in sospeso precedentemente:
     T' &\rightarrow *FT' \mid \varepsilon \\
     F &\rightarrow (E) \mid id
 \end{align*}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{parsingTopDownTable.jpg}
-    \caption{parsingTopDownTable}
-    \label{parsingTopDownTable}
-\end{figure}
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{ptdp-example.tex}
+    \caption{Tabella del parsing top-down}
+    \label{ptdp-example}
+\end{table} 
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.7\textwidth,keepaspectratio]{parsingTopDownTable.jpg}
+%     \caption{parsingTopDownTable}
+%     \label{parsingTopDownTable}
+% \end{figure}
 
 La tabella è così costruita:
 \begin{itemize}
@@ -461,13 +467,18 @@ Nell'algoritmo di parsing si utilizza la variabile \(b\) come primo simbolo dell
 \end{enumerate}
 
 Infine, come ultima operazione \(X\) viene assegnato all'elemento in cima alla pila e si ripete. A seguire un esempio che fa uso dell'algoritmo appena descritto.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{TopDownExercise.png}
-    \caption{TopDownExercise}
-    \label{TopDownExercise}
-\end{figure}
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{ptdp-ex1.tex}
+    \caption{Tabella delle strutture a ogni passo}
+    \label{ptdp-ex1}
+\end{table} 
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.7\textwidth,keepaspectratio]{TopDownExercise.png}
+%     \caption{TopDownExercise}
+%     \label{TopDownExercise}
+% \end{figure}
 
 \subsection{Parsing Table}
 

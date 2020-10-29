@@ -16,5 +16,3 @@ _minted*
 shell.nix
 
 *.drawio
-
-util
