@@ -16,10 +16,12 @@ names = [
     '*.toc'
 ]
 
-# Use flag -a for complete cleanup
-if len(sys.argv) > 1 and str(sys.argv[1]) == '-a':
+# Use flag -a for complete cleanupn
+if (len(sys.argv) > 1 and str(sys.argv[1]) == '-a') or input('Do you want a total clean up? (y/n) ') == 'y':
     names.append('*.pdf')
     names.append('*.synctex.gz')
+
+print(os.path)
 
 items = list()
 for name in names:

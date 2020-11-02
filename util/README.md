@@ -3,7 +3,7 @@ A simple `python` script that removes junk files of `pdftex` compilation.
 
 ## How to run
 
-Just call it with a `python` interpreter (must be `python 3.x`, won't work with version `2.7`) while being in the project root folder, like this:
+Just call it with a `python` interpreter (must be `python 3.x`, won't work with version `2.7`) **while being in the project root folder**, like this:
 
 ```
 ~/Appunti-LFC$ python ./util/cleaner.py

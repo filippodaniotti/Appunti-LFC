@@ -26,6 +26,6 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: Le github actions di Bozzo si meritano un messaggio più simpatico di questo
+          message: Comodo studiare dagli appunti degli altri, eh?
           document: src/main.pdf
         if: ${{ success() }}
