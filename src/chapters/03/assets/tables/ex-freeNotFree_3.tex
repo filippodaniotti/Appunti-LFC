@@ -4,11 +4,13 @@
 \usepackage{amsmath}
 \usepackage{tabularx}
 
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
 \begin{document}
 \begin{tabularx}{\textwidth}{XX}
 		Linguaggio & Risposta \\
     \midrule
-        $\{ a^j b^n c^n \mid n, j > 0 \}$
+        \(\{ a^j b^n c^n \mid n, j > 0 \}\)
         &
 				Libero
 \end{tabularx}

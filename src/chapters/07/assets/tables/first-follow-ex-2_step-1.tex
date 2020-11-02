@@ -1,0 +1,46 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage[table]{xcolor}
+
+\setlength\lightrulewidth{0.1pt}
+\providecommand\lightrule{%
+	\arrayrulecolor{black!30}%
+	\midrule[\lightrulewidth]%
+	\arrayrulecolor{black}}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }	
+\begin{document}
+\begin{tabularx}{\textwidth}{XXX}
+    & first & follow\\
+    \midrule
+        S
+        &
+        \{a\}
+        &
+        \\ \lightrule
+        A
+        &
+        \{d\}
+        &
+        \\ \lightrule
+        B
+        &
+        \{e, f, \(\varepsilon\)\}
+        &
+        \\ \lightrule
+        C
+        &
+        \{e, \(\varepsilon\)\}
+        &
+        \\ \lightrule
+        D
+        &
+        \{f, \(\varepsilon\)\}
+        &
+        
+\end{tabularx}
+\end{document}

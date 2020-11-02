@@ -17,8 +17,11 @@
 	{./chapters/04/assets/images/}%
 	{./chapters/05/assets/images/}%
 	{./chapters/06/assets/images/}%
+	{./chapters/07/assets/images/}%
 }
 
+% arara: pdflatex: { shell: yes }
+% arara: latexmk: { clean: partial }
 \begin{document}
 \frontmatter
 
@@ -33,6 +36,7 @@
 	\import{./chapters/04/}{chapter04}
 	\import{./chapters/05/}{chapter05}
 	\import{./chapters/06/}{chapter06}
+	\import{./chapters/07/}{chapter07}
 
 \backmatter
 

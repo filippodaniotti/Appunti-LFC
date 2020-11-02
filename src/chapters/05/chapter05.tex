@@ -4,9 +4,11 @@
 \usepackage{../../style_automata}
 \graphicspath{{./assets/images/}}
 
+% arara: pdflatex: { synctex: yes, shell: yes }
+% arara: latexmk: { clean: partial }
 \begin{document}
 
-\chapter{Automi a stati finiti: teoria, algoritmi e simili amenità}
+\chapter[Automi: teoria, esercizi, algoritmi e amenità]{Automi a stati finiti: teoria, esercizi, algoritmi e simili amenità}
 
 \section{Traduzione da NFA a DFA}
 Abbiamo già discusso in passato di come la simulazione su DFA sia più efficiente che su NFA, quindi ora siamo interessati a risolvere questo problema: dato un qualunque NFA some si può ricavare un DFA che riconosca lo stesso linguaggio?

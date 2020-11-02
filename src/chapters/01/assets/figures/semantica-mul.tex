@@ -5,6 +5,8 @@
 
 \usepackage{forest}
 
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
 \begin{document}
     \begin{forest}
         [MUL,delay={for tree={content=\texttt{#1}}}

@@ -1,0 +1,155 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage[table]{xcolor}
+
+\newcolumntype{b}{>{\hsize=.78\hsize}X}
+\newcolumntype{s}{>{\hsize=.5\hsize}X}
+\newcolumntype{m}{>{\hsize=.25\hsize}X}
+\newcolumntype{h}{>{\hsize=.6\hsize}X}
+
+\setlength\lightrulewidth{0.1pt}
+\providecommand\lightrule{%
+	\arrayrulecolor{black!30}%
+	\midrule[\lightrulewidth]%
+	\arrayrulecolor{black}}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+\begin{tabularx}{\textwidth}{XXX}
+    stack & input & output \\
+    \midrule
+        \(\$E\)
+        &
+        \(id + id * id\$\)
+        &
+        \(E \to TE'\)
+
+        \\ \lightrule
+
+        \(\$E'T\)
+        &
+        \(id + id * id\$\)
+        &
+        \(T \to FT'\)
+
+        \\ \lightrule
+
+        \(\$E'T'F\)
+        &
+        \(id + id * id\$\)
+        &
+        \(F \to id\)
+
+        \\ \lightrule
+
+        \(\$E'T'id\)
+        &
+        \(id + id * id\$\)
+        &
+
+        \\ \lightrule
+
+        \(\$E'T'\)
+        &
+        \(+ id * id\$\)
+        &
+        \(T' \to \varepsilon\)
+
+        \\ \lightrule
+
+        \(\$E'\)
+        &
+        \(+ id * id\$\)
+        &
+        \(E' \to TE'\)
+
+        \\ \lightrule
+
+        \(\$E'T+\)
+        &
+        \(+ id * id\$\)
+        &
+
+        \\ \lightrule
+
+        \(\$E'T\)
+        &
+        \(id * id\$\)
+        &
+        \(T \to FT'\)
+
+        \\ \lightrule
+
+        \(\$E'T'F\)
+        &
+        \(id * id\$\)
+        &
+        \(F \to id\)
+
+        \\ \lightrule
+
+        \(\$E'T'id\)
+        &
+        \(id * id\$\)
+        &
+
+        \\ \lightrule
+
+        \(\$E'T'\)
+        &
+        \(* id\$\)
+        &
+        \(T' \to \ast FT'\)
+
+        \\ \lightrule
+
+        \(\$E'T'F \ast\)
+        &
+        \(* id\$\)
+        &
+
+        \\ \lightrule
+
+        \(\$E'T'F\)
+        &
+        \(id\$\)
+        &
+        \(F \to id\)
+
+        \\ \lightrule
+
+        \(\$E'T'id\)
+        &
+        \(id\$\)
+        &
+
+        \\ \lightrule
+
+        \(\$E'T'\)
+        &
+        \(\$\)
+        &
+        \(T' \to \varepsilon\)
+
+        \\ \lightrule
+
+        \(\$E'\)
+        &
+        \(\$\)
+        &
+        \(E' \to \varepsilon\)
+
+        \\ \lightrule
+
+        \(\$\)
+        &
+        \(\$\)
+        &
+        
+        \\
+\end{tabularx}
+\end{document}
