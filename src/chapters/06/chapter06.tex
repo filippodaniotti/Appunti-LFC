@@ -1,6 +1,7 @@
 \documentclass[class=book, crop=false, oneside, 12pt]{standalone}
 \usepackage{standalone}
 \usepackage{../../style}
+\usepackage{csquotes}
 \graphicspath{{./assets/images/}}
 
 \begin{document}
@@ -418,12 +419,18 @@ Prendiamo come esempio il caso che abbiamo lasciato in sospeso precedentemente:
     T' &\rightarrow *FT' \mid \varepsilon \\
     F &\rightarrow (E) \mid id
 \end{align*}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{parsingTopDownTable.jpg}
-    \caption{parsingTopDownTable}
-    \label{parsingTopDownTable}
-\end{figure}
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{ptdp-example.tex}
+    \caption{Tabella del parsing top-down}
+    \label{ptdp-example}
+\end{table} 
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.7\textwidth,keepaspectratio]{parsingTopDownTable.jpg}
+%     \caption{parsingTopDownTable}
+%     \label{parsingTopDownTable}
+% \end{figure}
 
 La tabella è così costruita:
 \begin{itemize}
@@ -460,13 +467,18 @@ Nell'algoritmo di parsing si utilizza la variabile \(b\) come primo simbolo dell
 \end{enumerate}
 
 Infine, come ultima operazione \(X\) viene assegnato all'elemento in cima alla pila e si ripete. A seguire un esempio che fa uso dell'algoritmo appena descritto.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{TopDownExercise.png}
-    \caption{TopDownExercise}
-    \label{TopDownExercise}
-\end{figure}
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{ptdp-ex1.tex}
+    \caption{Tabella delle strutture a ogni passo}
+    \label{ptdp-ex1}
+\end{table} 
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.7\textwidth,keepaspectratio]{TopDownExercise.png}
+%     \caption{TopDownExercise}
+%     \label{TopDownExercise}
+% \end{figure}
 
 \subsection{Parsing Table}
 
@@ -622,6 +634,7 @@ I first evidenziano quali sono i terminali per cui iniziano le stringhe derivabi
     \includegraphics[width=.7\textwidth,keepaspectratio]{follow-algorithm.png}
     \caption{Algoritmo per calcolare follow(\(A\))}
     \label{follow-algorithm}
+    % PER CHI RISCRIVERà L'ALGORITMO: lasciate la label invariata o fate un refactoring perché viene referenziata giù dabbasso <3
 \end{figure}
 
 L'algoritmo comincia impostando follow(\(S\)) = \$, dal momento che lo starting symbol genera tutte le possibili parole, e per qualsiasi parola possiamo aspettarci di trovare il terminatore di stringa \$. Negli altri casi, invece, \(\forall A\) tale che \(A\) è un non terminale, inizializziamo in questo modo: follow(\(A\)) = \(\emptyset\).
@@ -632,10 +645,9 @@ A questo punto è necessario sottoloneare che ci interessano solamente le produz
     \item se \(\beta \neq \varepsilon\), allora aggiungiamo first(\(\beta\)) \(\setminus \varepsilon\) a follow(\(A\));
     \item se \(\beta = \varepsilon\) or \(\varepsilon \in\) first(\(\beta\)), allora aggiungiamo follow(\(B\)) a follow(\(A\)), perché quello che segue \(B\) potrà seguire anche \(A\) (si tenga presente che se \(\beta = \varepsilon\), allora \(A\) è la radice dell'ultimo sottoalbero generato da \(B\).
 \end{itemize}   
-
 % se si immagina un albero di derivazione qusto è formato da un sottoalbero per alpha, poi abbiamo un sottoalbero di A e poi quello di beta che contiene tutto quello che derivad a beta: tutti i terminali che sono diversi da epsilon e derivano da beta allora li mettiamo in A. Se invece beta è uguale a epsilon oppure epsilon appartiene ai first di beta allora dobbiamo aggiungere i follow di B ai follow di A perchè ciò che segue B potrà anche seguire A perchè se noi andiamo a considerare i sottoalberi che vengono generati andiamo a scoprire che A è la radice dell'utlimo sottoalbero della B e quindi quello che può seguire questa particolare occorrenza di B ... Si procede aggiungendo degli elementi ogni volta che andiamo a considerare delle partciolari istanze nella nostra grammatica e ci fermiamo fino a quando non possiamo inserire altro. 
 
-\subsection{Training}
+\subsection{Esercizio first/follow 1}
 Utilizziamo sempre la grammatica dell'esempio precedente, che qui riportiamo per comodità del lettore, e andiamone a definire i follow.
 \begin{align*}
     \mathcal{G}: E &\rightarrow TE' \\
@@ -670,5 +682,239 @@ A questo punto è possibile eliminare mano a mano le dipendenze e le varie ripet
     \caption{Esercizio sui follow, risultato finale}
     \label{follow}
 \end{table}
+
+\subsubsection{Esercizio first/follow 2}
+\label{first-folllow-ex-2}
+Prendiamo ora in analisi la seguente grammatica:
+\begin{align*}
+       S &\to aABb \\
+       A &\to Ac \mid d \\
+       B &\to CD \\
+       C &\to e \mid \varepsilon \\
+       D &\to f \mid \varepsilon
+\end{align*}
+Questa volta ripassiamo anche il calcolo dei first.
+\begin{enumerate}
+    \item Partiamo da \(S\): per calcolare i first di un non terminale andiamo a vedere i first di tutte le sue produzioni. Per \(S\) so che qualunque stringa derivata da \(S\) inizierà con \(a\), siccome \(a\) è un terminale e diverso da \(varepsilon\) non proseguo oltre nella ricerca di first per \(S\);
+    \item per calcolare i first di \(A\) invece ho due produzioni da vagliare, la prima (che derivo da \(A \to Ac\)) mi dice che i first di \(A\) contengono anche i first di \(A\) (non aggiunge informazioni), la seconda mi dice che \(d\) può essere un first di \(A\), quindi scrivo \(\{d\}\);
+    \item per calcolare i first di \(B\) devo conoscere quelli di \(C\) e \(D\); parto da \(C\): ottengo semplicemente che i first sono \(\{e\}\) e possibilmente \(\{\varepsilon\}\), quindi per \(C\) metto \(\{e, \varepsilon\}\);
+    \item in modo simile a \(C\) posso facilmente ricavare che i first di \(D\) sono \(\{f, \varepsilon\}\);
+    \item tornando ora ad analizzare \(B\) posso dire che i suoi first sono first(\(C\))\( \setminus \{\varepsilon\}\), ma siccome \(C\) contiente \(\varepsilon\) tra i suoi first devo aggiungere first(\(D\)) a first(\(B\));
+    \item infine notando che anche first(\(D\)) contiene \(\varepsilon\) posso annoverare in first(\(B\)) anche \(\varepsilon\) stesso.    
+\end{enumerate}
+Ora che abbiamo terminato la nostra ricerca dei first la tabella risolutiva dell'esercizio si presenta come in Tab. \ref{first-follow-ex-2_step-1}.
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{first-follow-ex-2_step-1.tex}
+    \caption{Esercizio \ref{first-folllow-ex-2} su first/follow step 1}
+    \label{first-follow-ex-2_step-1}
+\end{table}
+Passiamo quindi ora gaiamente al corpo prossimo step, ovvero il caclolo dei vari follow seguendo l'algoritmo indicato in \ref{follow-algorithm}.
+
+Per comodità notazionale, dato che nelle produzioni dell'esercizio compare il non terminale \(A\), scriveremo \(X\) per indicare la \(A\) dell'algoritmo per il calcolo del follow (assumiamo quindi che ogni \(A\) nell'algoritmo venga sostituita da \(X\), e.g.: \(\alpha A \beta\) diventa \(\alpha X \beta\)).
+\begin{enumerate}
+    \item la fase di inizializzazione del calcolo dei follow vuole che lo start symbol abbia come follow il dollaro, quindi inseriamo subito \(\$\) per \(S\);
+    \item cominciamo poi l'analisi dalle produzioni di \(S\):
+    \begin{enumerate}
+        \item osservando l'algoritmo cerchiamo un match possibile per \(\alpha X \beta\); partiamo con il considerare \(X\) = \(A\), quindi consideriamo \(\beta\) = \(Bb\);
+        \item in questo caso abbiamo che \(\beta \neq \varepsilon\), quindi dobbiamo aggiungere i first(\(\beta\)) ai follow(\(A\));
+        \item i first di \(\beta\) in questo caso sono i first di \(Bb\), quindi \(\{e, f, b\}\) (nota bene che non sono first(\(B\)) ma first(\(Bb\))), li aggiungo a follow(\(A\));
+        \item \(\beta\) è diverso da \(varepsilon\) ed il suo first non contiene eps, quindi il secondo \texttt{if} non si applica e terminiamo questo branch.
+        \item ora dobbiamo analizzare il caso in cui studiando la produzione di \(S\) assumiamo \(X = B\) e quindi \(\beta = b\);
+        \item in questo caso ho che devo aggiungere ai follow di \(B\) i first(\(b\)), ovvero \(\{b\}\);
+        \item \(\beta\) è diverso da \(varepsilon\) ed inoltre \(varepsilon\) non appartiene ai first di \(\beta\), quindi termino anche questo branch.
+    \end{enumerate}
+    \item Ho concluso quindi l’analisi delle produzioni di \(S\), passo ad analizzare la produzione di \(A\):
+    \begin{enumerate}
+        \item parto da \(A \to Ac\), in questo caso non ho altra scelta che considerare \(X = A\), quindi \(\beta = c\), a questo punto cado nel primo \texttt{if} dell'algoritmo che mi dice di aggiungere first(\(c\)) \(\setminus \{\varepsilon\}\) (ovvero \(\{c\}\)) ai follow(\(A\));
+        \item chiudo quindi il branch dato che il secondo \texttt{if} non si applica;
+        \item considero ora la seconda produzione di \(A\), ovvero \(A \to d\), tuttavia questa non è in forma \(\alpha X \beta\) e quindi non ci da informazioni, l'algoritmo mi dice che posso passare oltre, ho terminato le produzioni di \(A\).
+    \end{enumerate}
+    \item Passiamo all'analisi della produzione \(B \to CD\):
+    \begin{enumerate}
+        \item considero \(X = C\), ottengo quindi \(\beta = D\), dato che \(\beta \neq \varepsilon\) aggiungo ai follow(\(C\)) i first(\(D\))\( \setminus \{\varepsilon\} = \{f\}\);
+        \item dato però che \(\varepsilon \in \)first(\(\beta\), cado nel secondo \texttt{if} e devo aggiungere i follow(\(B\)) (inteso come \(B\) dell'algoritmo) ai follow(\(X\)), ovvero follow(\(B\)) ai follow(\(C\)) nel nostro esercizio; lascio quindi un placeholder nella tabella da riscrivere quando avrò finito di calcolare follow(\(B\)), avendo rggiunto la fine del \texttt{foreach} chiudo qui il branch;
+        \item ora considero la seconda opzione, ovvero \(X = D\), quindi \(\beta = \varepsilon\);
+        \item in questo caso andiamo direttamente nel secondo \texttt{if} che ci dice di aggiungere i follow(\(B\)) ai follow(\(D\)), nella tabella quindi indico un altro placeholder;
+        \item abbiamo terminato le possibili interpretazioni delle produizioni per la derivazione \(B \to CD\).
+    \end{enumerate}
+    \item Le produzioni di \(C\), come quelle di \(D\) non sono del tipo \(\alpha X \beta\) dato che non contengono caratteri non-terminali, quindi non ci danno informazioni sui follow e l’algoritmo ci dice di ignorarle;
+    \item a questo punto abbiamo terminato le produzioni da analizzare, non ci resta altro che risolvere i placeholder che abbiamo lasciato nella tabella durante i passi precedenti.
+\end{enumerate}
+Osserviamo in Tab.\ref{first-follow-ex-2_step-2} come risulta la tabella prima della sostituzione dei placeholder.
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{first-follow-ex-2_step-2.tex}
+    \caption{Esercizio \ref{first-folllow-ex-2} su first/follow con i placeholder}
+    \label{first-follow-ex-2_step-2}
+\end{table}
+Mentre in Tab.\ref{first-follow-ex-2_step-3} si può osservare il risultato finale, con sostituzione dei placeholder.
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{first-follow-ex-2_step-3.tex}
+    \caption{Esercizio \ref{first-folllow-ex-2} su first/follow una volta sostituiti i placeholder}
+    \label{first-follow-ex-2_step-3}
+\end{table}
+
+\subsubsection{Esercizio first/follow 3}
+\label{first-folllow-ex-3}
+Passiamo ora ad un'altro esercizio dello stesso tipo, la grammatica proposta è la seguente:
+\begin{align*}
+    S &\to aA \mid bBc \\
+    A &\to Bd \mid Cc \\
+    B &\to e \mid \varepsilon \\
+    C &\to f \mid \varepsilon
+\end{align*}
+Questa volta saremo più spigliati con la risoluzione dei first, ma li scriveremo comunque, dato che dobbiamo tener ben presente questa massima:
+\begin{displayquote}
+    "I first ed i follow li dovete sapere bene perché noi, con questi, ci faremo gli spaghetti."
+    -Paola Quaglia
+\end{displayquote}
+
+\noindent Andiamo quindi a risolvere senza indugi i first dei vari non-terminali.
+
+Per comodità notazionale, dato che nelle produzioni dell'esercizio compare il non terminale \(A\), anche in quest esercizio scriveremo \(X\) per indicare la \(A\) dell'algoritmo per il calcolo del follow come nel caso precedente.
+\begin{enumerate}
+    \item Per \(S\) mettiamo \(\{a, b\}\) e terminiamo subito dato che entrambi sono terminali;
+    \item per \(A\) deobbiamo conoscere i first di \(B\) e \(C\);
+    \item per \(B\) abbiamo che i first sono \(\{e, \varepsilon\}\);
+    \item per \(C\) abbiamo che i first sono \(\{f, \varepsilon\}\);
+    \item infine torniamo a risolvere \(A\):
+    \begin{itemize}
+        \item analizziamo \(A \to Bd\), inseriamo first(\(B\)) \(\setminus \{\varepsilon\}\), ovvero inseriamo \(\{e\}\);
+        \item siccome first(\(B\)) contiene \(\varepsilon\) aggiungiamo anche i first di \(b\) che sono porprio \(\{b\}\);
+        \item analizziam poi \(A \to Cc\);
+        \item esattamente come per \(A \to Bd\) abbiamo che i first sono \(\{f, c\}\);
+    \end{itemize}
+\end{enumerate}
+Una volta inseriti i first nella tabella ci troveremo nella situazione rappresentata in Tab.\ref{first-follow-ex-3_step-1}
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{first-follow-ex-3_step-1.tex}
+    \caption{Esercizio \ref{first-folllow-ex-2} su first/follow step 1}
+    \label{first-follow-ex-3_step-1}
+\end{table}
+Ora è il momento del calcolo dei follow, anche in questo caso tenterò di matentere la spiegazione concisa ma completa.
+
+Prima di tuffarci nei calcoli però è interessante osservare più da vicino qual è l’idea dietro all'inserimento di \(\$\) in follow(\(S\)) come primo passo.
+Questa azione risulta intuitiva se si pensa che follow(\(Z\)) mi rappresenta quello che io mi aspetto di poter derivare da un certo simbolo non terminale \(Z\) con un certo numero di passi; quindi si capisce che essendo \(S\) l’origine di tutte le parole generate da una certa grammatica, mi aspetto che dopo tutto ciò che è generato da \(S\) io trovi il terminatore di stringa, ovvero proprio \(\$\).
+
+\noindent Bene, ora siamo pronti a tuffarci nei calcoli.
+\begin{enumerate}
+    \item Partiamo con l’analizzare le produzioni di \(S\): iniziando con \(S \to aA\);
+    \begin{enumerate}
+        \item possiamo considerare solo \(X = A\), quindi per forza di cose\(\beta = \varepsilon\);
+        \item passiamo subito al secondo \texttt{if} che ci dice di ricordare di aggiungere i follow(\(S\)) a follow(\(A\)): lasciamo quindi un placeholder nella tabella e proseguiamo.
+    \end{enumerate}
+    \item Analizziamo ora \(S \to bBc\);
+    \begin{enumerate}
+        \item in questo caso siamo obbligati a scegliere \(X = B\) e quindi \(\beta = c\);
+        \item passiamo dentro al primo \texttt{if} ed aggiungo first(\(c\)) (\(=\{c\}\)) a follow(\(B\));
+        \item il secondo if non si applica, terminiamo.
+    \end{enumerate}
+    \item Analizziamo ora \(A \to Bb\);
+    \begin{enumerate}
+        \item dobbiamo scegliere \(X = B\), quindi \(\beta = d\);
+        \item anche questa volta ci ritroviamo a soddisfare il primo \texttt{if} ed aggiungere first(\(d\)) (\(=\{d\}\)) a follow(\(B\));
+        \item il secondo if non si applica, terminiamo il branch.
+    \end{enumerate}
+    \item Analizziamo \(A \to Cc\);
+    \begin{enumerate}
+        \item in questo caso \(X = C\), quindi \(\beta = c\);
+        \item come per il caso appena visto aggiungiamo first(\(c\)) (\(=\{c\}\)) a follow(\(C\)) e chiudiamo il branch.
+    \end{enumerate}
+    \item Infine, tutte le rimanenti produzioni non sono nella forma \(\alpha X \beta\) e quindi abbiamo terminato l’analisi;
+    \item l'ultimo passo che rimane da svolgere è la sostituzione dei placeholder.
+\end{enumerate}
+Osserviamo quindi in Tab.\ref{first-follow-ex-3_step-2} come risulta la tabella dell' Es.\ref{first-folllow-ex-3} prima della sostituzione dei placeholder.
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{first-follow-ex-3_step-2.tex}
+    \caption{Esercizio \ref{first-folllow-ex-3} su first/follow con i placeholder}
+    \label{first-follow-ex-3_step-2}
+\end{table}
+Infine, in Tab.\ref{first-follow-ex-3_step-3} si può osservare la soluzione finale dell' Es.\ref{first-folllow-ex-3}, con sostituzione dei placeholder.
+\begin{table}[H]
+	\centering
+	\subimport{assets/tables/}{first-follow-ex-3_step-3.tex}
+    \caption{Esercizio \ref{first-folllow-ex-3} su first/follow una volta sostituiti i placeholder}
+    \label{first-follow-ex-3_step-3}
+\end{table}
+
+\subsection{Costruire una parsing table}
+Ora che ci siamo esercitati con i meccanismi necessari possiamo tornare ad occuparci della nostra preoccupazione principale, ovvero come costruire una tabella di parsing.
+
+Rappresentato in Fig.\ref{algoritmo_parsing-table} si può osservare l'algoritmo che data in input una grammatica \(\mathcal{G}\) ritorna la parsing table propria di quella grammatica. 
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=.8\textwidth]{algoritmo_parsing-table.png}
+    \caption{Algoritmo di costruzione dei una parsing table}
+    \label{algoritmo_parsing-table}
+\end{figure}
+Ricordiamo brevemente che le tabelle di parsing ci servono per verificare se una certa parola può essere derivata tramite derivazione canonica da una data grammatica.
+
+L'algoritmo prevede di scorrere tutte le produzioni \(A \to \alpha\) presenti nella grammatica e per ognuna di queste:
+\begin{enumerate}
+    \item aggiungere \(A \to \alpha\) in \(M[A, b]\) per ogni \(b\) in first(\(\alpha\));
+    \item se  \(\varepsilon \in\) first(\(\alpha\)), aggiungere \(A \to \alpha\) a \(M[A, x]\) per tutti gli \(x\) in follow(\(A\)). 
+\end{enumerate}
+Una volta terminato questo ciclo, si va a settare il valore \(error()\) in tutte le entry della tabella ancora vuote.
+
+Osserva che follow(\(A\)) può contenere il simbolo \(\$\), per questo nel punto due usiamo \(x\) invece che \(b\), infatti mentre \(b\) indica terminali, \(x\) serve proprio a far notare che potrebbe esserci \(\$\) che non è un terminale della grammatica, ma il carattere segnalatore della terminazione di una parola.
+
+Alcune note interessanti:
+\begin{itemize}
+    \item nel nostro caso le caselle di errore saranno lasciate vuote, mentre nell’applicazione effettiva le caselle vuote puntano tutte a routine di errore;
+    \item ripetiamo che è possibile che ci troviamo con due entry in una stessa cella, tuttavia le grammatiche che compongono tabelle con questa forma non sono deterministiche e non appartengono alla classe LL(1), che è la lasse di cui ci interessiamo noi;
+    \item le entry multiple nella tabella di parsing si dicono multiply-defined.
+\end{itemize}
+
+Viene proposta ora come esempio al lettore questa grammatica.
+\begin{align}
+    \label{non-ll1_grammar}
+    E &\to E+T \mid T \\
+    T &\to T*F \mid F \nonumber \\
+    F &\to (E) \mid id \nonumber 
+\end{align}
+Saprebbe dire il lettore se la grammatica qui presentata appartiene alla classe LL(1)?
+
+Mentre il lettore riflette su questo quesito può leggere un'altra importante citazione del nostro punto di riferimento, Paola Quaglia, che riflette sul senso di incomunicabilità che attraversa i tempi moderni.
+\begin{displayquote}
+    "NWY5YTliMmVjMmRhNiwyOS8xMC8yMDIwIDExOjUxLGthbHQxMA==  kaltura ci parla cosi' :-("
+\end{displayquote}
+
+Ebbene, per rispondere alla domanda posta in precedenza la grammatica in \ref{non-ll1_grammar} non appartiene alla classe LL(1) e lo si può dimostrare provando a crearne la parsing table.
+
+Si può notare di fatto come first(\(E\)) = first(\(T\)) = first(\(F\)) \(= \{(, id\}\).
+Di conseguenza se seguiamo i passi dell'algoritmo di creazione della parsing table otteniamo una situazione in cui la casella \(M[E, id]\) contiene sia \(E \to E+T\) che \(E \to T\).
+
+Questa grammatica presenta anche una proprietà (o difetto) molto interessante chiamata ricorsione sinistra:
+\begin{definition}
+    Una grammatica presenta ricorsione sinistra (left recursive grammar) se, per qualche \(A\) e \(\alpha\), \(A \implies^* A\alpha\)
+\end{definition}
+
+Se osserviamo la nostra grammatica ci rendiamo conto immediatamente che presenta ricorsione sinistra dato che possiamo espandere un numero indefinito di volte la produzione \(E \to E+t\) ed ottenre una sequenza di derivazioni come la seguente:
+\begin{equation*}
+    E \implies E+T \implies E+T+T \implies E+T+T+T \implies \dots
+\end{equation*}
+La grammatica che abbiamo analizzato presenta, per la precisione, la caratteristica di ricorsione immediata sinistra (immediately left recursive grammar), ovvero presenta una produzione in forma \(A \to A\alpha\).
+
+Presentiamo ora un lemma sulle grammatiche con ricorsione sinistra.
+\begin{lemma}
+    Se una grammatica \(\mathcal{G}\) presenta ricorsione sinistra, immediata o no che sia, allora la tal grammatica \(\mathcal{G}\) non appartiene alla classe LL(1).
+\end{lemma}
+Una volta venuti a conoscenza di questo lemma è lecito chiedersi se tali grammatiche proprio non siano riducibili a grammatiche di tipo LL(1) per fare in modo da poterle analizzare in maniera deterministica (e di conseguenza più efficiente)
+
+In molti casi è effettivamente possibile eliminare la ricorsione sinistra. 
+Proviamo a capire l'intuizione da segire per ottenere una grammatica LL(1) da una con ricorsione sinistra provando a risolvere tale problema per la seguente grammatica d'esempio:
+\begin{equation}
+    \label{left-recursive_grammar}
+    A \to A \alpha | \beta \textrm{  con  } \alpha \neq \varepsilon \textrm{  e  } \beta \neq A \gamma
+\end{equation}
+Di fatto se valesse \(\alpha = \varepsilon\) la grammatica sarebbe solo scritta male e non è left recursive.
+
+Lasciamo al lettore un po' di tempo per pensare ad una grammatica LL(1), o quantomeno non left recursive, che generi lo stesso linguaggio della grammatica in Eq.\ref{left-recursive_grammar}.
+
+
 
 \end{document}
