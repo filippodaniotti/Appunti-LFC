@@ -227,8 +227,6 @@ Facciamo un breve riepilogo di quanto abbiamo visto: tutti i file predisposti pe
 }{%
 \inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file0.l}%
 }
-
-        
 % \begin{figure}[h]
 %     \centering
 %     \includegraphics[width=.7\textwidth,keepaspectratio]{file0.l.png}
@@ -255,6 +253,7 @@ Possiamo notare anche un'altra cosa molto interessante: solitamente, per poter u
 }{%
 \inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file1.l}%
 }
+
 % \begin{figure}[h]
 %     \centering
 %     \includegraphics[width=.7\textwidth,keepaspectratio]{file1.l.png}
@@ -283,11 +282,13 @@ Come descritto precedentemente, nella parte centrale i pattern sono associati al
 Complessivamente, il risultato ottenuto dall'esecuzione di un programma compilato a partire dal file discusso porterà all'eliminazione di '\texttt{ }', '\texttt{\textbackslash t}' e '\texttt{\textbackslash n}' dal testo passato in input e ci farà ottenere ad una sequenza continua di caratteri (ad esempio, una stringa del tipo "\texttt{ ab c d e \hspace{.8cm} f g}" diventerà "\texttt{abcdefg}").
 
 \subsubsection{file2.l}
+
 \ifthenelse{\boolean{isCompiledFromMain}}{%
 \inputminted[linenos, breaklines, tabsize = 2]{c}{chapters/06/assets/code-fragments/file2.l}%
 }{%
 \inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file2.l}%
 }
+
 % \begin{figure}[h]
 %     \centering
 %     \includegraphics[width=.7\textwidth,keepaspectratio]{file2.l.png}
@@ -326,6 +327,7 @@ Allora avremmo che verrebbe riscritto come segue:
 }{%
 \inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file3.l}%
 }
+
 % \begin{figure}[h]
 %     \centering
 %     \includegraphics[width=.7\textwidth,keepaspectratio]{file3.l.jpg}
@@ -350,11 +352,13 @@ Nella parte centrale del file abbiamo invece le seguenti associazioni pattern-az
 In sostanza, il programma che stiamo descrivendo con questi pattern si occupa di contare complessivamente quanti caratteri, parole e righe sono state individuate in un dato testo; qualora avessimo un match con una parola, allora avviene un incremento proporzionale al numero di caratteri che costituiscono quella stessa parola e, inoltre, si aggiorna il numero di parole totali che sono contenute nel testo; ogni volta che si trova una new line si incrementano di un'unità il numero di righe e di caratteri e, infine, ogni volta che si trova uno spazio o un tab viene incrementato solamente il numero di caratteri. 
 
 \subsubsection{file4.l} 
+
 \ifthenelse{\boolean{isCompiledFromMain}}{%
 \inputminted[linenos, breaklines, tabsize = 2]{c}{chapters/06/assets/code-fragments/file4.l}%
 }{%
 \inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file4.l}%
 }
+
 % \begin{figure}[h]
 %     \centering
 %     \includegraphics[width=.7\textwidth,keepaspectratio]{file4.l.jpg}
