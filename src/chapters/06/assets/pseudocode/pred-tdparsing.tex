@@ -1,0 +1,55 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+
+\begin{document}
+    \begin{algorithm}[H]
+        \DontPrintSemicolon
+
+        \SetKwData{t}{\textbf{true}}
+        \SetKwData{f}{\textbf{false}}
+        \SetKwData{mrk}{\texttt{\$}}
+        \SetKwData{noteq}{\(\neq\)}
+        \SetKwData{err}{error}
+
+        \SetKwData{w}{\(w\$\)}
+        \SetKwArray{TD}{M}
+        \SetKwData{b}{\(b\)}
+        \SetKwData{X}{\(X\)}
+        \SetKwData{Tmp}{\(tmp\)}
+        \SetKwFunction{Fs}{firstSymbol}
+        \SetKwFunction{Ns}{nextSymbol}
+        \SetKwFunction{Push}{push}
+        \SetKwFunction{Pop}{pop}
+        \SetKwFunction{ist}{isTerminal}
+        \SetKwFunction{ferr}{error}
+        \SetKwFunction{out}{output}
+        \SetKwFunction{Moved}{\(\textrm{move}_d\)}
+
+        \textsc{Stack} \Tmp = Stack()\;
+        \Tmp.\Push{S}
+        \tcp*[r]{S è starting symbol di \(\mathcal{G}\)}
+        \textsc{Symbol} \b \(=\) \w.\Fs{}\;
+        \textsc{Symbol} \X \(=\) \Tmp.\Pop{}\;
+        \While{\X \noteq \mrk} {
+            \uIf{\X \(=\) \b} {
+                \Tmp.\Pop{\X}\;
+                \b = \w.\Ns{}\;
+            } \uElseIf{\ist{\X}} {
+                \ferr{}\;
+            } \uElseIf{\TD{\X , \b} \(==\) \err} {
+                \ferr{}\;
+            } \ElseIf{\TD{\X , \b} \(==\) \X \(\to Y_1, \ldots, Y_k\) } {
+                \out{\X \(\to Y_1, \ldots, Y_k\)}\;
+                \Tmp.\Pop{\X}\;
+                \For{\(Y_i \in Y_1, \ldots, Y_k\)} {
+                    \Tmp.\Push{\(Y_i\)}\;
+                }
+            }
+            \X \(=\) \Tmp.\Pop{}\;
+        }
+
+        \caption{predictiveTopDownParsing(\textsc{Word} \(w\), \textsc{Symbol}[][] M)}
+    \end{algorithm}
+\end{document}

@@ -1,0 +1,7 @@
+
+%%
+
+.		printf("hello world!");
+
+%%
+
