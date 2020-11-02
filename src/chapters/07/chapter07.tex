@@ -26,7 +26,7 @@ Sia \(w\) = \(bd\) e sia \(\mathcal{G}\):
     B &\rightarrow b
 \end{align*}
 
-Per verificare se \(w \in \mathcal{L(G)}\) con un approccio top-down dobbiamo ottenere una derivazione leftmost a partire dallo starting symbol. Ovviamente, si noterà subito che non è possibile scegliere \(Ad\) come derivazione iniziale dello starting symbol, perché a quel punto l'unica parola ottenibile sarebbe parola \(ad\); dobbiamo invece optare per la seconda derivazione. La derivazione completa ci porta a
+Per verificare se \(w \in \mathcal{L(G)}\) con un approccio top-down dobbiamo ottenere una derivazione leftmost a partire dallo start symbol. Ovviamente, si noterà subito che non è possibile scegliere \(Ad\) come derivazione iniziale dello start symbol, perché a quel punto l'unica parola ottenibile sarebbe parola \(ad\); dobbiamo invece optare per la seconda derivazione. La derivazione completa ci porta a
 \begin{align*}
     S \Rightarrow Bd \Rightarrow bd
 \end{align*}
@@ -108,7 +108,7 @@ Avendo a disposizione la tabella di parsing, la cui costruzione verrà trattata 
     \item Input: Una stringa \(w\), una tabella \(M\) di parsing top-down per la grammatica \(\mathcal{G} = (V, T, S, \mathcal{P})\);
     \item Output: La derivazione leftmost della stringa \(w \iff w \in \mathcal{L(G)}\), altrimenti \emph{error()}.
 \end{itemize}
-Inizializziamo la procedura posizionando \(w\$\) nell'input buffer e, nella pila che viene utilizzata per inserire e analizzare gli elementi parziali, inseriamo il simbolo \$ con lo starting symbol \(S\) in cima.
+Inizializziamo la procedura posizionando \(w\$\) nell'input buffer e, nella pila che viene utilizzata per inserire e analizzare gli elementi parziali, inseriamo il simbolo \$ con lo start symbol \(S\) in cima.
 \begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{PredictiveTopDownAlgorithm.png}
@@ -195,7 +195,7 @@ Sia data la seguente grammatica:
     A &\rightarrow \varepsilon
 \end{align*}
 
-In questo esempio, invece, il linguaggio denotato dalla nostra grammatica è composto solamente dalla parola \(ab\). Per la definizione di \(\alpha\), l'unica cella che ha come non terminale (nonché starting symbol) \(S\) è la cella \(M[S, a] = S \rightarrow aAb\), perché l'unica stringa che è possibile ottenere inizia per \(a\). Da qui è possibile intuire anche che, per ottenere la parola \(ab\), è necessario che \(M[A, b] = S \rightarrow \varepsilon\); in tutti gli altri casi verrà ritornato un errore, in quanto tale parola non apparterrebbe al linguaggio denotato dalla grammatica. 
+In questo esempio, invece, il linguaggio denotato dalla nostra grammatica è composto solamente dalla parola \(ab\). Per la definizione di \(\alpha\), l'unica cella che ha come non terminale (nonché start symbol) \(S\) è la cella \(M[S, a] = S \rightarrow aAb\), perché l'unica stringa che è possibile ottenere inizia per \(a\). Da qui è possibile intuire anche che, per ottenere la parola \(ab\), è necessario che \(M[A, b] = S \rightarrow \varepsilon\); in tutti gli altri casi verrà ritornato un errore, in quanto tale parola non apparterrebbe al linguaggio denotato dalla grammatica. 
 
 \begin{table}[H]
 	\centering
@@ -299,7 +299,7 @@ I first evidenziano quali sono i terminali per cui iniziano le stringhe derivabi
     % PER CHI RISCRIVERà L'ALGORITMO: lasciate la label invariata o fate un refactoring perché viene referenziata giù dabbasso <3
 \end{figure}
 
-L'algoritmo comincia impostando follow(\(S\)) = \$, dal momento che lo starting symbol genera tutte le possibili parole, e per qualsiasi parola possiamo aspettarci di trovare il terminatore di stringa \$. Negli altri casi, invece, \(\forall A\) tale che \(A\) è un non terminale, inizializziamo in questo modo: follow(\(A\)) = \(\emptyset\).
+L'algoritmo comincia impostando follow(\(S\)) = \$, dal momento che lo start symbol genera tutte le possibili parole, e per qualsiasi parola possiamo aspettarci di trovare il terminatore di stringa \$. Negli altri casi, invece, \(\forall A\) tale che \(A\) è un non terminale, inizializziamo in questo modo: follow(\(A\)) = \(\emptyset\).
 
 A questo punto è necessario sottoloneare che ci interessano solamente le produzioni della grammatica per cui il simbolo \(A\) non compare come driver della grammatica, ma come body; dunque, per ogni \(B \rightarrow \alpha A \beta\), si eseguono le sequenti operazioni: 
 

@@ -34,10 +34,10 @@
   \noindent Andiamo a vedere da vicino come sono stati ricavati gli elementi:
 
   \begin{itemize}
-    \item \(V'_1\) e \(V'_2\) si ottengo effettuando un'operazione di \emph{refresh} sui non terminali, in modo da evitare collisioni di nomi (vedremo più avanti come mai quest'operazione è importante), inoltre questo vocabolario è completato con l'introduzione di un nuovo starting symbol;
+    \item \(V'_1\) e \(V'_2\) si ottengo effettuando un'operazione di \emph{refresh} sui non terminali, in modo da evitare collisioni di nomi (vedremo più avanti come mai quest'operazione è importante), inoltre questo vocabolario è completato con l'introduzione di un nuovo start symbol;
     \item l'insieme dei terminali è l'unione dei sue insiemi di terminali di \(\mathcal{G}_1\) e \(\mathcal{G}_2\);
-    \item \(S\) è il nuovo starting symbol, non presente in \(V'_1 \cup V'_2\), e \(S'_1\) e \(S'_2\) sono di nuovo il refresh degli starting symbol rispettivamente di \(\mathcal{G}_2\) e \(\mathcal{G}_2\);
-    \item infine, l'insieme delle produzioni è dato dall'unione tra i refresh delle produzioni delle due grammatiche di partenza  \(\mathcal{G}_1\) e \(\mathcal{G}_2\), unito a una nuova produzione che, dal nuovo starting symbol, produce il resfresh dello starting symbol di una delle due grammatiche di partenza.
+    \item \(S\) è il nuovo start symbol, non presente in \(V'_1 \cup V'_2\), e \(S'_1\) e \(S'_2\) sono di nuovo il refresh degli start symbol rispettivamente di \(\mathcal{G}_2\) e \(\mathcal{G}_2\);
+    \item infine, l'insieme delle produzioni è dato dall'unione tra i refresh delle produzioni delle due grammatiche di partenza  \(\mathcal{G}_1\) e \(\mathcal{G}_2\), unito a una nuova produzione che, dal nuovo start symbol, produce il resfresh dello start symbol di una delle due grammatiche di partenza.
   \end{itemize}
 
   \noindent Questa definizione ci basta per asserire che \(\mathcal{L(G)}\) è libero e \(\mathcal{L(G)} = \mathcal{L}(\mathcal{G}_1)  \cup \mathcal{L}(\mathcal{G}_2) \).
@@ -54,9 +54,9 @@
 \begin{osservazione}
   Cerchiamo di capire come mai  \(\mathcal{L(G)} = \mathcal{L}(\mathcal{G}_1)  \cup \mathcal{L}(\mathcal{G}_2) \) è valido.
   \begin{itemize}
-    \item Consideriamo una stringa \(w \in \mathcal{L(G)}\); questo è vero se e solo se esiste una certa derivazione per ottenerla a partire dallo starting symbol (\(S \implies^* w\)).
-    \item Per come abbiamo definito la grammatica \(\mathcal{G}\), il secondo passo della derivazione dev'essere necessariamente il refresh di uno dei due starting symbol delle grammatiche di partenza (\(S \implies S'_1 \implies^* w \lor S \implies S'_2 \implies^* w\));
-    \item questo naturalmente è valido se e solo se, a questo punto, la stringa \(w\) può essere derivata in qualche modo a partire da uno degli starting symbol delle grammatiche di partenza (\(S_1 \implies^* w \lor S_2 \implies^* w\)).
+    \item Consideriamo una stringa \(w \in \mathcal{L(G)}\); questo è vero se e solo se esiste una certa derivazione per ottenerla a partire dallo start symbol (\(S \implies^* w\)).
+    \item Per come abbiamo definito la grammatica \(\mathcal{G}\), il secondo passo della derivazione dev'essere necessariamente il refresh di uno dei due start symbol delle grammatiche di partenza (\(S \implies S'_1 \implies^* w \lor S \implies S'_2 \implies^* w\));
+    \item questo naturalmente è valido se e solo se, a questo punto, la stringa \(w\) può essere derivata in qualche modo a partire da uno degli start symbol delle grammatiche di partenza (\(S_1 \implies^* w \lor S_2 \implies^* w\)).
     \item Se \(w\) può essere ottenuta attraverso qualche derivazione a partire da \(S_1\) o \(S_2\), allora vuol dire che \(w\) appartiene a uno dei due linguaggi generati dalle nostre due grammatiche di partenza (\(w \in \mathcal{L}(\mathcal{G}_1)  \lor w \in \mathcal{L}(\mathcal{G}_2) \)).
     \item Questo è equivalente ad affermare che \(w\) appartiene all'unione dei due linguaggi (\(w \in \mathcal{L}(\mathcal{G}_1)  \cup \mathcal{L}(\mathcal{G}_2) \)), e ci convince quindi della validità dell'asserto.
   \end{itemize}
@@ -320,7 +320,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
    \paragraph{Dimostrazione se \(\varepsilon \in \mathcal{L}\)}
    La dimostrazione che abbiamo appena concluso è relativa a linguaggi privi di parola vuota, ma con un attimo di cura nell'impostazione possiamo estenderla anche ai linguaggi che comprendono \(\varepsilon\).
 
-   Considerando un linguaggio \(\mathcal{L}\) che comprenda \(\varepsilon\), partiamo ricavando una grammatica \(\mathcal{G} = (V, T, S, \mathcal{P})\) che generi \(\mathcal{L} \setminus \{\varepsilon\}\). A questo punto definiamo una seconda nuova grammatica \(\mathcal{G}'\), in cui andiamo semplicemente ad aggiungere un nuovo starting symbol assieme a due produzioni: una che punti verso lo starting symbol della precedente grammatica, e una seconda che generi invece \(\varepsilon\). Formalmente:
+   Considerando un linguaggio \(\mathcal{L}\) che comprenda \(\varepsilon\), partiamo ricavando una grammatica \(\mathcal{G} = (V, T, S, \mathcal{P})\) che generi \(\mathcal{L} \setminus \{\varepsilon\}\). A questo punto definiamo una seconda nuova grammatica \(\mathcal{G}'\), in cui andiamo semplicemente ad aggiungere un nuovo start symbol assieme a due produzioni: una che punti verso lo start symbol della precedente grammatica, e una seconda che generi invece \(\varepsilon\). Formalmente:
 
    \begin{equation*}
      \mathcal{G}' = (V, T, S', \mathcal{P} \cup \{ S' \rightarrow S, S' \rightarrow \varepsilon \})
@@ -426,7 +426,7 @@ Per provare che questo linguaggio è libero possiamo sfruttare la chiusura dei l
   S\; & \to\; aSb\; \mid ab
 \end{align*}
 
-\noindent Altrettanto semplice è farlo per il linguaggio \( \{ c^j \mid j > 0 \} \) (qui usiamo \(C\) come starting symbol):
+\noindent Altrettanto semplice è farlo per il linguaggio \( \{ c^j \mid j > 0 \} \) (qui usiamo \(C\) come start symbol):
 
 \begin{align*}
   C\; & \to\; c\; \mid cC
