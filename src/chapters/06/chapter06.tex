@@ -884,10 +884,10 @@ Una volta venuti a conoscenza di questo lemma, è lecito chiedersi se tali gramm
 
 In molti casi è effettivamente possibile eliminare la ricorsione sinistra. 
 Proviamo a capire l'intuizione da seguire per ottenere una grammatica LL(1) da una con ricorsione sinistra; per farlo, aiutiamoci tentando di risolvere tale problema per la seguente grammatica d'esempio:
-\begin{equation}
+\begin{equation*}
     \label{left-recursive_grammar}
-    A \to A \alpha | \beta \textrm{  con  } \alpha \neq \varepsilon \textrm{  e  } \beta \neq A \gamma
-\end{equation}
+    A \to A \alpha \mid \beta \textrm{  con  } \alpha \neq \varepsilon \textrm{  e  } \beta \neq A \gamma
+\end{equation*}
 Di fatto se valesse \(\alpha = \varepsilon\) la grammatica sarebbe solo scritta male e non sarebbe quindi left recursive.
 
 Lasciamo al lettore un po' di tempo per pensare ad una grammatica LL(1), o quantomeno non left recursive, che generi lo stesso linguaggio della grammatica in Eq.\ref{left-recursive_grammar}.
