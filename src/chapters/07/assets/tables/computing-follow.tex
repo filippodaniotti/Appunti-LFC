@@ -1,0 +1,50 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage[table]{xcolor}
+
+\setlength\lightrulewidth{0.1pt}
+\providecommand\lightrule{%
+	\arrayrulecolor{black!30}%
+	\midrule[\lightrulewidth]%
+	\arrayrulecolor{black}}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }	
+\begin{document}
+\begin{tabularx}{\textwidth}{XXX}
+    & first & computation of follow\\
+    \midrule
+        E
+        &
+        \{id, (\}
+        &
+        \$, )
+        \\ \lightrule
+        E'
+        &
+        \{\(\varepsilon, +\)\}
+        &
+        add follow(\(E\))
+        \\ \lightrule
+        T
+        &
+        \{id, (\}
+        &
+        \(+\), add follow(\(E\)), \(+\), add follow(\(E'\))
+        \\ \lightrule
+        T'
+        &
+        \{\(\varepsilon, *\)\}
+        &
+        add follow(\(T\))
+        \\ \lightrule
+        F
+        &
+        \{id, (\}
+        &
+        \(*\), add follow(\(T\)), \(*\), add follow(\(T'\))
+\end{tabularx}
+\end{document}

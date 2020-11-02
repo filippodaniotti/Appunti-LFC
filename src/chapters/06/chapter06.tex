@@ -1,14 +1,15 @@
 \documentclass[class=book, crop=false, oneside, 12pt]{standalone}
 \usepackage{standalone}
 \usepackage{../../style}
+\usepackage{csquotes}
 \graphicspath{{./assets/images/}}
 
+% arara: pdflatex: { synctex: yes, shell: yes }
+% arara: latexmk: { clean: partial }
 \begin{document}
+\chapter{Analisi lessicale}
 
-\chapter{Analisi lessicale e analisi sintattica}
-
-\section{Analisi lessicale}
-\subsection{Introduzione}
+\section{Rimandi all'analisi lessicale}
 Dopo i precedenti due capitoli, nei quali abbiamo introdotto e approfondito un buon numero di concetti, algoritmi e modelli necessari alla comprensione di come l'impostazione teorica dei linguaggi formali sia fondamentale nella progettazione dei compilatori, andiamo a tuffarci in quella che è la prima fase di compilazione: l'analisi lessicale.
 
 
@@ -45,6 +46,7 @@ Notiamo subito alcune differenze rispetto alla notazione che abbiamo impiegato f
 \end{itemize}
 
 Questo file, inoltre, è pensato per essere utilizzato in tandem con un analizzatore sintattico; per questo motivo, nell'intestazione dello stesso possiamo trovare le dichiarazione di quelli che sono i token (vale a dire, lo ripetiamo, i terminali della grammatica descritta). Saranno espressi nella forma rappresentata in Fig.\ref{token_c99}:
+
 \begin{minted}[linenos, breaklines, tabsize = 2]{c}
 %token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
@@ -72,6 +74,7 @@ Un'altra cosa che possiamo osservare è la dichiarazione di quello che è lo sta
 \end{minted}
 Questa dichiarazione in realtà potrebbe non essere presente su alcuni file contenenti grammatiche, dal momento che, in sua assenza, non otteniamo degli errori, bensì viene preso il non-letterale della prima produzione listata a seguito come starting symbol.
 
+
 Il ruolo dell’analizzatore lessicale è quindi analizzare il sorgente e decidere, di volta in volta, quale derivazione può essere applicata a ciascuna delle righe del sorgente analizzato. Una volta completato l'albero di derivazione e quindi arrivato presso un terminale (ad esempio \texttt{IDENTIFIER}), l'analizzatore lessicale andrà anche ad associargli informazioni come valre e tipo, dal momento che è necessario distinguere quell'\texttt{IDENTIFIER} da un altro. Nel programma potremmo appunto avere due \texttt{IDENTIFIER} di diverso tipo, ma in ogni caso dovremo conservare delle informazioni aggiuntive di qualche tipo (nome, tipo, scope e altro ancora). Tutte queste informazioni vengono conservate in una \emph{symbol table}.
 
 Infine, le ultime rihe del file contengono informazioni utili al particolare analizzatore sintattico utilizzato; avremo modo di parlarne nel dettaglio in futuro.
@@ -92,7 +95,7 @@ L'obiettivo dell'analalizzatore lessicale è quindi riconoscere i cosiddetti \em
     \item \texttt{<token-value>} è tipicamente un puntatore a una entry della symbol table, in cui si va a salvare tutte le informazioni relative a quel preciso token di tipo\footnote{In questo caso la parola "tipo" è chiaramente impropria, ma è molto utile per rendere la natura astratta di classe di token.} \texttt{<token-name>}.
 \end{itemize}
 
-\subsection{Lessemi e espressioni regolari}
+\section{Lessemi e espressioni regolari}
 Andiamo quindi a capire in che modo la teoria studiata nei due capitoli precedenti entra prepotentemente nell'analisi lessicale.
 
 I lessemi sono estremamente facili da descrivere utilizzando le espressioni regolari: ad esempio, in un linguaggio che prevede un lessema identificatore, il quale è costituito di qualsiasi combinazione di lettere maiuscole e minuscole, quest'ultimo può essere facilmente denotato da un'espressione regolare del tipo:
@@ -185,7 +188,7 @@ Il contenuto di queste tre macrosezioni è ben determinato, andiamo a vederlo pi
     \item[Epilogo] questa sezione è in realtà facoltativa, il lexer funziona anche senza che vi sia scritto alcunché; tuttavia, quello che potremmo eventualmente trovare e/o scrivere sono delle routine definite dall'utente, le quali verranno copiate e incollate dentro al genituro \texttt{lex.yy.c}.
 \end{labeling}
 
-\subsection{Linguaggio delle espressioni regolari in Flex}
+\subsection{Il linguaggio delle espressioni regolari in Flex}
 Dal momento che tutte le coppie \texttt{pattern \{azione\}} sono scritte in linguaggio \texttt{lex}, a differenza di altre parti di \texttt{file.l}, è opportuno conoscere questo linguaggio. Di seguito presentiamo i \emph{metacaratteri} di Flex, ossia dei caratteri riservati:
 \begin{equation*}
     \slash \quad \backslash \quad - \quad * \quad + \quad >\quad " \quad \{ \quad \} \quad . \quad \$ \quad ( \quad ) \quad \mid \quad \% \quad [ \quad ] \quad ^\wedge
@@ -205,6 +208,7 @@ Dal momento che tutte le coppie \texttt{pattern \{azione\}} sono scritte in ling
     \item[\texttt{"+"}] somma letterale di due elementi
     \item[\texttt{\{\}}] espressioni regolari scritte nel preambolo
 \end{labeling}
+
 
 \subsection{Esempi di file per Flex}
 Facciamo un breve riepilogo di quanto abbiamo visto: tutti i file predisposti per Flex si compongono da tre sezioni, ciascuna separata da coppie di \%. Nel preambolo si inseriscono delle definizioni come le \mintinline{c}{define} che servono e i pattern (espressioni regolari per i lessemi che vogliamo inserire). I pattern sono inseriti insieme all'azione nella parte centrale. In fondo si inseriscono le routine dell'utente che vengono copiate nel file \texttt{lex.yy.c}: un testo minimale è l'invocazione della routine \mintinline{c}{yylex()} che se non viene inserita viene chiamata in automatico. I comandi, qualora non si usi Flex con Bison (analizzatore sintattico in pipeline con Flex), sono i seguenti:
@@ -245,6 +249,7 @@ Possiamo notare anche un'altra cosa molto interessante: solitamente, per poter u
 %     \caption{file1.l}
 %     \label{file1.l}
 % \end{figure}
+
 \paragraph{Preambolo}
 Diversamente dall'esempio precedente, in questo \texttt{file1.l} abbiamo del contenuto nel preambolo. Andiamo a vederlo da vicino cosa ci troviamo:
 
@@ -298,6 +303,7 @@ Allora avremmo che verrebbe riscritto come segue:
     \item[\texttt{3}] \emph{Repudiandae delectus omnis. Modi earum doloribus. Quis eaque quidem.}
 \end{enumerate}
 
+
 \subsubsection{file3.l}
 \inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file3.l}
 % \begin{figure}[h]
@@ -306,6 +312,7 @@ Allora avremmo che verrebbe riscritto come segue:
 %     \caption{file3.l}
 %     \label{file3.l}
 % \end{figure}
+
 In questo quarto esercizio andiamo a combinare quanto visto precedentemente, aggiungendo anche una routine custom scrivendo del codice ad hoc nell'epilogo del file.
 
 \paragraph{Preambolo}
@@ -330,6 +337,7 @@ In sostanza, il programma che stiamo descrivendo con questi pattern si occupa di
 %     \caption{file4.l}
 %     \label{file4.l}
 % \end{figure}
+
 L'ultimo esempio proposto fa uso di quanto discusso fino ad ora per analizzare un \texttt{csv} e restituire i dati sotto forma di una tabella in formato \texttt{html}.
 
 \paragraph{Preambolo}
@@ -364,130 +372,5 @@ Quando abbiamo discusso del funzionamento dell'analisi lessicale basata sull'uti
 Per risolvere a tale problematica si utilizza la regola del \emph{longest match}: dalla lista di pattern si va a recuperare quello più lungo che ha portato ad un match.
 
 Cosa succede invece se ci sono più pattern che a parità di lunghezza comportano un match (ovvero i due pattern hanno la stessa lunghezza)? In questo caso si sceglie sempre il primo della lista. Da qui si intuisce dunque che anche l'ordine in cui si scrive la sequenza dei pattern ha una sua importanza: un medesimo \texttt{file.l} potrebbe non generare lo stesso risultato se si eseguisse uno shuffle dei pattern.
-
-\section{Parsing}
-Il parsing (o analisi sintattica) è quel processo in cui, data una grammatica \(\mathcal{G} = (V, T, S, \mathcal{P})\) e una parola \(w\), dobbiamo dire se \(w \in \mathcal{L(G)}\) e, se così fosse, fornire il suo albero di derivazione. Solitamente gli approcci al parsing che vengono presi in considerazione nell'ambito dei linguaggi di programmazione sono due: 
-\begin{itemize}
-    \item \textbf{Top-Down}: consiste nella costruzione di una derivazione leftmost da uno start symbol della grammatica e quindi procede dalla radice verso le foglie dell'albero di derivazione; a prima vista, si direbbe che sia l'approccio più intuitivo;
-    \item \textbf{Bottom-Up}: consiste invece nella costruzione di una derivazione rightmost (in ordine inverso) della stringa dalle foglie alla radice.
-\end{itemize}
-A questo punto è necessario aggiungere che il parsing non si limita a questi due approcci, ma esiste anche in forma più generale utilizzando delle tattiche che vengono impiegate nel caso dei linguaggi naturali. Gli approcci descritti non permettono di considerare tutti i possibili linguaggi liberi, ma solamente delle sottoclassi: per questo si ha un'analisi sintattica estremamente efficiente dal punto di vista computazionale.
-
-\subsection{Top-Down Parsing}
-\subsubsection{Esempio 1}
-Sia \(w\) = \(bd\) e sia \(\mathcal{G}\): 
-\begin{align*}
-    \mathcal{G}: S &\rightarrow Ad \mid Bd \\
-    A &\rightarrow a \\
-    B &\rightarrow b
-\end{align*}
-
-Per verificare se \(w \in \mathcal{L(G)}\) con un approccio top-down dobbiamo ottenere una derivazione leftmost a partire dallo starting symbol. Ovviamente, si noterà subito che non è possibile scegliere \(Ad\) come derivazione iniziale dello starting symbol, perché a quel punto l'unica parola ottenibile sarebbe parola \(ad\); dobbiamo invece optare per la seconda derivazione. La derivazione completa ci porta a
-\begin{align*}
-    S \Rightarrow Bd \Rightarrow bd
-\end{align*}
-Visto che abbiamo dimostrato che \(w \in \mathcal{L(G)}\) e che tale derivazione esiste, allora possiamo fornire il suo derivation tree che, per questo esempio, risulta davvero molto semplice.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.15\textwidth,keepaspectratio]{par-td-es1.png}
-    \caption{Albero di derivazione per esercizio 1}
-    \label{par-td-es1}
-\end{figure}
-
-\subsubsection{Esempio 2}
-Sia \(w\) = \(id + id * id\) e sia \(\mathcal{G}\):
-\begin{align*}
-    \mathcal{G}: E &\rightarrow TE' \\
-    E' &\rightarrow +TE' \mid \varepsilon \\
-    T &\rightarrow FT' \\
-    T' &\rightarrow *FT' \mid \varepsilon \\
-    F &\rightarrow (E) \mid id
-\end{align*}
-
-Qui non è così intuitivo riuscire a dire se esiste una derivazione leftmost: che cosa mi conviene espandere? Avremo modo di parlare meglio di questo esempio non appena introdurremo il \textbf{Predictive top-down parsing}.
-
-\subsubsection{Esempio 3}
-Sia \(w\) = \(cad\) e sia \(\mathcal{G}\):
-\begin{align*}
-    S &\rightarrow cAd \\
-    A &\rightarrow ab \mid a
-\end{align*}
-
-Nonostante questo esempio sia molto intuitivo, dobbiamo sforzarci di ragionare nei panni dell'algoritmo di parsing: dopo la prima derivazione, infatti, entrambe le opzioni che vengono proposte per poter derivare il non-terminale \(A\) sono apparentemente valide in quanto iniziano entrambe per \(a\). Quale delle due dovrei dunque scegliere? Quanto devo continuare l'esecuzione prima di accorgermi se ho fatto una scelta corretta oppure no? Il nostro algoritmo potrebbe anche trovarsi nel caso di dover fare \emph{backtrack}, perché semplicemente non c'era un modo semplice e generale per capire cosa dover scegliere: ovviamente questo tipo di tecnica funziona, ma vogliamo un approccio efficiente e il backtrack, come sappiamo, in questo non ci aiuta.
-
-\subsection{Predictive Top-Down Parsing}
-Nel caso del Predictive top-down parsing non è mai necessario applicare la tecnica del backtrack, poiché questo fa riferimento a una classe particolare di grammatiche, le quali vengono definite \textbf{LL(1) grammars}; vengono così chiamate per via della procedura impiegata per analizzarle, in cui:
-\begin{itemize}
-    \item guardiamo le parole da sinistra a destra;
-    \item eseguiamo una produzione leftmost;
-    \item guardiamo un solo simbolo (non-terminale).
-\end{itemize}
-Tali grammatiche prevedono una tipologia di parsing per cui non è necessario backtrack, e per di più è \textbf{completamente deterministica}.
-
-Queste grammatiche vengono classificate a seconda del grado di determinismo che consentono; all'inizio del corso abbiamo visto la differenza tra le grammatiche senza contesto e contestuali, ma adesso le classi che incontreremo da oggi in poi si differenzieranno esclusivamente per il tipo di analizzatore con cui possiamo riconoscere le parole generate da queste grammatiche. 
-
-In questo caso il parsing si basa sul fatto che possiamo costruire una tabella di parsing che ci guida nell'analisi della parola che ci viene data in input; quessta strategia ci permette molto efficacemente di dire se la parola appartenga oppure no al linguaggio e, in caso di esito positivo, di costruire la derivazione leftmost richiesta e il conseguente albero di derivazione.
-
-Prendiamo come esempio il caso che abbiamo lasciato in sospeso precedentemente:
-\begin{align*}
-    \mathcal{G}: E &\rightarrow TE' \\
-    E' &\rightarrow +TE' \mid \varepsilon \\
-    T &\rightarrow FT' \\
-    T' &\rightarrow *FT' \mid \varepsilon \\
-    F &\rightarrow (E) \mid id
-\end{align*}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{parsingTopDownTable.jpg}
-    \caption{parsingTopDownTable}
-    \label{parsingTopDownTable}
-\end{figure}
-
-La tabella è così costruita:
-\begin{itemize}
-    \item si ha una \textbf{riga} per ogni non-terminale della grammatica;
-    \item ed una \textbf{colonna} per ogni terminale della grammatica, a cui si aggiunge il simbolo \$ alla parola fornita in input e utilizzato come terminatore
-    \item le entry vuote all'interno della tabella identificano i casi di errore.
-\end{itemize}
-
-Avendo a disposizione la tabella di parsing, la cui costruzione verrà trattata successivamente, è possibile utilizzarla per il parsing top-down predittivo.
-
-\subsubsection{Algoritmo per il Predictive Top-Down Parsing}
-\begin{itemize}
-    \item Input: Una stringa \(w\), una tabella \(M\) di parsing top-down per la grammatica \(\mathcal{G} = (V, T, S, \mathcal{P})\);
-    \item Output: La derivazione leftmost della stringa \(w \iff w \in \mathcal{L(G)}\), altrimenti \emph{error()}.
-\end{itemize}
-Inizializziamo la procedura posizionando \(w\$\) nell'input buffer e, nella pila che viene utilizzata per inserire e analizzare gli elementi parziali, inseriamo il simbolo \$ con lo starting symbol \(S\) in cima.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{PredictiveTopDownAlgorithm.png}
-    \caption{PredictiveTopDownAlgorithm}
-    \label{PredictiveTopDownAlgorithm}
-\end{figure}
-
-Nell'algoritmo di parsing si utilizza la variabile \(b\) come primo simbolo delle parola w\$ e si inizializza la variabile X con la cima dello stack (il caso base corrisponde ad avere \(X = S\)). Finché \(X \neq \$\) (sostanzialmente finché non ho svuotato completamente la pila), sono dati i seguenti casi:
-
-\begin{enumerate}
-    \item se \(X = b\), allora tolgo l'elemento dalla cima della pila e imposto \(b\) al simbolo successivo nell'input buffer. Questo corrisponde al caso in cui nella derivazione della costruzione parziale ho ottenuto un match con un terminale nella parola;
-    \item se invece X è comunque un terminale, allora deve essere che \(X \neq b\), ma ciò produce un errore;
-    \item se invece X è un non-terminale, allora è necessario verificare la tabella di top-down parsing in posizione \(M[X, b]\) e possono valere le seguenti:
-    \begin{itemize}
-        \item \(M[X, b]\) = \texttt{error} e allora viene restituito \texttt{error()};
-        \item \(M[X, b] = X \rightarrow Y_1...Y_k\) e quindi è una produzione che verrà utilizzata per continuare la derivazione: questa viene stampata in output, viene rimosso l'elemento \(X\) dalla testa della pila e infine viene inserito il body della produzione in ordine inverso (cioè in modo che \(Y_1\) sia l'elemento in cima allo stack).
-    \end{itemize}
-\end{enumerate}
-
-Infine, come ultima operazione \(X\) viene assegnato all'elemento in cima alla pila e si ripete. A seguire un esempio che fa uso dell'algoritmo appena descritto.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{TopDownExercise.png}
-    \caption{TopDownExercise}
-    \label{TopDownExercise}
-\end{figure}
-
-\subsection{Parsing Tables}
-La domanda ora è: come riempiamo la tabella? % Bella domanda ce lo dice quando ci ri-zoomiamo
 
 \end{document}

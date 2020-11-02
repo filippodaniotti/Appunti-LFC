@@ -1,18 +1,38 @@
 # Appunti LFC
 ![logo](src/chapters/titlepage/images/logo-unitn.png)
+
 ## Il progetto
 Quella che il lettore sta approcciando è una dispensa che raccoglie, riorganizza e riespone l’intero contenuto del corso di
 
-> LINGUAGGI FASCISTI E SOVVERTITORI
+> LINGUAGGI FONDATI E COLONIZZATI
 
 tenuto nell’Università degli studi di Trento durante il primo semestre dell’anno accademico 2020/2021. L'elaborato è stato suddiviso in capitoli che seguono il partizionamento proposto dalla professoressa e, successivamente, in sezioni e sottosezioni per questioni di agilità consultativa. I singoli argomenti vengono presentati nell'ordine e modalità proposti dalla professoressa (all'infuori di sporadici casi in cui gli autori hanno proposto una maniera da loro ritenuta più fruibile per il target di riferimento), corredati da immagini e codici commentati dove possibile.
+
+## How to build
+Prerequisiti:
+- una distribuzione TeX, ad esempio [MiKTeX](https://miktex.org/) o [TeXLive](http://tug.org/texlive/)
+- `pip`, per cui assicuratevi di aver installato [Python](https://www.python.org/)
+- se volete compilare utilizzando il tool [arara](https://gitlab.com/islandoftex/arara/), allora dovrete avere una [JVM](https://www.java.com/) installata
+
+A questo punto:
+
+1. clonate la repository con `git clone https://github.com/filippodaniotti/Appunti-LFC`
+2. installate il pacchetto Pygments con `pip install Pygments`
+3. compilate lanciando tre volte `pdflatex -shell-escape main.tex`
+4. (opzionale) per una compilazione rapida, potete lanciare `arara main.tex` dalla directory `src/`; verrà creato un `main.pdf` senza references né table of contents
+
+È possibile compilare singolarmente ogni capitolo e ogni asset, è sufficiente lanciare la compilazione sul singolo `.tex` desiderato.
+
+Se lavorate con degli IDE o con degli editor in coppia con dei tool per la scrittura LaTeX (e.g. [Atom](https://atom.io) + [latex](https://atom.io/packages/latex) o [VS Code](https://code.visualstudio.com) + [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop)), assicuratevi di attivare il flag `-shell-escape` dalle impostazioni del vostro tool.
 
 ## Principali pacchetti impiegati
 
 - `standalone` per gestire la compilazione autonoma di capitoli e assets
-- `tikz` con librerie `automata` per la generazione dei grafi
+- `tabularx` per la gestione delle tabelle
 - `forest` per la generazione degli alberi
+- `tikz` con librerie `automata` per la generazione dei grafi
 - `algorithm2e` per la scrittura degli pseudocodici
+- `minted` per la scrittura di codice 
 
 ## La squadra
 - Curatori

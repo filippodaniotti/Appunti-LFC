@@ -1,11 +1,11 @@
 \documentclass[class=book, crop=false, oneside, 12pt]{standalone}
 \usepackage{standalone}
-
 \usepackage{../../style}
 \usepackage{../../style_tree}
-
 \graphicspath{{./assets/images/}}
 
+% arara: pdflatex: { synctex: yes, shell: yes }
+% arara: latexmk: { clean: partial }
 \begin{document}
 \chapter{Le grammatiche generative}
 
@@ -14,7 +14,7 @@ Le grammatiche che tratteremo in questo corso sono chiamate grammatiche generati
 
 Il primo passo per definire una grammatica è definirne il vocabolario, questo consiste in un set di simboli.
 Alcuni di questi simboli sono chiamati terminali (terminals) e giocano il ruolo di token nell’analisi lessicale.
-Un simbolo particolare nella grammatica è lo starting symbol: come suggerisce il nome, questo è il simbolo che permette di iniziare a generare il linguaggio derivato dalla grammatica (tale processo sarà chiarito in seguito).
+Un simbolo particolare nella grammatica è lo start symbol: come suggerisce il nome, questo è il simbolo che permette di iniziare a generare il linguaggio derivato dalla grammatica (tale processo sarà chiarito in seguito).
 
 Altra cosa da fissare in una grammatica è il set delle produzioni (productions); queste sono regole di riscrittura da stringhe ad altre stringhe e rispettano la seguente limitazione: la stringa di partenza deve contenere almeno un simbolo non-terminale.
 
@@ -82,7 +82,7 @@ Presentiamo ora una serie di esercizietti di derivazione del linguaggio da una c
     \label{Esercizio 1}
 \end{table}
 \subsubsection*{Spiegazione di \ref{Esercizio 1}:}
-Ricordiamo che si parte sempre e solo dallo starting symbol a derivare un linguaggio, quindi da \(S\).
+Ricordiamo che si parte sempre e solo dallo start symbol a derivare un linguaggio, quindi da \(S\).
 
 L'unica derivazione che si può effettuare in questo caso è \(S \implies aAb\).
 Da qui in poi non si può procedere che con una delle due productions \(aA \to aaAb\) oppure \(A \to \varepsilon\), in un caso si aumenterà la stringa di un \(a\) a sinistra e di un \(b\) a destra, nell'altro caso si terminerà la derivazione.

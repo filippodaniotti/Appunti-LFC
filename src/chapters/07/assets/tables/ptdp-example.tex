@@ -1,0 +1,73 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage[table]{xcolor}
+
+\newcolumntype{b}{>{\hsize=.78\hsize}X}
+\newcolumntype{s}{>{\hsize=.5\hsize}X}
+\newcolumntype{m}{>{\hsize=.25\hsize}X}
+\newcolumntype{h}{>{\hsize=.6\hsize}X}
+
+\setlength\lightrulewidth{0.1pt}
+\providecommand\lightrule{%
+	\arrayrulecolor{black!30}%
+	\midrule[\lightrulewidth]%
+	\arrayrulecolor{black}}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+\begin{tabularx}{\textwidth}{m|X|X|X|X|b|b}
+    & id & + & * & ( & ) & \$ \\
+    \midrule
+        \(E\)
+        &
+        \(E\! \to\! TE'\)
+        & & &
+        \(E\! \to\! TE'\)
+        & &
+
+        \\ \lightrule
+
+        \(E'\)
+        & &
+        \(E'\! \to\! + TE'\)
+        & & &
+        \(E'\! \to\! \varepsilon\)
+        &
+        \(E'\! \to\! \varepsilon\)
+
+        \\ \lightrule
+
+        \(T\)
+        &
+        \(T\! \to\! FT'\)
+        & & &
+        \(T\! \to\! FT'\)
+        & &
+
+        \\ \lightrule
+
+        \(T'\)
+        & &
+        \(T'\! \to\! \varepsilon\)
+        &
+        \(T'\! \to\! \ast FT'\)
+        & & 
+        \(T'\! \to\! \varepsilon\)
+        &
+        \(T'\! \to\! \varepsilon\)
+
+        \\ \lightrule
+
+        \(F\)
+        &
+        \(F\! \to\! id\)
+        & & &
+        \(F\! \to\! (E)\)
+        & & 
+        \\
+\end{tabularx}
+\end{document}
