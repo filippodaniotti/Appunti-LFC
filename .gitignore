@@ -12,6 +12,8 @@
 *.synctex(busy)
 
 _minted*
+*.pyg
+
 .envrc
 shell.nix
 

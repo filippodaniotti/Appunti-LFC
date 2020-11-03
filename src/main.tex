@@ -24,8 +24,9 @@
 % arara: latexmk: { clean: partial }
 \begin{document}
 \frontmatter
-
+	\newgeometry{ignorefoot, bottom = 1cm}
 	\import{./chapters/titlepage/}{titlepage}
+	\restoregeometry
 	\tableofcontents
 
 \mainmatter
