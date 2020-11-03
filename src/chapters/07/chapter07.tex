@@ -142,7 +142,7 @@ Infine, come ultima operazione \(X\) viene assegnato all'elemento in cima alla p
 %     \label{TopDownExercise}
 % \end{figure}
 
-\subsection{Parsing Table}
+\subsection{Tabella di parsing}
 
 L'algoritmo di Parsing predittivo ha una complessità lineare. Ci chiediamo quindi: come costruiamo le Parsing Table? In quale posizione dobbiamo mettere le produzioni della grammatica per fare sì che l'algoritmo funzioni?
 
@@ -533,12 +533,12 @@ Alcune note interessanti:
 
 \subsection{Applicazioni}
 Viene proposta ora come esempio al lettore questa grammatica.
-\begin{align*}
+\begin{align}
     \label{non-ll1_grammar}
     \mathcal{G}: E &\to E+T \mid T \\
     T &\to T*F \mid F \nonumber \\
     F &\to (E) \mid id \nonumber 
-\end{align*}
+\end{align}
 Saprebbe dire il lettore se la grammatica qui presentata appartiene alla classe LL(1)?
 
 Mentre il lettore riflette su questo quesito può leggere un'altra importante citazione del nostro punto di riferimento, Paola Quaglia, la quale riflette sul senso di incomunicabilità che attraversa i tempi moderni, quel conflitto generazionale di cui tutti, in certo momento della nostra vita e in un certo schieramento, siamo stati attori.
@@ -549,35 +549,221 @@ Mentre il lettore riflette su questo quesito può leggere un'altra importante ci
 Ebbene, per rispondere alla domanda posta in precedenza la grammatica in \ref{non-ll1_grammar} non appartiene alla classe LL(1) e lo si può dimostrare provando a crearne la parsing table.
 
 Si può notare di fatto come first(\(E\)) = first(\(T\)) = first(\(F\)) \(= \{(, id\}\).
-Di conseguenza, se seguiamo i passi dell'algoritmo di creazione della parsing table, otteniamo una situazione in cui la casella \(M[E, id]\) contiene sia \(E \to E+T\) che \(E \to T\).
+Di conseguenza, se seguiamo i passi dell'algoritmo di creazione della parsing table, otteniamo una situazione in cui la casella \(M[E, id]\) contiene sia \(E \to E+T\) che \(E \to T\). Ma su questa grammatica abbiamo anche altre cose da dire.
 
-Questa grammatica presenta anche una proprietà (o difetto) molto interessante, chiamata ricorsione sinistra:
+\section{Grammatiche con ricorsione sinistra}
+La grammatica vista sopra \ref{non-ll1_grammar} presenta anche una proprietà (o difetto) molto interessante, chiamata ricorsione sinistra:
 \begin{definition}
     Una grammatica presenta ricorsione sinistra (left recursive grammar) se, per qualche \(A\) e \(\alpha\), \(A \Rightarrow^* A\alpha\)
 \end{definition}
 
-Se osserviamo la nostra grammatica, ci rendiamo conto immediatamente che presenta ricorsione sinistra, dato che possiamo espandere un numero indefinito di volte la produzione \(E \to E+t\) ed ottenere una sequenza di derivazioni come la seguente:
+Ad esempio, consideriamo la seguente grammatica:
+\begin{align*}
+    S &\to B \mid a \\
+    B &\to Sa \mid b
+\end{align*}
+Questa grammatica è ricorsiva a sinistra, perché possiamo ottenere una derivazione del tipo: \(S \Rightarrow B \Rightarrow Sa\).
+
+\subsection{Grammatiche con ricorsione sinistra immediata}
+Se osserviamo la grammatica \ref{non-ll1_grammar}, ci rendiamo conto immediatamente che presenta ricorsione sinistra, dato che possiamo espandere un numero indefinito di volte la produzione \(E \to E+T\) ed ottenere una sequenza di derivazioni come la seguente:
 \begin{equation*}
     E \Rightarrow E+T \Rightarrow E+T+T \Rightarrow E+T+T+T \Rightarrow \dots
 \end{equation*}
-La grammatica che abbiamo analizzato presenta, per la precisione, la caratteristica di ricorsione immediata sinistra (\emph{immediately left recursive grammar}), ovvero presenta una produzione in forma \(A \to A\alpha\).
+Ma non finisce qui: infatti, questa grammatica presenta, per la precisione, la caratteristica di ricorsione immediata sinistra (\emph{immediately left recursive grammar}), ovvero presenta una produzione in forma \(A \to A\alpha\).
 
 Presentiamo ora un lemma sulle grammatiche con ricorsione sinistra.
-\begin{lemma}
+\begin{lemma}\label{ll1-leftrec}
     Se una grammatica \(\mathcal{G}\) presenta ricorsione sinistra, immediata o no che sia, allora la tal grammatica \(\mathcal{G}\) \emph{non} appartiene alla classe LL(1).
 \end{lemma}
 Una volta venuti a conoscenza di questo lemma, è lecito chiedersi se tali grammatiche proprio non siano riducibili a grammatiche di tipo LL(1) per fare in modo da poterle analizzare in maniera deterministica (e di conseguenza più efficiente).
 
+\subsection{Eliminazione della ricorsione sinistra immediata}
 In molti casi è effettivamente possibile eliminare la ricorsione sinistra. 
 Proviamo a capire l'intuizione da seguire per ottenere una grammatica LL(1) da una con ricorsione sinistra; per farlo, aiutiamoci tentando di risolvere tale problema per la seguente grammatica d'esempio:
-\begin{equation*}
+\begin{equation}
     \label{left-recursive_grammar}
-    A \to A \alpha \mid \beta \textrm{  con  } \alpha \neq \varepsilon \textrm{  e  } \beta \neq A \gamma
+    A \to A \alpha \mid \beta \textrm{  con  } \alpha \neq \varepsilon \land \beta \neq A \gamma
+\end{equation}
+Di fatto, se valesse \(\alpha = \varepsilon\), allora la grammatica sarebbe solo scritta male e non sarebbe quindi left recursive.
+
+\subsubsection{Intuizione}
+Per aiutarci a trovare un'idea, possiamo aiutarci andando a tracciare un albero piuttosto grezzo che rappresenti, più o meno, quello che sta succedendo se cerchiamo di derivare lo schema \ref{left-recursive_grammar}:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.25\textwidth,keepaspectratio]{lrremove-intuition_1.png}
+    \caption{Rappresentazione ad albero del problema}
+    \label{lrremove-intuition_1}
+\end{figure}
+Questa figura non è un vero e proprio albero di derivazione, ma ci permette di capire una cosa: quello che noi vogliamo fare è modificare la struttura dell'albero, quindi le produzioni della grammatica, e al contempo mantenere inalterata la frontiera dell'albero. Potremmo ottenere questo risultato aggiungendo un nuovo non terminale alla grammatica, in modo da eliminare l'elemento ricorsivo della produzione; idealmente, vorremmo ottenere un risultato di questo tipo:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.25\textwidth,keepaspectratio]{lrremove-intuition_2.png}
+    \caption{Rappresentazione della nostra intuizione}
+    \label{lrremove-intuition_2}
+\end{figure}
+
+\subsubsection{Soluzione formale}
+A questo punto possiamo scrivere formalmente la nostra strategia per l'eliminazione della ricorsione sinistra immediata: data una produzione del tipo:
+\begin{equation*}
+    A \to A \alpha \mid \beta
 \end{equation*}
-Di fatto se valesse \(\alpha = \varepsilon\) la grammatica sarebbe solo scritta male e non sarebbe quindi left recursive.
+dove \(\alpha \ne \varepsilon\) e \(\beta \ne A \gamma\), possiamo riscriverla equivalentemente come segue:
+\begin{align*}
+    A &\to \beta A' \\
+    A' &\to \alpha A' \mid \varepsilon
+\end{align*}
+dove \(A'\) è un non-terminale \emph{fresh} per la grammatica di riferimento; deve essere fresh, quindi aggiunto alla grammatica, perché altrimenti potrebbe interferire con la derivazione di alcune parole nel linguaggio generato dalla stessa grammatica.
 
-Lasciamo al lettore un po' di tempo per pensare ad una grammatica LL(1), o quantomeno non left recursive, che generi lo stesso linguaggio della grammatica in Eq.\ref{left-recursive_grammar}.
+\subsubsection{Formulazione generale}
+Riformuliamo la precedente strategia, in modo da astrarla al caso più generale possibile rispetto ai body di una certa produzione.
 
+Per eliminare la ricorsione sinistra immediata di una produzione e mantenerne inalterate le eventuali derivazioni, devo considerare la sua forma:
+\begin{equation}
+    A \to A \alpha_1 \mid \dots \mid A \alpha_n \mid \beta_1 \mid \dots \mid \beta_k
+\end{equation} 
+dove \(\alpha \ne \varepsilon \;\; \forall j: 1 \le j \le n\) e anche \(\beta_i \ne A \gamma_i \;\; \forall i: 1 \le i \le k\), con la seguente forma:
 
+\begin{align}
+    A &\to \beta_1 A' \mid \dots \mid \beta_k A' \\
+    A' &\to \alpha_1 A' \mid \dots \mid \alpha_n A' \mid \varepsilon
+\end{align}
+Andiamo adesso a vedere come (e se) è possibile elminare la ricorsione sinistra anche quando non è immediata.
+
+\subsection{Eliminazione della ricorsione sinistra}
+Qui il problema si fa più spinoso, e purtroppo possiamo già anticipare che non sarà un'operazione possibile in tutte le grammatiche, e c'è addirittura il rischio che eliminare la ricorsione sinistra per un certo non-terminale causi la sua comparsa per un altro non-terminale.
+
+In ogni caso, l'idea è di ridurre gli steps della derivazione \(A \Rightarrow^* A \alpha\), in modo da ottenere una produzione di ricorsione sinistra immediata e applicare la tecnica che già conosciamo.
+
+Consideriamo la seguente grammatica:
+\begin{align*}
+    A &\to Ba \mid b \\
+    B &\to Bc \mid Ad \mid b
+\end{align*}
+Notiamo subito che abbiamo una ricorsione sinistra immediata su \(B\),  ma abbiamo anche una ricorsione sinistra su \(A\), attraverso \(A \Rightarrow Ba \Rightarrow Ada\).
+
+Ci eravamo detti di tentare di ridurre gli steps di derivazione; per cui, quello che facciamo adesso è sostituire i non-terminali coi body delle loro produzioni, ad esempio:
+\begin{equation*}
+    B \to Ad \textrm{ diventerà } B \to Bad \mid bd
+\end{equation*}
+Mantenendo inalterate le altre produzioni, ottengo la seguente grammatica:
+\begin{align*}
+    A &\to Ba \mid b \\
+    B &\to Bc \mid Bad \mid bd \mid b
+\end{align*}
+A questo punto diventa molto semplice eliminare la ricorsione immediata di \(B\) con lo stesso metodo visto in precedenza:
+\begin{align*}
+    A &\to Ba \mid b \\
+    B &\to bdB' \mid bB' \\
+    B' &\to cB' \mid adB' \mid \varepsilon
+\end{align*}
+
+\subsection{Eliminazione di ricorsione sinistra: efficacia}
+Fermiamoci un attimo e facciamo il punto della situazione. Prima di questa ampia digressione sulle grammatiche con ricorsione sinistra stavamo parlando di top-down parsing, giusto? Bramavamo una tabella di parsing senza entries con definizioni multiple, perché questo avrebbe reso il nostro parsing deterministico. Sapevamo che, fintantoché andavamo a considerare delle grammatiche LL(1), avremmo potuto dormire sogni tranquilli; ma il lemma \ref{ll1-leftrec} ci ha detto che le grammatiche con ricorsioni sinistra (sia immediata, sia non immediata) non sono LL(1), per cui abbiamo iniziato a chiederci se fosse possibile eliminare in qualche modo questa proprietà. Ebbene, dopo tanto tempo speso nell'impresa, ci chiediamo: dopo aver eliminato tutte le ricorsioni, abbiamo certezza che la grammatica ottenuta sia LL(1)?
+
+Consideriamo la grammatica delle espressioni aritmetiche, visto che siamo partiti da quella; proviamo ad applicare le nostre regole di eliminazione e vediamo cosa succede.
+\begin{align*}
+    \label{non-ll1_grammar}
+    \mathcal{G}: E &\to E+T \mid T \\
+    T &\to T*F \mid F \nonumber \\
+    F &\to (E) \mid id \nonumber 
+\end{align*}
+% TODO mostrare gli steps
+E il risultato finale è proprio lei, la grammatica che abbiamo visto nel calcolo dei first/follow!
+\begin{align*}
+    \mathcal{G'}: E &\rightarrow TE' \\
+    E' &\rightarrow +TE' \mid \varepsilon \\
+    T &\rightarrow FT' \\
+    T' &\rightarrow *FT' \mid \varepsilon \\
+    F &\rightarrow (E) \mid id
+\end{align*}
+Per di più sappiamo questa grammatica è LL(1), quindi tutto a posto? L'algoritmo di eliminazione della ricorsione sinistra garantisce effettivamente di ottenere grammatiche LL(1)?
+
+Per evitare di cadere in ragionamenti induttivi fallaci del tipo 
+\begin{equation*}
+    \textrm{uh, in questo caso funziona} \implies \textrm{funzionerà in qualsiasi caso, no?}
+\end{equation*}
+andiamo a vedere un altro caso, considerando quindi una grammatica che genera comunque il linguaggio delle espressioni aritmetiche ma, a differenza della formulazione precedente, è ambigua:
+\begin{equation*}
+    \mathcal{G}: E \to E + E \mid E * E \mid (E) \mid id
+\end{equation*}
+Andiamo quindi a eseguire la nostra procedura e otteniamo la seguente grammatica:
+\begin{align*}
+    \mathcal{G'}: E &\to (E)E' \mid idE' \\
+    E' &\to +EE' \mid \ast EE' \mid \varepsilon
+\end{align*}
+Questa grammatica è LL(1)? Sfortunatamente, se costruiamo la tabella di parsing per questa grammatica, troviamo che la cella [\(E', +\)] contiene due produzioni:
+\begin{itemize}[noitemsep]
+    \item \(+EE'\);
+    \item \(E' \to \varepsilon\).
+\end{itemize}
+%TODO tabella di parsing
+Ne abbiamo un ulteriore conferma se andiamo a calcolare i first/follow per \(E\) e \(E'\):
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.4\textwidth,keepaspectratio]{fxness-lrremove-fftable.png}
+    \caption{Tabella con i first/follow per \(E\) e \(E'\)}
+    \label{fxness-lrremove- fftable}
+\end{figure}
+
+\paragraph{Conclusione}
+Nota bene: non dobbiamo cadere nell'errore di supporre che, magari, la nostra procedura funzioni a meno che non sia lanciata su grammatiche ambigue, perché non ne abbiamo fornito alcuna prova. Da questo  esempio possiamo solamente concludere, a malincuore, che la procedura di eliminazione della ricorsione sinistra \emph{non garantisce} di ottenere delle grammatiche LL(1).
+
+\subsection{Eliminare della ricorsione sinistra elimina l'ambiguità?}
+Possiamo però chiederci: la grammatica \(\mathcal{G'}\) che abbiamo ottenuto è ancora ambigua, oppure applicando la nostra procedura ne abbiamo eliminato l'ambiguità? Ricordiamo che l'ambiguità della grammatica di partenza risiedeva nell'impossibilità di esprimere l'associatività degli operatori e la precedenza dell'uno sull'altro\footnote{Si riveda a \ref{sec:ambguity} in caso servisse un ripasso.}. 
+
+Sfortunatamente, riusciamo a trovare senza troppi problemi due derivazioni rightmost che ci portano a ottenere la medesima stringa \(id + id * id\):
+\begin{gather*}
+    E \Rightarrow idE' \Rightarrow id + EE' \Rightarrow id + E * EE' \Rightarrow id + E * E \Rightarrow id + E * idE' \Rightarrow id + E * id \Rightarrow id + idE' * id \Rightarrow id + id * id \\
+    E \Rightarrow idE' \Rightarrow id + EE' \Rightarrow id + E \Rightarrow id + idE' \Rightarrow id + id * EE' \Rightarrow id + id * E \Rightarrow id + id * idE' \Rightarrow id + id * id
+\end{gather*}
+
+Possiamo convincerci di questo risultato anche seguendo un altro procedimento, ossia tracciando un albero di derivazione parziale per la nostra grammatica:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.25\textwidth,keepaspectratio]{fxness-lrremove-ambiguity_1.png}
+    \caption{Albero di derivazione parziale per \(\mathcal{G'}\)}
+    \label{fxness-lrremove- ambiguity_1}
+\end{figure}
+A questo punto notiamo subito che, per ottenere la parola \(id + id * id\), possiamo completare questo albero parziale sostituendo i nodi marcati con i seguenti sottoalberi:
+\begin{figure}[H]
+    \begin{minipage}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=.35\textwidth,keepaspectratio]{fxness-lrremove-ambiguity_2_1.png}
+        \subcaption{}
+        \label{fxness-lrremove- ambiguity_2_1}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=.15\textwidth,keepaspectratio]{fxness-lrremove-ambiguity_2_2.png}
+        \subcaption{}
+        \label{fxness-lrremove- ambiguity_2_2}
+    \end{minipage}
+    \caption{Completamento di \ref{fxness-lrremove- ambiguity_1}, versione 1}
+    \label{fxness-lrremove- ambiguity_2}
+\end{figure}
+Ma, allo stesso identico modo, potremmo completare lo stesso albero parzial e ottenere la stessa identica parola sostituendo gli stessi nodi con questi due diversi sottoalberi:
+\begin{figure}[H]
+    \begin{minipage}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=.35\textwidth,keepaspectratio]{fxness-lrremove-ambiguity_3_1.png}
+        \subcaption{}
+        \label{fxness-lrremove- ambiguity_3_1}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=.15\textwidth,keepaspectratio]{fxness-lrremove-ambiguity_3_2.png}
+        \subcaption{}
+        \label{fxness-lrremove- ambiguity_3_2}
+    \end{minipage}
+    \caption{Completamento di \ref{fxness-lrremove- ambiguity_1}, versione 2}
+    \label{fxness-lrremove- ambiguity_3}
+\end{figure}
+
+\paragraph{Conclusione}
+Anche qui, non possiamo fare altro che concludere che applicare la procedura di eliminazione dlla ricorsione sinistra su una grammatica ambigua \emph{non} ne elimina l'ambguità.
+
+\section{Fattorizzazione sinistra}
 
 \end{document}
