@@ -20,6 +20,9 @@
 	{./chapters/07/assets/images/}%
 }
 
+\newboolean{isCompiledFromMain}
+\setboolean{isCompiledFromMain}{true}
+
 % arara: pdflatex: { shell: yes }
 % arara: latexmk: { clean: partial }
 \begin{document}

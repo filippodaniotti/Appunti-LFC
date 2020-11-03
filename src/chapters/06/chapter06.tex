@@ -4,6 +4,9 @@
 \usepackage{csquotes}
 \graphicspath{{./assets/images/}}
 
+\provideboolean{isCompiledFromMain}
+\setboolean{isCompiledFromMain}{false}
+
 % arara: pdflatex: { synctex: yes, shell: yes }
 % arara: latexmk: { clean: partial }
 \begin{document}
@@ -219,14 +222,11 @@ Facciamo un breve riepilogo di quanto abbiamo visto: tutti i file predisposti pe
 \end{minted}
 
 \subsubsection{file0.l}
-% \inputminted[linenos, breaklines, tabsize = 2]{c}{./assets/code-fragments/file0.l}
-\begin{minted}{c}
-    %%
-
-    .		printf("hello world!");
-
-    %%
-\end{minted}
+\ifthenelse{\boolean{isCompiledFromMain}}{%
+\inputminted[linenos, breaklines, tabsize = 2]{c}{chapters/06/assets/code-fragments/file0.l}%
+}{%
+\inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file0.l}%
+}
 % \begin{figure}[h]
 %     \centering
 %     \includegraphics[width=.7\textwidth,keepaspectratio]{file0.l.png}
@@ -248,24 +248,12 @@ In sostanza, questo file ci farà sì che, nella lettura, qualsiasi carattere in
 Possiamo notare anche un'altra cosa molto interessante: solitamente, per poter utilizzare lo standard output nei programmi C, è necessario includere all'interno del file la libreria \mintinline{c}{stdio.h}, ma nel \texttt{file0.l} non vi è nemmeno l'ombra di un inlcude: è lo stesso Flex a occuparsi di aggiungere in un secondo momento tutti i dettagli necessari per la gestione dell'output.
 
 \subsubsection{file1.l}
-% \inputminted[linenos, breaklines, tabsize = 2]{c}{./assets/code-fragments/file1.l}
-\begin{minted}{c}
-    %%
-    %{
-    %}
+\ifthenelse{\boolean{isCompiledFromMain}}{%
+\inputminted[linenos, breaklines, tabsize = 2]{c}{chapters/06/assets/code-fragments/file1.l}%
+}{%
+\inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file1.l}%
+}
 
-
-    non_white	[^ \t\n]*
-
-    %%
-
-    {non_white}	ECHO;
-    .		;
-    [\n]		;
-
-    %%
-    %%
-\end{minted}
 % \begin{figure}[h]
 %     \centering
 %     \includegraphics[width=.7\textwidth,keepaspectratio]{file1.l.png}
@@ -294,21 +282,13 @@ Come descritto precedentemente, nella parte centrale i pattern sono associati al
 Complessivamente, il risultato ottenuto dall'esecuzione di un programma compilato a partire dal file discusso porterà all'eliminazione di '\texttt{ }', '\texttt{\textbackslash t}' e '\texttt{\textbackslash n}' dal testo passato in input e ci farà ottenere ad una sequenza continua di caratteri (ad esempio, una stringa del tipo "\texttt{ ab c d e \hspace{.8cm} f g}" diventerà "\texttt{abcdefg}").
 
 \subsubsection{file2.l}
-% \inputminted[linenos, breaklines, tabsize = 2]{c}{./assets/code-fragments/file2.l}
-\begin{minted}{c}
-%{
 
-int lineno = 1;
+\ifthenelse{\boolean{isCompiledFromMain}}{%
+\inputminted[linenos, breaklines, tabsize = 2]{c}{chapters/06/assets/code-fragments/file2.l}%
+}{%
+\inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file2.l}%
+}
 
-%}
-
-
-%%
-
-^.*\n   printf ("%4d)\t%s", lineno++, yytext);
-
-%%
-\end{minted}
 % \begin{figure}[h]
 %     \centering
 %     \includegraphics[width=.7\textwidth,keepaspectratio]{file2.l.png}
@@ -342,29 +322,12 @@ Allora avremmo che verrebbe riscritto come segue:
 
 
 \subsubsection{file3.l}
-% \inputminted[linenos, breaklines, tabsize = 2]{c}{./assets/code-fragments/file3.l}
-\begin{minted}{c}
-%{
-
-int charCount = 0, wordCount = 0, lineCount = 0;
-%}
-
-word [^ \t\n]+
-
-%%
-
-{word}	{wordCount++; charCount += yyleng; }
-[\n]		{charCount++; lineCount++; }
-.		    {charCount++; }
-
-%%
-
-int main() {
-  yylex();
-  printf("Characters: %d Words: %d Lines %d\n",charCount, wordCount, lineCount);
-  return 0;
+\ifthenelse{\boolean{isCompiledFromMain}}{%
+\inputminted[linenos, breaklines, tabsize = 2]{c}{chapters/06/assets/code-fragments/file3.l}%
+}{%
+\inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file3.l}%
 }
-    \end{minted}
+
 % \begin{figure}[h]
 %     \centering
 %     \includegraphics[width=.7\textwidth,keepaspectratio]{file3.l.jpg}
@@ -389,32 +352,13 @@ Nella parte centrale del file abbiamo invece le seguenti associazioni pattern-az
 In sostanza, il programma che stiamo descrivendo con questi pattern si occupa di contare complessivamente quanti caratteri, parole e righe sono state individuate in un dato testo; qualora avessimo un match con una parola, allora avviene un incremento proporzionale al numero di caratteri che costituiscono quella stessa parola e, inoltre, si aggiorna il numero di parole totali che sono contenute nel testo; ogni volta che si trova una new line si incrementano di un'unità il numero di righe e di caratteri e, infine, ogni volta che si trova uno spazio o un tab viene incrementato solamente il numero di caratteri. 
 
 \subsubsection{file4.l} 
-% \inputminted[linenos, breaklines, fontsize=\footnotesize ,tabsize = 2]{c}{./assets/code-fragments/file4.l}
-\begin{minted}{c}
-%{
 
-int comma = 0;  /* to check empty entries, rendered by consecutive commas */
-
-%}
-
-
-%%
-
-[a-zA-Z0-9]+		{printf("<td> "); ECHO; comma = 0;}
-","             {if (comma) { printf("</td> <td> </td>"); } else { printf("</td>"); }
-                 comma = 1;
-                }
-\n              {printf("</tr> \n </tr>"); comma = 0;}
-
-%%
-int main() {
-  printf("<html><body><table border=\"\" cellpadding=\"3\" cellspacing=\"0\"><tbody>");
-  yylex();
-  printf("</tr>\n</tbody></table>\n");
-  printf("</body></html>\n");
-  return 0;
+\ifthenelse{\boolean{isCompiledFromMain}}{%
+\inputminted[linenos, breaklines, tabsize = 2]{c}{chapters/06/assets/code-fragments/file4.l}%
+}{%
+\inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file4.l}%
 }
-        \end{minted}
+
 % \begin{figure}[h]
 %     \centering
 %     \includegraphics[width=.7\textwidth,keepaspectratio]{file4.l.jpg}
