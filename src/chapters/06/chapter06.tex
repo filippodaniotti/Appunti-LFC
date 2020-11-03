@@ -32,14 +32,19 @@ Il mestiere dell'analizzatore lessicale è proprio quello di ricevere in input u
 % L’analizzatore lessicale lavora in tandem (pipeline) con l’analizzatore sintattico per non si sa bene come o perché
 \subsection{Esempio: la grammatica di C99}
 Andiamo a vedere da vicino la grammatica di un reale linguaggio, anzi, del linguaggio preferito di tutti noi, ossia il C (nella versione \(99\), scritta per il parser \emph{Bison}); il lettore interessato ad approfondire può trovare lo stesso file al seguente indirizzo: \url{http://www.quut.com/c/ANSI-C-grammar-y-1999.html}. Andiamo a vedere un frammento di quel codice:
-\begin{minted}[breaklines, tabsize = 2]{c}
-    primary_expression
-        : IDENTIFIER
-        | CONSTANT
-        | STRING_LITERAL
-        | '(' expression ')'
-        ;
-\end{minted}
+\ifthenelse{\boolean{isCompiledFromMain}}{%
+\inputminted[firstline = 17, lastline = 22, linenos, breaklines, tabsize = 2]{c}{chapters/06/assets/resources/c99.y}%
+}{%
+\inputminted[firstline = 17, lastline = 22, linenos, breaklines, tabsize = 2]{c}{assets/resources/c99.y}%
+}
+% \begin{minted}[breaklines, tabsize = 2]{c}
+%     primary_expression
+%         : IDENTIFIER
+%         | CONSTANT
+%         | STRING_LITERAL
+%         | '(' expression ')'
+%         ;
+% \end{minted}
 Notiamo subito alcune differenze rispetto alla notazione che abbiamo impiegato finora: 
 \begin{itemize}
     \item la freccia ( \(\to\) ) è rappresentata da un altro simbolo, i due punti ( \(:\) );
@@ -50,20 +55,25 @@ Notiamo subito alcune differenze rispetto alla notazione che abbiamo impiegato f
 
 Questo file, inoltre, è pensato per essere utilizzato in tandem con un analizzatore sintattico; per questo motivo, nell'intestazione dello stesso possiamo trovare le dichiarazione di quelli che sono i token (vale a dire, lo ripetiamo, i terminali della grammatica descritta). Saranno espressi nella forma rappresentata in Fig.\ref{token_c99}:
 
-\begin{minted}[linenos, breaklines, tabsize = 2]{c}
-%token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
-%token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
-%token AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
-%token SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
-%token XOR_ASSIGN OR_ASSIGN TYPE_NAME
+\ifthenelse{\boolean{isCompiledFromMain}}{%
+\inputminted[lastline = 22, linenos, breaklines, tabsize = 2, fontsize = \small]{c}{chapters/06/assets/resources/c99.y}%
+}{%
+\inputminted[lastline = 12, linenos, breaklines, tabsize = 2, fontsize = \small]{c}{assets/resources/c99.y}%
+}
+% \begin{minted}[linenos, breaklines, tabsize = 2]{c}
+% %token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
+% %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
+% %token AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
+% %token SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
+% %token XOR_ASSIGN OR_ASSIGN TYPE_NAME
 
-%token TYPEDEF EXTERN STATIC AUTO REGISTER INLINE RESTRICT
-%token CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
-%token BOOL COMPLEX IMAGINARY
-%token STRUCT UNION ENUM ELLIPSIS
+% %token TYPEDEF EXTERN STATIC AUTO REGISTER INLINE RESTRICT
+% %token CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
+% %token BOOL COMPLEX IMAGINARY
+% %token STRUCT UNION ENUM ELLIPSIS
 
-%token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
-\end{minted}
+% %token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
+% \end{minted}
 % \begin{figure}[H]
 %     \centering
 %     \includegraphics[width=.7\textwidth,keepaspectratio]{c99-ex2}
@@ -72,9 +82,11 @@ Questo file, inoltre, è pensato per essere utilizzato in tandem con un analizza
 % \end{figure}
 
 Un'altra cosa che possiamo osservare è la dichiarazione di quello che è lo starting symbol della grammatica:
-\begin{minted}[breaklines, tabsize = 2]{c}
-    % start translation_unit
-\end{minted}
+\ifthenelse{\boolean{isCompiledFromMain}}{%
+\inputminted[firstline = 14, lastline = 14, linenos, breaklines, tabsize = 2]{c}{chapters/06/assets/resources/c99.y}%
+}{%
+\inputminted[firstline = 14, lastline = 14, linenos, breaklines, tabsize = 2]{c}{assets/resources/c99.y}%
+}
 Questa dichiarazione in realtà potrebbe non essere presente su alcuni file contenenti grammatiche, dal momento che, in sua assenza, non otteniamo degli errori, bensì viene preso il non-letterale della prima produzione listata a seguito come starting symbol.
 
 
@@ -167,22 +179,22 @@ Si tenga bene a mente che queste tre righe descrivono come utilizzare Flex da so
 \subsection{Struttura del \texttt{file.l}}
 I file con estensione \texttt{.l} che diamo da fagocitare a Flex hanno la seguente struttura:
 \begin{minted}[breaklines, tabsize = 2]{bash}
-    ...(Preambolo)
-    % { code
-    % } %
-    // shorthand for patterns
-    %%
-    /*
-    (Parte centrale)
-    pattern-1 {action-1};
-    pattern-2 {action-2};
-    ...
-    */
-    %%
-    /*
-    (Epilogo)
-    user rountes
-    */
+...(Preambolo)
+% { code
+% } %
+// shorthand for patterns
+%%
+/*
+(Parte centrale)
+pattern-1 {action-1};
+pattern-2 {action-2};
+...
+*/
+%%
+/*
+(Epilogo)
+user rountes
+*/
 \end{minted}
 Il contenuto di queste tre macrosezioni è ben determinato, andiamo a vederlo più da vicino:
 \begin{labeling}{Parte centrale}
@@ -323,9 +335,9 @@ Allora avremmo che verrebbe riscritto come segue:
 
 \subsubsection{file3.l}
 \ifthenelse{\boolean{isCompiledFromMain}}{%
-\inputminted[linenos, breaklines, tabsize = 2]{c}{chapters/06/assets/code-fragments/file3.l}%
+\inputminted[linenos, breaklines, tabsize = 2, fontsize = \small]{c}{chapters/06/assets/code-fragments/file3.l}%
 }{%
-\inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file3.l}%
+\inputminted[linenos, breaklines, tabsize = 2, fontsize = \small]{c}{assets/code-fragments/file3.l}%
 }
 
 % \begin{figure}[h]
@@ -354,9 +366,9 @@ In sostanza, il programma che stiamo descrivendo con questi pattern si occupa di
 \subsubsection{file4.l} 
 
 \ifthenelse{\boolean{isCompiledFromMain}}{%
-\inputminted[linenos, breaklines, tabsize = 2]{c}{chapters/06/assets/code-fragments/file4.l}%
+\inputminted[linenos, breaklines, tabsize = 2, fontsize = \small]{c}{chapters/06/assets/code-fragments/file4.l}%
 }{%
-\inputminted[linenos, breaklines, tabsize = 2]{c}{assets/code-fragments/file4.l}%
+\inputminted[linenos, breaklines, tabsize = 2, fontsize = \small]{c}{assets/code-fragments/file4.l}%
 }
 
 % \begin{figure}[h]
@@ -376,7 +388,7 @@ Andiamo a vedere da vicino le coppie pattern-azione che troviamo nella parte cen
 \begin{itemize}
     \item La regular expression \mintinline{c}{[a-zA-Z0-9]+}, che indica la sequenza di uno o più caratteri alfanumerici, comporta l'esecuzione di \mintinline{c}{{printf("\(<\)td\(>\) "); ECHO; comma = 0;}}, dove viene creata una nuova colonna per la tabella, viene inserita la sequenza appena letta e viene impostato il valore dell'intero \mintinline{c}{comma} a \(0\).
     \item La seconda espressione è "\texttt{,}", che vuol dire che bisogna trovare il carattere che corrisponde alla virgola e che nel \texttt{csv} serve per separare i dati, comporta l'esecuzione del blocco di codice
-    \begin{minted}[linenos, breaklines, tabsize = 2]{c}
+    \begin{minted}[breaklines, tabsize = 2]{c}
     {            
     if (comma) {
         printf("<td> </td>"); 

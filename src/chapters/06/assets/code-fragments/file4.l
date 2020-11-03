@@ -4,7 +4,6 @@ int comma = 0;  /* to check empty entries, rendered by consecutive commas */
 
 %}
 
-
 %%
 
 [a-zA-Z0-9]+		{printf("<td> "); ECHO; comma = 0;}
