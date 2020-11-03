@@ -536,8 +536,8 @@ Viene proposta ora come esempio al lettore questa grammatica.
 \begin{align}
     \label{non-ll1_grammar}
     \mathcal{G}: E &\to E+T \mid T \\
-    T &\to T*F \mid F \nonumber \\
-    F &\to (E) \mid id \nonumber 
+    T &\to T*F \mid F \nonumber \\ \notag
+    F &\to (E) \mid id \nonumber  \notag
 \end{align}
 Saprebbe dire il lettore se la grammatica qui presentata appartiene alla classe LL(1)?
 
@@ -625,7 +625,7 @@ dove \(\alpha \ne \varepsilon \;\; \forall j: 1 \le j \le n\) e anche \(\beta_i 
 
 \begin{align}
     A &\to \beta_1 A' \mid \dots \mid \beta_k A' \\
-    A' &\to \alpha_1 A' \mid \dots \mid \alpha_n A' \mid \varepsilon
+    A' &\to \alpha_1 A' \mid \dots \mid \alpha_n A' \mid \varepsilon \notag
 \end{align}
 Andiamo adesso a vedere come (e se) è possibile elminare la ricorsione sinistra anche quando non è immediata.
 
@@ -712,10 +712,15 @@ Nota bene: non dobbiamo cadere nell'errore di supporre che, magari, la nostra pr
 Possiamo però chiederci: la grammatica \(\mathcal{G'}\) che abbiamo ottenuto è ancora ambigua, oppure applicando la nostra procedura ne abbiamo eliminato l'ambiguità? Ricordiamo che l'ambiguità della grammatica di partenza risiedeva nell'impossibilità di esprimere l'associatività degli operatori e la precedenza dell'uno sull'altro\footnote{Si riveda a \ref{sec:ambguity} in caso servisse un ripasso.}. 
 
 Sfortunatamente, riusciamo a trovare senza troppi problemi due derivazioni rightmost che ci portano a ottenere la medesima stringa \(id + id * id\):
-\begin{gather*}
-    E \Rightarrow idE' \Rightarrow id + EE' \Rightarrow id + E * EE' \Rightarrow id + E * E \Rightarrow id + E * idE' \Rightarrow id + E * id \Rightarrow id + idE' * id \Rightarrow id + id * id \\
-    E \Rightarrow idE' \Rightarrow id + EE' \Rightarrow id + E \Rightarrow id + idE' \Rightarrow id + id * EE' \Rightarrow id + id * E \Rightarrow id + id * idE' \Rightarrow id + id * id
-\end{gather*}
+\begin{align*}
+    E &\Rightarrow idE' \Rightarrow id + EE' \Rightarrow id + E * EE' \Rightarrow id + E * E \\
+        &\Rightarrow id + E * idE' \Rightarrow id + E * id \Rightarrow id + idE' * id \\
+        &\Rightarrow id + id * id 
+    \\ \\
+    E &\Rightarrow idE' \Rightarrow id + EE' \Rightarrow id + E \Rightarrow id + idE' \\
+        &\Rightarrow id + id * EE' \Rightarrow id + id * E \Rightarrow id + id * idE' \\
+        &\Rightarrow id + id * id  
+\end{align*}
 
 Possiamo convincerci di questo risultato anche seguendo un altro procedimento, ossia tracciando un albero di derivazione parziale per la nostra grammatica:
 \begin{figure}[H]
