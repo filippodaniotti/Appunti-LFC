@@ -1,7 +1,5 @@
-
 %%
 
 .		printf("hello world!");
 
 %%
-
