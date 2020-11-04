@@ -696,7 +696,9 @@ Questa grammatica è LL(1)? Sfortunatamente, se costruiamo la tabella di parsing
     \item \(+EE'\);
     \item \(E' \to \varepsilon\).
 \end{itemize}
+
 %TODO tabella di parsing
+
 Ne abbiamo un ulteriore conferma se andiamo a calcolare i first/follow per \(E\) e \(E'\):
 \begin{figure}[H]
     \centering
@@ -769,6 +771,236 @@ Ma, allo stesso identico modo, potremmo completare lo stesso albero parzial e ot
 \paragraph{Conclusione}
 Anche qui, non possiamo fare altro che concludere che applicare la procedura di eliminazione dlla ricorsione sinistra su una grammatica ambigua \emph{non} ne elimina l'ambguità.
 
-\section{Fattorizzazione sinistra}
+\section{Fattorizzabilità Sinistra}
+
+Sia data la grammatica \(S \rightarrow aSb \mid ab\)
+
+Questo tipo di grammatica ci permette di denotare ad esempio un linguaggio composto da parentesi annidate ma non è una grammatica di tipo LL(1) e ci possiamo accorgere di ciò computando i first(\(S\)): l'unico elemento appartenente a questo insieme, nel caso delle due produzioni, risulta infatti essere il non terminale \(a\) e ciò vuol dire che, applicando l'algoritmo per la generazione della tabella di parsing predittivo, ci troveremo con due produzioni nella posizione \(M[S, a]\).
+
+Il problema è che la grammatica può essere \textbf{fattorizzata a sinistra} e questo accade quando
+\begin{itemize}
+    \item ci sono almeno due produzioni che hanno lo lo stesso non terminale come driver
+    \item possiedono un prefisso comune nel body
+\end{itemize}
+
+Nel caso precedente vi sono due produzioni che hanno \(S\) come driver e \(a\) come prefisso.
+
+Se la grammatica \(\mathcal{G}\) è fattorizzata a sinistra sicuramente \(\mathcal{G}\) non è \(LL(1)\).
+
+Possiamo modificare le produzioni della grammatica in modo da non avere più produzioni per un singolo prefisso (e quindi entries multiple defined)?
+
+L'idea che sta alla base della strategia che si utilizza per la fattorizzazione sinistra è quella di ritardare la scelta delle produzioni con lo stesso prefisso.
+
+Data una grammatica che ha due produzioni con lo stesso driver e con un prefisso comune allora quello che si fa è rimpiazzare la produzione
+
+\(A \rightarrow \alpha \beta_1 \mid \alpha \beta_2\)
+
+con
+
+\(A \rightarrow \alpha A'\) 
+
+\(A' \rightarrow \beta_1 \mid \beta_2\)
+
+Nel caso della prima grammatica non vi può essere determinismo nell'espansione data da \(A\) perchè sceglieremo l'espansione indipendentemente dalla lettera successiva a quella considerata correntemente (i.e. se potessi sapere che il prossimo simbolo è una \(b\) allora non avrei dubbi su cosa scegliere).
+
+\subsection{Algoritmo di fattorizzazione a sinistra}
+
+Il tipo di trasformazione che possiamo fare ad una grammatica generica in modo da rimuovere questi prefissi comuni mantenendo il linguaggio è espresso dal seguente algoritmo 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{leftFactorizationAlgorithm.png}
+    \caption{leftFactorizationAlgorithm}
+    \label{leftFactorizationAlgorithm}
+\end{figure}
+
+L'idea è che dato in input una grammatica che può essere fattorizzata a sinistra, per ogni non terminale della grammatica si trova il prefisso più lungo (\(\alpha\)) comune a due o più produzioni aventi lo stesso driver: se \(\exists \alpha\) allora viene scelto un non terminale nuovo e vengono sostituite le produzioni di \(A\) nella forma 
+
+\(A \rightarrow \alpha \beta_1 \mid ... \mid \alpha \beta_n \mid \gamma_1 \mid \gamma_n\) 
+
+con le produzioni 
+
+\(A \rightarrow \alpha A' \mid \gamma_1 \mid ... \mid \gamma_n\)
+
+\(A' \rightarrow \beta_1 \mid ... \mid \beta_n\)
+
+Tale operazione viene ripetuta finchè non ci sono più produzioni con un prefisso comune: questo vuol dire che non basta un semplice foreach per eliminare i prefissi comuni ma è necessario esaminare tutte le produzioni anche una volta che sono stati rimossi dei prefissi in quanto è possibile che si generino dei nuovi prefissi dopo aver rimosso i primi.
+
+Vediamo se tale algoritmo risolve il problema che avevamo discusso: se la grammatica può essere sottoposta a fattorizzazione sinistra vediamo cosa succede a valle. Applichiamo la fattorizzazione sinistra alla grammatica
+
+Nel nostro caso dunque otteniamo
+
+\(S \rightarrow aS'\) 
+
+\(S' \rightarrow Sb \mid b\)
+
+Quella che abbiamo ottenuto è una grammatica \(LL(1)\)?
+
+È possibile notare che 
+\begin{itemize}
+    \item first(\(S\)) = \(\{a\}\) e follow(\(S\)) = \(\{\$, b\}\)
+    \item first(\(S'\)) = \(\{a, b\}\) e follow(\(S'\)) = \(\{\$, b\}\)
+\end{itemize}
+
+Dunque la tabella viene descritta come segue:
+
+\begin{table}[h]
+    \centering
+    \subimport{assets/tables/}{topDownParsingAfterFactorization.tex}
+    \caption{Top Down Parsing Table - Dopo fattorizzazione sinistra}
+    \label{topDownParsingAfterFactorization}
+\end{table}
+
+\subsubsection{Dangling Else}
+
+Passiamo ora ad esaminare un caso di fattorizzazione sinistra molto famoso nei linguaggi di programmazione che riguarda la grammatica ambigua degli if e degli else:
+
+\(S \rightarrow\) if \(b\) then \(S \mid\) if \(b\) then \(S\) else \(S \mid c\)
+
+Tale grammatica si trasforma applicando l'algoritmo di fattorizzazione sinistra in 
+
+\(S \rightarrow\) if \(b\) then \(SS' \mid c\)
+
+\(S' \rightarrow\) else \(S \mid \epsilon\)
+
+La domanda che ci poniamo a è questo punto è: tale grammatica è \(LL(1)\)?
+
+Se computiamo i first e i follow otteniamo
+
+È possibile notare che 
+\begin{itemize}
+    \item first(\(S\)) = \(\{\)if \(b\) then, \(c\}\) e follow(\(S\)) = \(\{\$, else\}\)
+    \item first(\(S'\)) = \(\{else, \epsilon\}\) e follow(\(S'\)) = \(\{\$, else\}\)
+\end{itemize}
+  
+In questo caso la grammatica risultante non è \(LL(1)\) perchè vi sono due produzioni in \(M[S', else]\): si può infatti osservare che  \(M[S', else] = S' \rightarrow \) else \(S\) poichè else \(\in\) first(else \(S'\)) e, allo stesso tempo, \(M[S', else] = \epsilon\) in quanto else \(\in\) follow(\(S'\)).
+
+La grammatica inoltre continua ad essere ambigua perchè se consideriamo il seguente albero di derivazione...
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.7\textwidth,keepaspectratio]{leftFactorizationAmbiguity.png}
+    \caption{leftFactorizationAmbiguity}
+    \label{leftFactorizationAmbiguity}
+\end{figure}
+
+...si può notare che in un caso è possibile scegliere di sostituire \({S'}_1\) con \(\epsilon\) e \({S'}_2\) con else \(c\) mentre nell'altro caso è possibile sostituire \({S'}_1\) con else \(c\) e \({S'}_2\) con \(\epsilon\), ottenendo di fatto la stessa stringa per due alberi di derivazione differenti utilizzando una derivazione leftmost.
+
+Questo problema viene definito \text{dangling else} che corrisponde a non sapere identificare in maniera certa di quele then sia figlio l'else. per risolvere tale problematica vi sono due differenti soluzioni:
+\begin{itemize}
+    \item proibire il costrutto if then e sostituirlo con if then else, una tecnica che viene impiegata nel caso dei linguaggi funzionali: l'idea è che bisogna avere un ramo in cui il booleano \(b\) sia valutato a true e nel caso in cui sia valutato a false; nel caso in cui l'else dovesse rivelarsi completamente inutile allora si crea un ramo fittizio.
+    \item imporre l'\textbf{innermost binding}, dove si fa corrispondere l'else al then più vicino e non ancora matchato: ovviamente tale soluzione ha senso nel caso in cui non si vogliono utilizzare parentesizzazioni.
+\end{itemize}
+
+L'innermost binding può anche essere implementato attraverso la definizioni di policy per definire particolari direttive al parser (come vedremo per byson) oppure specializzando la grammatica permettendo solo a coppie di then-else che matchano tra le occorrenze di then e else, ottenendo dunque la grammatica seguente
+
+\(S \rightarrow M \mid U\)
+
+\(M \rightarrow\) if \(b\) then \(M\) else \(M \mid c\)
+
+\(U \rightarrow\) if \(b\) then \(S \mid\) if \(b\) then \(M\) else \(U\)
+
+\section{Ricapitolando le grammatiche LL(1)}
+
+A questo punto dovrebbe essere chiaro che se una grammatica è
+
+\begin{itemize}
+    \item ricorsiva a sinistra
+    \item fattorizzabile a sinistra
+    \item ambigua
+\end{itemize}
+
+allora non è possibile che sia una grammatica \(LL(1)\).
+
+\textbf{LEMMA}: \(\mathcal{G}\) è una grammatica \(LL(1)\) se e solo se, nel caso in cui \(\mathcal{G}\) avesse delle produzioni del tipo \(A \rightarrow \alpha \mid \beta\), allora:
+\begin{itemize}
+    \item first(\(\alpha\)) \(\cap\) first(\(\beta\)) = \(\emptyset\)
+    \item se \(\epsilon \in\) first(\(\alpha\)), allora first(\(\beta\)) \(\cap\) follow(\(A\)) = \(\emptyset\) e, viceversa, se \(\epsilon \in\) first(\(\beta\)), allora first(\(\alpha\)) \(\cap\) follow(\(A\)) = \(\emptyset\)
+\end{itemize}
+
+Questo termina la discussione sulle grammatiche \(LL(1)\), va detto però che tali proprietà sono estensibili alle grammatiche \(LL(K)\): ricordiamo infatti che l'acronimo \(LL\) si riferisce al fatto che la stringa viene letta da sinistra verso destra e che viene applicata un tipo di derivazione leftmost, mentre il numero 1 messo tra parentesi ci dice che il nostro algoritmo di parsing analizzerà un elemento di input alla volta: ciò vuol dire che ci facciamo guidare da un solo elemento alla volta. 
+
+L'algoritmo si può dunque estendere controllando non 1 bensì \(K\) simboli alla volta: nel complesso la strategia è analoga, tuttavia la tabella di parsing deve prevedere delle entries in più, e.g. nel caso di una grammatica \(LL(2)\) vanno segnalate sulle colonne coppie di simboli terminali: se prendiamo come riferimento la grammatica \(S \rightarrow aSb \mid ab\) avremo sulle colonne le coppie di terminali \(aa\), \(ab\), \(bb\), \(ba\), \(b\$\), \(a\$\), \(\$\$\).
+
+Rifacendoci alla grammatica proposta: se avessi la possibilità di vedere due simboli alla volta riuscirei a fare un parsing predittivo deterministico? Sì, perchè in quel caso so per certo che se leggessi \(ab\) dovrei utilizzare la produzione \(S \rightarrow ab\) mentre in tutti gli altri casi \(S \rightarrow aSb\).
+
+\section{Training sulle grammatiche LL(1)}
+
+\subsection{Es 1}
+
+Sia data la grammatica \(S \rightarrow aSb \mid \epsilon\) che denota il linguaggio \(\{a^n b^n \mid n \geq 0\}\).
+
+La grammatica proposta è \(LL(1)\)?
+
+Possiamo facilmente calcolare che first(\(S\)) = \(\{a, \epsilon\}\) mentre follow(\(S\)) = \(\{\$, b\}\). 
+
+Per il lemma precedente visto che first(\(aSb\)) \(\cap\) first(\(\epsilon\)) = \(\emptyset\) e che, nonostante \(\epsilon \in\) first(\(\epsilon\)), first(\(aSb\)) \(\cap\) follow(\(S\)) = \(\emptyset\); ciò può essere osservato anche dalla tabella di parsing produttivo:
+
+\begin{table}[h]
+    \centering
+    \subimport{assets/tables/}{trainingLL1_1.tex}
+    \caption{Es 1 - Training LL(1)}
+    \label{trainingLL1_1}
+\end{table}
+
+sorprendentemente dunque la grammatica è LL(1)
+
+\subsection{Es 2}
+
+Consideriamo adesso la seguente grammatica:
+
+\(S \rightarrow AbB \mid B\)
+
+\(A \rightarrow cB \mid a\)
+
+\(B \rightarrow A\)
+
+La grammatica sopra citata è \(LL(1)\)? Il sospetto è di no perchè a prima impressione i first(\(A\)) sono uguali ai first(\(B\)) e, essendo che nelle produzioni di \(S\) compaiono in prima posizione entrambi i non terminali discussi, è possibile che si vadano a collocare nella stessa cella. Procediamo per gradi calcolando i first e se necessario i follow
+
+\begin{table}[h]
+    \centering
+    \subimport{assets/tables/}{trainingLL1_first_2.tex}
+    \caption{Es 2: Calcolo First - Training LL(1)}
+    \label{trainingLL1_first_2}
+\end{table}
+
+Questa grammatica non è dunque \(LL(1)\) perchè nella tabella di parsing avrò le produzioni \(S \rightarrow AbB\) e \(S \rightarrow B\) sia nella cella \(M[S, a]\) che in \(M[S, c]\).
+
+\begin{table}[h]
+    \centering
+    \subimport{assets/tables/}{trainingLL1_2.tex}
+    \caption{Es 2: Training LL(1)}
+    \label{trainingLL1_2}
+\end{table}
+
+\subsection{Es 3}
+
+Esaminiamo infine questa grammatica:
+
+\(S \rightarrow Aa\)
+
+\(A \rightarrow bB \mid c\)
+
+\(B \rightarrow aA \mid \epsilon\)
+
+\begin{table}[h]
+    \centering
+    \subimport{assets/tables/}{trainingLL1_first_3.tex}
+    \caption{Es 3: Calcolo First \& follow - Training LL(1)}
+    \label{trainingLL1_first_3}
+\end{table}
+
+Si può notare che mi ritroverò con produzioni in \(M[B, a]\) e ciò è osservabile anche per via del lemma enunciato precedentemente: infatti si ha che \(\epsilon \in\) first(\(\alpha\)) e first(\(aA\)) \(\cap\) follow(\(B\)) = \(\{a\} \neq \emptyset\).
+
+la tabella risultante è la seguente ...
+
+\begin{table}[h]
+    \centering
+	\subimport{assets/tables/}{trainingLL1_3.tex}
+    \caption{Es 3: Training LL(1)}
+    \label{trainingLL1_3}
+\end{table}
+
+...e dunque che la grammatica non è \(LL(1)\)
 
 \end{document}
