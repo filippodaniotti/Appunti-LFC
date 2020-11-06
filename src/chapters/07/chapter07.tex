@@ -7,9 +7,9 @@
 % arara: pdflatex: { synctex: yes, shell: yes }
 % arara: latexmk: { clean: partial }
 \begin{document}
-\chapter{Analisi sintattica}
+\chapter{Analisi sintattica: top-down parsing}
 
-\section{Parsing}
+\section{Il parsing}
 Il parsing (o analisi sintattica) è quel processo in cui, data una grammatica \(\mathcal{G} = (V, T, S, \mathcal{P})\) e una parola \(w\), dobbiamo dire se \(w \in \mathcal{L(G)}\) e, se così fosse, fornire il suo albero di derivazione. Solitamente gli approcci al parsing che vengono presi in considerazione nell'ambito dei linguaggi di programmazione sono due: 
 \begin{itemize}
     \item \textbf{Top-Down}: consiste nella costruzione di una derivazione leftmost da uno start symbol della grammatica e quindi procede dalla radice verso le foglie dell'albero di derivazione; a prima vista, si direbbe che sia l'approccio più intuitivo;

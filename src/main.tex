@@ -18,11 +18,14 @@
 	{./chapters/05/assets/images/}%
 	{./chapters/06/assets/images/}%
 	{./chapters/07/assets/images/}%
+	{./chapters/08/assets/images/}%
 }
 
 \newboolean{isCompiledFromMain}
 \setboolean{isCompiledFromMain}{true}
 
+% arara: pdflatex: { shell: yes }
+% arara: pdflatex: { shell: yes }
 % arara: pdflatex: { shell: yes }
 % arara: latexmk: { clean: partial }
 \begin{document}
@@ -41,6 +44,7 @@
 	\import{./chapters/05/}{chapter05}
 	\import{./chapters/06/}{chapter06}
 	\import{./chapters/07/}{chapter07}
+	\import{./chapters/08/}{chapter08}
 
 \backmatter
 

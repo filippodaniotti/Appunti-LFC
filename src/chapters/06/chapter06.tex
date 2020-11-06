@@ -10,6 +10,7 @@
 % arara: pdflatex: { synctex: yes, shell: yes }
 % arara: latexmk: { clean: partial }
 \begin{document}
+\part{Il processo di compilazione}
 \chapter{Analisi lessicale}
 
 \section{Rimandi all'analisi lessicale}
@@ -225,7 +226,7 @@ Dal momento che tutte le coppie \texttt{pattern \{azione\}} sono scritte in ling
 \end{labeling}
 
 
-\subsection{Esempi di file per Flex}
+\section{Esempi di file per Flex}
 Facciamo un breve riepilogo di quanto abbiamo visto: tutti i file predisposti per Flex si compongono da tre sezioni, ciascuna separata da coppie di \%. Nel preambolo si inseriscono delle definizioni come le \mintinline{c}{define} che servono e i pattern (espressioni regolari per i lessemi che vogliamo inserire). I pattern sono inseriti insieme all'azione nella parte centrale. In fondo si inseriscono le routine dell'utente che vengono copiate nel file \texttt{lex.yy.c}: un testo minimale è l'invocazione della routine \mintinline{c}{yylex()} che se non viene inserita viene chiamata in automatico. I comandi, qualora non si usi Flex con Bison (analizzatore sintattico in pipeline con Flex), sono i seguenti:
 \begin{minted}[breaklines, tabsize = 2]{bash}
     $   Flex file.l
@@ -233,7 +234,7 @@ Facciamo un breve riepilogo di quanto abbiamo visto: tutti i file predisposti pe
     $   ./a
 \end{minted}
 
-\subsubsection{file0.l}
+\subsection*{file0.l}
 \ifthenelse{\boolean{isCompiledFromMain}}{%
 \inputminted[linenos, breaklines, tabsize = 2]{c}{chapters/06/assets/code-fragments/file0.l}%
 }{%
@@ -259,7 +260,7 @@ In sostanza, questo file ci farà sì che, nella lettura, qualsiasi carattere in
 
 Possiamo notare anche un'altra cosa molto interessante: solitamente, per poter utilizzare lo standard output nei programmi C, è necessario includere all'interno del file la libreria \mintinline{c}{stdio.h}, ma nel \texttt{file0.l} non vi è nemmeno l'ombra di un inlcude: è lo stesso Flex a occuparsi di aggiungere in un secondo momento tutti i dettagli necessari per la gestione dell'output.
 
-\subsubsection{file1.l}
+\subsection*{file1.l}
 \ifthenelse{\boolean{isCompiledFromMain}}{%
 \inputminted[linenos, breaklines, tabsize = 2]{c}{chapters/06/assets/code-fragments/file1.l}%
 }{%
@@ -293,7 +294,7 @@ Come descritto precedentemente, nella parte centrale i pattern sono associati al
 
 Complessivamente, il risultato ottenuto dall'esecuzione di un programma compilato a partire dal file discusso porterà all'eliminazione di '\texttt{ }', '\texttt{\textbackslash t}' e '\texttt{\textbackslash n}' dal testo passato in input e ci farà ottenere ad una sequenza continua di caratteri (ad esempio, una stringa del tipo "\texttt{ ab c d e \hspace{.8cm} f g}" diventerà "\texttt{abcdefg}").
 
-\subsubsection{file2.l}
+\subsection*{file2.l}
 
 \ifthenelse{\boolean{isCompiledFromMain}}{%
 \inputminted[linenos, breaklines, tabsize = 2]{c}{chapters/06/assets/code-fragments/file2.l}%
@@ -333,7 +334,7 @@ Allora avremmo che verrebbe riscritto come segue:
 \end{enumerate}
 
 
-\subsubsection{file3.l}
+\subsection*{file3.l}
 \ifthenelse{\boolean{isCompiledFromMain}}{%
 \inputminted[linenos, breaklines, tabsize = 2, fontsize = \small]{c}{chapters/06/assets/code-fragments/file3.l}%
 }{%
@@ -363,7 +364,7 @@ Nella parte centrale del file abbiamo invece le seguenti associazioni pattern-az
 
 In sostanza, il programma che stiamo descrivendo con questi pattern si occupa di contare complessivamente quanti caratteri, parole e righe sono state individuate in un dato testo; qualora avessimo un match con una parola, allora avviene un incremento proporzionale al numero di caratteri che costituiscono quella stessa parola e, inoltre, si aggiorna il numero di parole totali che sono contenute nel testo; ogni volta che si trova una new line si incrementano di un'unità il numero di righe e di caratteri e, infine, ogni volta che si trova uno spazio o un tab viene incrementato solamente il numero di caratteri. 
 
-\subsubsection{file4.l} 
+\subsection*3{file4.l} 
 
 \ifthenelse{\boolean{isCompiledFromMain}}{%
 \inputminted[linenos, breaklines, tabsize = 2, fontsize = \small]{c}{chapters/06/assets/code-fragments/file4.l}%
