@@ -9,6 +9,7 @@
 \chapter{Analisi sintattica: bottom-up parsing}
 Iniziamo la trattazione del parsing di tipo \emph{bottom-up}: come suggerisce il nome stesso, consiste nel ricostruire le derivazioni di una parola in ordine inverso, partendo dall'ultima produzione e arrivando infine allo start symbol; a livello visivo, possiamo pensare che la nostra intenzione è di partire dalle foglie di un albero di derivazione e risalirlo fino alla radice.
 
+\section{Classi di grammatiche}
 Possiamo subito anticipare che anche in questo approccio possiamo identificare diversi classi di grammatiche, ciascuna delle quali ci permetterà di utilizzare, di volta in volta, diverse tecniche di parsing; in ogni caso, ciascuna di queste classi condivide le seguenti caratterstiche:
 \begin{itemize}
     \item per qualsiasi grammatica \(\G\) considerata, andremo sempre a espandere il suo insieme \(\P\) in \(\P'\) aggiungendo la produzione \(S \to S'\), dove \(S'\) è un non-terminale \emph{fresh};
@@ -27,11 +28,19 @@ Noi diciamo che una grammatica \(\G\) appartiene a una certa classe, ad esempio 
 
 Tra quelli presentati, il meccanismo più potente è LR(1), complementare di LL(1); per questo motivo noi cercheremo sempre di costruire una tabella di parsing deterministico che rientri nei vincoli di LR(1). Se questo non sarà possibile andremo a scalare in complessità con LALR e SRL.
 
-Andiamo ora a considerare un esempio con una delle prime grammatiche che abbiamo visto, quella che genera due occorrenza bilanciate:
+\section{Un primo esempio di applicazione}
+\subsection{Mosse di shift e reduce}
+Andiamo a introdurre l'algoritmo che utilizzeremo per verificare se una certa parola appartenga o meno al linguaggio denotato da una certa grammatica, rappresentata dal suo automa caratteristico; questo è detto algoritmo di shift/reduce, dalle due mosse che utilizziamo:
+\begin{enumerate}
+    \item la mossa di \emph{shift} è quella che compiamo quando passiamoo da un nodo (stato) all'altro, inserendo nella pila delle derivazioni parziali il terminale che marca l'arco attraversato e nella pila degli stati il nodo di destinazione;
+    \item la mossa di \emph{reduce} è quella che eseguiamo quando raggiungiamo un nodo marchiato da una formula di riduzione (capiremo nell'esempio quale forma hanno) e che ci porta a eliminare dei terminali dalla pila delle derivazioni parziali e degli stati dalla pila degli stati, coerentemente alla struttura dell'automa caratteristico.
+\end{enumerate}
+Consideriamo come esempio una delle prime grammatiche che abbiamo visto, quella che genera due occorrenza bilanciate:
 \begin{equation*}
     \label{balanced}
     \G: S \to aSb \mid ab
 \end{equation*}
+\subsection{Esempio di automa}
 L'automa caratterisco di tipo LR(1) per questa grammatica è il seguente:
 \begin{figure}[H]
     \centering
@@ -39,8 +48,9 @@ L'automa caratterisco di tipo LR(1) per questa grammatica è il seguente:
     \caption{Automa caratteristico LR(1) per Eq. \ref{balanced}}
     \label{balanced-char_aut-lr1}
 \end{figure}
-Lo utilizzeremo come guida per determinare, di volta in volta, quali mosse di shift e reduce applicare per verificare se una certa parola appartiene o no al linguaggio generato da \(\G\).
+Lo utilizzeremo come guida per determinare, di volta in volta, quali mosse di shift e reduce applicare per verificare se una certa parola appartiene o no al linguaggio generato da \(\G\). 
 
+\subsection{Procedura}
 Consideriamo ad esempio la parola \(w = aaabbb\). Come prima cosa le applichiamo il carattere terminatore di stringa \(aaabbb\$\), e successivamente dobbiamo parlare delle strutture che utilizzeremo nella procedura, che saranno due pile:
 \begin{itemize}
     \item nella prima inseriamo gli stati verso cui ci muoviamo;
@@ -74,79 +84,45 @@ Si tenga presente che in realtà potremmo farci bastare anche una sola pila, ma 
     \end{align*}
     \item abbiamo terminato: ci troviamo nello stato \(0\) e troviamo solamente il nostro start symbol \(S\), che ci permette  muoverci verso lo stato \(1\), e l'endmaker \$; la presenza della keyword \(ACCEPT\) nello stato in cui abbiamo terminato ci indica che la parola è stata riconosciut dall'automa.
 \end{itemize}
-%  - Mi sposto seguendo tutte le varie x-transizioni del caso
-% In pratica faccio questo:
 
-% - Mi sposto seguendo tutte le varie x-transizioni del caso
-% Se sulla pila da leggere trovo il letterale 𝑙 devo ritornare indietro a quando ho iniziato a
-% leggere il body di 𝐴 → 𝐵 (ovvero 𝐵) e da quel punto leggo 𝑆 invece che 𝐵
-% ○
-% Quando arrivo in un certo nodo con un passo di riduzione questo mi presenterà una
-% formula di questa forma 𝐴 → 𝐵,{𝑙}. -
-% - Quelli descritti sopra sono passi di riduzione
-% - Una volta che arrivo a leggere il terminale \$
-% Gli automi caratteristici possono essere sostituiti da una tabella.
-% Ora che abbiamo chiaro come fare questo parsing dobbiamo andare a capire come calcolare
-% l'automa o la relativa tabella di parsing.
-% Nota:
-% La mossa di shift è quella che compi normalmente passando da un nodo all'altro aggiungendo
-% un terminale alla pila di derivazione ed aggiungendo uno stato alla pila degli stati
-% 1.
-% La mossa di reduce è quella che si compie quando si arriva ad un nodo etichettato con una
-% riduzione, ovvero quella mossa che ci porta ad eliminare terminali dalla pila di derivazione e
-% stati dalla pila degli stati
-% 2.
-% Quello che abbiamo visto è l'algoritmo di shift/reduce
-% Per la cronaca: l'automa visto era del tipo LR(1)
-% #Automa caratteristico: come è fatto?
-% Gli stati sono insiemi di item
-% - LR(0)-items 𝐴 → 𝛼 ⋅ 𝛽
-% - LR(1)-items 𝐴 → 𝛼 ⋅ 𝛽, 𝐿 dove 𝐿 ⊂= 𝑇 ∪ {\$}
-% Gli item sono:
-% Come detto in precedenza gli LR(1) items contengono più informazioni e sono più ricchi degli LR(0) e
-% ci permettono di riconoscere più grammatiche
-% Comunque il livello 0 dell'item è caratterizzato da una produzione con un punto EHHH?
-% Consideriamo ora l'item LR(0) 𝑆
-% ᇱ → ⋅ 𝑆
-% Il significato intuitivo è:
-% Se sono all'origine del parsing è come dire che mi trovo in una posizione da cui voglio vedere
-% qualcosa che sia derivabile dalla 𝑆. Quindi è logico pensare come l'item 𝑆
-% ᇱ →⋅ 𝑆 deve stare nello stato iniziale dell'automa, diciamo
-% 𝑃଴ . Ma questo non è l'unico item che deve stare in quello stato:
-% Se io devo vedere qualcosa che deriva dalla S nella mia grammatica precedente mi aspetto di vedere
-% qualcosa che deriva da 𝑎𝑆𝑏 o che deriva da 𝑎𝑏. Quindi gli LR(0) items di 𝑆 saranno
-% 𝑆 → ⋅ 𝑎𝑆𝑏
-% 𝑆 → ⋅ 𝑎𝑏
+\subsection{Riassumendo}
+Questo è un esempio del procedimento dell'algoritmo di shift/reduce; vediamo quali regole generali possiamo dedurne:
+\begin{itemize}
+    \item partendo dallo stato iniziale, inizio a leggere la parola data attraversando gli archi marchiati dalle \(symbol\)-transizioni che incontriamo di volta in volta;
+    \item quando arrivo in un nodo in cui si dovrà effettuare un passo di riduzione, questo sarà marcato da un'etichetta che avrà la forma \(A \to B, \{l\}\); quello che dovrò fare a questo punto sarà scorrere all'indietro la pila delle derivazioni parziali e, se riesco a trovare un'occorrenza di quello stesso \(l\), (da capire e chiarire bene)
+\end{itemize}
+Gli automi caratteristici sono una rappresentazione utile, ma si tenga presente che la stessa funzione può essere ottemperata anche da una tabella.
 
-% 𝑆 → ⋅ 𝑎𝑏
-% Vediamo ora il concetto di chiusura di set di LR(0)-items
-% Sia 𝑃 un set di LR(0)-items
-% 𝑐𝑙𝑜𝑠𝑢𝑟𝑒଴(𝑃) è il più piccolo set che soddisfa la seguente equazione
-% 𝑐𝑙𝑜𝑠𝑢𝑟𝑒଴
-% (𝑃) = 𝑃 ∪ {𝐵 → ⋅ 𝛾 𝑡𝑎𝑙𝑒 𝑐ℎ𝑒 𝐴 → 𝛼 ⋅ 𝐵𝛽 ∈ 𝑐𝑙𝑜𝑠𝑢𝑟𝑒଴
-% (𝑃) 𝑎𝑛𝑑 𝐵 → 𝛾 ∈ 𝑃
-% ᇱ}
-% Tale formula si traduce con il seguente algoritmo:
-% Testiamo l'algoritmo:
-% 𝑆
-% ᇱ → . 𝑆
-% Ci aspettiamo quindi di vedere qualcosa che deriva dalla S, ovvero:
-% 𝑆 → . 𝑎𝑆𝑏
-% 𝑆 → . 𝑎𝑏
-% L'insieme 𝑐𝑙𝑜𝑠𝑢𝑟𝑒଴(𝑆') in questo caso è proprio
-% 𝑆
-% ᇱ → . 𝑆
-% 𝑆 → . 𝑎𝑆𝑏
-% 𝑆 → . 𝑎𝑏
-% Perché tutte le espansioni possibili sono inserite già in 𝑃
-% Se avessimo invece
-% 𝑆 → 𝑎. 𝑆𝑏
-% 𝑆 → . 𝑎𝑆𝑏
-% 𝑆 → . 𝑎𝑏
-% La prima riga ci dice che abbiamo già visto una a ed ora ci aspettiamo di vedere qualcosa che deriva
-% da Sb e così via.
-% La chiusura consiste sostanzialmente in tutti gli item che hanno un punto davanti ad un non
-% terminale. Poi ricorsivamente si vanno ad aggiungere tutte le chiusure dei terminali con un punto
-% davanti.
+\section{Costruzione dell'automa}
+Dopo aver visto questo esempio, non possiamo fare a meno di domandarci com'è possibile per noi calcolare questo automa caratteristico e la relativa tabella di parsing.
+
+\subsection{Stati}
+Andiamo per prima cosa a vedere gli stati. Gli stati sono degli insiemi di items, dove gli items sono oggetti di diverso tipo e così definiti:
+\begin{labeling}{LR(1)-items}
+    \item[LR(0)-items] \(A \to \alpha \cdot \beta\)
+    \item[LR(1)-items] [\(A \to \alpha \cdot \beta, L\)], dove \(L \subseteq T \cup \{\$\}\)\footnote{Ricordiamo che \(T\) è l'insieme dei terminali della grammatica considerata.}
+\end{labeling}
+Da qui capiamo finalmente cosa intendevamo quando prima abbiamo detto che gli LR(1)-items sono più ricchi dei loro equivaleenti LR(0), e ci permettono quindi di riconoscere più grammatiche. Coerentemente alla definzione sopra riportata, avremo che gli automi caratteristici LR(0) sono quelli i cui stati sono LR(0)-items, e analogamente per gli automi carattersitici LR(1).
+
+Andiamo a fare subito un esempio per aiutarci a capire di cosa stiamo parlando. Consideriamo un LR(0)-item \(S' \to \cdot S\): il significato intuitivo è che, se siamo all'inizio della procedura di parsing, siamo in una posizione in cui vogliamo conoscere quali sono le parole derivabili a partire da \(S\), per cui è logico pensare che il nostro item \(S' \to \cdot S\) debba stare nello stato iniziale dell'automa, che chiamiamo \(P_0\).
+
+Ma non sarà l'unico item a risiedere in \(P_0\). Per aiutarci, riprendiamo la nostra fidata grammatica in Eq. \ref{balanced}: in questo caso, analizzare la parola vuol dire aspettarsi qualcosa che derivi da \(aSb\) oppure \(ab\), per cui gli LR(0)-items di \(S\) saranno:
+\begin{itemize}
+    \item \(S \to \cdot aSb\);
+    \item \(S \to \cdot ab\).
+\end{itemize}
+E verranno inseriti in \(P_0\).
+
+\subsection{Chiusura di un insieme di LR(0)-items}
+Andiamo ora a vedere il concetto di chiusura di un insieme di LR(0)-items:
+
+\begin{definition}
+    Sia \(P\) un insieme di LR(0)-items; allora, \(closure_0(P)\) è il più piccolo insieme che soddisfa la seguente equazione:
+    \begin{equation}
+        closure_0(P) = P \cup \{B \to \cdot \gamma \; \textrm{tale che} \; A \to \alpha \cdot B \beta \in closure_0(P) \; \textrm{e} \; B \to \gamma \in P'\}
+    \end{equation}
+\end{definition}
+
+La chiusura consiste sostanzialmente in tutti quegli items che hanno un punto davanti ad un non terminale; poi, ricorsivamente, si vanno ad aggiungere tutte le chiusure dei terminali con un punto davanti.
 
 \end{document}
