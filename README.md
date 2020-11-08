@@ -12,18 +12,20 @@ tenuto nell’Università degli studi di Trento durante il primo semestre dell�
 Prerequisiti:
 - una distribuzione TeX, ad esempio [MiKTeX](https://miktex.org/) o [TeXLive](http://tug.org/texlive/)
 - `pip`, per cui assicuratevi di aver installato [Python](https://www.python.org/)
-- se volete compilare utilizzando il tool [arara](https://gitlab.com/islandoftex/arara/), allora dovrete avere una [JVM](https://www.java.com/) installata
+- se volete compilare utilizzando il tool [Arara](https://gitlab.com/islandoftex/arara/), allora dovrete avere una [JVM](https://www.java.com/) installata
 
 A questo punto:
 
 1. clonate la repository con `git clone https://github.com/filippodaniotti/Appunti-LFC`
 2. installate il pacchetto Pygments con `pip install Pygments`
-3. compilate lanciando tre volte `pdflatex -shell-escape main.tex`
-4. (opzionale) per una compilazione rapida, potete lanciare `arara main.tex` dalla directory `src/`; verrà creato un `main.pdf` senza references né table of contents
+3. compilate, ad esempio:
+    - lanciando tre volte `pdflatex -shell-escape main.tex`
+    - lanciando `latexmk -pdf -shell-escape main.tex`
+    - per una compilazione rapida, potete utilizzare Arara con  `arara main.tex` (dovete necessariamente trovarvi nella directory `~/src/`), sarà equivalente a lanciare una sola passata di `pdflatex`
 
 È possibile compilare singolarmente ogni capitolo e ogni asset, è sufficiente lanciare la compilazione sul singolo `.tex` desiderato.
 
-Se lavorate con degli IDE o con degli editor in coppia con dei tool per la scrittura LaTeX (e.g. [Atom](https://atom.io) + [latex](https://atom.io/packages/latex) o [VS Code](https://code.visualstudio.com) + [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop)), assicuratevi di attivare il flag `-shell-escape` dalle impostazioni del vostro tool.
+Se lavorate con degli IDE o con degli editor in coppia con dei tool per la scrittura LaTeX (e.g. [VS Code](https://code.visualstudio.com) + [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) o [Atom](https://atom.io) + [latex](https://atom.io/packages/latex)), assicuratevi di attivare il flag `-shell-escape` dalle impostazioni di compilazione del vostro tool.
 
 ## Principali pacchetti impiegati
 
