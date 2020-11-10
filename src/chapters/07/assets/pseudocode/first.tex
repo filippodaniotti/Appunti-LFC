@@ -1,0 +1,37 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{algorithm}[H]
+        \label{alg:first}
+        \DontPrintSemicolon
+
+        \SetKwData{t}{\textbf{true}}
+        \SetKwData{f}{\textbf{false}}
+        \SetKwData{break}{\textbf{break}}
+
+        \SetKwData{j}{j}
+        \SetKwData{First}{first}
+        \SetKwFunction{Add}{add}
+        
+        \textsc{Set} \First{\(Y_1 \ldots Y_n\)} = \(\emptyset\) \;
+        \j = 1 \;
+        \While{\j \(\le n\)} {
+            \First{\(Y_1 \ldots Y_n\)}.\Add{\First{\(Y_j\)} \(\setminus \varepsilon\)}\;
+            \eIf{\(\varepsilon \in\) \First{\(Y_j\)}} {
+                \j = \j \(+ 1\)\;
+            }
+            {
+        	    \break\;
+            }
+        }
+        \lIf{\j = \(n + 1\)} {
+            \First{\(Y_1 \ldots Y_n\)}.\Add{\(\varepsilon\)}\;
+        }
+        \caption{\textsc{Set} firstComputation(\textsc{Word} \(\alpha\))}
+    \end{algorithm}
+\end{document}

@@ -115,6 +115,7 @@ Inizializziamo la procedura posizionando \(w\$\) nell'input buffer e, nella pila
     \caption{PredictiveTopDownAlgorithm}
     \label{PredictiveTopDownAlgorithm}
 \end{figure}
+\subimport{assets/pseudocode/}{pred-tdparsing.tex}
 
 Nell'algoritmo di parsing si utilizza la variabile \(b\) come primo simbolo delle parola w\$ e si inizializza la variabile X con la cima dello stack (il caso base corrisponde ad avere \(X = S\)). Finché \(X \neq \$\) (sostanzialmente finché non ho svuotato completamente la pila), sono dati i seguenti casi:
 
@@ -129,7 +130,7 @@ Nell'algoritmo di parsing si utilizza la variabile \(b\) come primo simbolo dell
 \end{enumerate}
 
 Infine, come ultima operazione \(X\) viene assegnato all'elemento in cima alla pila e si ripete. A seguire un esempio che fa uso dell'algoritmo appena descritto.
-\begin{table}[H]
+\begin{table}[htb]
 	\centering
 	\subimport{assets/tables/}{ptdp-ex1.tex}
     \caption{Tabella delle strutture a ogni passo}
@@ -235,6 +236,7 @@ Mostriamo ora un algoritmo che ci permette di calcolare first(\(Y_1 \ldots Y_n\)
     \caption{Algoritmo per calcolare first(\(\alpha\))}
     \label{first-algorithm}
 \end{figure}
+\subimport{assets/pseudocode/}{first.tex}
 
 Andiamo a vedere più da vicino quale idea stiamo seguendo in questo algoritmo. Dopo aver inizializzato l'insieme dei first(\(Y_1 \ldots Y_n\)), vado a iterare su tutti gli elementi \(Y_j \in V\) della parola: 
 \begin{itemize}
@@ -297,7 +299,9 @@ I first evidenziano quali sono i terminali per cui iniziano le stringhe derivabi
     \caption{Algoritmo per calcolare follow(\(A\))}
     \label{follow-algorithm}
     % PER CHI RISCRIVERà L'ALGORITMO: lasciate la label invariata o fate un refactoring perché viene referenziata giù dabbasso <3
+    % np l'ho cambiata anche dabbasso <3
 \end{figure}
+\subimport{assets/pseudocode/}{follow.tex}
 
 L'algoritmo comincia impostando follow(\(S\)) = \$, dal momento che lo start symbol genera tutte le possibili parole, e per qualsiasi parola possiamo aspettarci di trovare il terminatore di stringa \$. Negli altri casi, invece, \(\forall A\) tale che \(A\) è un non-terminale, inizializziamo in questo modo: follow(\(A\)) = \(\emptyset\).
 
@@ -371,7 +375,7 @@ Ora che abbiamo terminato la nostra ricerca dei first possiamo ricavare la tabel
     \caption{Esercizio \ref{first-folllow-ex-2} su first/follow, step 1}
     \label{first-follow-ex-2_step-1}
 \end{table}
-Passiamo ora gaiamente al prossimo step, ovvero il calcolo dei vari follow seguendo l'algoritmo indicato in \ref{follow-algorithm}.
+Passiamo ora gaiamente al prossimo step, ovvero il calcolo dei vari follow seguendo l'algoritmo indicato in Alg. \ref{alg:follow}.
 
 Per comodità notazionale, dato che nelle produzioni dell'esercizio compare il non-terminale \(A\), scriveremo \(X\) per indicare la \(A\) dell'algoritmo per il calcolo del follow (assumiamo quindi che ogni \(A\) nell'algoritmo venga sostituita da \(X\); quindi, ad esempio, \(\alpha A \beta\) diventa \(\alpha X \beta\)).
 \begin{enumerate}
@@ -506,13 +510,15 @@ Quindi, in Tab.\ref{first-follow-ex-3_step-3}, ammiriamo la soluzione finale del
 Ora che ci siamo esercitati con i meccanismi necessari, possiamo tornare ad occuparci della nostra preoccupazione principale, ovvero come costruire una tabella di parsing.
 
 \subsection{Algoritmo per la costruzione di una parsing table}
-Rappresentato in Fig.\ref{algoritmo_parsing-table} si può osservare l'algoritmo che, data in input una grammatica \(\mathcal{G}\), ritorna la parsing table propria di quella grammatica. 
+Rappresentato in Alg. \ref{parsing-table-comp} si può osservare l'algoritmo che, data in input una grammatica \(\mathcal{G}\), ritorna la parsing table propria di quella grammatica. 
+
 \begin{figure}[htb]
     \centering
     \includegraphics[width=.8\textwidth]{algoritmo_parsing-table.png}
     \caption{Algoritmo di costruzione dei una parsing table}
     \label{algoritmo_parsing-table}
 \end{figure}
+\subimport{assets/pseudocode/}{parsing-table-comp.tex}
 Ricordiamo brevemente che le tabelle di parsing ci servono per verificare se una certa parola può essere derivata tramite derivazione canonica da una data grammatica.
 
 L'algoritmo prevede di scorrere tutte le produzioni \(A \to \alpha\) presenti nella grammatica e, per ognuna di queste:
@@ -810,6 +816,7 @@ Il tipo di trasformazione che possiamo fare ad una grammatica generica in modo d
     \caption{leftFactorizationAlgorithm}
     \label{leftFactorizationAlgorithm}
 \end{figure}
+\subimport{assets/pseudocode/}{left-fact.tex}
 
 L'idea è che, data in input una grammatica che può essere fattorizzata a sinistra, per ogni non-terminale della grammatica si trova ilpiù lungo prefisso (\(\alpha\)) comune a due o più produzioni aventi lo stesso driver: se un prefisso \(\alpha\) con questa caratteristica esiste, allora viene scelto un nuovo non-terminale e vengono sostituite le produzioni di \(A\) nella forma: 
 \begin{equation*}

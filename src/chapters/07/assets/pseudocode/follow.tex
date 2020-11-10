@@ -1,0 +1,39 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{algorithm}[H]
+        \label{alg:follow}
+        \DontPrintSemicolon
+
+        \SetKwData{t}{\textbf{true}}
+        \SetKwData{f}{\textbf{false}}
+        \SetKwData{mrk}{\texttt{\$}}
+
+        \SetKwData{j}{j}
+        \SetKwData{Follow}{follow}
+        \SetKwData{First}{first}
+        \SetKwFunction{Add}{add}
+        
+        \textsc{Set} \Follow{\(S\)} = \{\$\} \;
+        \ForEach{\(A \ne S\)} {
+            \Follow{\(A\)} = \(\emptyset\)\;
+        }
+        \Repeat{saturation} {
+            \ForEach{\(B \to \alpha A \beta\)} {
+                \If{\(\beta \ne \varepsilon\)} {
+                    \Follow{\(A\)}.\Add{\First{B} \(\setminus \{\varepsilon\}\)}\;
+                }
+                \If{\(\beta\) = \(\varepsilon \lor \varepsilon \in\) \First{\(\beta\)}} {
+                    \Follow{\(A\)}.\Add{\Follow{\(B\)}}\;
+                }
+            }
+        }
+        
+        \caption{\textsc{Set} followComputation(\textsc{Word} \(A\))}
+    \end{algorithm}
+\end{document}
