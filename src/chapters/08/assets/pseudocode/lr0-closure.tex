@@ -1,0 +1,36 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[ruled,linesnumbered,vlined]{algorithm2e}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{algorithm}[H]
+        \label{alg:lr0-closure}
+        \DontPrintSemicolon
+
+        \SetKwData{t}{\textbf{true}}
+        \SetKwData{f}{\textbf{false}}
+        \SetKwData{not}{\textbf{not}}
+        
+        \SetKwData{p}{P}
+        \SetKwFunction{Mark}{mark}
+
+        \ForEach{\(item \in\) \p} {
+            etichetta \(item\) come \texttt{unmarked}\;
+        }
+        \While{\(\exists item : item\) è \texttt{unmarked}} {
+            \Mark{\(item\)}\;
+            \If{\(item\) ha forma \(A \to \alpha \cdot B \beta\)} {
+                \ForEach{\(B \to \gamma \in \mathcal{P}'\)} {
+                    \If{\(B \to \cdot \gamma \notin P\)} {
+                        aggiungi \(B \to \cdot \gamma\) a \(P\) come \texttt{unmarked} \(item\)\;
+                    }
+                }
+            }
+        }
+        \Return{\(P\)}
+
+        \caption{\textsc{Set} chiusura\(_0\)(\textsc{Set} P)}
+    \end{algorithm}
+\end{document}

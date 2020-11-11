@@ -163,7 +163,7 @@ computazione della chiusura:
     \includegraphics[width=.8\textwidth]{bottom-up-parsing_closure_algorithm.png}
     \caption{Algoritmo per il calcolo di \(closure_0(P)\)}
 \end{figure}
-
+\subimport{assets/pseudocode/}{lr0-closure.tex}
 
 \subsection{Costruire un automa caratteristico per il parsing LR(0)}
 
@@ -294,13 +294,14 @@ In conclusione l'automa caratteristico che otteniamo da questo procedimento può
     \label{charateristic-automata_cosntruction}    
 \end{figure}
 
-Una volta terminata questa arzigogolata esercitazione possiamo dare un'occhiata all'algoritmo per la costruzione di un automa LR(0) in Fig.\ref{}.
+Una volta terminata questa arzigogolata esercitazione possiamo dare un'occhiata all'algoritmo per la costruzione di un automa LR(0) in Alg.\ref{alg:char-automata}.
 \begin{figure}
     \centering
     \includegraphics[width=.8\textwidth]{lr0-automata_construction_algorithm.jpg}
     \caption{Algoritmo per la costruzione di un automa LR(0)}
     \label{lr0-automata_construction_algorithm}    
 \end{figure}
+\subimport{assets/pseudocode/}{char-automata.tex}
 
 Ma dove sono finite le etichette rosse che sull'automa dell'esercizio di shift/reduce ci segnalavano le mosse di reduce?
 Lo scopriremo nella prossima sezione.
