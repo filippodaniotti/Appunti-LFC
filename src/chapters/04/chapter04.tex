@@ -430,18 +430,18 @@ Ora che sappiamo quali sono le strutture dati che andremo ad utilizzare, studiam
     \item a questo punto estraiamo dalla cima dello stak, prendiamo il nodo estratto \(e\) e cerchiamo tutti i nodi che da \(e\) si raggiugono tramite un \(\varepsilon\)-arco; inseriamo tutti questi nello stak (se non sono già presenti) e ne segnaliamo l'inserimento settando il loro flag su \texttt{alreadyOn}.
 \end{itemize}
 
-Continuiamo così finché lo stak non si svuota. L'algoritmo appena descritto si può trovare in figura \ref{algoritmo_epsilon_chiusura}.
+Continuiamo così finché lo stak non si svuota. L'algoritmo appena descritto si può trovare in Alg.\ref{alg:ec-computation}.
 
 % \begin{algorithm}[H]
 % 	\centering
 	\subimport{assets/pseudocode/}{ec-wrapper.tex}
-	\subimport{assets/pseudocode/}{ec-computation.tex}\label{algoritmo_epsilon_chiusura}
+	\subimport{assets/pseudocode/}{ec-computation.tex}
 	% \caption{Esempio di parse tree}
 % \end{algorithm}
 
-Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'algoritmo per la verifica dell'appartenenza di una parola \(w\) al linguaggio riconosciuto da un automa, ovvero l'algoritmo di simulazione (figura \ref{algoritmo_simulazione_nfa}).
+Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'algoritmo per la verifica dell'appartenenza di una parola \(w\) al linguaggio riconosciuto da un automa, ovvero l'algoritmo di simulazione (Alg.\ref{alg:nfa-simulation}).
 
-\subimport{assets/pseudocode/}{nfa-simulation.tex}\label{algoritmo_simulazione_nfa}
+\subimport{assets/pseudocode/}{nfa-simulation.tex}
 
 Dove \texttt{\$} è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \texttt{\$}).
 Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(s_0\) e la aggiungiamo all'insieme \texttt{states}; prendiamo il primo simbolo nella parola e poi entriamo nel ciclo che compone il corpo della procedura.
