@@ -1,0 +1,33 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{algorithm}[H]
+        \label{alg:left-fact}
+        \DontPrintSemicolon
+
+        \SetKwData{t}{\textbf{true}}
+        \SetKwData{f}{\textbf{false}}
+        \SetKwData{mrk}{\texttt{\$}}
+
+        \SetKwData{j}{j}
+        \SetKwData{Follow}{follow}
+        \SetKwData{First}{first}
+        \SetKwFunction{Add}{add}
+        
+        \Repeat{no pair of productions for any \(A\) has common prefix} {
+            \ForEach{\(A\)} {
+                find the largest prefix \(\alpha\) common to \(2\) or more productions for \(A\)\;
+                \If{\(\alpha \ne \varepsilon\)} {
+                    sostituisci ma bisogna trovare un bel modo per dirlo
+                }
+            }
+        }
+
+        \caption{\textsc{Grammar} leftFactorization(\textsc{Grammar} \(\mathcal{G}\))}
+    \end{algorithm}
+\end{document}

@@ -1,0 +1,38 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{algorithm}[H]
+        \label{alg:parsing-table-comp}
+        \DontPrintSemicolon
+
+        \SetKwData{t}{\textbf{true}}
+        \SetKwData{f}{\textbf{false}}
+        \SetKwData{mrk}{\texttt{\$}}
+        \SetKwData{err}{error}
+
+        \SetKwData{j}{j}
+        \SetKwData{Follow}{follow}
+        \SetKwData{First}{first}
+        \SetKwArray{TD}{M}
+        \SetKwFunction{Add}{add}
+        
+        \ForEach{\(A \to \alpha \in \mathcal{P}\)} {
+            \ForEach{\(b \in\) \First{\(\alpha\)}} {
+                add \(A \to \alpha\) to \TD{\(A, b\)}\;
+            }
+            \If{\(\varepsilon \in\) \First{\(\alpha\)}} {
+                \ForEach{\( \in\) \Follow{\(A\)}} {
+                    add \(A \to \alpha\) to \TD{\(A, x\)}\;
+                }
+            }
+        }
+        set to \err{} all the empty entries\;
+
+        \caption{\textsc{Table} ParsingTableComputation(\textsc{Grammar} \(\mathcal{G}\))}
+    \end{algorithm}
+\end{document}
