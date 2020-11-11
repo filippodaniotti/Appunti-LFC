@@ -123,31 +123,31 @@ Andiamo ora a vedere il concetto di chiusura di un insieme di LR(0)-items:
     \end{equation}
 \end{definition}
 
-La chiusura consiste sostanzialmente in tutti quegli items che hanno un punto davanti ad un non terminale; poi, ricorsivamente, si vanno ad aggiungere tutte le chiusure dei terminali con un punto davanti.
+La chiusura consiste sostanzialmente in tutti quegli items che hanno un punto davanti ad un non-terminale; poi, ricorsivamente, si vanno ad aggiungere tutte le chiusure dei terminali con un punto davanti.
 
 \subsection{Esempio di calcolo della chiusura}
 Prendiamo ora ad esempio la seguente grammatica:
 \begin{align*}
-    E \to& E+T \mid T\\
-    T \to& T*F \mid F\\
-    F \to& (E) \mid id
+    E &\to E+T \mid T\\
+    T &\to T*F \mid F\\
+    F &\to (E) \mid id
 \end{align*}
-e calcoliamo \(closure_0 (\{E' \to \cdot E\})\). Ecco il procedimento passo per passo:
+e calcoliamo \(closure_0(\{E' \to \cdot E\})\). Ecco il procedimento passo per passo:
 \begin{enumerate}
-    \item inizializziamo \(closure_0 (\{E' \to \cdot E\})\) = \(\{E' \to \cdot E\}\); 
-    \item andiamo a vedere se questo insieme contiene qualche marker davanti ad un non-terminale: effettivamente c'è un marker prima di \(E\);
+    \item inizializziamo \(closure_0(\{E' \to \cdot E\})\) = \(\{E' \to \cdot E\}\); 
+    \item andiamo a vedere se questo insieme contiene qualche marker davanti ad un non-terminale: effettivamente, c'è un marker prima di \(E\);
     \item aggiungiamo quindi le due produzioni di \(E\) alla chiusura \(\{E \to \cdot E+T\}\) e \(\{E \to \cdot T\}\);
     \item una volta aggiunte queste produzioni, vediamo ricorsivamente se si presentano altre situazioni con \(\cdot\);
-    \item nel primo caso troviamo ancora \(\cdot E\) che però abbiamo già analizzato;
+    \item nel primo caso troviamo ancora \(\cdot E\), che però abbiamo già analizzato;
     \item nel secondo caso invece abbiamo \(\cdot T\) e non abbiamo ancora analizzato tutte le produzioni di \(T\), quindi andiamo ad aggiungere all'insieme le produzioni di \(T\);
     \item aggiungamo \(\{T \to \cdot T * F\}\) e \(\{T \to \cdot F\}\);
     \item ci troviamo di nuovo in un caso in cui abbiamo due nuove derivazioni con \(\cdot\) davanti
-    ad un non-terminale, ma \(\cdot T\) è già analizzato, analizziamo quindi solo \(\cdot F\);
-    \item aggiungiamo le produzioni di \(F\): \(\{F \to \cdot (E)\}\) e \(\{F \to \cdot id \}\).
-    \item siamo arrivati alla conclusione, sotto è riportato l'insieme chiusura che abbiamo trovato:
+    a un non-terminale, ma \(\cdot T\) è già analizzato, per cui analizziamo solo \(\cdot F\);
+    \item aggiungiamo le produzioni di \(F\): \(\{F \to \cdot (E)\}\) e \(\{F \to \cdot id \}\);
+    \item siamo arrivati alla conclusione, e qui sotto è riportato l'insieme chiusura che abbiamo trovato:
 \end{enumerate}
 \begin{align*}
-    E'&\to \cdot E \\
+    E' &\to \cdot E \\
     E  &\to \cdot E+T \\
     E  &\to \cdot T \\
     T  &\to \cdot T * F \\
@@ -156,8 +156,7 @@ e calcoliamo \(closure_0 (\{E' \to \cdot E\})\). Ecco il procedimento passo per 
     F  &\to \cdot id
 \end{align*}
 
-Ora che abbiamo visto un applicazione otteniamo lo pseudocodice dell'algoritmo per la
-computazione della chiusura:
+Ora che abbiamo visto un applicazione otteniamo lo pseudocodice dell'algoritmo per la computazione della chiusura:
 \begin{figure}[H]
     \centering
     \includegraphics[width=.8\textwidth]{bottom-up-parsing_closure_algorithm.png}
@@ -166,57 +165,55 @@ computazione della chiusura:
 \subimport{assets/pseudocode/}{lr0-closure.tex}
 
 \subsection{Costruire un automa caratteristico per il parsing LR(0)}
+Vedremo ora come costruire un automa caratteristico per il parsing di tipo LR(0) data una certa grammatica. La tecnica di costruzione è incrementale: andiamo a popolare un set di stati definendo mano a mano la funzione di transizione, fino a saturazione; il lettore si accorgerà che tale tecnica è poi utilizzata per costruire anche altri automi LR.
 
-Vedremo ora come costruire un automa caratteristico per il parsing di tipo LR(0) data una certa grammatica.
+\paragraph{Inizio}
+In primis, definiamo lo stato iniziale come \(P_0 = closure_0 (\{S' \to \cdot S\})\), dove \(S'\) è un carattere inserito da noi, mentre \(S\) è lo start symbol della nostra grammatica.
 
-La tecninca di costruzione è incrementale: andiamo a popolare un set di stati definendo mano a mano la funzione di transizione, fino alla saturazione; il lettorè si accorgerà che tale tecnica è poi utilizzata per costruire anche altri automi LR.
+\paragraph{Svolgimento}
+Tra gli stati che abbiamo già collezionato, ne esisterà uno, \(P\), che contiene un item \(A \to \alpha \cdot x \beta\), che rappresenta uno stato in cui ho già visto \(\alpha\) e in cui posso fare una transizione a \(x\beta\).
 
-In primis definiamo lo stato iniziale come \(P_0 = closure_0 (\{S' \to \cdot S\})\), dove \(S'\) è un carattere inserito da noi, mentre \(S\) è lo starting symbol della nostra grammatica.
+Esiste quindi una transizione da \(P\) a uno stato \(P'\) che contiene l'item \(A \to \alpha x \cdot \beta\); se \(x\) è un terminale, tale transizione rappresenta un'operazione di shift (come abbiamo visto nell'esercizio della sezione scorsa). Questo significa che avrò una transizione etichettata con \(x\) che mi porta da \(P\) a \(P'\).
 
-Esisterà tra gli stati che abbiamo già collezionato uno stato \(P\) che contiene un item \(A \to \alpha \cdot x \beta\), che rappresenta uno stato in cui ho già visto \(\alpha\) e posso fare una transizione a \(x\beta\).
-
-Esiste quindi una transizione da \(P\) ad uno stato \(P'\) che contiene l'item \(A \to \alpha x \cdot \beta\); se \(x\) è un terminale tale transizione rappresenta un'operazione di shift (come abbiamo visto nell'esercizio della sezione scorsa). 
-Questo significa che avrò una transizione etichettata con \(x\) che mi porta da \(P\) a \(P'\).
-
-Una volta che genero uno stato \(P'\) che contiene l'item \(A \to \alpha x \cdot \beta\) devo anche includervi tutti gli item che appartengono a \(closure_0 (\{ A \to \alpha x \cdot \beta \})\), poiché se \(\beta\) è un non terminale allora mi aspetto di poter trovare in \(P'\)  anche tutto ciò che deriva da \(\beta\).
-
-Osserviamo subito un esempio di costruzione  di un automa caratteristico per il parsing LR(0).
+Una volta che genero uno stato \(P'\) che contiene l'item \(A \to \alpha x \cdot \beta\) devo anche includervi tutti gli item che appartengono a \(closure_0 (\{ A \to \alpha x \cdot \beta \})\), poiché se \(\beta\) è un non-terminale allora mi aspetto di poter trovare in \(P'\) anche tutto ciò che deriva da \(\beta\).
 
 \subsubsection{Esempio costruzione automa caratteristico LR(0)}
 \label{esercizio_costruzione_automa_lr0}
-Costruiamo l'automa caratteristico per il parsing LR(0) della seguente grammatica:
+Per consolidare la procedura sopra illustrata, andiamo subitoa a metterele mani su un esempio di costruzione di un automa caratteristico per il parsing LR(0), in particolare per la seguente grammatica:
 \begin{align*}
     S &\to aABe \\
     A &\to Abc \mid b \\
     B &\to d
 \end{align*}
-Partiamo con il creare lo stato iniziale, lo stato 0:
+
+\paragraph{Inizio}
+Partiamo creando lo stato iniziale, lo stato \(0\):
 \begin{equation*}
     S' \to \cdot S
 \end{equation*}
-Ma non è concluso qui, infatti nello stato iniziale va anche la \(closure_0(\{ S' \to \cdot S \})\), quindi aggiungo le produzioni di \(S\): \(S \to \cdot aABe\).
-Dato che non sono presenti altre produzioni con marker prima di caratteri non-terminali lo stato 0 è completo.
+Ma c'è di più: nello stato iniziale va inserita anche la \(closure_0(\{ S' \to \cdot S \})\), quindi aggiungo le produzioni di \(S\): \(S \to \cdot aABe\). Dato che non sono presenti altre produzioni con marker prima di caratteri non-terminali, lo stato \(0\) è completo.
 
-A questo punto ci troviamo nello stato 0 ed abbiamo due produzioni, una con il marker prima di \(S\) ed una con il marker prima di \(a\), dobbiamo aggiungere i seguenti due stati:
+\paragraph{Svolgimento}
+A questo punto ci troviamo nello stato \(0\) ed abbiamo due produzioni, una con il marker prima di \(S\) ed una con il marker prima di \(a\), per cui dobbiamo aggiungere i seguenti due stati:
 \begin{enumerate}
-    \item \(\tau (0, S) =\) 1
-    \item \(\tau (0, a) =\) 2
+    \item \(\tau (0, S) = 1\)
+    \item \(\tau (0, a) = 2\)
 \end{enumerate}
-Nota: gli stati possono venire indicati con la notazione 
+Nota: gli stati possono venire indicati con la notazione :
 \begin{equation*}
     \tau( \textrm{stato di provenienza}, \textrm{transizione di provenienza}).
 \end{equation*}
-Questi stati però potrebbero essere già presenti! Non è questo il caso dato che sono i primi stati che troviamo, ma in seguito dovremmo ricordarci di tale controllo.
-\\
+Questi stati però potrebbero essere già presenti! Non è questo il caso dato che sono i primi stati che troviamo, ma in seguito dovremmo ricordarci di tale controllo. \\
+
 Partiamo con l'analizzare il nuovo stato \(\tau (0, S) =\) 1. \\
 Dobbiamo calcolare il \emph{kernel} dello stato, che si ottiene spostando il marker oltre al carattere che ci ha portati qui:
 \begin{equation*}
     S' \to S \cdot
 \end{equation*}
-Questo è quello che viene definito kernel dello stato; non presenta ulteriori transizioni possibili dato che il marker è arrivato in fondo, quindi passiamo ad analizzare un altro stato.
-\\
+Questo è quello che viene definito kernel dello stato; non presenta ulteriori transizioni possibili dato che il marker è arrivato in fondo, quindi passiamo ad analizzare un altro stato. \\
+
 Andiamo ad analizzare lo \(\tau (0, a) =\) 2. \\
-Il kernel questa volta è
+Il kernel questa volta è:
 \begin{equation*}
     S \to a \cdot ABe
 \end{equation*}
@@ -231,15 +228,15 @@ Quindi gli item dello stato 2 sono:
     A &\to \cdot Abc\\
 	A &\to \cdot b
 \end{align*}
-Dallo stato 2 avremo quindi due possibili transizioni, una tramite \(A\) ed una tramite \(b\).
-\\
-Partiamo ad analizzare \(\tau (2, A) =\) 3. \\
-Il kernel di questo stato è composto da due produzioni, dato che da 2 si può arrivare in 3 tramite due distinte produzioni:
+Dallo stato 2 avremo quindi due possibili transizioni, una tramite \(A\) ed una tramite \(b\). \\
+
+Partiamo ad analizzare \(\tau (2, A) = 3\). \\
+Il kernel di questo stato è composto da due produzioni, dato che da \(2\) si può arrivare in \(3\) tramite due distinte produzioni:
 \begin{align*}
     S &\to aA \cdot Be \\
     A &\to A \cdot bc
 \end{align*}
-Per verificare se questo stato è già astato raggiunto vado a verificare che non siano presenti stati con gli stessi item; non ve ne sono, lo stato 3 non è ancora stato effettivamente aggiunto quindi lo tengo.
+Per verificare se questo stato è già stato raggiunto, vado a verificare che non siano presenti stati con gli stessi item; in questo casp non ce ne sono, per cui lo stato \(3\) non è ancora stato effettivamente aggiunto e quindi lo tengo.
 
 Calcoliamo la chiusura dello stato, che ci porta ad aggiungere la seguente produzione:
 \begin{equation*}
@@ -247,46 +244,48 @@ Calcoliamo la chiusura dello stato, che ci porta ad aggiungere la seguente produ
 \end{equation*}
 Una volta calcolata la chiusura, mi segno i nuovi stati da visitare.
 \begin{itemize}
-    \item \(\tau (3, B) =\) 5
-    \item \(\tau (3, b) =\) 6
-    \item \(\tau (3, d) =\) 7
+    \item \(\tau (3, B) = 5\)
+    \item \(\tau (3, b) = 6\)
+    \item \(\tau (3, d) = 7\)
 \end{itemize}
-\noindent Analizziamo ora lo stato \(\tau (2, b) =\) 4. \\
-Questo stato ha come kernel
+
+Analizziamo ora lo stato \(\tau (2, b) = 4\). \\
+Questo stato ha come kernel:
 \begin{equation*}
     A \to b \cdot
 \end{equation*}
-che non presenta ulteriori possibili sviluppi, quindi passiamo oltre.
-\\
-Analizziamo lo stato \(\tau (3, B) =\) 5. \\
-Il kernel in questo caso è
+e non presenta ulteriori possibili sviluppi, quindi passiamo oltre. \\
+
+Analizziamo lo stato \(\tau (3, B) = 5\). \\
+Il kernel in questo caso è:
 \begin{equation*}
     S \to aAB \cdot e
 \end{equation*}
-Tale kernel è già chiuso (la sua chiusura è vuota) e ci offre come unica transizione possibile \(\tau (5, e) =\) 8.
-\\
-Analizziamo lo stato 6 \( = \tau (3, B)\). \\
-Il kernel è
+questo kernel è già chiuso (la sua chiusura, infatti, è un insieme vuoto) e ci offre come unica transizione possibile \(\tau (5, e) = 8\). \\
+
+Analizziamo lo stato \(\tau (3, B) = 6\). \\
+Il kernel in questo caso è:
 \begin{equation*}
     A \to Ab \cdot c
 \end{equation*}
-Anche questo kernel è già chiuso; ci offre la transizion allo stato 9 \(= \tau (6, c)\).
-\\
-Analizziamo lo stato \(\tau (3, d) =\) 7. \\
-Ha come kernel
+Anche questo kernel è già chiuso; ci offre la transizion allo stato \(\tau (6, c) = 9\). \\
+
+Analizziamo lo stato \(\tau (3, d) = 7\). \\
+Questo stato ha come kernel:
 \begin{equation*}
     B \to d \cdot 
 \end{equation*}
-Tale kernel è chiuso e non presnta transizioni uscenti.
-\\
-Non ci rimane che analizzare gli stati 8 e 9 che presentano rispettivamente i seguenti kernel:
+Tale kernel è chiuso e non presnta transizioni uscenti. \\
+
+Non ci rimane che analizzare gli stati \(8\) e \(9\) che presentano rispettivamente i seguenti kernel:
 \begin{align*}
     S &\to aABe \cdot \\
     A &\to Abc \cdot
 \end{align*}
-i quali non presentano ulteriori transizioni.
+questi due kernel non presentano ulteriori transizioni.
 
-In conclusione l'automa caratteristico che otteniamo da questo procedimento può essere visualizzato in Fig.\ref{charateristic-automata_cosntruction}
+\paragraph{Conclusione}
+In conclusione, l'automa caratteristico che otteniamo da questo procedimento può essere visualizzato in Fig.\ref{charateristic-automata_cosntruction}
 \begin{figure}
     \centering
     \includegraphics[width=.8\textwidth]{charateristic-automata_cosntruction.png}
@@ -303,30 +302,23 @@ Una volta terminata questa arzigogolata esercitazione possiamo dare un'occhiata 
 \end{figure}
 \subimport{assets/pseudocode/}{char-automata.tex}
 
-Ma dove sono finite le etichette rosse che sull'automa dell'esercizio di shift/reduce ci segnalavano le mosse di reduce?
-Lo scopriremo nella prossima sezione.
-
+Ma dove sono finite le etichette rosse che sull'automa dell'esercizio di shift/reduce ci segnalavano le mosse di reduce? Lo scopriremo nella prossima sezione.
 
 \section{Parsing table per bottom-up}
+L'algoritmo di shift/reduce compie delle mosse in base a cosa leggiamo sulle due pile (pila del parsing e pila della lettura). L'algoritmo usa una tabella di parsing per muoversi. La tabella ha tante righe quanti gli stati dell'automa caratteristico, ed una colonna per ogni simbolo in \(V \cup \{ \$ \}\). Nota che la tabella dipende dall'automa caratteristico, automi diversi portano a tabelle diverse che portano a tipi di parsing diversi.
 
-L'algoritmo di shift/reduce compie delle mosse in base a cosa leggiamo sulle due pile (pila del parsing e pila della lettura). L'algoritmo usa una tabella di parsing per muoversi.
+Le mosse di shift dipendono direttamente dalla funzione di transizione dell'automa, mentre le mosse di reduce sono più articolate: vanno effettuate solo quando raggiungiamo quei particolari stati etichettati ed implicano poi che dobbiamo cancellare degli elementi dalla pila degli stati e dalla pila di lettura per poi inserire altri caratteri in quest'ultima pila.
 
-La tabella ha tante righe quanti gli stati dell'automa caratteristico, ed una colonna per ogni simbolo in \(V \cup \{ \$ \}\).
-Nota che la tabella dipende dall'automa caratteristico, automi diversi portano a tabelle diverse che portano a tipi di parsing diversi.
-
-Le mosse di shift dipendono direttamente dalla funzione di transizione dell'automa; mentre le mosse di reduce sono più articolate: vanno effettuate solo quando raggiungiamo quei particolari stati etichettati ed implicano poi il dover cancellare degli elementi dalla pila degli stati e dalla pila di lettura per poi inserire altri caratteri in quest'ultima pila.
-
-Le mosse di reduce dipendono dal contenuto degli stati dell'automa: in un certo stato della tabella di parsing andiamo ad inserire una mossa di riduzione se la produzione \(A \to \beta\) è effettuata in uno stato contenente un reducing item per \(A \to \beta\), ma cosa sono i reducing item?
+Le mosse di reduce dipendono dal contenuto degli stati dell'automa: in un certo stato della tabella di parsing andiamo ad inserire una mossa di riduzione se la produzione \(A \to \beta\) è effettuata in uno stato contenente un reducing item per \(A \to \beta\). A questo punto però ci chiediamo: cosa sono i reducing item?
 \begin{itemize}
-    \item Item \(A \to \beta \cdot \) nel caso di item LR0 (ovvero quando sono arrivato alla fine della produzione di \(\beta\));
-    \item item \(A \to \beta \cdot, \; \Delta\) nel caso LR1 (ovvero quando ho terminato l'analisi del body di \(\beta\)).
+    \item Item \(A \to \beta \cdot \) nel caso di LR(0)-items, ovvero quando sono arrivato alla fine della produzione di \(\beta\);
+    \item item \(A \to \beta \cdot, \; \Delta\) nel caso LR(1)-items, ovvero quando ho terminato l'analisi del body di \(\beta\).
 \end{itemize}
-Le riduzioni dipendono dalla lookahead function \(\mathcal{LA}\) che è definita per tutte le coppie \((P,\; A \to \beta)\) tali che \(P\) contiene un reducing item per \(A \to \beta\).
+Le riduzioni dipendono dalla \emph{lookahead function} \(\mathcal{LA}\), la quale è definita per tutte le coppie \((P,\; A \to \beta)\) tali che \(P\) contiene un reducing item per \(A \to \beta\).
 
-Da mensionare il fatto che la scelta dell'automa e della lookahead function per la costruzione della parsing table sono le caratteristiche che distinguono le varie tecniche di bottomup parsing.
-Nello specifico abbiamo le seguenti conseguenze:
+Da menzionare il fatto che la scelta dell'automa e della lookahead function per la costruzione della parsing table sono le caratteristiche che distinguono le varie tecniche di bottomup parsing. Nello specifico abbiamo le seguenti conseguenze:
 \begin{itemize}
-    \item la classe delle grmmatiche analizzabili dipene dalla scelta appena menzionata;
+    \item la classe delle grammatiche analizzabili dipende dalla scelta appena menzionata;
     \item anche la dimensione della parsing table dipende da tale scelta;
     \item la procedura di riempimento della parsiing table è invece indipendente;
     \item anche l'algoritmo di parsing è sempre uguale.
@@ -334,19 +326,17 @@ Nello specifico abbiamo le seguenti conseguenze:
 
 \subsection{Costruire una parsing table per il bottom-up parsing}
 
-Vediamo ora nello specifico come costruire una parsing table.
-Dobbiamo riempire ogni entry \((P, Y)\) seconndo le seguenti regole:
+Vediamo ora nello specifico come costruire una parsing table. Dobbiamo riempire ogni entry \((P, Y)\) seconndo le seguenti regole:
 \begin{itemize}
-    \item se \(Y\) è un terminale e \(\tau (P,Y)=Q\) inserisci la mossa "shift Q";
-    \item se \(P\) contiene un reducing itemp per \(A \to \beta\) e \(Y \in \mathcal{LA}(P, A \to \beta)\), inserisci la mossa "reduce \(A \to \beta\)";
-    \item se \(P\) contiene l'accepting item e \(Y=\$\) inserisci "accept";
+    \item se \(Y\) è un terminale e \(\tau (P,Y) = Q\) inserisci la mossa \texttt{shift} Q;
+    \item se \(P\) contiene un reducing item per \(A \to \beta\) e \(Y \in \mathcal{LA}(P, A \to \beta)\), inserisci la mossa \texttt{reduce} \(A \to \beta\);
+    \item se \(P\) contiene l'accepting item e \(Y=\$\) inserisci \texttt{accept};
         \begin{itemize}
-            \item nel caso degli automati LR(0) l'item è \(\{S' \to S \cdot\}\);
-            \item nel caso degli automati LR(1) l'item è \(\{S' \to S \cdot, \; \Delta\}\);
+            \item nel caso degli automi LR(0) l'item è \(\{S' \to S \cdot\}\);
+            \item nel caso degli automi LR(1) l'item è \(\{S' \to S \cdot, \; \Delta\}\);
         \end{itemize}
-    \item se \(Y\) è un terminale o \$ e nessuna delle condizioni precedenti è valida, inserisce "errore";
-    \item se \(Y\) è un non-terminale e \(\tau (P, Y)=Q\) inserisci la mossa "goto \(Q\)".
+\item se \(Y\) è un terminale o \$ e nessuna delle condizioni precedenti è valida, inserisce \texttt{errore};
+    \item se \(Y\) è un non-terminale e \(\tau (P, Y) = Q\) inserisci la mossa \texttt{goto} \(Q\).
 \end{itemize}
-
 
 \end{document}

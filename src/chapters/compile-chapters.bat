@@ -29,3 +29,4 @@ cd ..
 cd 08
 arara -v chapter08
 cd ..
+pause
