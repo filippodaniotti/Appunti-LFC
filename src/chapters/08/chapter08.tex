@@ -1,6 +1,7 @@
 \documentclass[class=book, crop=false, oneside, 12pt]{standalone}
 \usepackage{standalone}
 \usepackage{../../style}
+\usepackage[normalem]{ulem}
 \graphicspath{{./assets/images/}}
 
 % arara: pdflatex: { synctex: yes, shell: yes }
@@ -417,6 +418,14 @@ In Tab.\ref{tab:parsing-table-SLR(1)parsing} possiamo trovare il risultato final
     \caption{LRS(1) Parsing Table}
     \label{tab:parsing-table-SLR(1)parsing}
 \end{table}
+Specifichiamo quindi per chiarezza il significato dei vari \(rK\):
+\begin{itemize}
+    \item \(r1 = S \to aABe\)
+    \item \(r2 = A \to Abc\)
+    \item \(r3 = A \to b\)
+    \item \(r4 = B \to d\)
+\end{itemize}
+
 Dal momento che \(\G\) dà origine a una nuova grammatica senza creare alcun conflitto, possiamo concludere che \(\G\) è SLR(1).
 
 Prima di passare alla prossima sezione è necessario precisare che \emph{solamente} le celle vuote che hanno per colonna un terminale o \$ sarebbero valorizzate a \texttt{error}: infatti, le celle vuote che hanno per colonna un non-terminale rimangono semplicemente vuote, in quanto sono dei casi che non è possibile che si verifichino. 
@@ -424,7 +433,7 @@ Prima di passare alla prossima sezione è necessario precisare che \emph{solamen
 \subsection{Algoritmo Shift/Reduce}
 \begin{itemize}
     \item \textbf{Input}: una stringa \(w\) e la tabella di parsing \(M\) per \(\G = (V, T, S, \P)\);
-    \item \textbf{Output}: una derivazione di \(w\) in ordine inverso (ossia dobbiamo leggere l'output che produciamo al rovescio: l'ultima reduce verrà utilizzata come prima) se \(w \in \mathcal{L}(\G)\), \texttt{error} altrimenti;
+    \item \textbf{Output}: una derivazione di \(w\) in ordine inverso se \(w \in \mathcal{L}(\G)\) (per trovare i passi di derivazione che ci portano a \(w\) dovremo leggere tutte le reduce che abbiamo applivato in ordine inverso); otterremo invece \texttt{error} se \(w \notin \mathcal{L}(\G)\);
     \item \textbf{Inizializzazione}: Per l'algoritmo è necessario inserire all'interno dell'input buffer la stringa \(w\$\), e inoltre abbiamo bisogno di due strutture dati:
     \begin{itemize}
         \item \(stSt\) (state stack - pila degli stati), che viene inizializzata ponendo in cima lo stato \(P_0\) (ovvero prima chiusura dell'insieme di LR(0)-item);
@@ -438,5 +447,204 @@ Prima di passare alla prossima sezione è necessario precisare che \emph{solamen
     \caption{Algoritmo di parsing Bottom-Up}
     \label{fig:bottom-up-parsing-algorithm}    
 \end{figure}
+
+Andiamo subito a mettere in pratica questo algoritmo con un esempio.
+
+\subsubsection{Esercizio shift/reduce 1}
+Verifichiamo che la parola
+\begin{equation*}
+    w = abbcde
+\end{equation*}
+appartenga al linguaggio generato dalla grammatica
+\begin{align}
+    \label{grammar-ex-sh/re-1}
+    S &\to aABe \\
+    A &\to Abc \nonumber \\ \notag
+    A &\to b \nonumber \\ \notag
+    B &\to d  \nonumber \notag
+\end{align}
+di cui abbiamo già calcolato la tabella di parsing bottom-up in Tab.\ref{tab:parsing-table-SLR(1)parsing}.
+
+La configurazione iniziale è la seguente:
+\begin{align*}
+    w &= abbcde\$ \\
+    stSt &= 0 \\
+    symSt &= 
+\end{align*}
+Il primo carattere che leggiamo nel buffer è \(a\), cerchiamo nella tabella del parsing il contenuto della casella [0,\(a\)], vediamo che contiene una mossa di shift verso lo stato 2, quindi andiamo ad inserire il nuovo stato di arrivo in \(stSt\) e il carattere letto in \(symSt\):
+\begin{align*}
+    w &= \underline{a}bbcde\$ \\
+    stSt &= 0\;2\\
+    symSt &= a
+\end{align*}
+Ci troviamo nello stato 2 e leggiamo il secondo carattere della parola che è \(b\), controlliamo cosa contiene la casella [2,\(b\)] della tabella di parsing.
+Abbiamo un'altra mossa di shift che ci fa raggiungere lo stato 4 e leggere un ennesimo carattere, questa è la situazione:
+\begin{align*}
+    w &= \underline{ab}bcde\$ \\
+    stSt &= 0\;2\;4\\
+    symSt &= a\;b
+\end{align*}
+Ora siamo in 4 e leggiamo \(b\), [4,\(b\)] ci suggerisce di compiere una mossa di reduce, nello specifico \(R: A \to b\); Questo significa che andiamo ad eliminare tanti stati da \(stSt\) quanti gli elementi nel body della produzione ed eliminiamo il body stesso da \(symSt\), per inserirvi il driver, in questo caso \(A\):
+\begin{align*}
+    w &= \underline{ab}bcde\$ \\
+    stSt &= 0\;2\;\xout{4}\\
+    symSt &= a\;A
+\end{align*}
+Ora però dobbiamo sostituire lo stato 4 con lo stato che è presente nella tabella in posizione [2,\(A\)], ovvero lo stato 3, la situazione si ristabilisce quindi così:
+\begin{align*}
+    w &= \underline{ab}bcde\$ \\
+    stSt &= 0\;2\;3\\
+    symSt &= a\;A
+\end{align*}
+Dobbiamo ancora consumare la seconda \(b\) (le mosse di reduce non consumano i caratteri), quindi ora ci troviamo nella casella [3, b], che ci suggerisce la mossa shift 6, vediamo cosa succede:
+\begin{align*}
+    w &= \underline{abb}cde\$ \\
+    stSt &= 0\;2\;3\;6\\
+    symSt &= a\;A\;b
+\end{align*}
+A questo punto la casella da guardare diventa [6,\(c\)], che ci dice shift 9, obladì obladà:
+\begin{align*}
+    w &= \underline{abbc}de\$ \\
+    stSt &= 0\;2\;3\;6\;9\\
+    symSt &= a\;A\;b\;c
+\end{align*}
+Plot-twit! proprio mentre ci siamo abituati alla tranquillità delle mosse di shift la casella [9,\(d\)] ci lascia sbigottiti con una mossa di reduce \(R: A \to Abc\), costringendoci ad eliminare ben 3 stati da \(stSt\) e 3 caratteri da \(symSt\), sostituendoli con una sprezzante \(A\):
+\begin{align*}
+    w &= \underline{abbc}de\$ \\
+    stSt &= 0\;2\;\xout{369}\\
+    symSt &= a\;\xout{Abc}A
+\end{align*}
+A questo punto siamo costretti a guardare in [2,\(A\)] per capire in quale stato siamo stati sballottati dal \texttt{goto}:
+\begin{align*}
+    w &= \underline{abbc}de\$ \\
+    stSt &= 0\;2\;3\\
+    symSt &= a\;A
+\end{align*}
+Bene, riprendiamo con la lettura, eravamo rimasti a \(d\), ora controlliamo [3,\(d\)] che ci suggerisce shift 7:
+\begin{align*}
+    w &= \underline{abbcd}e\$ \\
+    stSt &= 0\;2\;3\;7\\
+    symSt &= a\;A\;d
+\end{align*}
+Stato 7, prossimo carattere nel buffer \(e\), la casella [7,\(e\)] presenta tale riduzione \(R: B\to d\), ormai la prassi ci è nota:
+\begin{align*}
+    w &= \underline{abbcd}e\$ \\
+    stSt &= 0\;2\;3\;\xout{7}\;5\\
+    symSt &= a\;A\;\xout{d}\;B
+\end{align*}
+Dobbiamo ancora leggere la \(e\) e ci troviamo ora nello stato 5, [5,\(e\)] ci dice shift 8:
+\begin{align*}
+    w &= \underline{abbcde}\$ \\
+    stSt &= 0\;2\;3\;5\;8\\
+    symSt &= a\;A\;\;B\;e
+\end{align*}
+Con 8 come stato e \$ come ultimo carattere ci assicuriamo una bella reduce in forma di \(R: S \to aABe\), che ci fa arrivare a questa situazione (ricordiamoci del \texttt{goto}):
+\begin{align*}
+    w &= \underline{abbcde}\$ \\
+    stSt &= 0\;1\\
+    symSt &= 
+\end{align*}
+Il prossimo passo è descritto dalla casella [1,\$], che ci dice Accept, il che significa che abbiamo terminato la verifica e possiamo dire con pace interiore che \(w \in \mathcal{L}(\G)\).
+
+Mentre risolvevamo questo quesito abbiamo anche ricavato i passi di derivazione che ci portano ad ottenere la parola \(w\) stessa, questi consistono nelle riduzioni che abbiamo incontrato nel nostro cammino elentcate in senso contrario:
+\begin{align*}
+    S &\to aABe &(aABe)\\
+    B &\to d &(aAde)\\
+    A &\to Abc &(aAbcde)\\
+    A &\to b &(abbcde)
+\end{align*}
+
+Passiamo quindi ad un secondo esercizio, più completo questa volta.
+
+\subsubsection{Esercizio shift/reduce 2}
+La consegna è di costruire la parsing table SLR(1) per la seguente, ormai ben nota, grammatica:
+\begin{equation}
+    \label{ex2-sh/re-grammar}
+    E \to E+E \mid E*E \mid id
+\end{equation} 
+Per costruire una parsing table abbiamo prima di tutto bisogno di ricavare l'automa a stati finiti determinato da tale grammatica.
+\paragraph{Ricaviamo l'automa}
+\begin{enumerate}
+    \item Inizializziamo lo stato 0, esso ha come kernel 
+    \begin{equation*}
+        E' \to \cdot E
+    \end{equation*}
+    Di questo kernel devo calcolare la chiusura:
+    \begin{align*}
+        E &\to \cdot E+E \\
+        E &\to \cdot E*E \\
+        E &\to \cdot id
+    \end{align*}
+    Essendo questi gli item per lo stato 0 posso identificare due possibili transizioni (e quindi due possibili nunovi stati): \(\tau(0,E)=1 \textrm{ e } \tau(0,id)=2\).
+    \item Analizziamo ora lo stato 2, il suo kernel è 
+    \begin{equation*}
+        E \to id.    
+    \end{equation*}
+    Non serve calcolare la chiusura di questo item, inoltre tale item non comporta transizioni uscenti dallo stato 2, terminiamo qui l'analisi.
+    \item Passiamo al vaglio lo stato 1, il cui kernel è popolato da questi item:
+    \begin{align*}
+        E'&\to E.\\
+        E  &\to E.+E \\
+        E  &\to E.*E
+    \end{align*}
+    Tutti gli elementi del kernel sono già chiusi, verifichiamo quindi che transizioni ci offrono: \(\tau(1,+)=3 \textrm{ e } \tau(1,*)=4\).
+    Abbiamo concluso l'analisi dello stato 1.
+    \item Passiamo allo stato 3, il kernel qui risulta così
+    \begin{equation*}
+        E \to E*.E
+    \end{equation*}
+    Tale kernel presenta però la possibilità di chiusura, andiamo quindi ad aggiungere la chiusura agli item dello stato 3, che risultano essere:
+    \begin{align*}
+        E &\to E*.E \\
+        E &\to\ .E+E \\
+        E &\to\ .E*E \\
+        E &\to\ .id
+    \end{align*}
+    Quindi da qui posso transizionare tramite \(E\) e tramite \(id\), la transizione per \(E\) mi porta in \(\tau(3,E)=5\), la transizione per \(id\) invece è particolare: mi porterebbe in uno stato che ha come kernel \(E \to id.\) che però è  lo stesso kernel dello stato 2! quindi \(\tau(3,id)=2\).
+    \item Analizzo lo stato 4, che ha per kernel
+    \begin{equation*}
+        E \to E*.E 
+    \end{equation*}
+    Si può effettuare la chiusura, quindi gli item dello stato 4 sono:
+    \begin{align*}
+        E &\to E*.E \\ 
+        E &\to .E+E \\
+        E &\to .E*E \\
+        E &\to .id
+    \end{align*}
+    Esistono due possibili transizioni uscenti dallo stato 4, una per \(E\), che genera lo stato \(\tau(4,E)=6\) ed una per \(id\), che come per il caso precedente in realtà non genera un nuovo stato ma va a finire nello stato 2.
+    \item Quando analizzo lo stato 5 trovo che il kernel è
+    \begin{align*}
+        E &\to E+E. \\
+        E &\to E.+E \\
+        E &\to E.*E
+    \end{align*}
+    che non necessita di chiusura; ci sono due possibili transizioni:
+    \begin{itemize}
+        \item quella per \(+\), che però ci porta in uno stato con kernel \({E \to E.+E}\), ovvero nello stato 3, che abbiamo già analizzato;
+        \item quella per \(*\), che però ci porta in uno stato con kernel \({E \to E.*E}\), ovvero nello stato 4, che abbiamo già analizzato.
+    \end{itemize}
+    \item Allo stesso modo per lo stato 6 il kernel è
+    \begin{align*}
+        E &\to E*E. \\
+        E &\to E.+E \\
+        E &\to E.*E
+    \end{align*}
+    che non necessita di chiusura e che attraverso le due transizioni per \(+\) e per \(*\) ci porta esattamente negli stati 3 e 4.
+\end{enumerate}
+Una volta terminata l'analisi degli stati e dei relativi item ci preoccupiamo di trovare quali stati contengono l'accepting item e quali stati contengono i reducing item.
+
+L'accepting item nel metodo SLR(1) è l'item \(S' \to S.\) (ovvero \(E' \to E.\)), che nel nostro caso è contenuto nello stato 1.
+
+I reducing item sono quelli con il marker \(\cdot\) al termine di una produzione, nel nostro caso sono \(E \to id \cdot\) (stato 2), \(E \to E+E \cdot\) (stato 5) ed \(E \to E*E \cdot\) (stato 6).
+
+Per cncludere la parte di costruzione dell'automa caratteristico per la grammatica inseriamo in Fig.\ref{ex2-sh/re-automata} il disegno di tale sgorbio (scherzo, è carino, sembra un razzetto).
+\begin{figure}
+    \center
+    \includegraphics[width=.6\textwidth]{ex2-sh_re-automata.png}
+    \caption{Automa caratteristico per la grammatica \ref{ex2-sh/re-grammar}}
+    \label{ex2-sh/re-automata}
+\end{figure}
+
 
 \end{document}
