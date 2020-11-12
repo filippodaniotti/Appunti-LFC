@@ -340,113 +340,92 @@ Vediamo ora nello specifico come costruire una parsing table. Dobbiamo riempire 
 \end{itemize}
 
 \subsection{Conflitti}
+L'informazione che è contenuta nella tabella di parsing in posizione \(M[P, Y]\) viene dunque utilizzata per stabilire che tipo di operazione effettuare, dipendentemente dallo stato \(P\) in cui ci troviamo e dal simbolo \(Y\), terminale o non-terminale che esso sia.
+Nonostante la grandezza della parsing table dipenda dal tipo di algoritmo di parsing bottom-up che andiamo ad applicare (quindi SLR(1), LALR(1), LR(1)) e dalla funzione di lookahead (\(\mathcal{LA}\)), l'algoritmo che viene utilizzato per riempire la tabella rimane quello visto in precedenza.
 
-L'informazione che è contenuta nella tabella di parsing in posizione \(M[P, Y]\) viene dunque utilizzata per stabilire che tipo di operazione effettuare dipendentemente dallo stato \(P\) in cui ci troviamo e dal simbolo \(Y\) (terminale o non terminale che esso sia).
-
-Nonostante la grandezza della parsing table dipenda dal tipo di algoritmo di parsing bottom-up che andiamo ad applicare (i.e. SLR(1), LALR(1), LR(1)) e dalla funzione di Look Ahead (\(\mathcal{LA}\)), l'algoritmo che viene utilizzato per riempire la tabella rimane quello visto in precedenza.
-
-Visto che abbiamo già potuto modo di discutere di tabelle di parsing anche per il parsing di tipo top-down, sembra il minimo effettuare una comparazione chiedendosi se, anche in questo caso, sia possibile ottenere dei \textbf{conflitti} (i.e. delle entries multiple defined).
-
-Questa situazione può verificarsi anche in questo caso in due differenti modalità: parleremo di
-
+Visto che abbiamo già potuto modo di discutere di tabelle di parsing anche per il parsing di tipo top-down, risulta naturale metterle a confronto e chiedersi se, anche in questo caso, sia possibile ottenere dei \textbf{conflitti} (ovvero delle entries multiple defined). Questa situazione può verificarsi anche in questo caso in due differenti modalità: parleremo di
 \begin{itemize}
-    \item \textbf{s/r conflict} (o shift/reduce conflict) nel caso in cui almeno un entry della tabella di parsing contenga sia un'operazione di \texttt{shift} Q (data dal fatto che esiste una \(Y\)-transizione che va dallo stato \(P\), dove ci troviamo attualmente, allo stato \(Q\)) che un'operazione di \texttt{reduce} \(A \rightarrow \beta\) (poichè \(P\) contiene un reducing item per \(A \rightarrow \beta\) e \(Y \in \mathcal{LA}(P, A \rightarrow \beta)\))
-    \item \textbf{r/r conflict} (o reduce/reduce conflict) nel caso in cui almeno un entry della tabella di parsing contenga due operazioni di \texttt{reduce} per produzioni distinte
+    \item \textbf{s/r conflict} (o shift/reduce conflict) nel caso in cui almeno un entry della tabella di parsing contenga sia un'operazione di \texttt{shift} Q (data dal fatto che esiste una \(Y\)-transizione che va dallo stato \(P\), dove ci troviamo attualmente, allo stato \(Q\)), sia un'operazione di \texttt{reduce} \(A \rightarrow \beta\) (poiché \(P\) contiene un reducing item per \(A \rightarrow \beta\) e \(Y \in \mathcal{LA}(P, A \rightarrow \beta)\));
+    \item \textbf{r/r conflict} (o reduce/reduce conflict) nel caso in cui almeno un entry della tabella di parsing contenga due operazioni di \texttt{reduce} per produzioni distinte.
 \end{itemize}
 
-La prossima domanda sorgerà spontanea: cosa accade al parsing nel caso in cui vi sia un conflitto?
-
-Visto che nell'ambito del parsing di tipo bottom up abbiamo già parlato di tre differenti classi di grammatiche è corretto analizzare ogni caso singolarmente: se troviamo almeno un conflitto (i.e. una entry multiple defined) in una tabella di parsing costruita per la grammatica \(\G\) per eseguire un parsing di tipo 
-\begin{itemize}
-    \item \(SLR(1)\), allora \(\G\) \textbf{non} è una grammatica \(SLR(1)\)
-    \item \(LALR(1)\), allora \(\G\) \textbf{non} è una grammatica \(LALR(1)\)
-    \item \(LR(1)\), allora \(\G\) \textbf{non} è una grammatica \(LR(1)\)
-\end{itemize}
-
-\section{Tabelle di Parsing \(SLR(1)\)}
-
-Il parsing di tipo \(SLR(1)\) è un parsing meno raffinato per il semplice fatto che le tabelle contengono meno informazioni: questo deriva dal fatto che
-
+La prossima domanda sorge spontanea: cosa accade quando abbiamo un conflitto? La conclusione che possiamo trarre è che, se stiamo eseguendo un parsing di un certo tipo (ad esempio SLR(1), LALR(1) o LR(1)) per una grammatica \(\G\) e troviamo un conflitto mentre costruiamo la tabella, allora \(\G\) \emph{non} è una grammatica di quel particolare tipo.
+% La prossima domanda sorge spontanea: cosa accade al parsing quando abbiamo un conflitto? Visto che nell'ambito del parsing bottom-up abbiamo già parlato di tre differenti classi di grammatiche, prendiamoci del tempo per analizzare ogni caso singolarmente: se troviamo almeno un conflitto in una tabella di parsing costruita per la grammatica \(\G\) per eseguire un parsing di tipo 
+% \begin{itemize}
+%     \item \(SLR(1)\), allora \(\G\) \textbf{non} è una grammatica \(SLR(1)\)
+%     \item \(LALR(1)\), allora \(\G\) \textbf{non} è una grammatica \(LALR(1)\)
+%     \item \(LR(1)\), allora \(\G\) \textbf{non} è una grammatica \(LR(1)\)
+% \end{itemize}
+\section{Tabelle di Parsing SLR(1)}
+Il parsing di tipo \(SLR(1)\) è un parsing meno raffinato, in quanto le tabelle contengono meno informazioni; questo è per due motivi:
 \begin{enumerate}
-    \item la loro costruzione ha come base di partenza un automa caratteristico con \(LR(0)\)-item
-    \item la funzione di Lookahead è pari a \(\mathcal{LA}(P, A \rightarrow \beta) = follow(A)\) per ogni \(A \rightarrow \beta \cdot \in P\)
+    \item la loro costruzione ha come base di partenza un automa caratteristico con LR(0)-item;
+    \item la funzione di lookahead è pari a \(\mathcal{LA}(P, A \rightarrow \beta) = follow(A)\) per ogni \(A \rightarrow \beta \cdot \in P\).
 \end{enumerate}
+Come già detto precedentemente, una grammatica \(\G\) è SLR(1) se e solo se la parsing table ottenuta non ha conflitti.
 
-Come già detto precedentemente la grammatica \(\G\) è \(SLR(1)\) se e solo se la parsing table ottenuta come descritto non ha conflitti.
-
-\subsection{Esempio costruzione tabella di parsing \(SLR(1)\)}
-
+\subsection{Esempio costruzione tabella di parsing SLR(1)}
 Dobbiamo costruire la tabella di parsing \(SLR(1)\) per la seguente grammatica \(\G\):
-
-\(S \rightarrow aABe\)
-
-\(A \rightarrow Abc \mid b\)
-
-\(B \rightarrow d\)
-
-Tale grammatica è già stata trattata precedentemente per la costruzione dell'automa caratteristico ma, come già detto, il nostro obbiettivo stavolta è quello di costruire la tabella di parsing e, per fare ciò, utilizzeremo i risultati ottenuti in precedenza: sappiamo infatti che lo stato 1 (anche indicato dal colore verde) è quello che contiene l'\textbf{Accepting Item} mentre invece gli stati contenenti i \textbf{Reducing Item} (segnalati come stati finali) sono invece 4, 7, 8, 9. 
-
+\begin{align*}
+    S &\rightarrow aABe \\
+    A &\rightarrow Abc \mid b \\
+    B &\rightarrow d
+\end{align*}
+Riconoscerete di certo questa grammatica, l'abbiamo già vista nella costruzione dell'automa caratteristico. Tuttavia, il nostro obiettivo qui è costruire la tabella di parsing, e per farlo utilizzeremo i risultati ottenuti in precedenza: sappiamo infatti che lo stato \(1\) (anche indicato dal colore verde) è quello che contiene l'\textbf{Accepting Item}, mentre invece gli stati contenenti i \textbf{Reducing Item} (segnalati come stati finali) sono invece 4, 7, 8, 9 (si osservi Fig.\ref{fig:charateristic-automata-complete}). 
 \begin{figure}
     \centering
     \includegraphics[width=.8\textwidth]{charateristic-automata-complete.png}
     \caption{Automa Caratteristico per la Bottom-Up Parsing Table}
     \label{fig:charateristic-automata-complete}    
 \end{figure}
-
-In particolare possiamo dire che i reducing item sono:
+In particolare, possiamo dire che i reducing item sono:
 \begin{enumerate}
-    \item \(\{A \rightarrow b \cdot\}\) per lo stato 4
-    \item \(\{B \rightarrow d \cdot\}\) per lo stato 7
-    \item \(\{S \rightarrow aABe \cdot\}\) per lo stato 8
-    \item \(\{A \rightarrow Abc \cdot\}\) per lo stato 9
+    \item \(\{A \rightarrow b \cdot\}\) per lo stato 4;
+    \item \(\{B \rightarrow d \cdot\}\) per lo stato 7;
+    \item \(\{S \rightarrow aABe \cdot\}\) per lo stato 8;
+    \item \(\{A \rightarrow Abc \cdot\}\) per lo stato 9;
 \end{enumerate}
-
-Avendo a disposizione l'automa caratteristico e i dati sopra citati è dunque possibile costruire la tabella di parsing seguendo l'algoritmo per la costruzione di una parsing table per il bottom-up parsing. Procediamo quindi nel seguente modo
-
+Avendo a disposizione l'automa caratteristico e i dati sopra citati è dunque possibile costruire la tabella di parsing seguendo l'algoritmo per la costruzione di una tabella di parsing per il bottom-up parsing (ricordiamo all'utente distratto che siamo nell'ambito del parsing; parsing e chiudoing). Procediamo quindi in questo modo:
 \begin{enumerate}
-    \item Creiamo una tabella con tante righe quanti sono gli stati presenti all'interno del nostro automa caratteristico (in questo caso da 0 a 9) e con tante colonne quanti sono i terminali (a cui va aggiunto il \$) e i non terminali presenti all'interno della nostra grammatica (in questo caso abbiamo di conseguenza \emph{a b c d e \$ A B S})
-    \item Facendo riferimento all'automa caratteristico andiamo ad inserire in \(M[P, Y]\) un'operazione di \texttt{shift} \(Q\) nel caso in cui \(Y\) sia un terminale e vi sia una transizione \(\tau (P, Y) = Q\), i.e. una transizione che va dallo stato \(P\) con un arco con etichetta \(Y\) allo stato \(Q\) (e.g. nel nostro caso andremo ad inserire \(M[0, a]\) = 2)
-    \item A questo punto è necessario computare i \emph{follow} (e di conseguenza i \emph{first}) in quanto per poter inserire correttamente le operazioni di \texttt{reduce} abbiamo bisogno di avere questo tipo di informazioni per la funzione di Lookahead (\(\mathcal{LA}\))
+    \item creiamo una tabella con tante righe quanti sono gli stati nel nostro automa caratteristico (in questo caso da 0 a 9) e con tante colonne quanti sono i terminali (a cui va aggiunto il \$) e i non-terminali presenti all'interno della nostra grammatica (in questo caso abbiamo di conseguenza \emph{a b c d e \$ A B S});
+    \item facendo riferimento all'automa caratteristico, se \(Y\) è un terminale e c'è una transizione \(\tau (P, Y) = Q\) (ovvero una transizione che va dallo stato \(P\) allo stato \(Q\) attraversando un arco con etichetta \(Y\)), allora inseriamo un'operazione di \texttt{shift} \(Q\) nella cella \(M[P, Y]\); ad esempio, nel nostro caso inseriremo \(M[0, a] = 2\);
+    \item A questo punto è necessario calcolare i follow (e di conseguenza i first, Tab.\ref{tab:first-follow-SLR(1)parsing}), in quanto per poter inserire correttamente le operazioni di \texttt{reduce} abbiamo bisogno di avere queste informazioni per la funzione di lookahead (\(\mathcal{LA}\));
 \begin{table}[H]
     \centering
     \subimport{assets/tables/}{ptbu-follow.tex}
     \caption{LRS(1) Parsing Table - Calcolo Follow per Lookahead}
     \label{tab:first-follow-SLR(1)parsing}
 \end{table}
-    \item Una volta calcolati i follow è dunque è possibile inserire un'operazione di \texttt{reduce} \(A \rightarrow \beta\) in \(M[P, Y]\) nel caso in cui \(P\) sia un stato contenente un reducing item (quindi nel nostro caso sia uno tra 4, 7, 8 o 9) e per tutti quei terminali \(Y \in \mathcal{LA}(P, A \rightarrow \beta) = follow(A)\) (e.g. \(M[4, b] = A \rightarrow \beta \cdot\) in quanto \(A \rightarrow b \cdot\) è un reducing item per lo stato 4 e \(b \in follow(A)\))
-    \item Inseriamo in posizione \(M[1, \$]\) l'operazione di \texttt{Accept} in quanto 1 contiene un accepting item
-    \item A questo punto dovremmo valorizzare tutte quelle celle \(M[P, Y]\) dove \(Y\) è un terminale o \$ che non ricade nei casi precedenti con il valore \emph{error()}, tuttavia per una maggiore comprensione a livello visivo verranno lasciate vuote
-    \item Infine inseriamo un'operazione del tipo \texttt{Goto} \(Q\) per tutti quelle celle \(M[P, Y]\) con \(Y\) non terminale e per cui esiste è una transizione \(\tau(P, Y) = Q\) (e.g. \(M[0, S]\) = \texttt{Goto} 1 come è anche osservabile dall'automa caratteristico)
+    \item Una volta calcolati i follow è possibile inserire un'operazione di \texttt{reduce} \(A \rightarrow \beta\) in \(M[P, Y]\) nel caso in cui \(P\) sia un stato contenente un reducing item (quindi nel nostro caso sia uno tra 4, 7, 8 o 9) e per tutti quei terminali \(Y \in \mathcal{LA}(P, A \rightarrow \beta) = follow(A)\) (e.g. \(M[4, b] = A \rightarrow \beta \cdot\) in quanto \(A \rightarrow b \cdot\) è un reducing item per lo stato 4 e \(b \in follow(A)\))
+    \item Inseriamo in posizione \(M[1, \$]\) l'operazione di \texttt{Accept}, in quanto 1 contiene un accepting item;
+    \item A questo punto dovremmo valorizzare a \texttt{error} tutte quelle celle \(M[P, Y]\) dove \(Y\) è o \$ o un terminale che non ricade nei casi precedenti; tuttavia per una maggiore comprensione a livello visivo, nel nostro esempio queste celle verranno lasciate vuote;
+    \item Infine, inseriamo un'operazione del tipo \texttt{goto} \(Q\) per tutti quelle celle \(M[P, Y]\) dove \(Y\) è un non-terminale e per cui esiste una transizione \(\tau(P, Y) = Q\) (ad esempio \(M[0, S]\) = \texttt{goto} 1, come è anche osservabile dall'automa caratteristico).
 \end{enumerate}
-
-Prima di presentare il risultato finale ci teniamo a sottolineare alcune convenzioni che verranno impiegate per motivi di, come ad esempio:
+In Tab.\ref{tab:parsing-table-SLR(1)parsing} possiamo trovare il risultato finale dell'algoritmo. Ai fini di una corretta lettura della tabella, specifichiamo qui sotto alcune convenzioni che verranno impiegate per motivi di [convenienza?], come ad esempio:
 \begin{itemize}
-    \item L'operazione di \texttt{shift} \(Q\) verrà indicata con \(sQ\)
-    \item quella di \texttt{reduce} \(A \rightarrow \beta\) con \(rK\) dove \(K\) indica il \(K\)-esimo reducing item
-    \item Acc indica l'accepting item
-    \item ed infine l'operazione di \texttt{Goto} \(Q\) verrà indicata semplicemente da Q
+    \item l'operazione di \texttt{shift} \(Q\) verrà indicata con \(sQ\);
+    \item l'operazione di \texttt{reduce} \(A \rightarrow \beta\) con \(rK\), dove \(K\) indica il \(K\)-esimo reducing item;
+    \item \emph{Acc} indica l'accepting item;
+    \item l'operazione di \texttt{Goto} \(Q\) verrà indicata semplicemente da Q.
 \end{itemize}
-
 \begin{table}[H]
     \centering
     \subimport{assets/tables/}{ptbu-complete.tex}
     \caption{LRS(1) Parsing Table}
     \label{tab:parsing-table-SLR(1)parsing}
 \end{table}
+Dal momento che \(\G\) dà origine a una nuova grammatica senza creare alcun conflitto, possiamo concludere che \(\G\) è SLR(1).
 
-La grammatica che abbiamo visto è SLR(1) e lo concludiamo perchè la grammatica da origine ad una grammatica senza conflitti.
-
-Prima di passare alla prossima sezione è necessario precisare che \emph{solamente} le celle vuote che hanno per colonna un terminale o il dollaro sarebbero valorizzate ad \emph{error()}: infatti le celle vuote che hanno per colonna un non terminale rimangono semplicemente vuote in quanto sono dei casi che non è possibile che si verifichino. 
+Prima di passare alla prossima sezione è necessario precisare che \emph{solamente} le celle vuote che hanno per colonna un terminale o \$ sarebbero valorizzate a \texttt{error}: infatti, le celle vuote che hanno per colonna un non-terminale rimangono semplicemente vuote, in quanto sono dei casi che non è possibile che si verifichino. 
 
 \subsection{Algoritmo Shift/Reduce}
-
 \begin{itemize}
-    \item \textbf{Input}: Una stringa \(w\) e la tabella di parsing \(M\) per \(\G = (V, T, S, \P)\)
-    \item \text{Output}: Una derivazione di \(w\) in ordine inverso (i.e. dobbiamo leggere l'output che produciamo al rovescio: l'ultima reduce verrà utilizzata come prima) se \(w \in \mathcal{L}(\G)\), \emph{error()} altrimenti
-    \item \textbf{Inizializzazione}: Per l'algoritmo è infine necessario inserire all'interno dell'input buffer la stringa \(w\$\) ed inoltre utilizzare due strutture dati:
+    \item \textbf{Input}: una stringa \(w\) e la tabella di parsing \(M\) per \(\G = (V, T, S, \P)\);
+    \item \textbf{Output}: una derivazione di \(w\) in ordine inverso (ossia dobbiamo leggere l'output che produciamo al rovescio: l'ultima reduce verrà utilizzata come prima) se \(w \in \mathcal{L}(\G)\), \texttt{error} altrimenti;
+    \item \textbf{Inizializzazione}: Per l'algoritmo è necessario inserire all'interno dell'input buffer la stringa \(w\$\), e inoltre abbiamo bisogno di due strutture dati:
     \begin{itemize}
-        \item \(stSt\) (state stack - pila degli stati), che viene inizializzata ponendo in cima lo stato \(P_0\) (i.e. prima chiusura dell'insieme di LR(0)-item)
-        \item \(symSt\) (symbol stack - pila dei simboli)
+        \item \(stSt\) (state stack - pila degli stati), che viene inizializzata ponendo in cima lo stato \(P_0\) (ovvero prima chiusura dell'insieme di LR(0)-item);
+        \item \(symSt\) (symbol stack - pila dei simboli).
     \end{itemize}
 \end{itemize}
 
