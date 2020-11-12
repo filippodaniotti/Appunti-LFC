@@ -427,10 +427,10 @@ Ora che sappiamo quali sono le strutture dati che andremo ad utilizzare, studiam
 
 \begin{itemize}
     \item all’inizio dei tempi non c’è niente sulla pila, poi inseriamo \(t\) e lo segnaliamo su \texttt{alreadyOn};
-    \item a questo punto estraiamo dalla cima dello stak, prendiamo il nodo estratto \(e\) e cerchiamo tutti i nodi che da \(e\) si raggiugono tramite un \(\varepsilon\)-arco; inseriamo tutti questi nello stak (se non sono già presenti) e ne segnaliamo l'inserimento settando il loro flag su \texttt{alreadyOn}.
+    \item a questo punto estraiamo dalla cima dello stack, prendiamo il nodo estratto \(e\) e cerchiamo tutti i nodi che da \(e\) si raggiugono tramite un \(\varepsilon\)-arco; inseriamo tutti questi nello stack (se non sono già presenti) e ne segnaliamo l'inserimento settando il loro flag su \texttt{alreadyOn}.
 \end{itemize}
 
-Continuiamo così finché lo stak non si svuota. L'algoritmo appena descritto si può trovare in Alg.\ref{alg:ec-computation}.
+Continuiamo così finché lo stack non si svuota. L'algoritmo appena descritto si può trovare in Alg.\ref{alg:ec-computation}.
 
 % \begin{algorithm}[H]
 % 	\centering
@@ -564,18 +564,7 @@ Andiamo quindi ad analizzare la complessità di queste procedure.
 Consideriamo la  complessità di generazione di un NFA con \(n\) nodi e \(m\) archi; conoscendo le quattro operazioni, sappiamo che, per ogni passo, aggiungeremo al massimo \(2\) nodi e \(4\) archi (dalla Kleene star, l'operazione più costosa), per cui avremo che \(n \le 2|r|\) e \(m \le 4|r|\), per cui abbiamo che la somma \(n + m\) è dell'ordine della dimensione dell'espressione regolare (\(\mathcal{O}(|r|)\)) e, poiché avremo in totale \(|r|\) passi, ciascuno dei quali eseguibile in tempo costante, possiamo felicemente concludere che \(T(\textrm{Thompson}(r)) = \mathcal{O}(|r|)\).
 
 \subsection{Complessità del calcolo della \(\varepsilon\)-chiusura}
-Prima di analizzare il costo della simulazione, dobbiamo analizzare il costo della \(\varepsilon\)-chiusura. Teniamo in mente il listato di codice che ne descrive l'algoritmo:
-
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=.6\textwidth,keepaspectratio]{algoritmo_epsilon_chiusura}
-%     \caption{Algoritmo per il calcolo della \(\varepsilon\)-chiusura\((\{t\})\)}
-%     \label{algoritmo_epsilon_chiusura}
-% \end{figure}
-\subimport{assets/pseudocode/}{ec-wrapper.tex}
-\subimport{assets/pseudocode/}{ec-computation.tex}
-
-\noindent Evidenziamo che le strutture usate sono:
+Prima di analizzare il costo della simulazione, dobbiamo analizzare il costo della \(\varepsilon\)-chiusura. Tenendo sempre a mente il codice (Alg.\ref{alg:ec-wrapper} e Alg.\ref{alg:ec-computation}), evidenziamo che le strutture usate sono:
 \begin{itemize}
     \item uno stack per contenere gli elementi non ancora incontrati;
     \item un vettore booleano per tenere traccia dei visitati;
@@ -590,7 +579,7 @@ In sunto, la procedura si compone dei seguenti quattro passi:
     \item verifica se è già stato visitato con \texttt{alreadyOn[u]}.
 \end{enumerate}
 
-\noindent Ognuna di queste operazioni opera in tempo costante, ci chiediamo quindi quante volte venga ripetuto ognuna di queste.
+\noindent Ognuna di queste operazioni opera in tempo costante, e ci chiediamo quindi quante volte venga ripetuto ognuna di queste.
 
 Osserviamo che le prime due operazioni vengono ripetute a ogni chiamata della procedura, e mai più di una volta per ogni nodo, dal momento che il vettore \texttt{alreadyOn} non ci permetterà di richiamare la funzione se lanciato su un nodo già settato a \texttt{true}, e non capita mai che qualche bit venga reinizializzato a \texttt{false}. Per cui, il costo delle prime due operazioni è \(\mathcal{O}(n)\).
 
