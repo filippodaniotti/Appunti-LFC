@@ -400,7 +400,7 @@ Avendo a disposizione l'automa caratteristico e i dati sopra citati è dunque po
     \caption{LRS(1) Parsing Table - Calcolo Follow per Lookahead}
     \label{tab:first-follow-SLR(1)parsing}
 \end{table}
-    \item Una volta calcolati i follow è possibile inserire un'operazione di \texttt{reduce} \(A \rightarrow \beta\) in \(M[P, Y]\) nel caso in cui \(P\) sia un stato contenente un reducing item (quindi nel nostro caso sia uno tra 4, 7, 8 o 9) e per tutti quei terminali \(Y \in \mathcal{LA}(P, A \rightarrow \beta) = follow(A)\) (e.g. \(M[4, b] = A \rightarrow \beta \cdot\) in quanto \(A \rightarrow b \cdot\) è un reducing item per lo stato 4 e \(b \in follow(A)\))
+    \item Una volta calcolati i follow è possibile inserire un'operazione di \texttt{reduce} \(A \rightarrow \beta\) in \(M[P, Y]\) nel caso in cui \(P\) sia un stato contenente un reducing item (quindi nel nostro caso sia uno tra 4, 7, 8 o 9) e per tutti quei terminali \(Y \in \mathcal{LA}(P, A \rightarrow \beta) = follow(A)\) (e.g. \(M[4, b] = A \rightarrow b\) in quanto \(A \rightarrow b \cdot\) è un reducing item per lo stato 4 e \(b \in follow(A)\))
     \item Inseriamo in posizione \(M[1, \$]\) l'operazione di \texttt{Accept}, in quanto 1 contiene un accepting item;
     \item A questo punto dovremmo valorizzare a \texttt{error} tutte quelle celle \(M[P, Y]\) dove \(Y\) è o \$ o un terminale che non ricade nei casi precedenti; tuttavia per una maggiore comprensione a livello visivo, nel nostro esempio queste celle verranno lasciate vuote;
     \item Infine, inseriamo un'operazione del tipo \texttt{goto} \(Q\) per tutti quelle celle \(M[P, Y]\) dove \(Y\) è un non-terminale e per cui esiste una transizione \(\tau(P, Y) = Q\) (ad esempio \(M[0, S]\) = \texttt{goto} 1, come è anche osservabile dall'automa caratteristico).
@@ -408,7 +408,7 @@ Avendo a disposizione l'automa caratteristico e i dati sopra citati è dunque po
 In Tab.\ref{tab:parsing-table-SLR(1)parsing} possiamo trovare il risultato finale dell'algoritmo. Ai fini di una corretta lettura della tabella, specifichiamo qui sotto alcune convenzioni che verranno impiegate per motivi di [convenienza?], come ad esempio:
 \begin{itemize}
     \item l'operazione di \texttt{shift} \(Q\) verrà indicata con \(sQ\);
-    \item l'operazione di \texttt{reduce} \(A \rightarrow \beta\) con \(rK\), dove \(K\) indica il \(K\)-esimo reducing item;
+    \item l'operazione di \texttt{reduce} \(A \rightarrow \beta\) con \(rK\), dove \(K\) indica la \(K\)-esima produzione della grammatica;
     \item \emph{Acc} indica l'accepting item;
     \item l'operazione di \texttt{Goto} \(Q\) verrà indicata semplicemente da Q.
 \end{itemize}
