@@ -1,0 +1,28 @@
+{
+    "files.enableTrash": false,
+    "latex-workshop.latex.outDir": "out/",
+    "latex-workshop.synctex.afterBuild.enabled": true,
+    "latex-workshop.latex.tools": [
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1",
+                "-shell-escape",
+                "-halt-on-error",
+                "-interaction=nonstopmode",
+                "-output-directory=out",
+                "%DOC%"
+            ],
+            "env": {}
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "create pdf",
+            "tools": [
+                "pdflatex"
+            ]
+        }
+    ]
+}
