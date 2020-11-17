@@ -642,11 +642,75 @@ Una volta terminata l'analisi degli stati e dei relativi item ci preoccupiamo di
 \end{itemize}
 
 Per concludere la parte di costruzione dell'automa caratteristico per la nostra grammatica in Eq.\ref{eq:ex2-sh/re-grammar}, inseriamo in Fig.\ref{ex2-sh/re-automata} il disegno di tale sgorbio (scherzo, è carino, sembra un razzetto).
-\begin{figure}
+\begin{figure}[H]
     \center
     \includegraphics[width=.6\textwidth]{ex2-sh_re-automata.png}
-    \caption{Automa caratteristico per la grammatica \ref{ex2-sh/re-grammar}}
-    \label{ex2-sh/re-automata}
+    \caption{Automa caratteristico per la grammatica \ref{eq:ex2-sh/re-grammar}}
+    \label{fig:ex2-sh/re-automata}
 \end{figure}
+
+\subsubsection{La risoluzione dei conflitti}
+Quindi, partendo dalla grammatica Eq.\ref{eq:ex2-sh/re-grammar} siamo riusciti a ricavarne e l'automa caratteristico SLR(1) in Fig.\ref{fig:ex2-sh/re-automata} e i reducing items, che ricordiamo essere:
+\begin{align*}
+    2: E &\to id & 5: E &\to E + E \cdot & 6: E &\to E * E \cdot 
+    % \\
+    % & & E &\to E \cdot + E & E &\to E \cdot + E \\
+    % & & E &\to E \cdot * E & E &\to E \cdot * E
+\end{align*}
+Tutto questo è fantastico, ma purtroppo c'è un grosso elefante nella nostra stanza. L'intrinseca ambiguità di Eq.\ref{eq:ex2-sh/re-grammar} ha un effetto collaterale piuttosto sgradevole: la sua tabella di parsing SLR(1) (calcolata automaticamente dallo stesso algoritmo che fa aprire esse3 a Riccardo Peron quando passa un esame) avrà dei conflitti, come possiamo ben vedere in Tab.\ref{tab:ex2-sh/re-table}.
+\begin{figure}[H]
+    \center
+    \includegraphics[width=.6\textwidth]{ex2-sh_re-table.png}
+    \caption{tabella di parsing SLR(1) per la grammatica \ref{eq:ex2-sh/re-grammar}}
+    \label{tab:ex2-sh/re-table}
+\end{figure}
+\noindent Quindi, se vogliamo perseguire la nostra ricerca di un parsing deterministico (e lo vogliamo), toccherà rimboccarsi le maniche e andare a capire come possiamo risolvere questi conflitti, non diversamente da quanto già avevamo fatto nel parsing top-down con le entries multiple defined.
+
+I nostri conflitti sono localizzati solo in quattro situzioni, ossiamo quando ci troviamo in uno tra gli stati 5 o 6 e, contemporaneamente, troviamo in lettura un simbolo tra \(+\) o \(\ast\).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.6\textwidth]{ex2-sh_re-table_conf.png}
+    \caption{Dettaglio di Tab.\ref{tab:ex2-sh/re-grammar_conf}}
+    \label{tab:ex2-sh/re-table_conf}
+\end{figure}
+\noindent Proviamo a capire bene qual è il punto di tutta questa situazione. Se il nostro parser si trova nello stato 5, questo vuol dire che, in testa alla nostra pila dei simboli \(symSt\), avremo \(E + E\); possiamo vederlo facilmente, è sufficiente buttare un occhio al nostro automa caratteristico (Fig.\ref{fig:ex2-sh/re-automata}) per renderci conto che lo stato 5 è raggiungibile attraverso il percorso \(0, 1, 3, 5\), o anche \(3, 5, 3, 5\). Il discorso è del tutto analogo se passiamo allo stato 6, dove avremo la testa di \(symSt\) popolata di \(E * E\), poiché 6 è raggiungibile tramite \(0, 1, 4, 6\) (o \(4, 6, 4, 6\)).
+
+È chiaro che abbiamo dei conflitti quando siamo nella situazione in cui due simboli legati da un operatore sono stati già letti (\(E + E\) o \(E * E\)) e, subito dopo, leggiamo un terzo simbolo. Questo è dovuto proprio al fatto che la grammatica, nella sua ambiguità, non riesce a esprimere opportunamente né associatività, né precedenza per i due operatori.
+
+E insomma, qual è il segreto per risolvere questi dannati conflitti? Quello che faremo (almeno in questo caso) è, per ogni cella in cui abbiamo un conflitto, scegliere manualmente quale mossa mantenere. Questa scelta pare essere in mano nostra, e nel nostro specifico esempio faremo sì che il parser finisca per conformarsi a quelle che sono le corrette regole di precedenza e associatività per \(+\) e \(*\). 
+
+Possiamo aiutarci se pensiamo ai parse tree della nostra grammatica: gli alberi, infatti, per loro stessa costruzione, veicolano informazioni sull'annidamento dei loro elementi in maniera molto efficace, e l'annidamento può tranquillamente avere una corrispondenza diretta con la parentesizzazione. Nello specifico, noi siamo interessati a esprimire l'associatività sinistra degli operatori \(+\) e \(*\), nonché la precedenza di \(*\) di fronte a \(+\). Diciamolo in maniera ancora più pragmatica: se guardiamo gli esempi in Fig.\ref{fig:ex2-sh_re-ptree}, vogliamo sempre avere l'albero Fig.\ref{fig:ex2-sh_re-ptree_1} al posto di Fig.\ref{fig:ex2-sh_re-ptree_2}, e vogliamo che la precedenza tra i due operatori sia tale da generare sempre parse tree come Fig.\ref{fig:ex2-sh_re-ptree_3} e Fig.\ref{fig:ex2-sh_re-ptree_4}.
+\begin{figure}[H]
+    \begin{minipage}[b]{.4\textwidth}
+        \centering
+        \includegraphics[width=.7\textwidth]{ex2-sh_re-ptree_1.png}
+        \subcaption{Parse tree left-associativo}
+        \label{fig:ex2-sh_re-ptree_1}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{.4\textwidth}
+        \centering
+        \includegraphics[width=.7\textwidth]{ex2-sh_re-ptree_2.png}
+        \subcaption{Parse tree left associativo}
+        \label{fig:ex2-sh_re-ptree_2}
+    \end{minipage}
+    
+    \begin{minipage}[b]{.4\textwidth}
+        \centering
+        \includegraphics[width=.7\textwidth]{ex2-sh_re-ptree_3.png}
+        \subcaption{Parse tree per \(E + E * E\)}
+        \label{fig:ex2-sh_re-ptree_3}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{.4\textwidth}
+        \centering
+        \includegraphics[width=.7\textwidth]{ex2-sh_re-ptree_4.png}
+        \subcaption{Parse tree per \(E * E + E\)}
+        \label{fig:ex2-sh_re-ptree_4}
+    \end{minipage}
+    \caption{}
+    \label{fig:ex2-sh_re-ptree}
+\end{figure}
+
 
 \end{document}
