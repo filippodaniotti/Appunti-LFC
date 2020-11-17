@@ -4,7 +4,7 @@
 ## Il progetto
 Quella che il lettore sta approcciando è una dispensa che raccoglie, riorganizza e riespone l’intero contenuto del corso di
 
-> LINGUAGGI, COMPARI E SOVVERTITORI  
+> LINGUAGGI, COMPARI E SOVVERTITORI
 
 tenuto nell’Università degli studi di Trento durante il primo semestre dell’anno accademico 2020/2021. L'elaborato è stato suddiviso in capitoli che seguono il partizionamento proposto dalla professoressa e, successivamente, in sezioni e sottosezioni per questioni di agilità consultativa. I singoli argomenti vengono presentati nell'ordine e modalità proposti dalla professoressa (all'infuori di sporadici casi in cui gli autori hanno proposto una maniera da loro ritenuta più fruibile per il target di riferimento), corredati da immagini e codici commentati dove possibile.
 
@@ -19,13 +19,24 @@ A questo punto:
 1. clonate la repository con `git clone https://github.com/filippodaniotti/Appunti-LFC`
 2. installate il pacchetto Pygments con `pip install Pygments`
 3. compilate, ad esempio:
-    - lanciando tre volte `pdflatex -shell-escape main.tex`
-    - lanciando `latexmk -pdf -shell-escape main.tex`
-    - per una compilazione rapida, potete utilizzare Arara con  `arara main.tex` (dovete necessariamente trovarvi nella directory `~/src/`), sarà equivalente a lanciare una sola passata di `pdflatex`
+   - lanciando tre volte `pdflatex -shell-escape main.tex`
+   - lanciando `latexmk -pdf -shell-escape main.tex`
+   - per una compilazione rapida, potete utilizzare Arara con  `arara main.tex` (dovete necessariamente trovarvi nella directory `~/src/`), sarà equivalente a lanciare una sola passata di `pdflatex`
 
 È possibile compilare singolarmente ogni capitolo e ogni asset, è sufficiente lanciare la compilazione sul singolo `.tex` desiderato.
 
 Se lavorate con degli IDE o con degli editor in coppia con dei tool per la scrittura LaTeX (e.g. [VS Code](https://code.visualstudio.com) + [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) o [Atom](https://atom.io) + [latex](https://atom.io/packages/latex)), assicuratevi di attivare il flag `-shell-escape` dalle impostazioni di compilazione del vostro tool.
+
+## How to build 2 (docker+vscode)
+Se non volete installare LaTeX in tutto il sistema potete usare docker:
+Requisiti:
+- docker e vscode installati
+- minimo 2.2gb liberi su hard disk
+
+1. Aprire questa cartella in vsCode. Chiederà di installare le estensioni raccomndate. Procedete all'installazione di entrambe perché entrambe sono necessarie ([LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) e [Remote Container](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers))
+2. Chiudere e riaprire la cartella in vsCode
+3. Vi chiederà di aprirla in un container. Date l'ok e procederà a buildare il container docker (ci mette 10-15 minuti)
+4. Aprite il file `main.tex` e usate ctrl+alt+b per buildare il progetto
 
 ## Principali pacchetti impiegati
 
@@ -34,19 +45,19 @@ Se lavorate con degli IDE o con degli editor in coppia con dei tool per la scrit
 - `forest` per la generazione degli alberi
 - `tikz` con librerie `automata` per la generazione dei grafi
 - `algorithm2e` per la scrittura degli pseudocodici
-- `minted` per la scrittura di codice 
+- `minted` per la scrittura di codice
 
 ## La squadra
 - Curatori
-    - [Filippo Daniotti](https://github.com/filippodaniotti)
-    - [Samuele Conti](https://github.com/samaretas)
+  - [Filippo Daniotti](https://github.com/filippodaniotti)
+  - [Samuele Conti](https://github.com/samaretas)
 - Scrittori
-    - [Simone Alghisi](https://github.com/Simone-Alghisi)
-    - [Emanuele Beozzo](https://github.com/emanuelebeozzo)
-    - [Samuele Bortolotti](https://github.com/samuelebortolotti)
+  - [Simone Alghisi](https://github.com/Simone-Alghisi)
+  - [Emanuele Beozzo](https://github.com/emanuelebeozzo)
+  - [Samuele Bortolotti](https://github.com/samuelebortolotti)
 - Tecnici
-    - [Francesco Bozzo](https://github.com/FrancescoBozzo)
-    - [Federico Izzo](https://github.com/fedeizzo)
+  - [Francesco Bozzo](https://github.com/FrancescoBozzo)
+  - [Federico Izzo](https://github.com/fedeizzo)
 - Revisori
-    - [Michele Yin](https://github.com/BigEmperor26)
-    - [Giacomo Zanolli](https://github.com/civts)
+  - [Michele Yin](https://github.com/BigEmperor26)
+  - [Giacomo Zanolli](https://github.com/civts)

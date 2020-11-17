@@ -1,0 +1,10 @@
+{
+    "name": "latex-env",
+    "extensions": [
+        "james-yu.latex-workshop"
+    ],
+    "dockerFile": "Dockerfile",
+    "mounts": [
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/usr/root/home/.gitconfig,type=bind,consistency=cached"
+    ]
+}  
