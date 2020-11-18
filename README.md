@@ -27,16 +27,16 @@ A questo punto:
 
 Se lavorate con degli IDE o con degli editor in coppia con dei tool per la scrittura LaTeX (e.g. [VS Code](https://code.visualstudio.com) + [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) o [Atom](https://atom.io) + [latex](https://atom.io/packages/latex)), assicuratevi di attivare il flag `-shell-escape` dalle impostazioni di compilazione del vostro tool.
 
-## How to build 2 (docker+vscode)
-Se non volete installare LaTeX in tutto il sistema potete usare docker:
-Requisiti:
-- docker e vscode installati
-- minimo 2.2gb liberi su hard disk
+## Alternative building: Docker + VS Code
+Se non volete installare LaTeX in tutto il sistema potete usare docker. Requisiti:
+- [Docker](https://www.docker.com/) e [VS Code](https://code.visualstudio.com) installati
+- minimo 2.2GB liberi su disco
 
-1. Aprire questa cartella in vsCode. Chiederà di installare le estensioni raccomndate. Procedete all'installazione di entrambe perché entrambe sono necessarie ([LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) e [Remote Container](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers))
-2. Chiudere e riaprire la cartella in vsCode
-3. Vi chiederà di aprirla in un container. Date l'ok e procederà a buildare il container docker (ci mette 10-15 minuti)
-4. Aprite il file `main.tex` e usate ctrl+alt+b per buildare il progetto
+Procedimento:
+1. Aprite questa cartella in VS Code e vi chiederà di installare le estensioni raccomandate. Procedete all'installazione di entrambe, perché entrambe sono necessarie ([LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) e [Remote Container](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers))
+2. Chiudete e riaprite la cartella in VS Code
+3. Vi chiederà di aprirla in un container; fatelo, e procederà a buildare il container Docker (sarà completato in 10-15 minuti)
+4. Aprite il file `main.tex` e usate Ctrl+Alt+B per buildare il progetto, o in alternativa uno dei comandi presentati sopra (non Arara, perché l'immagine Docker non comprende una JVM)
 
 ## Principali pacchetti impiegati
 
