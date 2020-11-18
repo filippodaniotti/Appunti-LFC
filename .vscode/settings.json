@@ -4,14 +4,26 @@
     "latex-workshop.synctex.afterBuild.enabled": true,
     "latex-workshop.latex.tools": [
         {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-shell-escape",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-pdf",
+                "-outdir=%OUTDIR%",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
             "name": "pdflatex",
             "command": "pdflatex",
             "args": [
                 "-synctex=1",
-                "-shell-escape",
-                "-halt-on-error",
                 "-interaction=nonstopmode",
-                "-output-directory=out",
+                "-file-line-error",
                 "%DOC%"
             ],
             "env": {}
@@ -19,7 +31,13 @@
     ],
     "latex-workshop.latex.recipes": [
         {
-            "name": "create pdf",
+            "name": "Full build (latexmk 🔃)",
+            "tools": [
+                "latexmk"
+            ]
+        },
+        {
+            "name": "Quick compile (pdflatex)",
             "tools": [
                 "pdflatex"
             ]

@@ -5,3 +5,4 @@ FROM texlive/texlive@sha256:35df6f5eda3dba6420515c8cfd38cbe22b07ad417310edf0d898
 RUN apt-get update
 RUN apt-get install python3-pip -y
 RUN pip install Pygments
+RUN apt install ghostscript -y
