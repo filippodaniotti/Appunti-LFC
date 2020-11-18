@@ -28,5 +28,5 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: Comodo studiare dagli appunti degli altri, eh?
-          document: src/main.pdf
+          document: src/out/main.pdf
         if: ${{ success() }}
