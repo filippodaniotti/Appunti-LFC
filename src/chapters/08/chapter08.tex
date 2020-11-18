@@ -642,11 +642,118 @@ Una volta terminata l'analisi degli stati e dei relativi item ci preoccupiamo di
 \end{itemize}
 
 Per concludere la parte di costruzione dell'automa caratteristico per la nostra grammatica in Eq.\ref{eq:ex2-sh/re-grammar}, inseriamo in Fig.\ref{ex2-sh/re-automata} il disegno di tale sgorbio (scherzo, è carino, sembra un razzetto).
-\begin{figure}
+\begin{figure}[H]
     \center
     \includegraphics[width=.6\textwidth]{ex2-sh_re-automata.png}
-    \caption{Automa caratteristico per la grammatica \ref{ex2-sh/re-grammar}}
-    \label{ex2-sh/re-automata}
+    \caption{Automa caratteristico per la grammatica \ref{eq:ex2-sh/re-grammar}}
+    \label{fig:ex2-sh/re-automata}
 \end{figure}
+
+\subsubsection{La risoluzione dei conflitti}
+Quindi, partendo dalla grammatica Eq.\ref{eq:ex2-sh/re-grammar} siamo riusciti a ricavarne e l'automa caratteristico SLR(1) in Fig.\ref{fig:ex2-sh/re-automata} e i reducing items, che ricordiamo essere:
+\begin{align*}
+    2: E &\to id & 5: E &\to E + E \cdot & 6: E &\to E * E \cdot
+\end{align*}
+Tutto questo è fantastico, ma purtroppo c'è un grosso elefante nella nostra stanza. L'intrinseca ambiguità di Eq.\ref{eq:ex2-sh/re-grammar} ha un effetto collaterale piuttosto sgradevole: la sua tabella di parsing SLR(1) avrà dei conflitti, come possiamo ben vedere in Tab.\ref{tab:ex2-sh/re-table}.
+\begin{figure}[H]
+    \center
+    \includegraphics[width=.6\textwidth]{ex2-sh_re-table.png}
+    \caption{tabella di parsing SLR(1) per la grammatica \ref{eq:ex2-sh/re-grammar}}
+    \label{tab:ex2-sh/re-table}
+\end{figure}
+\noindent Quindi, se vogliamo perseguire la nostra ricerca di un parsing deterministico (e lo vogliamo), toccherà rimboccarsi le maniche e andare a capire come possiamo risolvere questi conflitti, non diversamente da quanto già avevamo fatto nel parsing top-down con le entries multiple defined.
+
+I nostri conflitti sono localizzati solo in quattro situzioni, ossiamo quando ci troviamo in uno tra gli stati 5 o 6 e, contemporaneamente, troviamo in lettura un simbolo tra \(+\) o \(\ast\).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.6\textwidth]{ex2-sh_re-table_conf.png}
+    \caption{Dettaglio di Tab.\ref{tab:ex2-sh/re-grammar_conf}}
+    \label{tab:ex2-sh/re-table_conf}
+\end{figure}
+\noindent Proviamo a capire bene qual è il punto di tutta questa situazione. Se il nostro parser si trova nello stato 5, questo vuol dire che, in testa alla nostra pila dei simboli \(symSt\), avremo necessariamente \(E + E\); possiamo vederlo facilmente, è sufficiente buttare un occhio al nostro automa caratteristico (Fig.\ref{fig:ex2-sh/re-automata}) per renderci conto che lo stato 5 è raggiungibile solo dallo stato \(3\), il quale a sua volta può essere raggiunto o dalla sequenza di stati \((0, 1)\), \((4, 6)\) o \((3, 5)\), in tutti questi casi sulla testa di \(symSt\) si troverà \(E + E\). Il discorso è del tutto analogo se passiamo allo stato 6, dove avremo la testa di \(symSt\) popolata di \(E * E\), poiché 6 è raggiungibile tramite \(\dots, 0, 1, 4, 6\), \(\dots, 4, 6, 4, 6\) oppure \(\dots, 3, 5, 4, 6\).
+
+È chiaro che abbiamo dei conflitti quando siamo nella situazione in cui due simboli legati da un operatore sono stati già letti (\(E + E\) o \(E * E\)) e, subito dopo, leggiamo un terzo simbolo. Questo è dovuto proprio al fatto che la grammatica, nella sua ambiguità, non riesce a esprimere opportunamente né associatività, né precedenza per i due operatori.
+
+E insomma, qual è il segreto per risolvere questi dannati conflitti? Quello che faremo (almeno in questo caso) è, per ogni cella in cui abbiamo un conflitto, scegliere manualmente quale mossa mantenere. Questa scelta pare essere in mano nostra, e nel nostro specifico esempio faremo sì che il parser finisca per conformarsi a quelle che sono le comuni regole di precedenza e associatività per \(+\) e \(*\). 
+
+Possiamo aiutarci se pensiamo ai parse tree della nostra grammatica: gli alberi, infatti, per loro stessa costruzione, veicolano informazioni sull'annidamento dei loro elementi in maniera molto efficace, e l'annidamento può tranquillamente avere una corrispondenza diretta con la parentesizzazione. Di fatto assumendo, come facciamo noi, che i sottoalber vengano risolti prima degli alberi padri, stabiliamo delle regole di precedenza del tutto simili a quelle che si possono ottenere con una parentesizzazione.
+
+Nello specifico, noi siamo interessati a esprimire l'associatività sinistra degli operatori \(+\) e \(*\), nonché la precedenza di \(*\) rispetto a \(+\). Diciamolo in maniera ancora più pragmatica: se guardiamo gli esempi in Fig.\ref{fig:ex2-sh_re-ptree}, vogliamo sempre avere l'albero Fig.\ref{fig:ex2-sh_re-ptree_1} al posto di Fig.\ref{fig:ex2-sh_re-ptree_2}, e vogliamo che la precedenza tra i due operatori sia tale da generare sempre parse tree come Fig.\ref{fig:ex2-sh_re-ptree_3} e Fig.\ref{fig:ex2-sh_re-ptree_4}.
+\begin{figure}[H]
+    \begin{minipage}[b]{.4\textwidth}
+        \centering
+        \includegraphics[width=.7\textwidth]{ex2-sh_re-ptree_1.png}
+        \subcaption{Parse tree left-associativo}
+        \label{fig:ex2-sh_re-ptree_1}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{.4\textwidth}
+        \centering
+        \includegraphics[width=.7\textwidth]{ex2-sh_re-ptree_2.png}
+        \subcaption{Parse tree left associativo}
+        \label{fig:ex2-sh_re-ptree_2}
+    \end{minipage}
+    
+    \begin{minipage}[b]{.4\textwidth}
+        \centering
+        \includegraphics[width=.7\textwidth]{ex2-sh_re-ptree_3.png}
+        \subcaption{Parse tree per \(E + E * E\)}
+        \label{fig:ex2-sh_re-ptree_3}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{.4\textwidth}
+        \centering
+        \includegraphics[width=.7\textwidth]{ex2-sh_re-ptree_4.png}
+        \subcaption{Parse tree per \(E * E + E\)}
+        \label{fig:ex2-sh_re-ptree_4}
+    \end{minipage}
+    \caption{}
+    \label{fig:ex2-sh_re-ptree}
+\end{figure}
+In questa interpretazione possiamo vedere le mosse di reduce come una parentesizzazione, perché stiamo assegnando un padre a un determinato sottoalbero del tipo \(E + E\) o \(E * E\).
+
+A questo punto possiamo andare ad analizzare i quattro conflitti che abbiamo trovato e, per ciascuna cella, scegliere la mossa che rende il parsing conforme alle regole che abbiamo stabilito. Tenendo a mente Tab.\ref{tab:ex2-sh/re-table_conf}, rimbocchiamoci le maniche.
+\begin{itemize}
+    \item \(M[5, +]\): questa è la situazione in cui la testa di \(symSt\) è popolata di \(E + E\) e in lettura troviamo un altro \(+\); gli operatori sono left-associativi, per cui vogliamo parentesizzare la testa del nostro \(symSt\) e solo dopo leggere il nuovo simbolo; ergo, la mossa che scegliamo è \(r1\).
+    \item \(M[6, *]\): vediamo subito questa cella perché presenta una situazione del tutto analoga a quella appena vista;  la testa di \(symSt\) è popolata di \(E * E\) e questa volta l'operatore coinvolto è \(\ast\), che al pari di \(+\) è left-associativo, di conseguenza anche qui scegliamo la reduce \(r2\);
+    \item \(M[5, *]\): torniamo adesso a parlare dello stato 5; la testa di \(symSt\) è popolata come prima, ma questa volta il lettura troviamo un simbolo \(\ast\). Questo cambia le carte in tavola, perché noi vogliamo che l'operatore \(\ast\) abbia precedenza più alta di \(+\); per ottenere questo, scegliamo la mossa di shift \(s4\), il che significa che rimandiamo la parentesizzazione della testa e proseguiamo nella lettura.
+    \item \(M[6, +]\): qui abbiamo trovato \(E * E\) nella testa di \(symSt\) e ci sta arrivando un \(+\) in lettura, e ormai l'idea dovrebbe essere chiara: coerentemente con le regole di precedenza (\(\ast \prec +\)), vogliamo che la testa di \(symSt\) sia parentesizzata, per cui qui teniamo la reduce \(r2\).
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.6\textwidth]{ex2-sh_re-table_conf_solved.png}
+    \caption{Soluzione dei conflitti di Tab.\ref{tab:ex2-sh/re-grammar_conf}}
+    \label{tab:ex2-sh/re-table_conf_solved}
+\end{figure}
+Fatto! Dopo tutto questo processo abbiamo ottenuto una tabella di parsing senza conflitti, ovvero senza entries multiple defined. Strategie di questo tipo sono abbastanza standard per le grammatiche degli operatori (non solo aritmetici, si pensi alle precedenze dell'algebra booleana); all'atto pratico, chi scrive le grammatiche (che ha studiato LFC e ha capito questi argomenti) si preoccuperà anche di predisporre delle direttive per il parser, sicché quest'ultimo abbia informazioni su quali scelte compiere in caso di conflitti.
+
+Naturalmente, tutto questo è reso necessario dal fatto che la grammatica \(\G\) in Eq.\ref{eq:ex2-sh/re-grammar} è ambigua; se avessimo semplicemente scritto un'altra grammatica \(\G'\) non ambigua, tale che \(\L(\G) = \L(\G')\), saremmo riusciti a ottenere una tabella di parsing senza conflitti da risolvere. Dovessimo percorrere questa strada, sia chiaro che è estremamente importante che la nuova grammatica esprima correttamente le regole di precedenza e associatività che vogliamo. Guardiamo ad esempio:
+\begin{align}
+    \label{eq:ex2-sh/re-grammar_v2}
+    \G': E &\to E + T \mid T \\
+    T &\to T * id \mid id \notag
+\end{align}
+L'ordine con cui ho inserito le produzioni non è causale: abbiamo posizionato \(*\) in un livello di produzione inferiore a \(+\) perché, dal momento che la deriazione è rightmost e andiamo ad attraversare l'albero dal basso verso la radice (bottom-up, no?), ci assicuriamo in questo modo di parentesizzare prima tutte le occorrenze di \(\ast\); non avremmo avuto questa garanzia se avessimo inserito produzioni come, ad esempio, \(E \to T + E\). Inoltre, se ad esempio avessimo scritto \(T \to id * T\), avremmo perso la left-associatività per l'operatore \(\ast\) (ma lo stesso sarebbe successo anche per \(+\)). Il modo migliore per convincersi di queste cose (nonché il nostro suggerimento per il lettore), è quello di provare da sé a cambiare la grammatica, provare a tracciare dei parse tree e vedere cosa succede, un po'come abbiamo fatto noi qui sotto in Fig.\ref{fig:ex2-sh_re-altgrm-ptree}.
+\begin{figure}[H]
+    \begin{minipage}[b]{.4\textwidth}
+        \centering
+        \includegraphics[width=.7\textwidth]{ex2-sh_re-altgrm-ptree_1.png}
+        \subcaption{\(T \to T * id\), left-associativa (versione corretta)}
+        \label{fig:ex2-sh_re-altgrm-ptree_1}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{.4\textwidth}
+        \centering
+        \includegraphics[width=.7\textwidth]{ex2-sh_re-altgrm-ptree_2.png}
+        \subcaption{Se invece scriviamo \(T \to id * T\) perdiamo la left-associatività}
+        \label{fig:ex2-sh_re-altgrm-ptree_2}
+    \end{minipage}
+    \caption{Esempio di come possiamo alterare Eq.\ref{eq:ex2-sh/re-grammar_v2} e vedere i cambiamenti direttamente dalla struttura dei parse trees}
+    \label{fig:ex2-sh_re-altgrm-ptree}
+\end{figure}
+
+È bene far notare, inoltre, che questo procedimento ci ha portato ad aggiungere il non-terminale \(T\) alla grammatica. Certo, un non-terminale in più non ha tutto questo grande impatto sull'efficienza degli algoritmi, ma in altre situazioni la scrittura di una grammatica non ambigua che generi un linguaggio equivalente può rivelarsi davvero complicata e costosa; per questo motivo, spesso si preferisce semplicemente tenere le grammatiche ambigue e gestire i conflitti tramite direttive per il parser: il prezzo da pagare per usare una grammatica non ambigua equivalente sarebbe troppo alto.
+
+% INSERIRE QUID L'ESERCIZIO CHE HA INIZIATO IN LEC-24 DIMENTICANDOSI DI COMPLETARLO E POI HA RIPRESO LA LEZIONE SUCCESSIVA
 
 \end{document}
