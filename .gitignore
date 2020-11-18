@@ -10,9 +10,10 @@
 *.sta
 *.pdf
 *.synctex(busy)
+out/
 
-_minted*
 *.pyg
+_minted*/
 
 .envrc
 shell.nix
