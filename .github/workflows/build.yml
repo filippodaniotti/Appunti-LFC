@@ -13,8 +13,8 @@ jobs:
         with:
           root_file: main.tex
           working_directory: src/
-          args: "-outdir=out/" 
           latexmk_shell_escape: true
+          args: "-pdf -outdir=out/" 
           extra_system_packages: "py-pygments"
       - name: Upload pdf as artifact
         uses: actions/upload-artifact@v2
