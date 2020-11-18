@@ -19,7 +19,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build-dispensa
-          path: ./src/main.pdf
+          path: ./src/out/main.pdf
         if: ${{ success() }}
       - name: Send dispensa to Telegram Group
         uses: appleboy/telegram-action@master

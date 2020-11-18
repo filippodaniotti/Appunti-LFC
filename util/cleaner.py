@@ -6,6 +6,7 @@ import shutil
 # List of files to be deleted according to name
 names = [
     '_minted*',
+    '*.pyg',
     '*.aux',
     '*.dvi',
     '*.fdb_latexmk',
@@ -27,8 +28,8 @@ items = list()
 for name in names:
     items = glob.glob('./src/**/' + name, recursive = True)
     # If at least one 'name' element has been found
+    print('Checking ' + name)
     if items:
-        print('Checking ' + name)
         for item in items:
             print('>  Found ' + item)
             # If item is a _minted* folder
