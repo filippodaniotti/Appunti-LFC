@@ -14,13 +14,12 @@ jobs:
           root_file: main.tex
           working_directory: src/
           latexmk_shell_escape: true
-          args: "-pdf -outdir=out/" 
           extra_system_packages: "py-pygments"
       - name: Upload pdf as artifact
         uses: actions/upload-artifact@v2
         with:
           name: build-dispensa
-          path: ./src/out/main.pdf
+          path: ./src/main.pdf
         if: ${{ success() }}
       - name: Send dispensa to Telegram Group
         uses: appleboy/telegram-action@master
@@ -28,5 +27,5 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: Comodo studiare dagli appunti degli altri, eh?
-          document: src/out/main.pdf
+          document: src/main.pdf
         if: ${{ success() }}

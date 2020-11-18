@@ -1,6 +1,5 @@
 {
     "files.enableTrash": false,
-    "latex-workshop.latex.outDir": "out/",
     "latex-workshop.synctex.afterBuild.enabled": true,
     "latex-workshop.latex.tools": [
         {
