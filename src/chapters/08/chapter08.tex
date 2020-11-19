@@ -272,7 +272,7 @@ Il kernel in questo caso è:
 \begin{equation*}
     A \to Ab \cdot c
 \end{equation*}
-Anche questo kernel è già chiuso; ci offre la transizion allo stato \(\tau (6, c) = 9\). \\
+Anche questo kernel è già chiuso; ci offre la transizione allo stato \(\tau (6, c) = 9\). \\
 
 Analizziamo lo stato \(\tau (3, d) = 7\). \\
 Questo stato ha come kernel:
@@ -756,12 +756,12 @@ L'ordine con cui ho inserito le produzioni non è causale: abbiamo posizionato \
 
 \subsubsection{Esercizio sulla risoluzione dei conflitti}
 Sia data la seguente grammatica:
-\begin{align*}
-    \label{eq:ex3-slr1-grammar}
+\begin{align}
+    \label{eq:ex3-slr1-grammarr}
     \G: S &\to aAd \mid bBd \mid aBe \mid bAe \\
-    A &\to c \\
-    B &\to c
-\end{align*}
+    A &\to c \nonumber \\ \notag
+    B &\to c \notag
+\end{align}
 Il nostro obiettivo è costruire una tabella di parsing SLR(1) per la grammatica citata, e per farlo, come prima cosa, andiamo a tracciare l'automa caratteristico.
 \paragraph{Ricaviamo l'automa}
 \begin{enumerate}
@@ -824,7 +824,16 @@ Il nostro obiettivo è costruire una tabella di parsing SLR(1) per la grammatica
 
 Potremmo continuare senza fare ulteriori elucubrazioni, ma non possiamo non porre l'attenzione sullo stato appena analizzato: il fatto che vi possano essere due reducing items all'interno di un singolo stato non è necessariamente motivo di conflitti, in quanto la presenza di conflitti dipende dalla funzione di lookahead che stiamo utilizzando. Nel caso del parsing di tipo SLR(1) sappiamo che è possibile inserire un'operazione di \texttt{reduce} \(A \rightarrow \beta\) in \(M[P, Y]\) nel caso in cui \(P\) sia un stato contenente un reducing item e per tutti quei terminali \(Y \in \mathcal{LA}(P, A \rightarrow \beta) = follow(A)\): in questo caso \(follow(A) = follow(B) = \{d, e\}\), il che significa che avremo almeno due celle dove sono presenti dei conflitti nella nostra parsing table finale.
 
-Tuttavia, in questo caso la colpa non è della grammatica, ma va ricercata piuttosto nel tipo di parsing adoperato, fin troppo grosolano: invece di accorpare tutto all'interno di un singolo stato (riguardiamo lo stato 6), non sarebbe meglio avere due stati differenti? 
+La situazione è ben rappresentata dalla figura \ref{fig:lr0-automata_conflict} che riporta un pezzo dell'automa caratteristico che deriva da questa analisi.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.4\textwidth]{lr0-automata_conflict.png}
+    \caption{Automa di tipo LR(0), si noti come con una \(c\)-transizione si possa arrivare in 6 sia da 3 che da 2}
+    \label{fig:lr0-automata_conflict}
+\end{figure}
+
+Tuttavia, in questo caso la colpa non è della grammatica che non è per nulla ambigua (produce solo 4 parole), ma va ricercata piuttosto nel tipo di parsing adoperato, fin troppo grossolano: invece di accorpare tutto all'interno di un singolo stato (riguardiamo lo stato 6), non sarebbe meglio avere due stati differenti? 
 
 Ovviamente stato 2 e lo stato 3 "ricordano" delle informazioni differenti e per poter risolvere questa indecisione è necessario considerare in quale modo si è arrivati all'item di riduzione. Ad esempio, nel caso in cui avessimo letto fino ad ora la parola \(ac\) e ci trovassimo quindi in dubbio su che tipo di operazione di reduce effettuare, basterebbe semplicemente poter osservare quale fosse il prossimo simbolo: 
 \begin{itemize}
@@ -836,55 +845,82 @@ Ovviamente stato 2 e lo stato 3 "ricordano" delle informazioni differenti e per 
 Per poter ottenere quanto detto andremo a utilizzare gli LR(1)-items, che hanno questa forma:
 \begin{equation}
     \label{lr0}
-    [A \to \alpha \cdot \beta, \Delta]
+    [A \to \alpha \cdot B \beta, \Delta]
 \end{equation}
 Dove \(\Delta\) è detto \textbf{lookahead-set}.
 
 Quando applicata a \([A \to \alpha \cdot B \beta, \Delta]\), la \(closure_1(\_)\) rifinisce la \(closure_0(\_)\) propagando i simboli che seguono \(B\) nella produzione \(A \to \alpha \cdot B \beta\) agli items che vengono aggiunti per fare l'operazione di chiusura rispetto a \(B\).
 
+Di fatto la \(closure_1(\_)\) è composta di due parti:
+\begin{itemize}
+    \item la chiusura, che è in tutto e per tutto uguale alla \(closure_0(\_)\);
+    \item l'insieme di lookahead, che viene aggiunto alla \(closure_0(\_)\) per specificare con precisione maggiore quando sono da utilizzare determinate riduzioni.  
+\end{itemize}
+L'informazione che viene propagata grazie a \(\Delta\) riguarda quali simboli ci aspettiamo di leggere sulla pila prossimamente, il che dipende dal percorso (ramo dell'albero di derivazione) stiamo arrivando.
+
 \subsection{Chiusure di insiemi di LR(1)-item}
-Come facciamo a calcolare la chiusura degli insiemi di LR(1)-items? Iniziamo dunque fornendo la definizione per la computazione a punto fisso:
+Come facciamo a calcolare la chiusura degli insiemi di LR(1)-items? Il metodo di calcolo che ci viene presentato è un classico calcolo risolvibile grazie al teorema del punto fisso:
 \begin{definition}
     \label{def:lr1-closure}
-    Sia \(P\) un insieme di item LR(1)-item, la \(closure_1(P)\) identifica il più piccolo insieme di item, con il più piccolo lookahead-set, che soddisfa la seguente equazione:
-    \begin{equation*}
-        closure_1(P) = P \cup \{[B \rightarrow \cdot \gamma, \Gamma] : [A \rightarrow \alpha \cdot B \beta, \Delta] \in closure_1(P) \textrm{ and } B \rightarrow \gamma \in \P' \textrm{ and } first(\beta \Delta) \subseteq \Gamma\}
-    \end{equation*}  
+    Sia \(P\) un insieme di LR(1)-item, la \(closure_1(P)\) identifica il più piccolo insieme di item, con il più piccolo lookahead-set, che soddisfa la seguente equazione:
+    \begin{align*}
+        &closure_1(P) = P \cup \{[B \rightarrow \cdot \gamma, \Gamma] : \\
+        &[A \rightarrow \alpha \cdot B \beta, \Delta] \in closure_1(P) \textrm{ and } \\ 
+        &B \rightarrow \gamma \in \P' \textrm{ and } first(\beta \Delta) \subseteq \Gamma\}
+    \end{align*}  
     dove \(first(\beta \Delta) = \cup_{d \in \Delta} first(\beta d)\).
 \end{definition}
+Un altro modo per descrivere questa procedura è quello di descriverne l'algoritmo, questa seconda possibilità è mostrata in Alg.\ref{alg:closure-lr1}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{alg_closure-lr1.png}
+    \caption{Algoritmo per il calcolo della chiusura di uno stato LR(1)}
+    \label{alg:closure-lr1}
+\end{figure}
+In questo algoritmo si deve fare conto che \(B \to \cdot \gamma \notin prj(P)\) significa che non è ancora presente in \(closure_1(P)\) una produzione \(B \to \cdot \gamma\).
+Di fatto quello che succede all'interno del \texttt{foreach} centrale è che se l'elemento è nuovo vado ad aggiungerlo con il suo \(\Delta\), se l'elemento è già presente vado a vedere se è il caso di aggiungere al \(\Delta\) di questa qualche elemento.
+
+La definizione appena illustrata potrebbe sermbrare di difficile comprensione, ma sarà tutto più chiaro dopo un esercizio esplicativo.
 
 \subsubsection{Esesercizio 1: computazione \(closure_1(P)\)}
-Facendo riferimento alla grammatica dell'esercizio precedente (Eq.\ref{eq:ex3-slr1-grammar}), calcolare la chiusura \(closure_1(\{[S' \to \cdot S, \{\$\}]\})\): questa inizializzazione sottolinea il fatto che, che una volta che avremo raggiunto il particolare stato in cui avremo l'accepting item \(S' \to \cdot S\), vorremo vedere il \$ che viene utilizzato come terminatore per definire una parola appartenente al linguaggio. Quindi, che si fa ora?
+Facendo riferimento alla grammatica dell'esercizio precedente (Eq.\ref{eq:ex3-slr1-grammarr}), calcolare tutti gli stati dell'automa caratteristico LR(1).
+Partiamo con l'inizializzare lo stato \(0\), esso conterrà la \(closure_1(\{[S' \to \cdot S, \{\$\}]\})\); questa inizializzazione sottolinea il fatto che, che una volta che avremo raggiunto il particolare stato in cui avremo l'accepting item \(S' \to S\cdot \), vorremo vedere il \$ che viene utilizzato come terminatore per definire una parola appartenente al linguaggio. Quindi, che si fa ora?
 
-Secondo la Def.\ref{def:lr1-closure}, l'unico item che appartiene alla chiusura è \([S' \to \cdot S, \{\$\}] = [A \rightarrow \alpha \cdot B \beta, \Delta]\),e dovremo aggiungere a questa chiusura degli item nella forma \([B \rightarrow \cdot \gamma, \Gamma]\), per cui:
-\begin{itemize}
-    \item la prima componente di questa coppia corrisponde a tutte quelle produzioni nella grammatica che hanno forma \(B \rightarrow \gamma\);
-    \item  la seconda componente invece (\(\Gamma\)) sarà un insieme contenente tanti elementi quanti sono i \(first(\beta \Delta)\), dove \(\Delta\) fa riferimento al lookahead-set dell'item che stiamo considerando, mentre \(\beta\) è tutto ciò che segue il non-terminale B.
-\end{itemize} 
-Nel caso dell'item \([S' \to \cdot S, \{\$\}]\), dunque, possiamo affermare che \(\Delta = \{\$\} \textrm{ e } \beta = \varepsilon\) e, di conseguenza, \(first(\varepsilon \$) = first(\$) = \{\$\} \subseteq \Gamma\). Gli item che otterremo da \(closure_1(\{[S' \to \cdot S, \{\$\}]\})\) saranno dunque:
+Secondo la Def.\ref{def:lr1-closure}, la \(closure_1(P)\) va inizializzata con \(P\) stesso, ovvero \([S' \to \cdot S, \{\$\}]\).
+In seguito dobbiamo andare a prendere all'interno della \(closure_1(P)\) (che è parziale, non ancora completa) tutti gli elementi in forma \([A \rightarrow \alpha \cdot B \beta, \Delta]\) e dovremo aggiungere a \(closure_1(P)\) tutti quegli item che soddisfano la forma \([B \rightarrow \cdot \gamma, \Gamma]\); dove (\(\Gamma\)) è un insieme contenente tanti elementi quanti sono i \(first(\beta \Delta)\), dove \(\Delta\) fa riferimento al lookahead-set dell'item che stiamo considerando, mentre \(\beta\) è tutto ciò che segue il non-terminale \(B\).
+
+Nel nostro caso l'unico item in \(closure_1(P)\) è \([S' \to \cdot S, \{\$\}]\), che corrisponde alla forma desiderata, quindi possiamo assumere \(\Delta = \{\$\} \textrm{ e } \beta = \varepsilon\); di conseguenza, \(first(\varepsilon \$) = first(\$) = \{\$\} \subseteq \Gamma\). Gli item che otteniamo da \(closure_1(\{[S' \to \cdot S, \{\$\}]\})\) saranno dunque:
 \begin{align*}
-    [S' &\to \cdot S, \{\$\}] \\
-    [S &\to \cdot aAd, \{\$\}] \\
-	[S &\to \cdot bBd, \{\$\}] \\
-	[S &\to \cdot aBe, \{\$\}] \\
-	[S &\to \cdot bAe, \{\$\}]
+    [&S' \to \cdot S, \{\$\}] \\
+    [&S \to \cdot aAd, \{\$\}] \\
+	[&S \to \cdot bBd, \{\$\}] \\
+	[&S \to \cdot aBe, \{\$\}] \\
+	[&S \to \cdot bAe, \{\$\}]
 \end{align*}
 Quanto abbiamo appena ottenuto è la chiusura dell'insieme che costituisce lo stato 0 del nostro automa caratteristico di tipo LR(1).
+Si può notare come la prima parte di questi item sia esattamente corrispondente all'item LR(0) che avremmo trovato utilizzando SLR parsing, la seconda parte (ovvero il \(\Delta\)) è l'unica novità introdotta dalla procedura LR(1).
 
-Notare che la componente del lookahead-set è utile per le riduzioni, mentre nel caso delle transizioni non fornirà alcuna informazione aggiuntiva, per cui il procedimento rimarrà sotto quel punto di vista inalterato. Di conseguenza, possiamo affermare la presenza, come nel caso iniziale, di tre transizioni che portano a tre stati differenti: \(\tau(0,S)=1 \textrm{, } \tau(0,a)=2 \textrm{ e } \tau(0,b)=3\). A questo punto è possibile procedere come abbiamo sempre fatto prestando attenzione alla computazione delle \(closure_1(S)\):
+È da notare anche che la componente del lookahead-set è usata solo in caso di riduzioni, e non incide sulle transizioni, per cui il procedimento rimarrà sotto quel punto di vista inalterato rispetto al metodo SLR. Di conseguenza, possiamo affermare la presenza, di tre transizioni che portano a tre stati differenti: \(\tau(0,S)=1 \textrm{, } \tau(0,a)=2 \textrm{ e } \tau(0,b)=3\). A questo punto è possibile procedere come abbiamo sempre fatto prestando attenzione alla computazione delle \(closure_1(S)\):
 \begin{enumerate}
-    \item Proseguiamo osservando lo stato 1. Il suo kernel è:
+    \item Proseguiamo osservando lo stato \(\tau(0, S)=\)1. Il suo kernel è:
     \begin{equation*}
         [S' \to S \cdot, \{\$\}]
     \end{equation*}
     dobbiamo dunque calcolare \(closure_1(\{[S' \to S \cdot, \{\$\}]\})\), per cui sappiamo che \(B = \varepsilon\) e dunque non possiamo fare altro se non appuntarci che lo stato 1 contiene l'Accepting Item.
-    \item Analizziamo dunque lo stato 2, il cui kernel è popolato da questi item:
+    \item Analizziamo dunque lo stato \(\tau(0, a)=\)2, il cui kernel è popolato da questi item:
     \begin{align*}
         [S &\to a \cdot Ad, \{\$\}] \\
         [S &\to a \cdot Be, \{\$\}]
     \end{align*}
-    per cui sappiamo che, nel caso in cui esista una produzione con A come driver, si ha che \(B = A, \beta = d, \Delta = \{\$\}\) (e quindi \(\Gamma_A = first(\beta \Delta) = first(d\$)\)), mentre, nel caso in cui esista una produzione con B come driver, si ha che \(B = B, \beta = e, \Delta = \{\$\}\) (e quindi \(\Gamma_B = first(\beta \Delta) = first(e\$)\)) . Calcoliamo dunque la chiusura:
+    entrambi soddisfano la forma \([A \rightarrow \alpha \cdot B \beta, \Delta]\).
+    Nel primo caso abbiamo le seguenti corrisponde: \(A=S\), \(\alpha = a\), \(B = A\), \(\beta = d\) e \(\Delta=\$\); andiamo a cercare nella nostra grammatica se sono presenti derivazioni in forma \(B \to \gamma\), troviamo \(A \to c\), quindi grazie alla formula del calcolo di \(closure_1(P)\) sappiamo che dobbiamo aggiungere algi item dello stato 2 un item formato così: \([A \to \cdot c, {\Gamma}]\), dove \(\Gamma = first(\beta\Delta) = first(d\$) = \{d\}\); in definitiva aggiungiamo l'item \(A \to \cdot c, \{d\}\).
+
+    Con lo stesso procedimento possiamo trovare la chiusura di \([S \to a \cdot Be, \{\$\}]\): in questo caso le corrispondenze sono: \(A=s\), \(\alpha=a\), \(B=B\), \(\beta=e\) e \(\Delta=\$\), la produzione da analizzare è \(B \to c\) e l'item che ne ricaviamo è \([A \to \cdot c, {\Gamma}]\), dove \(\Gamma = first(\beta\Delta) = first(e\$) = \{e\}\).
+    
+    In sostanza lo stato 2 contiene questi LR(1) items:
     \begin{align*}
+        [S &\to a \cdot Ad, \{\$\}] \\
+        [S &\to a \cdot Be, \{\$\}] \\
         [A &\to \cdot c, \{d\}] \\
         [B &\to \cdot c, \{e\}]
     \end{align*}
@@ -899,46 +935,147 @@ Notare che la componente del lookahead-set è utile per le riduzioni, mentre nel
 \end{enumerate}
 
 \subsubsection{Esesrcizio 2: computazione \(closure_1(P)\)}
+\label{ex:closure-lr1}
 Sia data la seguente grammatica:
 \begin{align}
-    \label{}
     \G: S &\to L=R \mid R \\
-    L &\to *R \mid id \\ \notag
+    L &\to *R \mid id \nonumber \\ \notag
     R &\to L \notag
 \end{align}
 Inizializziamo lo stato 0 ponendo come suo kernel:
-\begin{equation}
+\begin{equation*}
     [S' \to \cdot S, \{\$\}]
-\end{equation}
-Calcoliamo \(closure_1(0)\) (ci fermiamo dopo la prima iterazione):
-\begin{align*}
+\end{equation*}
+Calcoliamo \(closure_1(0)\). Questo item soddisfa la forma \([A \rightarrow \alpha \cdot B \beta, \Delta]\), con le seguenti corrispondenze: \(B = S \texttt{, } \beta = \varepsilon \texttt{, } \Delta = \{\$\}\) (e quindi \(\Gamma = first(\beta \Delta) = first(\varepsilon \$) = \{\$\}\)).
+Le due produzioni di \(B\) (ovvero di \(S\)) in questo caso sono \(S \to L=R \mid R\), quindi aggiungo i due item LR(1) seguenti:
+\begin{align}
+    \label{prod:production-L}
     [S &\to \cdot L = R, \{\$\}] \\
-    [S &\to \cdot R, \{\$\}]
-\end{align*}
-Un risultato di questo tipo è ancora una volta osservabile dal fatto che l'unico elemento presente all'interno della chiusura è \([S' \to \cdot S, \{\$\}]\), dunque \(B = S \texttt{, } \beta = \varepsilon \texttt{, } \Delta = \{\$\}\) (e quindi \(\Gamma = first(\beta \Delta) = first(\varepsilon \$) = \{\$\}\)).
-
-A questo punto la chiusura non è completa in quando abbiamo aggiunto due elementi che possono essere presi in considerazione nella definizione ricorsiva della chiusura: selezioniamo dunque \([S \to \cdot L = R, \{\$\}]\) e proseguiamo nella procedura considerando \(B = L \texttt{, } \beta = \{=\} \texttt{, } \Delta = \{\$\}\) (e quindi \(\Gamma = first(\beta \Delta) = first(\{=\} \$) = \{=\}\)), ottenendo:
+    [S &\to \cdot R, \{\$\}] \notag
+\end{align}
+A questo punto la chiusura non è completa in quando abbiamo aggiunto due elementi che possono essere presi in considerazione nella definizione ricorsiva della chiusura, ovvero soddisfano anch'essi la famosa forma \([A \rightarrow \alpha \cdot B \beta, \Delta]\).
+Analizziamo dunque \([S \to \cdot L = R, \{\$\}]\), le sue corrispondenze sono: \(B = L \texttt{, } \beta = \{=\} \texttt{, } \Delta = \{\$\}\) (e quindi \(\Gamma = first(\beta \Delta) = first(\{=\} \$) = \{=\}\)); le produzioni di \(L\) sono \(L \to *R \mid id\), quindi arriviamo a generare i seguenti LR(1)-items:
 \begin{align*}
     [L &\to \cdot *R, \{=\}] \\
     [L &\to \cdot id, \{=\}]
 \end{align*}
-Allo stesso modo è possibile continuare con \([S \to \cdot R, \{\$\}]\) ponendo \(B = R \texttt{, } \beta = \{\varepsilon\} \texttt{, } \Delta = \{\$\}\) (e quindi \(\Gamma = first(\beta \Delta) = first(\varepsilon \$) = \{\$\}\)), ottenendo:
+che non presentano altre possibili espansioni (grazie al cielo).
+
+Ci rimane ora da analizzare \([S \to \cdot R, \{\$\}]\), che soddisfa la nostra formosa forma e presenta le seguenti corrispondenze: \(B = R \texttt{, } \beta = \{\varepsilon\} \texttt{, } \Delta = \{\$\}\) (e quindi \(\Gamma = first(\beta \Delta) = first(\varepsilon \$) = \{\$\}\)), inoltre le produzioni di \(R\) sono \(R \to L\), quindi otteniamo il seguente LR(1)-items:
 \begin{align*}
     [R &\to \cdot L, \{\$\}]
 \end{align*}
-Nonostante la produzione con driver \(L\) sia già stata analizzata, è necessario eseguire nuovamente la sua chiusura in quanto ha un lookahed-set differente, il che ci porta ad inserire:
+questo item presenta il marker davanti ad un non-terminale, può creare nuovi item per la chiusra che stiamo calcolando?
+Nonostante la produzione con driver \(L\) sia già stata analizzata (vedi \ref{prod:production-L}), è necessario eseguire nuovamente la sua chiusura in quanto ha un lookahed-set differente (nel caso precedente \(\beta= \{=\}\), mentre ora \(\beta=\varepsilon\)), il che ci porta a ripetere la chiusura per l'item \([R \to \cdot L, \{\$\}]\), ricavando i seguenti LR(1)-items:
 \begin{align*}
     [L &\to \cdot *R, \{\$\}] \\
     [L &\to \cdot id, \{\$\}]
 \end{align*}
-Visto che però avevamo già inserito due LR(1)-item con lo stesso LR(0)-item possiamo semplicemente accrescere i lookahead-set corrispondenti. Il risultato finale per lo stato iniziale può essere dunque riscritto nel seguente modo:
+Visto che però avevamo già inserito due LR(1)-item con lo stesso LR(0)-item (la parte \(L \to \cdot qualcosa\)) possiamo semplicemente accrescere i lookahead-set corrispondenti. Il risultato finale per la chiusura degli item dello stato iniziale è:
 \begin{align*}
-    [S' &\to \cdot S, \{\$\}] \\
-    [S &\to \cdot L = R, \{\$\}] \\
-    [S &\to \cdot R, \{\$\}] \\
-    [L &\to \cdot *R, \{\$, =\}] \\
-    [L &\to \cdot id, \{\$, =\}] \\
-    [R &\to \cdot L, \{\$\}]
+    [&S'\to \cdot S, \{\$\}] \\
+    [&S \to \cdot L = R, \{\$\}] \\
+    [&S \to \cdot R, \{\$\}] \\
+    [&L \to \cdot *R, \{\$, =\}] \\
+    [&L \to \cdot id, \{\$, =\}] \\
+    [&R \to \cdot L, \{\$\}]
 \end{align*}
+Bene, ora abbiamo fatto un po' di allenamento con il calcolo degli stati, ma dobbiamo ricordare che non è questo il nostro obiettivo finale, noi vogliamo ricavare l'automa caratteristico!
+
+\subsection{Costruire un automa LR(1)}
+Partiamo con lo spiegare nel modo più semplice come si fa a costruire un automa LR(1):
+\begin{enumerate}
+    \item costruiamo lo stato di partenza con l'item \([S' \to \cdot S, {\$}]\);
+    \item reicorsiavamente aggiungiamo gli stati che si possono raggiungere dagli stati presenti nell'automa;
+    \item aggiungamo le transizioni che ci permettono di passare da uno stato all'altro.
+\end{enumerate}
+E come facciamo a capire quali stati sono collegati ad un certo stato \(P\)?
+
+\noindent Se uno stato \(P\) contiene un item nella forma \([A \to \alpha Y \cdot \beta, \Delta]\) allora esiste una transizione da \(P\) ad uno stato \(Q\) che contiene l'item \([A \to \alpha Y \cdot \beta , \Delta]\); inoltre, siccome \(Q\) contiene \([A \to \alpha Y \cdot \beta , \Delta]\), esso contiene anche tutti gli item in \(closure_1([A \to \alpha Y \cdot \beta , \Delta])\).
+
+Proviamo ora a chiarire tale procedura tramite la sua scrittura in forma algoritmica, si veda \ref{alg:construct-lr1-automata}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{alg-construct-lr1-automata.png}
+    \caption{Algoritmo per la costruzione di un automa LR(1)}
+    \label{alg:construct-lr1-automata}
+\end{figure}
+Indovinate un po' con quale grammatica stiamo per andare a osservare cosa si ottiene con questa procedura? Oh sì! proprio lei:
+\begin{align}
+    \label{eq:ex3-slr1-grammarrrrrr-again-and-again}
+    \G: S &\to aAd \mid bBd \mid aBe \mid bAe \\
+    A &\to c \nonumber \\ \notag
+    B &\to c \notag
+\end{align}
+Ora chiederemo al lettore di fare uno sforzo mnemonico poderoso e di ricordare che in passato, quando abbiamo provato a costruire l'automa caratteristico di tipo SLR per questa grammatica ci siamo trovati ad avere la situazione rappresentata in figura \ref{fig:lr0-automata_conflict}, che riprtiamo qui sotto per comodità.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.4\textwidth]{lr0-automata_conflict.png}
+    \caption{Automa di tipo LR(0), si noti il conflitto sullo stato 6}
+    \label{fig:lr0-automata_conflict}
+\end{figure}
+Abbiamo già calcolato quali sono gli stati LR(1) per la grammatica in questione in \ref{ex:closure-lr1}, ed applicando l'algoritmo per la costruzione degli automi LR(1) arriviamo ad ottenere il seguente automa:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.4\textwidth]{lr1-automata_no-conflict.png}
+    \caption{Automa di tipo LR(1), si noti che il conflitto sullo stato 6 è stato eliminato}
+    \label{fig:lr1-automata_no-conflict}
+\end{figure}
+Ma siamo sicuri di aver effettivamente risolto il problema? per verificarlo dobbiamo costruire la parsing table!
+
+La costruzione della parsing table per il parsing di tipo LR(1) è semplice da ottenere perché si crea esattamente come la parsing table per l'SLR parsing con queste uniche due differenze:
+\begin{itemize}
+    \item l'automa caratteristico è di tipo LR(1);
+    \item la lookahead function utilizzata è la seguente: per ogni \([A \to \beta \cdot , \Delta] \in P\), \(\mathcal{LA}(P, A \to \beta ) = \Delta\).
+\end{itemize}
+Naturalmente una grammatica \(\mathcal{G}\) è di tipo LR(1) se la sua tabella di parsing LR(1) non presenta conflitti.
+
+Sbirciamo quindi cosa sarebbe successo costruendo la parsing table LR(1) per la nostra grammatica preferita.
+
+Innanzitutto l'automa caratteristico LR(1) si presenta come in fig.\ref{fig:lr1_automata-complete}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth]{lr1_automata-complete.png}
+    \caption{Automa di tipo LR(1) completo}
+    \label{fig:lr1_automata-complete}
+\end{figure}
+Negli stati 6 e 9, che ci avrebbero causato problemi con la costruzione di tipo LR(0) ora troveremmo i seguenti item:
+\begin{itemize}
+    \item Stato 6
+    \begin{align*}
+        A &\to c \cdot , {d} \\
+        B &\to c \cdot , {e}    
+    \end{align*}
+    \item Stato 9
+    \begin{align*}
+        A &\to c \cdot , {e} \\
+        B &\to c \cdot , {d}    
+    \end{align*}
+\end{itemize}
+ Quindi, seguendo le regole di compilazione della tabella di parsing LR(1) avremmo:
+ \begin{itemize}
+     \item nella casella M[6,d] la riduzione \(A \to c \cdot , {d}\);
+     \item nella casella M[6,e] la riduzione \(B \to c \cdot , {e}\);
+     \item nella casella M[9,e] la riduzione \(A \to c \cdot , {e}\);
+     \item nella casella M[9,d] la riduzione \(B \to c \cdot , {d}\);
+ \end{itemize}
+Festa! Festa! non ci sono più conflitti!
+È però notevole il fatto che il numero di stati sia aumentato parecchio: questo è quello che succede quando si va ad utilizzare tecniche di parsing più precise e raffinate.
+
+\subsection{Esercizi: costruzione di parsing table LR(1)}
+Mettiamoci ora di buona lena ad esercitarci con la costruzione di tabelle di parsing di tipo LR(1).
+
+\subsubsection{Esercizio 1}
+La prima grammatica che andiamo ad analizzare è la seguente:
+\begin{align}
+    \label{gr:pointers-grammar}
+    S &\to L = R \mid R \\
+    L &\to *R \mid id \nonumber \\ \notag
+    R &\to L \notag
+\end{align}
+Questa è una grammatica che ci parla di puntatori, ma capiremo in seguito cos significa ciò, per ora concentriamoci sulla sua risoluzione.
+
+È il momento di campiare Pokémon, vai DaPips, scelgo te!
 
 \end{document}
