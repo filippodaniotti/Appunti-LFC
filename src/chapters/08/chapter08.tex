@@ -447,7 +447,7 @@ Prima di passare alla prossima sezione è necessario precisare che \emph{solamen
     \caption{Algoritmo di parsing Bottom-Up}
     \label{fig:bottom-up-parsing-algorithm}    
 \end{figure}
-
+\subimport{assets/pseudocode/}{btmup-parsing.tex}
 Andiamo subito a mettere in pratica questo algoritmo con un esempio.
 
 \subsubsection{Esercizio shift/reduce 1}
@@ -870,13 +870,14 @@ Come facciamo a calcolare la chiusura degli insiemi di LR(1)-items? Il metodo di
     \end{align*}  
     dove \(first(\beta \Delta) = \cup_{d \in \Delta} first(\beta d)\).
 \end{definition}
-Un altro modo per descrivere questa procedura è quello di descriverne l'algoritmo, questa seconda possibilità è mostrata in Alg.\ref{alg:closure-lr1}
+Un altro modo per descrivere questa procedura è quello di descriverne l'algoritmo, questa seconda possibilità è mostrata in Alg.\ref{alg:lr1-closure}
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{alg_closure-lr1.png}
     \caption{Algoritmo per il calcolo della chiusura di uno stato LR(1)}
     \label{alg:closure-lr1}
 \end{figure}
+\subimport{assets/pseudocode/}{lr1-closure.tex}
 In questo algoritmo si deve fare conto che \(B \to \cdot \gamma \notin prj(P)\) significa che non è ancora presente in \(closure_1(P)\) una produzione \(B \to \cdot \gamma\).
 Di fatto quello che succede all'interno del \texttt{foreach} centrale è che se l'elemento è nuovo vado ad aggiungerlo con il suo \(\Delta\), se l'elemento è già presente vado a vedere se è il caso di aggiungere al \(\Delta\) di questa qualche elemento.
 
@@ -993,14 +994,15 @@ E come facciamo a capire quali stati sono collegati ad un certo stato \(P\)?
 
 \noindent Se uno stato \(P\) contiene un item nella forma \([A \to \alpha Y \cdot \beta, \Delta]\) allora esiste una transizione da \(P\) ad uno stato \(Q\) che contiene l'item \([A \to \alpha Y \cdot \beta , \Delta]\); inoltre, siccome \(Q\) contiene \([A \to \alpha Y \cdot \beta , \Delta]\), esso contiene anche tutti gli item in \(closure_1([A \to \alpha Y \cdot \beta , \Delta])\).
 
-Proviamo ora a chiarire tale procedura tramite la sua scrittura in forma algoritmica, si veda \ref{alg:construct-lr1-automata}.
+Proviamo ora a chiarire tale procedura tramite la sua scrittura in forma algoritmica, si veda \ref{alg:lr1-automata}.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{alg-construct-lr1-automata.png}
-    \caption{Algoritmo per la costruzione di un automa LR(1)}
-    \label{alg:construct-lr1-automata}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\textwidth]{alg-construct-lr1-automata.png}
+%     \caption{Algoritmo per la costruzione di un automa LR(1)}
+%     \label{alg:construct-lr1-automata}
+% \end{figure}
+\subimport{assets/pseudocode/}{lr1-automata.tex}
 Indovinate un po' con quale grammatica stiamo per andare a osservare cosa si ottiene con questa procedura? Oh sì! proprio lei:
 \begin{align}
     \label{eq:ex3-slr1-grammarrrrrr-again-and-again}

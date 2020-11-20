@@ -1,0 +1,50 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[ruled,linesnumbered,vlined]{algorithm2e}
+\usepackage{amssymb}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{algorithm}[H]
+        \label{alg:btmup-parsing}
+        \DontPrintSemicolon
+
+        \SetKwData{t}{\textbf{true}}
+        % \SetKwData{f}{\textbf{false}}
+        % \SetKwData{not}{\textbf{not}}
+
+        \SetKwData{Symb}{\(symSt\)}
+        \SetKwData{St}{\(stSt\)}
+        \SetKwData{Tmp}{tmp}
+        \SetKwArray{BU}{M}
+        \SetKwFunction{ferr}{error}
+        
+        Let \(b\) be the first symbol in the input buffer \;
+        \While{\t} {
+            Let \(S\) be the top of \St \;
+            \uIf{\BU{\(S, b\)} = \texttt{shift} \(T\)} {
+                Push \(b\) onto \Symb \;
+                Push \(T\) onto \St \;
+                let \(b\) be the next symbol in the input buffer \;
+            }
+            \uElseIf{\BU{\(S, b\)} = \texttt{reduce} \(A \to \beta\)} {
+                Pop \(|\beta|\) symbols off \Symb \;
+                Push \(A\) onto \Symb \;
+                Pop \(|\beta|\) symbols off \St \;
+                Let \Tmp be the top of \St \;
+                Push \(T\) onto \St, where \(T\) is such that \BU{\Tmp, \(A\)} = \texttt{goto} \(T\) \;
+                Output \(A \to \beta\) \;
+            }
+            \uElseIf{\BU{\(S, b\)} = ACCEPT} {
+                \Return{} \;
+            }
+            \Else{
+                \ferr{}
+            }
+        }
+
+
+        \caption{bottomUpParsing(\textsc{Word} \(w\), \textsc{Table}[][] M)}
+    \end{algorithm}
+\end{document}
