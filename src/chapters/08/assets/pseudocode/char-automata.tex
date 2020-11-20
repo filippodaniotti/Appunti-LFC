@@ -17,9 +17,9 @@
         \SetKwData{p}{P}
         \SetKwData{Tmp}{tmp}
         \SetKwFunction{Mark}{mark}
-        \SetKwFunction{Closure}{chiusura\(_0\)}
+        \SetKwFunction{ClosureO}{chiusura\(_0\)}
 
-        inizializza la collezione \(\Q\) in modo che contenga \(P_0\) = \Closure{\(\{S \to S'\}\)}\;
+        inizializza la collezione \(\Q\) in modo che contenga \(P_0\) = \ClosureO{\(\{S \to S'\}\)}\;
         etichetta \(P_0\) come \texttt{unmarked}\;
         \While{\(\exists P \in \Q: P\) è \texttt{unmarked}} {
             \Mark{\(P\)}\;
@@ -29,8 +29,8 @@
                     sia \(Q\) lo \(Y\) per \(P\)\;
                 }
                 { 
-                    aggiungi \Closure{\Tmp} a \(\Q\) come stato \texttt{unmarked}\;
-                    sia \Closure{\Tmp} lo \(Y\) per \(P\)\;
+                    aggiungi \ClosureO{\Tmp} a \(\Q\) come stato \texttt{unmarked}\;
+                    sia \ClosureO{\Tmp} lo \(Y\) per \(P\)\;
                 }
             }
         }
