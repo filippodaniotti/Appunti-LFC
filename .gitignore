@@ -19,3 +19,6 @@ _minted*/
 shell.nix
 
 *.drawio
+
+.devcontainer
+.vscode
