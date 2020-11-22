@@ -34,7 +34,7 @@ Visto che abbiamo dimostrato che \(w \in \mathcal{L(G)}\) e che tale derivazione
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.15\textwidth,keepaspectratio]{par-td-es1.png}
+    \subimport{assets/figures/}{derivation_tree_es1.tex}
     \caption{Albero di derivazione per esercizio 1}
     \label{par-td-es1}
 \end{figure}
@@ -596,14 +596,14 @@ Di fatto, se valesse \(\alpha = \varepsilon\), allora la grammatica sarebbe solo
 Per aiutarci a trovare un'idea, possiamo aiutarci andando a tracciare un albero piuttosto grezzo che rappresenti, più o meno, quello che sta succedendo se cerchiamo di derivare lo schema \ref{left-recursive_grammar}:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.25\textwidth,keepaspectratio]{lrremove-intuition_1.png}
+    \subimport{assets/figures/}{LR_elimination_problem.tex}
     \caption{Rappresentazione ad albero del problema}
     \label{lrremove-intuition_1}
 \end{figure}
 Questa figura non è un vero e proprio albero di derivazione, ma ci permette di capire una cosa: quello che noi vogliamo fare è modificare la struttura dell'albero, quindi le produzioni della grammatica, e al contempo mantenere inalterata la frontiera dell'albero. Potremmo ottenere questo risultato aggiungendo un nuovo non-terminale alla grammatica, in modo da eliminare l'elemento ricorsivo della produzione; idealmente, vorremmo ottenere un risultato di questo tipo:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.25\textwidth,keepaspectratio]{lrremove-intuition_2.png}
+    \subimport{assets/figures/}{LR_elimination_intuition.tex}
     \caption{Rappresentazione della nostra intuizione}
     \label{lrremove-intuition_2}
 \end{figure}
@@ -733,7 +733,7 @@ Sfortunatamente, riusciamo a trovare senza troppi problemi due derivazioni right
 Possiamo convincerci di questo risultato anche seguendo un altro procedimento, ossia tracciando un albero di derivazione parziale per la nostra grammatica:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.25\textwidth,keepaspectratio]{fxness-lrremove-ambiguity_1.png}
+    \subimport{assets/figures/}{LR_elimination_partial_derivation.tex}
     \caption{Albero di derivazione parziale per \(\mathcal{G'}\)}
     \label{fxness-lrremove- ambiguity_1}
 \end{figure}
@@ -741,14 +741,14 @@ A questo punto notiamo subito che, per ottenere la parola \(id + id * id\), poss
 \begin{figure}[H]
     \begin{minipage}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=.35\textwidth,keepaspectratio]{fxness-lrremove-ambiguity_2_1.png}
+        \subimport{assets/figures/}{LR_elimination_partial_derivation_v2_part1.tex}
         \subcaption{}
         \label{fxness-lrremove- ambiguity_2_1}
     \end{minipage}
     \hfill
     \begin{minipage}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=.15\textwidth,keepaspectratio]{fxness-lrremove-ambiguity_2_2.png}
+        \subimport{assets/figures/}{LR_elimination_partial_derivation_v1_part2.tex}
         \subcaption{}
         \label{fxness-lrremove- ambiguity_2_2}
     \end{minipage}
@@ -759,14 +759,14 @@ Ma, allo stesso identico modo, potremmo completare lo stesso albero parzial e ot
 \begin{figure}[H]
     \begin{minipage}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=.35\textwidth,keepaspectratio]{fxness-lrremove-ambiguity_3_1.png}
+        \subimport{assets/figures/}{LR_elimination_partial_derivation_v1_part1.tex}
         \subcaption{}
         \label{fxness-lrremove- ambiguity_3_1}
     \end{minipage}
     \hfill
     \begin{minipage}[b]{0.4\textwidth}
         \centering
-        \includegraphics[width=.15\textwidth,keepaspectratio]{fxness-lrremove-ambiguity_3_2.png}
+        \subimport{assets/figures/}{LR_elimination_partial_derivation_v2_part2.tex}
         \subcaption{}
         \label{fxness-lrremove- ambiguity_3_2}
     \end{minipage}
@@ -877,7 +877,7 @@ e, allo stesso tempo, abbiamo anche chiederci
 Abbiamo anche un altro modo per constatare che la nostra grammatica rimane ambigua, ossia andando a vedere il seguente albero di derivazione:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{leftFactorizationAmbiguity.png}
+    \subimport{assets/figures/}{left_factorization_ambiguity.tex}
     \caption{leftFactorizationAmbiguity}
     \label{leftFactorizationAmbiguity}
 \end{figure}

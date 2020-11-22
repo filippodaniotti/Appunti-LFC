@@ -45,7 +45,7 @@ Consideriamo come esempio una delle prime grammatiche che abbiamo visto, quella 
 L'automa caratterisco di tipo LR(1) per questa grammatica è il seguente:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth,keepaspectratio]{balanced-char_aut-lr1.png}
+	\subimport{assets/figures/}{automa_LR_8-1.tex}
     \caption{Automa caratteristico LR(1) per Eq. \ref{balanced}}
     \label{balanced-char_aut-lr1}
 \end{figure}
@@ -292,7 +292,7 @@ questi due kernel non presentano ulteriori transizioni.
 In conclusione, l'automa caratteristico che otteniamo da questo procedimento può essere visualizzato in Fig.\ref{charateristic-automata_cosntruction}
 \begin{figure}
     \centering
-    \includegraphics[width=.8\textwidth]{charateristic-automata_cosntruction.png}
+	\subimport{assets/figures/}{automa_LR_8-3-4.tex}
     \caption{Automa caratteristico LR(0) per la grammatica \ref{esercizio_costruzione_automa_lr0}}
     \label{charateristic-automata_cosntruction}    
 \end{figure}
@@ -378,7 +378,7 @@ Dobbiamo costruire la tabella di parsing \(SLR(1)\) per la seguente grammatica \
 Riconoscerete di certo questa grammatica, l'abbiamo già vista nella costruzione dell'automa caratteristico. Tuttavia, il nostro obiettivo qui è costruire la tabella di parsing, e per farlo utilizzeremo i risultati ottenuti in precedenza: sappiamo infatti che lo stato \(1\) (anche indicato dal colore verde) è quello che contiene l'\textbf{Accepting Item}, mentre invece gli stati contenenti i \textbf{Reducing Item} (segnalati come stati finali) sono invece 4, 7, 8, 9 (si osservi Fig.\ref{fig:charateristic-automata-complete}). 
 \begin{figure}
     \centering
-    \includegraphics[width=.8\textwidth]{charateristic-automata-complete.png}
+	\subimport{assets/figures/}{automa_bottom_up_8-3-4.tex}
     \caption{Automa Caratteristico per la Bottom-Up Parsing Table}
     \label{fig:charateristic-automata-complete}    
 \end{figure}
@@ -644,7 +644,7 @@ Una volta terminata l'analisi degli stati e dei relativi item ci preoccupiamo di
 Per concludere la parte di costruzione dell'automa caratteristico per la nostra grammatica in Eq.\ref{eq:ex2-sh/re-grammar}, inseriamo in Fig.\ref{ex2-sh/re-automata} il disegno di tale sgorbio (scherzo, è carino, sembra un razzetto).
 \begin{figure}[H]
     \center
-    \includegraphics[width=.6\textwidth]{ex2-sh_re-automata.png}
+	\subimport{assets/figures/}{automa_caract_8-4.tex}
     \caption{Automa caratteristico per la grammatica \ref{eq:ex2-sh/re-grammar}}
     \label{fig:ex2-sh/re-automata}
 \end{figure}
@@ -682,28 +682,28 @@ Nello specifico, noi siamo interessati a esprimire l'associatività sinistra deg
 \begin{figure}[H]
     \begin{minipage}[b]{.4\textwidth}
         \centering
-        \includegraphics[width=.7\textwidth]{ex2-sh_re-ptree_1.png}
+        \subimport{assets/figures/}{parse_tree_left_associative_a.tex}
         \subcaption{Parse tree left-associativo}
         \label{fig:ex2-sh_re-ptree_1}
     \end{minipage}
     \hfill
     \begin{minipage}[b]{.4\textwidth}
         \centering
-        \includegraphics[width=.7\textwidth]{ex2-sh_re-ptree_2.png}
+        \subimport{assets/figures/}{parse_tree_left_associative_b.tex}
         \subcaption{Parse tree left associativo}
         \label{fig:ex2-sh_re-ptree_2}
     \end{minipage}
     
     \begin{minipage}[b]{.4\textwidth}
         \centering
-        \includegraphics[width=.7\textwidth]{ex2-sh_re-ptree_3.png}
+        \subimport{assets/figures/}{parse_tree_left_associative_c.tex}
         \subcaption{Parse tree per \(E + E * E\)}
         \label{fig:ex2-sh_re-ptree_3}
     \end{minipage}
     \hfill
     \begin{minipage}[b]{.4\textwidth}
         \centering
-        \includegraphics[width=.7\textwidth]{ex2-sh_re-ptree_4.png}
+        \subimport{assets/figures/}{parse_tree_left_associative_d.tex}
         \subcaption{Parse tree per \(E * E + E\)}
         \label{fig:ex2-sh_re-ptree_4}
     \end{minipage}
@@ -737,14 +737,14 @@ L'ordine con cui ho inserito le produzioni non è causale: abbiamo posizionato \
 \begin{figure}[H]
     \begin{minipage}[b]{.4\textwidth}
         \centering
-        \includegraphics[width=.7\textwidth]{ex2-sh_re-altgrm-ptree_1.png}
+        \subimport{assets/figures/}{parse_tree_left_associative_a_V2.tex}
         \subcaption{\(T \to T * id\), left-associativa (versione corretta)}
         \label{fig:ex2-sh_re-altgrm-ptree_1}
     \end{minipage}
     \hfill
     \begin{minipage}[b]{.4\textwidth}
         \centering
-        \includegraphics[width=.7\textwidth]{ex2-sh_re-altgrm-ptree_2.png}
+        \subimport{assets/figures/}{parse_tree_left_associative_b_V2.tex}
         \subcaption{Se invece scriviamo \(T \to id * T\) perdiamo la left-associatività}
         \label{fig:ex2-sh_re-altgrm-ptree_2}
     \end{minipage}
@@ -828,7 +828,7 @@ La situazione è ben rappresentata dalla figura \ref{fig:lr0-automata_conflict} 
 
 \begin{figure}
     \centering
-    \includegraphics[width=.4\textwidth]{lr0-automata_conflict.png}
+    \subimport{assets/figures/}{automa_conflict_LR.tex}
     \caption{Automa di tipo LR(0), si noti come con una \(c\)-transizione si possa arrivare in 6 sia da 3 che da 2}
     \label{fig:lr0-automata_conflict}
 \end{figure}
@@ -1013,14 +1013,14 @@ Indovinate un po' con quale grammatica stiamo per andare a osservare cosa si ott
 Ora chiederemo al lettore di fare uno sforzo mnemonico poderoso e di ricordare che in passato, quando abbiamo provato a costruire l'automa caratteristico di tipo SLR per questa grammatica ci siamo trovati ad avere la situazione rappresentata in figura \ref{fig:lr0-automata_conflict}, che riprtiamo qui sotto per comodità.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.4\textwidth]{lr0-automata_conflict.png}
+    \subimport{assets/figures/}{automa_conflict_LR.tex}
     \caption{Automa di tipo LR(0), si noti il conflitto sullo stato 6}
     \label{fig:lr0-automata_conflict}
 \end{figure}
 Abbiamo già calcolato quali sono gli stati LR(1) per la grammatica in questione in \ref{ex:closure-lr1}, ed applicando l'algoritmo per la costruzione degli automi LR(1) arriviamo ad ottenere il seguente automa:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.4\textwidth]{lr1-automata_no-conflict.png}
+    \subimport{assets/figures/}{automa_conflict_solution_LR.tex}
     \caption{Automa di tipo LR(1), si noti che il conflitto sullo stato 6 è stato eliminato}
     \label{fig:lr1-automata_no-conflict}
 \end{figure}
@@ -1038,7 +1038,7 @@ Sbirciamo quindi cosa sarebbe successo costruendo la parsing table LR(1) per la 
 Innanzitutto l'automa caratteristico LR(1) si presenta come in fig.\ref{fig:lr1_automata-complete}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth]{lr1_automata-complete.png}
+    \subimport{assets/figures/}{automa_LR_complete_solution.tex}
     \caption{Automa di tipo LR(1) completo}
     \label{fig:lr1_automata-complete}
 \end{figure}

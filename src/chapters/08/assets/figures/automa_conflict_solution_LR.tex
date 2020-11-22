@@ -1,0 +1,28 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+ 
+\usepackage{../../../../style_automata}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \tikzset{
+    node distance=2.5cm, % specifies the minimum distance between two nodes.
+    }
+    \begin{tikzpicture}
+        \node[state] (0) {0};
+        \node[state, below left of=0] (2) {2};
+        \node[state, below right of=0] (3) {3};
+        \node[state, below left of=2] (6) {6};
+        \node[state, below right of=3] (9) {9};
+        \draw (0) edge[above left] node{a} (2)
+        (0) edge[above right] node{b} (3)
+        (2) edge[above left] node{c} (6)
+        (3) edge[above right] node{c} (9)
+        ;
+
+    \end{tikzpicture}
+\end{document}
+
