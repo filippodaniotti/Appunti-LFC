@@ -1,0 +1,27 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{forest}
+        [E
+            [T
+                [T
+                    [T
+                        [$\vdots$]
+                    ]
+                    [*]
+                    [id]
+                ]
+                [*]
+                [id]
+            ]
+        ]
+    \end{forest}
+\end{document}
+
