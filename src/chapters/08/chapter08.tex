@@ -1080,4 +1080,180 @@ Questa è una grammatica che ci parla di puntatori, ma capiremo in seguito cos s
 
 È il momento di campiare Pokémon, vai DaPips, scelgo te!
 
+\section{SPOILER: TUTTO QUELLO CHE SEGUE È UNA LEZIONE NON SCRITTA}
+
+Ripartiamo dalla risoluzione dell'esercizio di ieri.
+Avevamo già osservato tutti gli stati da 0 a 5, riportiamoli qui:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth]{send_help_1.png}
+    \caption{help}
+\end{figure}
+Descrizione degli stati?
+Lo stato 7:
+Il kernel dello stato 7 non presenta possibilità di chiusura, ma conterrà riduzione, passiamo oltre.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth]{send_help_2.png}
+    \caption{help}
+\end{figure}
+Per tutti gli stati 8,9 e 10 non ci sono chiusure ma si presentano riduzioni.
+Nello stato 11 il kernel permette di cercare una chiusura per R, la chiusura per R ci porta a R -> .L, {\$}
+che ci permette un'ulteriore chiusura, con conseguente inserimento di L->.*R,{\$} e L->.id,{\$}.
+Passiamo allo stato 12 ha un kernel che potrebbe sembrare uguale allo stato 5, ma il lookahead set è
+diverso… quindi lo stato 12 è diverso dal 5
+Aggiungiamo anche lo stato 13 per rappresentare la transizione \(\tau(11,R)\) ecc. ecc.
+Nota che la Quaglia non ha riportato tutti gli stati ed i relativi items.
+Questo è l'automa che ricaviamo:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth]{send_help_3.png}
+    \caption{help}
+\end{figure}
+Ora la domanda diventa: questa grammatica è LR(1)?
+Potremmo ripsondere cosruendo la tbella di parsing e controllando che non vi siano conflitti.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth]{send_help_4.png}
+    \caption{help}
+\end{figure}
+Oppure possiamo notare che i conflitti reduce-reduce non sono presenti, perché in nessuno stato
+sono presenti due riduzioni: in nessuno stato è presente più di un item che porta riduzione.
+Ma sono presenti conflitti shift reduce?
+Come si verifica questo?
+Si va a vedere tutti gli stati che presentano riduzioni (tutti quelli con il doppio cerchiolino
+nel'automa) e si verifica che non presentino mosse di shift (frecce uscenti).
+Gli stati 3,5,7,8, ecc. non presentano problemi perché non presentano shift.
+Mentre lo stato 2 potrebbe presentare problemi dato che presenta sia riduzione che shift, ma
+andando subito a verificare ci rendiamo conto che la riduzione viene applicata per \$ mentre lo shift
+viene applicato per =, quindi festa festa non ci sono conflitti, la grammatica è LR(1).
+Ora ci chiediamo invece se la grammatica è slr(1)?
+Ricordiamo che la risoluzione di tipo SLR(1) prevede di utilizzare l'automa LR(0) e di utilizzare come 
+lookahead function follow(B) ; in tal caso l'automa sarebbe stato il seguente:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth]{send_help_5.png}
+    \caption{help}
+\end{figure}
+E si sarebbe verificato un problema per lo stato 2, dato che avrebbe presentato uno shift per = ma
+usando come lookahead function follow(B) avremmo inserito = anche come item valido per la
+riduzione, quindi nella casella [2, = ] della tabella di parsing SLR(1) avremmo avuto un conflitto shiftreduce.
+La grammatica quindi risulta essere LR(1) ma non SLR(1).
+A che cosa gioca questa grammatica?
+
+Abbiamo già detto in passato come questa sia una grammatica che ci parla di puntatori, andiamo ora
+ad indagare più a fondo tale affermazione:
+
+L sta per left
+R sta per right
+
+Notiamo che il non-terminale S si presenta una sola volta per derivazione, ed essendo l'unico che
+genera = allora l'= può essere presente all'interno di una derivazione al massimo una volta.. Cosa
+sappiamo del resto?
+
+Che linguaggio possiamo ricavare da tale grammatica?
+% {( (*)^n id ) = ( (*)^k id ), n,k>=0} U {(*)^n id, n>=0} forse
+Continueremo questo discorso? Mah
+
+Qui nel frattempo discutiamo di come in 5 si presenti una riduzione per id
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth]{send_help_6.png}
+    \caption{help}
+\end{figure}
+Dato che lo stato 5 contiene l'elemento di riduzione
+Voglio arrivare in 2, voglio capire come faccio ad arrivare in 2 e voglio capire perché qui ci sia un
+conflitto.
+Il 2 lo raggiungo tramite L dallo stato 0, L è un non terminale e non lo leggerò mai dall'input buffer, lo
+leggerò per forza da un goto.
+Devo quindi aver fatto una riduzione che mi riporta allo stato 0 e mi inserisce L nella pila dell'analisi.
+Quindi una delle possibili riduzioni che ci portano allo stato 0 con L sulla pila dei simboli è la
+riduzione in 5 per id.
+Proviamo a capirlo facendo il parsing di "id = id"
+Partiamo da 0, leggiamo id, ci spostiamo in 5.
+In 5 esiste la riduzione L -> id.
+Simboli: id
+Stati: 0 5
+Applico la riduzione
+Simboli:
+Stati: 0
+Inserisco il driver della riduzione e mi muovo allo stato della transizione
+Simboli: L
+Stati: 0 2
+Ora sono nello stato 2 e leggo =, ora trovo lo shift reduce conflict!
+Ma qual è l'azione giusta da fare?
+La riduzione è R->L non ha senso perché non ho mai letto un asterisco prima, quindi è sciocco
+chiedersi se sia giusto applicare la riduzione R->L (siamo partiti da id=id ed abbiamo trasformato
+subito la L derivata da S in id, senza mai passare da stringhe con *, quindi non sono mai passato da
+produzioni R->L).
+Proviamo ora con ***id = id
+Qal'è il percorso che compio?
+0 4 4 4 5, poi incontro la riduzione che mi mette L sui simboli ecc. ecc.
+0 4 4 4 8
+ * * * L(L->id)
+Altra riduzione perché trovo in 8 la riduzione R->L
+Sbam passo allo stato 7, dove
+trovo una riduzione L->R
+* * * R
+0 4 4 7
+Proced
+
+Procedo così un po' di volte, quello che succede è che rimbalzo tra 8 e 7 fino a che non "assorbo"
+(Quagliabolario) tutti gli asterischi, quindi ad un certo punto dopo l'ennesima soluzione m imangio
+tutti gli stait 4 e arrivo allo stato 0
+Nello stato 0 avrò un goto L che mi porterà nello stato 2 con coflitto annesso, cosa è giusto fare?
+Shift o reduce per riconoscere la parola?
+Proviamo con lo shift:
+Mi sposto sullo stato 6 e consumo = in lettura
+0 2 6
+L =
+ora vedo id, id mi porta in 5 che tramite riduzione L-> id mi sbatte nello stato 8
+0 2 6 8
+L = L
+Ora trovo la riduzione di 8 R->L che mi sbatte in 9
+0 2 6 9
+L = R
+In 9 trovo l'ennesima riduzione S -> L = R, comunque sia questa riduzione ci porta ad arrivare fino
+all'accepting item quindi bingo.
+Cosa sarebbe successo se una volta arrivati nello stato 2 avessimo scelto la mossa di reduce R->L?
+Da 2 saremmo passati allo stato 3 con la seguente situazione:
+0 3
+Nello stato 3 noi leggiamo =, che non ha nessuna mossa corrispondente, quindi siamo finiti in una
+casella error della tabella di parsing.
+La scelta giusta era lo shift.
+LALR
+Le grammatiche LALR sono tali per cui la loro complessità in spazio (la dimensione della tabella) è
+esattamente uguale a SLR ma la funzione di lookahead è ben più raffinata.
+Mentre in SLR si va ad usare il follow(B), mentre in SLR(1) si va a raffianre questo insieme, non sono
+più i follow del driver, ma un sottinsieme appunto raffinato.
+LALR si posiziona a metà tra questi due casi, si esegue il raffinamento solo in alcuni casi.
+Vediamo subito cosa si intende
+A proposito della grammatica che abbiamo appena finito di trattare ci sono, negli stati dell'automa
+lr1, degli stati che hanno esattamente gli stessi item-lr0 dell'automa lr0.
+Gli stati in questione sono:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth]{send_help_7.png}
+    \caption{help}
+\end{figure}
+SI nota di fatto che tra i due automi lr0 e lr1 esiste una sottostruttura che è replicata in entrambi,
+questa similarità si presenta esattamente in questi stati.
+Il processo verso l'automa lalr prevede di passare per l'automa intermedio LRm(1), ovvero LR(1)
+merged
+Tutti gli stati di lr1 ma si mergiano quegli stati che appunto hanno lr0 item uguali tra di loro
+Ad esempio lo stato 4 e lo stato 11 hanno esattamente gli stessi item-LR(0), quindi si possono
+mergiare!
+Gli stati dell'automa LRm1 sono:
+Le transizioni invece:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth]{send_help_8.png}
+    \caption{help}
+\end{figure}
+Ora che ho l'automa LRm(1) costruisco la tabella di parsing LALR in questo modo:
+
+- Utilizzo l'automa LRm(1) per costruire la tabella
+- Le riduzioni le decido utilizzando come lookahead function l'unione dei \(\Delta\) degli item-LR(1)
+degli stati (se uno stato è merged vado a vedere tutti i singoli Delta degli stati che ho mergiato) - Ora che ho l'automa LRm(1) costruisco la tabella di parsing LALR in questo modo:
+
 \end{document}
