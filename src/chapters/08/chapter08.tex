@@ -397,7 +397,7 @@ Avendo a disposizione l'automa caratteristico e i dati sopra citati è dunque po
 \begin{table}[H]
     \centering
     \subimport{assets/tables/}{ptbu-follow.tex}
-    \caption{LRS(1) Parsing Table - Calcolo Follow per Lookahead}
+    \caption{SLR(1) Parsing Table - Calcolo Follow per Lookahead}
     \label{tab:first-follow-SLR(1)parsing}
 \end{table}
     \item Una volta calcolati i follow è possibile inserire un'operazione di \texttt{reduce} \(A \rightarrow \beta\) in \(M[P, Y]\) nel caso in cui \(P\) sia un stato contenente un reducing item (quindi nel nostro caso sia uno tra 4, 7, 8 o 9) e per tutti quei terminali \(Y \in \mathcal{LA}(P, A \rightarrow \beta) = follow(A)\) (e.g. \(M[4, b] = A \rightarrow b\) in quanto \(A \rightarrow b \cdot\) è un reducing item per lo stato 4 e \(b \in follow(A)\))
@@ -1267,5 +1267,184 @@ Ora che ho l'automa LRm(1) costruisco la tabella di parsing LALR in questo modo:
 - Utilizzo l'automa LRm(1) per costruire la tabella
 - Le riduzioni le decido utilizzando come lookahead function l'unione dei \(\Delta\) degli item-LR(1)
 degli stati (se uno stato è merged vado a vedere tutti i singoli Delta degli stati che ho mergiato) - Ora che ho l'automa LRm(1) costruisco la tabella di parsing LALR in questo modo:
+
+%IN QUALCHE MODO STE PARTI SI DEVONO COLLEGARE IDKH
+
+\subsubsection{Caso di studio parsing LR(1)}
+
+Prendiamo ancora una volta in considerazione la seguente grammatica:
+\begin{align*}
+    S &\to L = R \mid R \\
+    L &\to *R \mid id \\
+    R &\to L
+\end{align*}
+
+Costruendo l'automa caratteristico sia per il parsing di tipo SLR(1) sia LR(1) abbiamo affermato che non si trattasse di una di una grammatica SLR(1), in quanto conteneva dei conflitti, bensì di una LR(1).
+
+Nel caso SLR(1) infatti gli item di riduzione vengono trasformati in operazioni di reduce in presenza dei follow del driver delle produzioni. 
+
+Lo stato che genera un conflitto all'interno del automa caratteristico SLR(1) è quello identificato dal numero 2: utilizzando come detto precedentemente i follow non riusciamo ad avere un'espressività tale da discriminare le operazioni di reduce e di shift che vanno a creare un s/r conflict; utilizzando un parsing LR(1) nel medesimo stato avremo invece un'operazione di \texttt{shift 6} solo nel caso in cui leggessimo \{=\} dall'input buffer mentre invece \texttt{reduce \(R \to L\)} nel caso in cui il simbolo letto in input sia \{\$\}.
+
+Supponiamo a questo proposito di fare un'analisi di una stringa del tipo \(w_1 = w_2\) utilizzando l'automa caratteristico LR(1): visto che l'uguale è un simbolo generato solo se si sceglie una produzione del tipo \(S \to L = R\), una volta che abbiamo letto tutto ciò che fa a capo \(w_1\) dobbiamo fare una riduzione ad \(L\).
+
+A questo punto però, osservando la grammatica, dovrebbe essere abbastanza chiaro che le uniche parole derivabili da \(L\) appartengono a \(\{*^n id \mid n \geq 0\}\) e che le uniche derivazioni di parole in \(\{*^n id \mid n > 0\}\) coinvolgono la \(R\) (i.e. se vogliamo una stringa in cui compaia almeno una volta il simbolo * è necessario utilizzare la produzione \(L \rightarrow *R\)).
+
+Se la stringa che si sta analizzando è del tipo \(id = w_2\) allora ci spostiamo dallo stato 5 per poi effettuare \texttt{reduce \(L \to id\)} e spostarci allo stato 2. 
+
+Se invece ci stiamo concentrando su una stringa del tipo \(*w_1' = w_2\) allora ci sposteremo invece allo stato 4 dove continueremo a eseguire un ciclo fino a che non esauriremo gli \(*\): nel momento in cui leggeremo invece \(id\) ci sposteremo allo stato 5, eseguiremo \texttt{reduce \(L \to id\)} e finiremo con lo spostarci allo stato 8 e \textbf{non} al 2. 
+
+Il parsing di tipo SLR(1) non riconosce dunque la differenza fra lo stato 2 e lo stato 8 a differenza del parsing LR(1) che ha un costo maggiore. 
+
+Il problema nel caso del parsing SLR(1) è che andiamo a piazzare un'operazione di reduce per tutti i follow dei driver mentre in quello di tipo LR(1) lo si fa per sottoinsiemi dei follow dei driver.
+
+\section{Parsing LRm(1)}
+
+Nonostante il parsing di tipo LR(1) sia il più completo è possibile che l'automa caratteristico risultante contenga delle ridondanze: nell'esempio precedente vi sono infatti delle sottostrutture che sono isomorfe e ciò deriva dal fatto che, visto che le transizioni dipendono sempre dalla prima componente (i.e. item LR(0)), è possibile notare che le ridondanze si verificano nel caso in cui gli stati abbiano la stessa proiezione LR(0).
+
+\subsection{Automi LRm(1)}
+
+L'automa LRm(1) \(\mathcal{AM}\) è costruito a partire dall'automa LR(1) \(\mathcal{A}\) (la lettera m sta per \emph{merged}).
+
+Gli \textbf{Stati} del nuovo automa caratteristico sono ottenuti unendo all'interno di un singolo stato di \(\mathcal{AM}\) tutti gli item negli stati \(<P_1, ..., P_n>\) di \(\mathcal{A}\) che hanno le stesse LR(0)-proiezioni (i.e. con lo stesso item LR(0)).
+
+\textbf{Transizioni}: Se lo stato \(P\) di \(\mathcal{A}\) ha la stessa \(Y\)-transizione a \(Q\) e se \(P\) è stato unito in \(<P_1, ..., P_n>\) e \(Q\) in \(<Q_1, ..., Q_m>\), allora c'è una \(Y\)-transizione in \(\mathcal{AM}\) da \(<P_1, ..., P_n>\) a \(<Q_1, ..., Q_m>\).
+
+Se prendiamo in considerazione l'automa LR(1) definito precedente, possiamo osservare che gli stati 4 e 11 hanno la medesima prima proiezione e quindi possiamo unirli all'interno di un nuovo stato.
+
+Cosa facciamo per le transizioni? Nell'automa LR(1) abbiamo un'unica transizione etichettata \(id\) che va dallo stato 4 allo stato 5 (e allo stesso modo un'altra etichettata \(id\) dallo stato 11 al 12). Visto che gli stati 4 e 11 sono stati uniti in un unico stato (4\&11) e lo stesso vale per 5 e 12 (5\&12), per la definizione precedente possiamo inserire in \(\mathcal{AM}\) una transizione da 4\&11 a 5\&12 etichettata \(id\).
+
+Eseguendo l'operazione descritta la dimensione (i.e. il numero di stati) dell'automa LRm(1) così generato è sicuramente uguale a quella dell'automa LR(0): andando a combinare stati con con gli stessi item LR(0) ci ritroveremo con lo stesso numero di stati dell'automa LR(0) e con lo stesse transizioni. 
+
+\section{Parsing Table LALR(1)}
+
+Le parsing table LALR(1) sono ottenute prendendo:
+
+\begin{itemize}
+    \item l'automa caratteristico LRm(1)
+    \item la lookahead function \(\mathcal{LA}(P, A \to \beta) = \cup_{[A \to \beta \cdot, \Delta_j]} \Delta_j\)
+\end{itemize}
+
+Nel caso in cui non vi sia più di uno stato con la stessa proiezione LR(0) allora tale stato non subisce l'operazione di unione e viene inserito direttamente nell'automa LRm(1) con il medesimo lookahead-set.
+
+La grammatica \(\G\) è LALR(1) se e solo se la sua tabella di parsing LALR(1) non ha conflitti. 
+
+Il vantaggio della grammatica LALR(1) è di essere più potente (i.e. espressiva) della grammatica SLR(1) pur rimanendo con delle dimensioni contenute rispetto alla LR(1). 
+
+\subsection{Esercizio parsing LALR(1) - c'è sì ma in realtà no perchè è LR(1)}
+\begin{align*}
+    S &\to AaB \mid b \\
+    A &\to BcBaA \mid \epsilon \\
+    B &\to \epsilon
+\end{align*}
+
+Il nostro obbiettivo è quello di costruire la parsing table LALR(1) per la grammatica citata: per poter procedere dobbiamo però prima costruire l'automa caratteristico.
+\paragraph{Ricaviamo l'automa}
+\begin{enumerate}
+    \item Inizializziamo lo stato 0; il suo kernel è 
+    \begin{equation*}
+        S' \to \cdot S, \{\$\}
+    \end{equation*}
+    Di questo kernel devo calcolare la chiusura:
+    \begin{align*}
+        S &\to \cdot AaB, \{\$\} \\
+        S &\to \cdot b, \{\$\} \\
+        A &\to \cdot BcBaA, \{a\} \\
+        A &\to \cdot, \{a\} \\
+        B &\to \cdot, \{c\}
+    \end{align*}
+    Essendo questi gli item per lo stato 0, possiamo identificare quattro possibili transizioni (e quindi quattro possibili nuovi stati): \(\tau(0,S)=1 \textrm{, } \tau(0,A)=2 \textrm{, } \tau(0,b)=3 \textrm{ e } \tau(0,B)=4\).
+    
+    Interessante notare che le produzioni del tipo \(A \to \epsilon\) vengono convertite in reducing item \(A \to \cdot\).
+    \item Analizziamo ora lo stato 1; il suo kernel è 
+    \begin{equation*}
+        S' \to S \cdot, \{\$\}    
+    \end{equation*}
+    Non serve calcolare la chiusura di questo item in quanto è formata solamente da sé stesso, possiamo però evidenziare il fatto che questo è lo stato contenente l'\textbf{Accepting Item}.
+    \item Analizziamo dunque lo stato 2, il cui kernel è composto solamente da:
+    \begin{equation*}
+        S \to  A \cdot aB, \{\$\}
+    \end{equation*}
+    Nemmeno in questo caso è necessario calcolare la sua chiusura in quanto il marker si trova davanti ad un non terminale: aggiungiamo dunque la transizione \(\tau(2,a)=5 \) e proseguiamo.
+    \item Il kernel dello stato 3 è dato da
+    \begin{equation*}
+        S \to b \cdot, \{\$\}
+    \end{equation*}
+    Il che vuol dire che non è possibile calcolare la chiusura e che lo stato 3 contiene un reducing item.
+    \item Passiamo allo stato 4, il cui kernel è:
+    \begin{equation*}
+        A \to B \cdot cBaA, \{a\} 
+    \end{equation*}
+   Per gli stessi motivi dello stato 2 la chiusura di tale stato non porta nuovi elementi; è comunque possibile definire la transizione \(\tau(4,c)\) allo stato 6
+    \item Il kernel dello stato 5 è:
+    \begin{equation*}
+        S \to  Aa \cdot B, \{\$\}
+    \end{equation*}
+    La cui chiusura risulta essere pari a 
+    \begin{align*}
+        B &\to \cdot, \{\$\}
+    \end{align*}
+    Per questo motivo sappiamo che lo stato contiene un reducing item e possiede una transizione \(\tau(5, B)\) allo stato 7
+    \item Procedendo come abbiamo fatto fino ad ora il kernel per lo stato 6 è
+    \begin{equation*}
+        A \to Bc \cdot BaA, \{a\} 
+    \end{equation*}
+    la cui chiusura corrisponde a 
+    \begin{equation*}
+         B \to \cdot, \{a\} 
+    \end{equation*}
+    Come è intuibile lo stato 6 contiene un reducing item e la sua transizione è \(\tau(6, B)=8\)
+    \item Il kernel dello stato 7 è 
+    \begin{equation*}
+         S \to  AaB \cdot, \{\$\}  
+    \end{equation*}
+    Essendo che il marker è in fondo alla produzione non è possibile effettuare la chiusura ma solo considerare che lo stato 7 contiene un reducing item
+    \item Lo stato 8 ha kernel
+    \begin{equation*}
+        A \to BcB \cdot aA, \{a\} 
+    \end{equation*}
+    e possiede una transizione \(\tau(8, a)\) allo stato 9
+    \item Lo stato 9 ha kernel
+    \begin{equation*}
+        A \to BcBa \cdot A, \{a\} 
+    \end{equation*}
+    di cui possiamo computare la chiusura ottenendo
+    \begin{align*}
+        A &\to \cdot BcBaA, \{a\} \\
+        A &\to \cdot, \{a\} \\
+        B &\to \cdot, \{c\}
+    \end{align*}
+    Che contiene due reducing item e possiede due transizioni: la prima è \(\tau(9, A)=10\) e ha come target un nuovo stato mentre la seconda è \(\tau(9, B)=4\) che ha come target uno stato che fa già parte del nostro automa caratteristico.
+    \item Lo stato 10 infine ha kernel
+    \begin{equation*}
+        A \to BcBaA \cdot, \{a\} 
+    \end{equation*}
+    Visto che il marker è posto alla fine non è possibile calcolare la chiusura di questo stato e possiamo concludere aggiungendo che lo stato 10 ha un reducing item. 
+\end{enumerate}
+
+L'automa caratteristico LR(1) risulta dunque così costruito
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=.9\textwidth]{lalr-automata.png}
+    \caption{Automa LR(1)/LALR(1)}
+    \label{fig:lalr-automata}
+\end{figure}
+
+Visto che non è possibile unire nessuno degli stati dell'automa LR(1), l'automa disegnato poc'anzi corrisponderà anche a quello LRm(1). Di seguito dunque possiamo costruire la tabella di parsing
+
+\begin{enumerate}
+    \item \(S \to AaB\) 
+    \item \(S \to b\) 
+    \item \(A \to BcBaA\) 
+    \item \(A \to \epsilon\) 
+    \item \(B \to \epsilon\)
+\end{enumerate}
+
+\begin{table}[h]
+    \centering
+    \subimport{assets/tables/}{lr-lalr-parsing-table.tex}
+    \caption{LR(1) \& LALR(1) Parsing Table}
+    \label{tab:lr-lalr-parsing-table}
+\end{table}
 
 \end{document}
