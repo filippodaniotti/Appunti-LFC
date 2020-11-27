@@ -680,15 +680,15 @@ I nostri conflitti sono localizzati solo in quattro situzioni, ossiamo quando ci
     \caption{Dettaglio di Tab.\ref{tab:ex2-sh/re-grammar_conf}}
     \label{tab:ex2-sh/re-table_conf}
 \end{figure}
-\noindent Proviamo a capire bene qual è il punto di tutta questa situazione. Se il nostro parser si trova nello stato 5, questo vuol dire che, in testa alla nostra pila dei simboli \(symSt\), avremo necessariamente \(E + E\); possiamo vederlo facilmente, è sufficiente buttare un occhio al nostro automa caratteristico (Fig.\ref{fig:ex2-sh/re-automata}) per renderci conto che lo stato 5 è raggiungibile solo dallo stato \(3\), il quale a sua volta può essere raggiunto o dalla sequenza di stati \((0, 1)\), \((4, 6)\) o \((3, 5)\), in tutti questi casi sulla testa di \(symSt\) si troverà \(E + E\). Il discorso è del tutto analogo se passiamo allo stato 6, dove avremo la testa di \(symSt\) popolata di \(E * E\), poiché 6 è raggiungibile tramite \(\dots, 0, 1, 4, 6\), \(\dots, 4, 6, 4, 6\) oppure \(\dots, 3, 5, 4, 6\).
+\noindent Proviamo a capire bene qual è il punto di tutta questa situazione. Se il nostro parser si trova nello stato 5, questo vuol dire che, in testa alla nostra pila dei simboli \(symSt\), avremo necessariamente \(E + E\); possiamo vederlo facilmente, è sufficiente buttare un occhio al nostro automa caratteristico (Fig.\ref{fig:ex2-sh/re-automata}) per renderci conto che lo stato 5 è raggiungibile solo dallo stato \(3\), il quale a sua volta può essere raggiunto o dalla sequenza di stati \((0, 1)\), \((4, 6)\) o \((3, 5)\), in tutti questi casi sulla testa di \(symSt\) si troverà \(E + E\). Il discorso è del tutto analogo se passiamo allo stato 6, dove avremo la testa di \(symSt\) popolata di \(E * E\), poiché 6 è raggiungibile tramite \(\dots \to 0 \to 1 \to 4 \to 6\), \(\dots \to 4 \to 6 \to 4 \to 6\) oppure \(\dots \to 3 \to 5 \to 4 \to 6\).
 
 È chiaro che abbiamo dei conflitti quando siamo nella situazione in cui due simboli legati da un operatore sono stati già letti (\(E + E\) o \(E * E\)) e, subito dopo, leggiamo un terzo simbolo. Questo è dovuto proprio al fatto che la grammatica, nella sua ambiguità, non riesce a esprimere opportunamente né associatività, né precedenza per i due operatori.
 
-E insomma, qual è il segreto per risolvere questi dannati conflitti? Quello che faremo (almeno in questo caso) è, per ogni cella in cui abbiamo un conflitto, scegliere manualmente quale mossa mantenere. Questa scelta pare essere in mano nostra, e nel nostro specifico esempio faremo sì che il parser finisca per conformarsi a quelle che sono le comuni regole di precedenza e associatività per \(+\) e \(*\). 
+E insomma, qual è il segreto per risolvere questi dannati conflitti? Quello che faremo (almeno in questo caso) è, per ogni cella in cui abbiamo un conflitto, scegliere manualmente quale mossa mantenere\footnote{Qualcuno potrebbe a ragione pensare che, in questo modo stiamo barando, e a dirla tutta avrebbe ragione; ma nel reame dei compilatori è meglio tenere la conscienza sporca e fare del parsing efficace e  rispetto a conservare l'integrità ma fare del parsing leeeeento.}. Questa scelta pare essere in mano nostra, e nel nostro specifico esempio faremo sì che il parser finisca per conformarsi a quelle che sono le comuni regole di precedenza e associatività per \(+\) e \(*\). 
 
-Possiamo aiutarci se pensiamo ai parse tree della nostra grammatica: gli alberi, infatti, per loro stessa costruzione, veicolano informazioni sull'annidamento dei loro elementi in maniera molto efficace, e l'annidamento può tranquillamente avere una corrispondenza diretta con la parentesizzazione. Di fatto assumendo, come facciamo noi, che i sottoalber vengano risolti prima degli alberi padri, stabiliamo delle regole di precedenza del tutto simili a quelle che si possono ottenere con una parentesizzazione.
+Possiamo aiutarci se pensiamo ai parse tree della nostra grammatica: gli alberi, infatti, per loro stessa costruzione, veicolano informazioni sull'annidamento dei loro elementi in maniera molto efficace, e l'annidamento può tranquillamente avere una corrispondenza diretta con la parentesizzazione. Di fatto assumendo, come facciamo noi, che i sottoalberi vengano risolti prima degli alberi padri, stabiliamo delle regole di precedenza del tutto simili a quelle che si possono ottenere con una parentesizzazione.
 
-Nello specifico, noi siamo interessati a esprimire l'associatività sinistra degli operatori \(+\) e \(*\), nonché la precedenza di \(*\) rispetto a \(+\). Diciamolo in maniera ancora più pragmatica: se guardiamo gli esempi in Fig.\ref{fig:ex2-sh_re-ptree}, vogliamo sempre avere l'albero Fig.\ref{fig:ex2-sh_re-ptree_1} al posto di Fig.\ref{fig:ex2-sh_re-ptree_2}, e vogliamo che la precedenza tra i due operatori sia tale da generare sempre parse tree come Fig.\ref{fig:ex2-sh_re-ptree_3} e Fig.\ref{fig:ex2-sh_re-ptree_4}.
+Nello specifico, noi siamo interessati a esprimire l'associatività sinistra degli operatori \(+\) e \(*\), nonché la precedenza di \(*\) rispetto a \(+\). Diciamolo in maniera ancora più pragmatica: se guardiamo gli esempi in Fig.\ref{fig:ex2-sh_re-ptree}, vogliamo sempre avere l'albero Fig.\ref{fig:ex2-sh_re-ptree_1} al posto di Fig.\ref{fig:ex2-sh_re-ptree_2} quando stiamo valutando una stessa espressione (\(E + E + E\), ad esempio), e vogliamo che la precedenza tra i due operatori sia tale da generare sempre parse tree come Fig.\ref{fig:ex2-sh_re-ptree_3} e Fig.\ref{fig:ex2-sh_re-ptree_4}: \(E*E\) è più "in basso", ergo verrà eseguita prima, ergo avrà precedenza su \(E+E\).
 \begin{figure}[H]
     \begin{minipage}[b]{.4\textwidth}
         \centering
@@ -700,34 +700,34 @@ Nello specifico, noi siamo interessati a esprimire l'associatività sinistra deg
     \begin{minipage}[b]{.4\textwidth}
         \centering
         \subimport{assets/figures/}{parse_tree_left_associative_b.tex}
-        \subcaption{Parse tree left associativo}
+        \subcaption{Parse tree right-associativo}
         \label{fig:ex2-sh_re-ptree_2}
     \end{minipage}
     
     \begin{minipage}[b]{.4\textwidth}
         \centering
         \subimport{assets/figures/}{parse_tree_left_associative_c.tex}
-        \subcaption{Parse tree per \(E + E * E\)}
+        \subcaption{Parse tree per \(E * E + E\)}
         \label{fig:ex2-sh_re-ptree_3}
     \end{minipage}
     \hfill
     \begin{minipage}[b]{.4\textwidth}
         \centering
         \subimport{assets/figures/}{parse_tree_left_associative_d.tex}
-        \subcaption{Parse tree per \(E * E + E\)}
+        \subcaption{Parse tree per \(E + E * E\)}
         \label{fig:ex2-sh_re-ptree_4}
     \end{minipage}
     \caption{}
     \label{fig:ex2-sh_re-ptree}
 \end{figure}
-In questa interpretazione possiamo vedere le mosse di reduce come una parentesizzazione, perché stiamo assegnando un padre a un determinato sottoalbero del tipo \(E + E\) o \(E * E\).
+In questa interpretazione possiamo vedere le mosse di reduce come una parentesizzazione, perché stiamo assegnando un padre a un determinato sottoalbero del tipo \(E + E\) o \(E * E\)\footnote{QUesta frase è importantissima e invitiamo il lettore a spenderci alcuni minuti, perché afferrarne appieno il significato implica di aver ottenuto una buona comprensione del parsing bottom -up.}.
 
 A questo punto possiamo andare ad analizzare i quattro conflitti che abbiamo trovato e, per ciascuna cella, scegliere la mossa che rende il parsing conforme alle regole che abbiamo stabilito. Tenendo a mente Tab.\ref{tab:ex2-sh/re-table_conf}, rimbocchiamoci le maniche.
 \begin{itemize}
-    \item \(M[5, +]\): questa è la situazione in cui la testa di \(symSt\) è popolata di \(E + E\) e in lettura troviamo un altro \(+\); gli operatori sono left-associativi, per cui vogliamo parentesizzare la testa del nostro \(symSt\) e solo dopo leggere il nuovo simbolo; ergo, la mossa che scegliamo è \(r1\).
-    \item \(M[6, *]\): vediamo subito questa cella perché presenta una situazione del tutto analoga a quella appena vista;  la testa di \(symSt\) è popolata di \(E * E\) e questa volta l'operatore coinvolto è \(\ast\), che al pari di \(+\) è left-associativo, di conseguenza anche qui scegliamo la reduce \(r2\);
-    \item \(M[5, *]\): torniamo adesso a parlare dello stato 5; la testa di \(symSt\) è popolata come prima, ma questa volta il lettura troviamo un simbolo \(\ast\). Questo cambia le carte in tavola, perché noi vogliamo che l'operatore \(\ast\) abbia precedenza più alta di \(+\); per ottenere questo, scegliamo la mossa di shift \(s4\), il che significa che rimandiamo la parentesizzazione della testa e proseguiamo nella lettura.
-    \item \(M[6, +]\): qui abbiamo trovato \(E * E\) nella testa di \(symSt\) e ci sta arrivando un \(+\) in lettura, e ormai l'idea dovrebbe essere chiara: coerentemente con le regole di precedenza (\(\ast \prec +\)), vogliamo che la testa di \(symSt\) sia parentesizzata, per cui qui teniamo la reduce \(r2\).
+    \item \(M[5, +]\): questa è la situazione in cui la testa di \(symSt\) è popolata di \(E + E\) e in lettura troviamo un altro \(+\); gli operatori sono left-associativi, per cui vogliamo parentesizzare la testa del nostro \(symSt\) e solo dopo leggere il nuovo simbolo; ergo, la mossa che scegliamo e inseriamo in \(M[5, +]\) è \(r1\).
+    \item \(M[6, *]\): vediamo subito questa cella perché presenta una situazione del tutto analoga a quella appena vista;  la testa di \(symSt\) è popolata di \(E * E\) e questa volta l'operatore coinvolto è \(\ast\), che al pari di \(+\) è left-associativo, di conseguenza anche qui scegliamo la reduce \(r2\) per dare precedenza alla parentesizzazione;
+    \item \(M[5, *]\): torniamo adesso a parlare dello stato 5; la testa di \(symSt\) è popolata come prima, ma questa volta il lettura troviamo un simbolo \(\ast\). Questo cambia le carte in tavola, perché noi vogliamo che l'operatore \(\ast\) abbia precedenza più alta di \(+\); per ottenere questo, scegliamo la mossa di shift \(s4\), il che significa che rimandiamo la parentesizzazione della testa di \(symSt\) e proseguiamo nella lettura.
+    \item \(M[6, +]\): qui abbiamo trovato \(E * E\) nella testa di \(symSt\) e ci sta arrivando un \(+\) in lettura, e ormai l'idea dovrebbe essere chiara: coerentemente con le regole di precedenza (\(\ast \prec +\)), vogliamo che la testa di \(symSt\) sia parentesizzata prima di proseguire con la lettura di \(+\), per cui qui teniamo la reduce \(r2\).
 \end{itemize}
 \begin{figure}[H]
     \centering
