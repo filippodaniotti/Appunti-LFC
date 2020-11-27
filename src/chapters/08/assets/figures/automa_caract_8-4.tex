@@ -13,7 +13,7 @@
     }
     \begin{tikzpicture}
         \node[state] (0) {0};
-        \node[state, fill=red, below of=0] (1) {1};
+        \node[state, fill=green, below of=0] (1) {1};
         \node[state, accepting, above of=0] (2) {2};
         \node[state, below left of=1] (3) {3};
         \node[state, below right of=1] (4) {4};
@@ -29,7 +29,7 @@
         (4) edge[above right, bend right=30] node{E} (6)
         (5) edge[above left, bend left=30] node{+} (3)
         (5) edge[above left, bend right=30] node{+} (4)
-        (6) edge[above right, bend right=30] node{+} (4)
+        (6) edge[above right, bend right=30] node{* } (4)
         (6) edge[above right, bend left=30] node{*} (3)
         ;
 

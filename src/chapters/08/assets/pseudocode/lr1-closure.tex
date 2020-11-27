@@ -19,7 +19,7 @@
         \SetKwFunction{Mark}{mark}
 
         Tag each item in \(P\) as \UnMk \;
-        \While{\(\exists item : item\) is \UnMk} {
+        \While{\(\exists item \in P : item\) is \UnMk} {
             \Mark{\(item\)}\;
             \If{\(item\) is in form \([A \to \alpha \cdot B \beta, \Delta]\)} {
                 \(\Delta_1 \leftarrow \bigcup_{d \in \Delta}\) first(\(\beta d\)) \;
