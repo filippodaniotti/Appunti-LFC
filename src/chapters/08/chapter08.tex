@@ -50,12 +50,14 @@ Consideriamo come esempio una delle prime grammatiche che abbiamo visto, quella 
 \end{equation}
 \subsection{Esempio di automa}
 L'automa caratterisco di tipo LR(1) per questa grammatica è il seguente:
+% \newgeometry{left = 1.7cm, right=1.7cm}
 \begin{figure}[H]
     \centering
 	\subimport{assets/figures/}{automa_LR_8-1.tex}
     \caption{Automa caratteristico LR(1) per Eq. \ref{balanced}}
     \label{balanced-char_aut-lr1}
 \end{figure}
+% \restoregeometry
 Lo utilizzeremo come guida per determinare, di volta in volta, quali mosse di shift e reduce applicare per verificare se una certa parola appartiene o no al linguaggio generato da \(\G\). 
 
 \subsection{Procedura}
@@ -376,7 +378,7 @@ Riconoscerete di certo questa grammatica, l'abbiamo già vista nella costruzione
 \begin{figure}[H]
     \centering
 	\subimport{assets/figures/}{automa_bottom_up_8-3-4.tex}
-    \caption{Automa Caratteristico per la Bottom-Up Parsing Table}
+    \caption{Automa Caratteristico per la parsing table bottom-up}
     \label{fig:charateristic-automata-complete}    
 \end{figure}
 In particolare, possiamo dire che i reducing item sono:
