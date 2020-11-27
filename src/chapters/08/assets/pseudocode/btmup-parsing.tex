@@ -20,13 +20,14 @@
         \SetKwArray{BU}{M}
         \SetKwFunction{ferr}{error}
         
-        Let \(b\) be the first symbol in the input buffer \;
+        \(b\) = the first symbol in the input buffer \;
+        initialize \(stSt\) by adding state \(0\) \;
         \While{\t} {
             Let \(S\) be the top of \St \;
             \uIf{\BU{\(S, b\)} = \texttt{shift} \(T\)} {
                 Push \(b\) onto \Symb \;
                 Push \(T\) onto \St \;
-                let \(b\) be the next symbol in the input buffer \;
+                \(b\) = the next symbol in the input buffer \;
             }
             \uElseIf{\BU{\(S, b\)} = \texttt{reduce} \(A \to \beta\)} {
                 Pop \(|\beta|\) symbols off \Symb \;

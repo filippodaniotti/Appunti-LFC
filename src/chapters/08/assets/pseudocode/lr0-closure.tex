@@ -19,7 +19,7 @@
         \ForEach{\(item \in\) \p} {
             etichetta \(item\) come \texttt{unmarked}\;
         }
-        \While{\(\exists item : item\) è \texttt{unmarked}} {
+        \While{\(\exists item \in P : item\) è \texttt{unmarked}} {
             \Mark{\(item\)}\;
             \If{\(item\) ha forma \(A \to \alpha \cdot B \beta\)} {
                 \ForEach{\(B \to \gamma \in \mathcal{P}'\)} {
