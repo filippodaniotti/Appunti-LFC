@@ -1,0 +1,343 @@
+\documentclass[class=book, crop=false, oneside, 12pt]{standalone}
+\usepackage{standalone}
+\usepackage{../../style}
+\usepackage[normalem]{ulem}
+\graphicspath{{./assets/images/}}
+
+% arara: pdflatex: { synctex: yes, shell: yes }
+% arara: latexmk: { clean: partial }
+\begin{document}
+\chapter{Analisi sintattica: bottom-up parsing}
+
+\section{Automa caratteristico LR(1)}
+
+\subsection{LR(1)-items}
+Per poter ottenere quanto detto andremo a utilizzare gli LR(1)-items, che hanno questa forma:
+\begin{equation}
+    \label{lr0}
+    [A \to \alpha \cdot B \beta, \Delta]
+\end{equation}
+Viene più semplice immaginare che un LR(1)-item sia una tupla composta da due elementi:
+\begin{enumerate}
+    \item il primo è un item di tipo LR(0) \((A \to \alpha \cdot B \beta)\);
+    \item il secondo è un insieme di caratteri \((\Delta)\).
+\end{enumerate} 
+\(\Delta\) è detto \textbf{lookahead-set}.
+
+Quando andiamo a calcolare la chiusura di un item di tipo LR(1) utilizziamo la \(closure_1(item)\) e non la \(closure_0(item)\), che funziona esattamente come la \(closure_0\) ma in più ci permette di aggiornare l'insieme \(\Delta\), il lookahead set. Questo insieme ci torna poi utile quando dobbiamo inserire mosse di riduzione in qualche stato dell'automa caratteristico LR(1): il lookahead set specifica quali caratteri ci dobbiamo aspettare di vedere in lettura quando stiamo per utilizzare una mossa di reduce.
+
+Ma specifichiamo ora meglio come è strutturata l'operazione di \(closure_1(item)\):
+\begin{itemize}
+    \item la prima parte della chiusura è in tutto e per tutto uguale alla \(closure_0(item)\), quindi quando si calcola una \(closure_1(item)\) la prima cosa che si fa è appunto calcolare la \(closure_0(item)\), utilizzando la parte LR(0) dell'item LR(1) che stiamo chiudendo;
+    \item la seconda parte pervede di aggiornare l'insieme di lookahead, che viene aggiunto alla \(closure_0(item)\) appena calcolata.  
+\end{itemize}
+Di fatto con questo metodo di calcolo l'informazione contenuta nell'insieme \(\Delta\) di un LR(1)-item viene tramandata agli item che ne derivano grazie alla seconda parte della procedura \(closure_1\), così se si segue una derivazione lungo tutto l'albero delle produzioni guardando a \(\Delta\) si ha sempre sotto controllo quali simboli ci si aspetta di leggere in un certo stato quando si deve effettuare una mossa di riduzione.
+
+\subsection{Chiusure di insiemi di LR(1)-item}
+Come facciamo a calcolare la chiusura degli insiemi di LR(1)-items? Il metodo di calcolo che ci viene presentato è un classico calcolo risolvibile grazie al teorema del punto fisso:
+\begin{definition}
+    \label{def:lr1-closure}
+    Sia \(P\) un insieme di LR(1)-item, la \(closure_1(P)\) identifica il più piccolo insieme di item, con il più piccolo lookahead-set, che soddisfa la seguente equazione:
+    \begin{align*}
+        closure_1(P) = P \; \cup \; &\{[B \rightarrow \cdot \gamma, \Gamma] : [A \rightarrow \alpha \cdot B \beta, \Delta] \in closure_1(P) \; \land \\ 
+        & B \rightarrow \gamma \in \P' \; \land \\
+        & first(\beta \Delta) \subseteq \Gamma\}
+    \end{align*}  
+    dove \(first(\beta \Delta) = \cup_{d \in \Delta} first(\beta d)\) e ricordiamo che \(\P'\) è ricavato dall'insieme delle produzioni \(\P\) aggiungendo la produzione \(S' \to S\).
+\end{definition}
+Un altro modo per descrivere questa procedura è quello di rappresentarla in linguaggio algoritmico, questa seconda possibilità è mostrata in Alg.\ref{alg:lr1-closure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{alg_closure-lr1.png}
+    \caption{Algoritmo per il calcolo della chiusura di uno stato LR(1)}
+    \label{alg:closure-lr1}
+\end{figure}
+\subimport{assets/pseudocode/}{lr1-closure.tex}
+In questo algoritmo si deve fare conto che \(B \to \cdot \gamma \notin prj(P)\) significa che non è ancora presente in \(closure_1(P)\) una produzione \(B \to \cdot \gamma\).
+Di fatto quello che succede all'interno del \texttt{foreach} centrale è che se l'elemento è nuovo vado ad aggiungerlo con il suo \(\Delta\), se l'elemento è già presente vado a vedere se è il caso di aggiungere al \(\Delta\) di questa qualche elemento.
+
+La definizione appena illustrata potrebbe sermbrare di difficile comprensione, ma sarà tutto più chiaro dopo qualche esercizio esplicativo.
+
+\subsubsection{Esesercizio di calcolo di \(closure_1(P)\)}
+Facendo riferimento alla grammatica dell'esercizio precedente (riportata qui sotto), calcolare tutti gli stati dell'automa caratteristico LR(1).
+\begin{align}
+    \label{eq:ex3-slr1-grammarr}
+    \G: S &\to aAd \mid bBd \mid aBe \mid bAe \\
+    A &\to c \nonumber \\ \notag
+    B &\to c \notag
+\end{align}
+Partiamo con l'inizializzazione dello stato \(0\); esso conterrà la \(closure_1(\{[S' \to \cdot S, \{\$\}]\})\); questa inizializzazione sottolinea il fatto che, che una volta che avremo raggiunto il particolare stato in cui avremo l'accepting item \(S' \to S\cdot \), vorremo vedere il \$ che viene utilizzato come terminatore per definire una parola appartenente al linguaggio. Quindi, che si fa ora?
+
+Secondo la Def.\ref{def:lr1-closure}, la \(closure_1(P)\) va inizializzata con \(P\) stesso, ovvero \([S' \to \cdot S, \{\$\}]\).
+In seguito dobbiamo andare a prendere all'interno della \(closure_1(P)\) (che è parziale, non ancora completa) tutti gli elementi in forma \([A \rightarrow \alpha \cdot B \beta, \Delta]\) e dovremo aggiungere a \(closure_1(P)\) tutti quegli item che soddisfano la forma \([B \rightarrow \cdot \gamma, \Gamma]\); dove \(\Gamma\) è un insieme calcolato come descritto dall'algoritmo; niente paura, in seguito sarà tutto più chiaro.
+
+Nel nostro caso l'unico item in \(closure_1(P)\) è \([S' \to \cdot S, \{\$\}]\), che corrisponde alla forma desiderata (\([A \to a \cdot B\beta, \Delta]\)), quindi possiamo assumere \(\Delta = \{\$\} \textrm{ e } \beta = \varepsilon\); di conseguenza, \(first(\varepsilon \$) = first(\$) = \{\$\} \subseteq \Gamma\). Gli item che otteniamo da \(closure_1(\{[S' \to \cdot S, \{\$\}]\})\) saranno dunque:
+\begin{align*}
+    [&S' \to \cdot S, \{\$\}] \\
+    [&S \to \cdot aAd, \{\$\}] \\
+	[&S \to \cdot bBd, \{\$\}] \\
+	[&S \to \cdot aBe, \{\$\}] \\
+	[&S \to \cdot bAe, \{\$\}]
+\end{align*}
+Quanto abbiamo appena ottenuto è la chiusura dell'insieme che costituisce lo stato 0 del nostro automa caratteristico di tipo LR(1).
+Come già detto prima la prima parte di questi item è esattamente corrispondente all'item LR(0) che avremmo trovato utilizzando SLR parsing, la seconda parte (ovvero il \(\Delta\)) è l'unica novità introdotta dalla procedura LR(1).
+
+È da notare anche che la componente del lookahead-set è usata solo in caso di riduzioni, e non incide sulle transizioni, per cui il procedimento rimarrà sotto quel punto di vista inalterato rispetto al metodo SLR. Di conseguenza, possiamo affermare la presenza, di tre transizioni che portano a tre stati differenti: \(\tau(0,S)=1 \textrm{, } \tau(0,a)=2 \textrm{ e } \tau(0,b)=3\). A questo punto è possibile procedere come abbiamo sempre fatto, prestando attenzione al calcolo della \(closure_1(S)\):
+\begin{enumerate}
+    \item Proseguiamo osservando lo stato \(\tau(0, S)=\)1. Il suo kernel è:
+    \begin{equation*}
+        [S' \to S \cdot, \{\$\}]
+    \end{equation*}
+    dobbiamo dunque calcolare \(closure_1(\{[S' \to S \cdot, \{\$\}]\})\), per cui sappiamo che \(B = \varepsilon\) e dunque non possiamo fare altro se non appuntarci che lo stato 1 contiene l'Accepting Item.
+    \item Analizziamo dunque lo stato \(\tau(0, a)=\)2, il cui kernel è popolato da questi item:
+    \begin{align*}
+        [S &\to a \cdot Ad, \{\$\}] \\
+        [S &\to a \cdot Be, \{\$\}]
+    \end{align*}
+    entrambi soddisfano la forma \([A \rightarrow \alpha \cdot B \beta, \Delta]\).
+    Nel primo caso abbiamo le seguenti corrispondenze: \(A=S\), \(\alpha = a\), \(B = A\), \(\beta = d\) e \(\Delta=\$\); andiamo a cercare nella nostra grammatica se sono presenti derivazioni in forma \(B \to \gamma\), troviamo \(A \to c\), quindi grazie alla formula del calcolo di \(closure_1(P)\) sappiamo che dobbiamo aggiungere agli item dello stato 2 un item formato così: \([A \to \cdot c, {\Gamma}]\), dove \(\Gamma = first(\beta\Delta) = first(d\$) = \{d\}\); in definitiva, aggiungiamo l'item \(A \to \cdot c, \{d\}\).
+
+    Abbiamo detto che anche la seconda produzione (\([S \to a \cdot Be, \{\$\}]\)) soddisfa la forma \([A \rightarrow \alpha \cdot B \beta, \Delta]\), quindi con lo stesso procedimento appena adottato possiamo trovare la chiusura di \([S \to a \cdot Be, \{\$\}]\): in questo caso le corrispondenze sono: \(A=S\), \(\alpha=a\), \(B=B\), \(\beta=e\) e \(\Delta=\$\), la produzione da analizzare è \(B \to c\) e l'item che ne ricaviamo è \([B \to \cdot c, {\Gamma}]\), dove \(\Gamma = first(\beta\Delta) = first(e\$) = \{e\}\).
+    
+    In sostanza, lo stato 2 contiene questi LR(1) items:
+    \begin{align*}
+        [S &\to a \cdot Ad, \{\$\}] \\
+        [S &\to a \cdot Be, \{\$\}] \\
+        [A &\to \cdot c, \{d\}] \\
+        [B &\to \cdot c, \{e\}]
+    \end{align*}
+    Come succedeva nell'esempio con il parsing LR(0), nello stato 2 possiamo osservare la presenza di tre transizioni e quindi di tre possibili nuovi stati che sono \(\tau(2,A)=4 \textrm{, } \tau(2,B)=5 \textrm{ e } \tau(2,c)=6\).
+    \item[...]
+    \item[6.] Ovviamente la parte interessante dell'esercizio è verificare se siamo riusciti a risolvere il conflitto che occorreva nel parsing SLR(0). In modo pressoché analogo a quanto accadeva, abbiamo che il kernel per lo stato 6 è :
+    \begin{align*}
+        [A &\to c \cdot, \{d\}] \\
+        [B &\to c \cdot, \{e\}]
+    \end{align*}
+    Anche questa volta nello stato sono presenti due item di riduzione, ma non aviene il conflitto che si verificava ncon il parsing di tipo LR(0) perché in questo caso la riduzione \(A \to c\) si applica solo se nell'input buffer si sta leggendo \(d\), mentre la riduzione \(B \to c\) si applica solo nel caso in cui nell'input \emph{baffer} si sta leggendo \(e\). Questo implica che nello stato 6, grazie al parsing LR(1), è stata eliminata l'ambiguità del conflitto reduce-reduce.
+\end{enumerate}
+
+\subsubsection{Facciamone un altro, dai}
+\label{ex:closure-lr1}
+Sia data la seguente grammatica:
+\begin{align}
+    \G: S &\to L=R \mid R \\
+    L &\to *R \mid id \nonumber \\ \notag
+    R &\to L \notag
+\end{align}
+Inizializziamo lo stato 0 ponendo come suo kernel:
+\begin{equation*}
+    [S' \to \cdot S, \{\$\}]
+\end{equation*}
+Calcoliamo \(closure_1(0)\). Questo item soddisfa la forma \([A \rightarrow \alpha \cdot B \beta, \Delta]\), con le seguenti corrispondenze: \(B = S \texttt{, } \beta = \varepsilon \texttt{, } \Delta = \{\$\}\) (e quindi \(\Gamma = first(\beta \Delta) = first(\varepsilon \$) = \{\$\}\)).
+Le due produzioni di \(B\) (ovvero di \(S\)) in questo caso sono \(S \to L=R \mid R\), quindi aggiungo i due item LR(1) seguenti:
+\begin{align}
+    \label{prod:production-L}
+    [S &\to \cdot L = R, \{\$\}] \\
+    [S &\to \cdot R, \{\$\}] \notag
+\end{align}
+A questo punto la chiusura non è completa in quando abbiamo aggiunto due elementi che possono essere presi in considerazione nella definizione ricorsiva della chiusura, ovvero soddisfano anch'essi la famosa forma \([A \rightarrow \alpha \cdot B \beta, \Delta]\).
+Analizziamo dunque \([S \to \cdot L = R, \{\$\}]\), le sue corrispondenze sono: \(B = L \texttt{, } \beta = \; \; =R \texttt{, } \Delta = \{\$\}\) (e quindi \(\Gamma = first(\beta \Delta) = first(=R\$) = \{=\}\)); le produzioni di \(L\) sono \(L \to *R \mid id\), quindi arriviamo a generare i seguenti LR(1)-items:
+\begin{align*}
+    [L &\to \cdot *R, \{=\}] \\
+    [L &\to \cdot id, \{=\}]
+\end{align*}
+che non presentano altre possibili espansioni (grazie al cielo).
+
+Ci rimane ora da analizzare \([S \to \cdot R, \{\$\}]\), che soddisfa la nostra formosa forma e presenta le seguenti corrispondenze: \(B = R \texttt{, } \beta = \{\varepsilon\} \texttt{, } \Delta = \{\$\}\) (e quindi \(\Gamma = first(\beta \Delta) = first(\varepsilon \$) = \{\$\}\)), inoltre le produzioni di \(R\) sono \(R \to L\), quindi otteniamo il seguente LR(1)-items:
+\begin{align*}
+    [R &\to \cdot L, \{\$\}]
+\end{align*}
+questo item presenta il marker davanti a un non-terminale; può generare nuovi item per la chiusura che stiamo calcolando?
+Nonostante la produzione con driver \(L\) sia già stata analizzata (vedi \ref{prod:production-L}), è necessario eseguire nuovamente la sua chiusura in quanto ha un lookahed-set differente (nel caso precedente \(\beta= \; \;  =R\), mentre ora \(\beta=\varepsilon\)), il che ci porta a ripetere la chiusura per l'item \([R \to \cdot L, \{\$\}]\), ricavando i seguenti LR(1)-items:
+\begin{align*}
+    [L &\to \cdot *R, \{\$\}] \\
+    [L &\to \cdot id, \{\$\}]
+\end{align*}
+Visto che però avevamo già inserito due LR(1)-item con lo stesso LR(0)-item (la parte \(L \to \cdot qualcosa\)) possiamo semplicemente accrescere i lookahead-set corrispondenti. Il risultato finale per la chiusura degli item dello stato iniziale è:
+\begin{align*}
+    [&S'\to \cdot S, \{\$\}] \\
+    [&S \to \cdot L = R, \{\$\}] \\
+    [&S \to \cdot R, \{\$\}] \\
+    [&L \to \cdot *R, \{\$, =\}] \\
+    [&L \to \cdot id, \{\$, =\}] \\
+    [&R \to \cdot L, \{\$\}]
+\end{align*}
+Bene, ora abbiamo fatto un po' di allenamento con il calcolo degli stati, ma dobbiamo ricordare che non è questo il nostro obiettivo finale, noi vogliamo ricavare l'automa caratteristico!
+
+\subsection{Costruire un automa LR(1)}
+Partiamo con lo spiegare nel modo più semplice come si fa a costruire un automa LR(1):
+\begin{enumerate}
+    \item costruiamo lo stato di partenza con l'item \([S' \to \cdot S, {\$}]\);
+    \item ricorsiavamente aggiungiamo gli stati che si possono raggiungere dagli stati presenti nell'automa;
+    \item aggiungamo le transizioni che ci permettono di passare da uno stato all'altro.
+\end{enumerate}
+E come facciamo a capire quali stati sono collegati ad un certo stato \(P\)?
+
+\noindent Se uno stato \(P\) contiene un item nella forma \([A \to \alpha \cdot Y \beta, \Delta]\) allora esiste una transizione da \(P\) ad uno stato \(Q\) che contiene l'item \([A \to \alpha Y \cdot \beta , \Delta]\); inoltre, siccome \(Q\) contiene \([A \to \alpha Y \cdot \beta , \Delta]\), esso contiene anche tutti gli item in \(closure_1([A \to \alpha Y \cdot \beta , \Delta])\).
+
+Proviamo ora a chiarire tale procedura tramite la sua scrittura in forma algoritmica, si veda \ref{alg:lr1-automata}.
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\textwidth]{alg-construct-lr1-automata.png}
+%     \caption{Algoritmo per la costruzione di un automa LR(1)}
+%     \label{alg:construct-lr1-automata}
+% \end{figure}
+\subimport{assets/pseudocode/}{lr1-automata.tex}
+Indovinate un po' con quale grammatica stiamo per andare a osservare cosa si ottiene con questa procedura? Oh sì! proprio lei:
+\begin{align}
+    \label{eq:ex3-slr1-grammarrrrrr-again-and-again}
+    \G: S &\to aAd \mid bBd \mid aBe \mid bAe \\
+    A &\to c \nonumber \\ \notag
+    B &\to c \notag
+\end{align}
+Ora chiederemo al lettore di fare uno sforzo mnemonico poderoso e di ricordare che in passato, quando abbiamo provato a costruire l'automa caratteristico di tipo SLR per questa grammatica ci siamo trovati ad avere la situazione rappresentata in figura \ref{fig:lr0-automata_conflict}, che riprtiamo qui sotto per comodità.
+\begin{figure}[H]
+    \centering
+    \subimport{assets/figures/}{automa_conflict_LR.tex}
+    \caption{Automa di tipo LR(0), si noti il conflitto sullo stato 6}
+    \label{fig:lr0-automata_conflict}
+\end{figure}
+Abbiamo già calcolato quali sono gli stati LR(1) per la grammatica in questione in un esercizio precedente (vedi \ref{ex:closure-lr1}), ed applicando l'algoritmo per la costruzione degli automi LR(1) arriviamo ad ottenere il seguente automa (parziale):
+\begin{figure}[H]
+    \centering
+    \subimport{assets/figures/}{automa_conflict_solution_LR.tex}
+    \caption{Automa di tipo LR(1), si noti che il conflitto sullo stato 6 è stato eliminato}
+    \label{fig:lr1-automata_no-conflict}
+\end{figure}
+Ma siamo sicuri di aver effettivamente risolto il problema? per verificarlo dobbiamo costruire la parsing table!
+
+La costruzione della parsing table per il parsing di tipo LR(1) è semplice da ottenere perché si crea esattamente come la parsing table per l'SLR parsing con queste uniche due differenze:
+\begin{itemize}
+    \item l'automa caratteristico è di tipo LR(1);
+    \item la lookahead function utilizzata è la seguente: per ogni \([A \to \beta \cdot , \Delta] \in P\), \(\mathcal{LA}(P, A \to \beta ) = \Delta\).
+\end{itemize}
+Naturalmente una grammatica \(\mathcal{G}\) è di tipo LR(1) se la sua tabella di parsing LR(1) non presenta conflitti.
+
+Sbirciamo quindi cosa sarebbe successo costruendo la parsing table LR(1) per la nostra grammatica preferita.
+
+Innanzitutto, l'automa caratteristico LR(1) si presenta come in Fig.\ref{fig:lr1_automata-complete}
+\begin{figure}[H]
+    \centering
+    \subimport{assets/figures/}{automa_LR_complete_solution.tex}
+    \caption{Automa di tipo LR(1) completo}
+    \label{fig:lr1_automata-complete}
+\end{figure}
+Negli stati 6 e 9, che ci avrebbero causato problemi con la costruzione di tipo LR(0), ora troviamo i seguenti item:
+\begin{itemize}
+    \item Stato 6
+    \begin{align*}
+        A &\to c \cdot , {d} \\
+        B &\to c \cdot , {e}    
+    \end{align*}
+    \item Stato 9
+    \begin{align*}
+        A &\to c \cdot , {e} \\
+        B &\to c \cdot , {d}    
+    \end{align*}
+\end{itemize}
+ Quindi, seguendo le regole di compilazione della tabella di parsing LR(1) avremmo:
+ \begin{itemize}
+     \item nella casella M[6,d] la riduzione \(A \to c \cdot , {d}\);
+     \item nella casella M[6,e] la riduzione \(B \to c \cdot , {e}\);
+     \item nella casella M[9,e] la riduzione \(A \to c \cdot , {e}\);
+     \item nella casella M[9,d] la riduzione \(B \to c \cdot , {d}\);
+ \end{itemize}
+Festa! Festa! non ci sono più conflitti!
+È però notevole il fatto che il numero di stati sia aumentato parecchio: questo è quello che succede quando si va ad utilizzare tecniche di parsing più precise e raffinate.
+
+\section{Costruzione di una tabella di parsing LR(1)}
+\subsection{Esercizi: costruzione di parsing table LR(1)}
+Mettiamoci ora di buona lena ad esercitarci con la costruzione di tabelle di parsing di tipo LR(1).
+
+\subsubsection{Esercizio 1}
+La prima grammatica che andiamo ad analizzare è la seguente:
+\begin{align}
+    \label{gr:pointers-grammar}
+    S &\to L = R \mid R \\
+    L &\to *R \mid id \nonumber \\ \notag
+    R &\to L \notag
+\end{align}
+Questa è una grammatica che ci parla di puntatori, ma capiremo in seguito cos significa ciò, per ora concentriamoci sulla sua risoluzione.
+
+È il momento di campiare Pokémon, vai DaPips, scelgo te!
+
+\section{Algoritmo Shift/Reduce}
+% \section{Un primo esempio di applicazione}
+% \subsection{Mosse di shift e reduce}
+% Andiamo a introdurre l'algoritmo che utilizzeremo per verificare se una certa parola appartenga o meno al linguaggio denotato da una certa grammatica, rappresentata dal suo automa caratteristico; questo è detto algoritmo di shift/reduce, dal nome delle due mosse che andremo a utilizzare. Come prima cosa, prendiamo familiriatà con le due pile che utilizzeremo nella procedura:
+% \begin{itemize}
+%     \item nella prima inseriamo gli stati verso cui ci muoviamo;
+%     \item nella seconda conserviamo la derivazione parziale a cui siamo arrivati sinora.
+% \end{itemize}
+% Si tenga presente che in realtà potremmo farci bastare anche una sola pila, ma andrebbe a complicare sensibilmente la gestione della procedura.
+
+% Adesso che conosciamo le strutture necessarie alla procedura, andiamo a vedere le due mosse sopra menzionate:
+% \begin{enumerate}
+%     \item la mossa di \emph{shift} è quella che compiamo quando passiamo da un nodo (stato) all'altro, inserendo nella pila delle derivazioni parziali il terminale che marca l'arco attraversato e nella pila degli stati il nodo di destinazione;
+%     \item la mossa di \emph{reduce} è quella che eseguiamo quando raggiungiamo un nodo etichettato da una formula di riduzione (capiremo nell'esempio quale forma hanno) e che ci porta a eliminare dei terminali dalla pila delle derivazioni parziali e degli stati dalla pila degli stati, coerentemente alla struttura dell'automa caratteristico.
+% \end{enumerate}
+% Consideriamo come esempio una delle prime grammatiche che abbiamo visto, quella che genera due occorrenze bilanciate:
+% \begin{equation}
+%     \label{balanced}
+%     \G: S \to aSb \mid ab
+% \end{equation}
+% \subsection{Esempio di automa}
+% L'automa caratterisco di tipo LR(1) per questa grammatica è il seguente:
+% % \newgeometry{left = 1.7cm, right=1.7cm}
+% \begin{figure}[H]
+%     \centering
+% 	\subimport{assets/figures/}{automa_LR_8-1.tex}
+%     \caption{Automa caratteristico LR(1) per Eq. \ref{balanced}}
+%     \label{balanced-char_aut-lr1}
+% \end{figure}
+% % \restoregeometry
+% Lo utilizzeremo come guida per determinare, di volta in volta, quali mosse di shift e reduce applicare per verificare se una certa parola appartiene o no al linguaggio generato da \(\G\). 
+
+% \subsection{Procedura}
+% Consideriamo ad esempio la parola \(w = aaabbb\). Come prima cosa le applichiamo il carattere terminatore di stringa \(aaabbb\$\). 
+% \begin{itemize}
+%     \item Partiamo dallo stato \(0\) e inseriamolo nella pila degli stati;
+%     \item il primo simbolo che leggiamo in \(w\) è \(a\); vediamo che l'automa presenta una \(a\)-transizione verso lo stato \(2\), per cui la seguiamo, inseriamo lo stato \(2\) nella pila, passiamo oltre al simbolo \(a\) appena "consumato" e passiamo al prossimo simbolo;
+%     \item il prossimo simbolo è ancora \(a\); di nuovo, seguiamo la \(a\)-transizione verso lo stato \(5\), lo inseriamo nella pila degli stati, passiamo oltre al simbolo consumato e andiamo avanti;
+%     \item abbiamo una terza occorrenza di \(a\) e abbiamo una \(a\)-transizione in forma di self loop in \(5\), che andiamo ad eseguire, reinserendo \(5\) nella pila degli stati passando oltre alla nostra terza \(a\);
+%     \item troviamo quindi una \(b\), per cui ci spostiamo allo stato \(8\), il quale ha un'etichetta rossa che riporta un passo di riduzione in forma \(S \to ab, \{b\}\); questo sta a indicare che, se in lettura troviamo \(b\), contenuto nel set \(\{b\}\), possiamo ritornare indietro di due passi, eliminando i due precedenti stati dalla pila e spostarci direttamento dal primo \(5\) a \(7\), dal momento che i due stati sono collegati da una \(S\)-transizione:
+%     \begin{align*}
+%         \textrm{pila degli stati prima:} &\quad 02558 \\
+%         \textrm{pila degli stati dopo:} &\quad 0257 
+%     \end{align*}
+%     inoltre dobbiamo anche rimuovere gli ultimi due simboli \(ab\) - il body della produzione della riduzione - dalla pila della derivazione e sostituirli con \(S\):
+%     \begin{align*}
+%         \textrm{pila di derivazione prima:} &\quad \#aaab \\
+%         \textrm{pila di derivazione dopo:} &\quad \#aaS 
+%     \end{align*}
+%     \item leggiamo un'altra \(b\) e avanziamo allo stato \(9\), e anche qui operiamo un passo di riduzione (reduce), nello specifico abbiamo che \(R: S \to aSb, \{b\}\); questo ci dice che dobbiamo tornare indietro di tre passi, eliminando i tre elementi precedenti sia nella pila degli stati e muovendoci verso \(3\), sostituendo nella pila delle derivazioni il body della riduzione con il driver; si osservi attentamente il cambiamento delle pile per capire cosa succede:
+%     \begin{align*}
+%         \textrm{pila degli stati prima:} &\quad 02579 & \textrm{pila di derivazione prima:} &\quad \#aaSb \\
+%         \textrm{pila degli stati dopo:} &\quad 023 & \textrm{pila di derivazione dopo:} &\quad \#aS
+%     \end{align*}
+%     \item proseguiamo quindi con la lettura e incontriamo una terza \(b\), ci muoviamo verso \(6\) e incontriamo una terza riduzione \(R: S \to aSb, \{\$\}\); di nuovo, torniamo indietro di tre stati e contestualmente sostituiamo gli elementi nelle pile: 
+%     \begin{align*}
+%         \textrm{pila degli stati prima:} &\quad 0236 & \textrm{pila di derivazione prima:} &\quad \#aSb \\
+%         \textrm{pila degli stati dopo:} &\quad 0 & \textrm{pila di derivazione dopo:} &\quad \#S
+%     \end{align*}
+%     \item abbiamo terminato: ci troviamo nello stato \(0\) e troviamo solamente il nostro start symbol \(S\), che ci permette  muoverci verso lo stato \(1\), e l'endmaker \$; la presenza della keyword \(Accept\) nello stato in cui abbiamo terminato ci indica che la parola è stata riconosciuta dall'automa.
+% \end{itemize}
+
+% \subsection{Riassumendo}
+% Questo è un esempio del procedimento dell'algoritmo di shift/reduce; vediamo quali regole generali possiamo dedurne:
+% \begin{itemize}
+%     \item partendo dallo stato iniziale, iniziamo a leggere la parola data attraversando gli archi marchiati dalle \(symbol\)-transizioni che incontriamo di volta in volta;
+%     \item quando arriviamo in un nodo in cui si dovrà effettuare un passo di riduzione, questo sarà marcato da un'etichetta che avrà la forma \(A \to B, \{l\}\); a questo punto, dovremo:
+%     \begin{itemize}
+%         \item eliminare dalla cima della pila della derivazione il body della riduzione;
+%         \item mettere al suo posto il driver della riduzione
+%         \item eliminare dalla pila degli stati tanti stati quanti i caratteri nel body della derivazione;
+%         \item ritornare nello stato che si trova ora in cima alla pila degli stati;
+%         \item da qui, effettuare una \(A\) transizione;
+%         \item inserire lo stato in cui siamo giunti tramite la \(A\) transizione nella pila degli stati. 
+%     \end{itemize}
+% \end{itemize}
+% Gli automi caratteristici sono una rappresentazione utile, ma si tenga presente che la stessa funzione può essere ottemperata anche da una tabella.
+
+\end{document}

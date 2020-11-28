@@ -1,0 +1,38 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[ruled,linesnumbered,vlined]{algorithm2e}
+\newcommand{\Q}{\mathcal{Q}}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{algorithm}[H]
+        \label{alg:lr1-automata}
+        \DontPrintSemicolon
+
+        \SetKwData{UnMk}{unmarked}
+        \SetKwData{Tmp}{tmp}
+        \SetKwFunction{Mark}{mark}
+        \SetKwFunction{ClosureOne}{chiusura\(_1\)}
+
+        Initialize che collection \(\Q\) to contain \(P_0 =\) \ClosureOne{\(\{[S' \to \cdot S, \{\$\}]\}\)} \;
+        tag \(P_0\) as \UnMk \;
+        \While{\(\exists\) a state \(P \in \Q : P\) is \UnMk} {
+            \Mark{\(P\)} \;
+            \ForEach{\(Y\) on the right side of the marker in some item of \(P\)} {
+                Compute in \Tmp the kernel-set of the \(Y\)-target of \(P\) \;
+                \eIf{\(\Q\) already contains a state \(Q\) whose kernel is \Tmp} {
+                    Let \(Q\) be the \(Y\)-target of \(P\) \;
+
+                }
+                {
+                    Add \ClosureOne{\Tmp} to \(\Q\) as \UnMk state \;
+                    Let \ClosureOne{\Tmp} be the \(Y\)-target of \(P\) \;
+                }
+            }
+        }
+
+
+        \caption{LR(1)-automatonConstruction()}
+    \end{algorithm}
+\end{document}
