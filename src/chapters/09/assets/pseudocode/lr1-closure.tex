@@ -1,0 +1,42 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[ruled,linesnumbered,vlined]{algorithm2e}
+\usepackage{amssymb}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{algorithm}[H]
+        \label{alg:lr1-closure}
+        \DontPrintSemicolon
+
+        % \SetKwData{t}{\textbf{true}}
+        % \SetKwData{f}{\textbf{false}}
+        % \SetKwData{not}{\textbf{not}}
+        
+        \SetKwData{p}{P}
+        \SetKwData{UnMk}{unmarked}
+        \SetKwFunction{Mark}{mark}
+
+        Tag each item in \(P\) as \UnMk \;
+        \While{\(\exists item \in P : item\) is \UnMk} {
+            \Mark{\(item\)}\;
+            \If{\(item\) is in form \([A \to \alpha \cdot B \beta, \Delta]\)} {
+                \(\Delta_1 \leftarrow \bigcup_{d \in \Delta}\) first(\(\beta d\)) \;
+                \ForEach{\(B \to \gamma \in \mathcal{P}'\)} {
+                    \eIf{\(B \to \cdot \gamma \notin prj(P)\)} {
+                        add \([B \to \cdot \gamma, \Delta_1]\) to \(P\) as \UnMk \(item\)\;
+                    }
+                    {
+                        \If{\([B \to \cdot \gamma, \Gamma] \in P \land \Delta_1 \nsubseteq \Gamma\)} {
+                            Update \([B \to \cdot \gamma, \Gamma]\) to \([B \to \cdot \gamma, \Gamma \cup \Delta_1]\) as \UnMk \;
+                        }
+                    }
+                }
+            }
+        }
+        \Return{\(P\)} 
+
+        \caption{\textsc{Set} closure\(_1\)(\textsc{Set} P)}
+    \end{algorithm}
+\end{document}

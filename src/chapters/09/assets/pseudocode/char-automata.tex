@@ -1,0 +1,40 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[ruled,linesnumbered,vlined]{algorithm2e}
+\newcommand{\Q}{\mathcal{Q}}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{algorithm}[H]
+        \label{alg:char-automata}
+        \DontPrintSemicolon
+
+        \SetKwData{t}{\textbf{true}}
+        \SetKwData{f}{\textbf{false}}
+        \SetKwData{not}{\textbf{not}}
+        
+        \SetKwData{p}{P}
+        \SetKwData{Tmp}{tmp}
+        \SetKwFunction{Mark}{mark}
+        \SetKwFunction{ClosureO}{chiusura\(_0\)}
+
+        inizializza la collezione \(\Q\) in modo che contenga \(P_0\) = \ClosureO{\(\{S' \to S\}\)}\;
+        etichetta \(P_0\) come \texttt{unmarked}\;
+        \While{\(\exists P \in \Q: P\) è \texttt{unmarked}} {
+            \Mark{\(P\)}\;
+            \ForEach{\(Y\) a sinistra del marker in qualche \(item\) di \(P\)} {
+                calcola il kernel-set \Tmp per lo stato bersaglio della \(Y\)-transizione che parte da \(P\)\;
+                \eIf{\(\Q\) contiene uno stato \(Q\) di kernel \Tmp} {
+                    sia \(Q\) lo stato bersaglio della \(Y\)-transizione che parte da \(P\)\;
+                }
+                { 
+                    aggiungi \ClosureO{\Tmp} a \(\Q\) come stato \texttt{unmarked}\;
+                    sia \ClosureO{\Tmp} lo stato bersaglio della \(Y\)-transizione che parte da \(P\)\;
+                }
+            }
+        }
+
+        \caption{CharAutomataConstruction(\textsc{Grammar} \(\G\))}
+    \end{algorithm}
+\end{document}

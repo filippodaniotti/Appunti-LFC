@@ -1,0 +1,45 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+ 
+\usepackage{../../../../style_automata}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \tikzset{
+    node distance=2.5cm, % specifies the minimum distance between two nodes.
+    redText/.style={text=red},
+    }
+    \begin{tikzpicture}
+        \node[redText, align=center] at (4, 0) {[Accept]};
+        \node[redText, align=center] at (4.5, -2.5) {[$S\to ab, \{\$\}$]};
+        \node[redText, align=center] at (4.5, -5) {[$S\to ab, \{b\}$]};
+        \node[redText, align=center] at (-7.2, -2.5) {[$S\to aSb, \{\$\}$]};
+        \node[redText, align=center] at (2.2, -10) {[$S\to aSb, \{b\}$]};
+        \node[state] (0) {0};
+        \node[state, right of=0] (1) {1};
+        \node[state, below of=0] (2) {2};
+        \node[state, left of=2] (3) {3};
+        \node[state, right of=2] (4) {4};
+        \node[state, below of=2] (5) {5};
+        \node[state, left of=3] (6) {6};
+        \node[state, below of=5] (7) {7};
+        \node[state, right of=5] (8) {8};
+        \node[state, below of=7] (9) {9};
+        \draw (0) edge[above] node{S} (1)
+        (0) edge[right] node{a} (2)
+        (2) edge[above] node{b} (4)
+        (2) edge[right] node{a} (5)
+        (2) edge[above] node{S} (3)
+        (3) edge[above] node{b} (6)
+        (5) edge[loop left] node{a} (5)
+        (5) edge[right] node{S} (7)
+        (5) edge[above] node{b} (8)
+        (7) edge[right] node{b} (9)
+        ;
+
+    \end{tikzpicture}
+\end{document}
+

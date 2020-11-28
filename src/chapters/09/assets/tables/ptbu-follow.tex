@@ -1,0 +1,43 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage[table]{xcolor}
+
+\newcolumntype{b}{>{\hsize=.78\hsize}X}
+\newcolumntype{s}{>{\hsize=.5\hsize}X}
+\newcolumntype{m}{>{\hsize=.25\hsize}X}
+\newcolumntype{h}{>{\hsize=.6\hsize}X}
+
+\setlength\lightrulewidth{0.1pt}
+\providecommand\lightrule{%
+	\arrayrulecolor{black!30}%
+	\midrule[\lightrulewidth]%
+	\arrayrulecolor{black}}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+\begin{tabularx}{\textwidth}{XXX}
+         & first & follow \\
+        \midrule
+            \(S\)
+            &
+            \(a\)
+            &
+            \(\$\)
+            \\ \lightrule
+            \(A\)
+            &
+            \(b\)
+            &
+            \(b, d\)
+            \\ \lightrule
+            \(B\)
+            &
+            \(d\)
+            &
+            \(e\)
+\end{tabularx}
+\end{document}
