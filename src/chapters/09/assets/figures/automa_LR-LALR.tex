@@ -1,0 +1,41 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+ 
+\usepackage{../../../../style_automata}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \tikzset{
+    node distance=2.5cm, % specifies the minimum distance between two nodes.
+    }
+    \begin{tikzpicture}
+        \node[state, accepting, fill=red] (0) {0};
+        \node[state, fill=green, below left of=0] (1) {1};
+        \node[state, above right of=0] (2) {2};
+        \node[state, accepting, fill=red, above left of=0] (3) {3};
+        \node[state, below right of=0] (4) {4};
+        \node[state, accepting, fill=red, right of=2] (5) {5};
+        \node[state, accepting, fill=red, right of=4] (6) {6};
+        \node[state, accepting, fill=red, right of=5] (7) {7};
+        \node[state, right of=6] (8) {8};
+        \node[state, accepting, fill=red, right of=8] (9) {9};
+        \node[state, accepting, fill=red, right of=9] (10) {10};
+        \draw (0) edge[below right] node{S} (1)
+        (0) edge[above left] node{A} (2)
+        (0) edge[above right] node{b} (3)
+        (0) edge[below left] node{B} (4)
+        (2) edge[above] node{a} (5)
+        (4) edge[below] node{c} (6)
+        (5) edge[above] node{B} (7)
+        (6) edge[below] node{B} (8)
+        (8) edge[below] node{a} (9)
+        (9) edge[below, bend left=30] node{B} (4)
+        (9) edge[below] node{A} (10)
+        ;
+
+    \end{tikzpicture}
+\end{document}
+
