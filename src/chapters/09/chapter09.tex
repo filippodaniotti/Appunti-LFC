@@ -290,7 +290,7 @@ Nota che la Quaglia non ha riportato tutti gli stati ed i relativi items.
 Questo è l'automa che ricaviamo:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth]{send_help_3.png}
+	\subimport{assets/figures/}{figures_9-7.tex}
     \caption{help}
 \end{figure}
 Ora la domanda diventa: questa grammatica è LR(1)?
@@ -315,7 +315,7 @@ Ricordiamo che la risoluzione di tipo SLR(1) prevede di utilizzare l'automa LR(0
 lookahead function follow(B) ; in tal caso l'automa sarebbe stato il seguente:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth]{send_help_5.png}
+	\subimport{assets/figures/}{figures_9-9.tex}
     \caption{help}
 \end{figure}
 E si sarebbe verificato un problema per lo stato 2, dato che avrebbe presentato uno shift per = ma
@@ -341,7 +341,7 @@ Continueremo questo discorso? Mah
 Qui nel frattempo discutiamo di come in 5 si presenti una riduzione per id
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth]{send_help_6.png}
+	\subimport{assets/figures/}{figures_9-10.tex}
     \caption{help}
 \end{figure}
 Dato che lo stato 5 contiene l'elemento di riduzione
@@ -596,7 +596,7 @@ L'automa caratteristico LR(1) risulta dunque così costruito
 
 \begin{figure}[H]
 	\centering
-    \includegraphics[width=.9\textwidth]{lalr-automata.png}
+	\subimport{assets/figures/}{automa_LR-LALR.tex}
     \caption{Automa LR(1)/LALR(1)}
     \label{fig:lalr-automata}
 \end{figure}
