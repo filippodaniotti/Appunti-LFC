@@ -20,5 +20,5 @@ shell.nix
 
 *.drawio
 
-.vscode/
-!.vscode/extensions.json
+.devcontainer
+.vscode
