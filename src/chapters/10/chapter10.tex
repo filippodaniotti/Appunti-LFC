@@ -9,4 +9,303 @@
 \begin{document}
 \chapter{Analisi semantica}
 
+\section{Introduzione all'analisi semantica}
+
+\subsection{Grammatiche attribuite}
+Nei capitoli precedenti abbiamo trattato esaustivamente la fase dell'analisi sintattica, in questo capitolo è finalmente arrivato il momento di passare all'analisi semantica.
+
+Per approcciarsi a questa fase del processo della compilazione è necessario introdurre il concetto di grammatica attribuita (Syntax-Directed Definitions, da ora in poi SDD).
+
+Questo tipo di grammatica è tale e quale ad una grammatica di quelle che siamo abituati ad utilizzare ormai quotidianamente, ma ci sorprende con due elementi aggiuntivi:
+\begin{itemize}
+    \item \textbf{Attributi} che sono associati ai simboli della grammatica e possono essere numeri, tipi, riferimenti alla tabella dei simboli ecc; 
+    \item \textbf{Regole} che sono associate alle produzioni della grammatica e di norma sono funzioni degli attributi dei simboli della produzione.
+\end{itemize}
+Sia simboli che regole sono utilizzati per compiere l'analisi semantica, ovvero dare un valore a quello che è espresso da una parola di un a certa grammatica.
+
+\subsection{Tipi di attributi}
+
+Gli attributi sono divisi in due categorie:
+\begin{itemize}
+    \item \textbf{attributi sintetizzati}, sono gli attributi del driver di una produzione, questi sono definiti in funzione degli attributi dei simboli del body della produzione;
+    \item \textbf{attributi ereditati}, sono gli attributi dei non-terminali nel body della produzione e sono definiti in funzione degli altri simboli del body della produzione.
+\end{itemize}
+Il lettore accorto si sarà reso cont senz'altro che non abbiamo definito degli attributi per i caratteri terminali, questo perché gli attributi dei terminali sono sempre noti: sono dati dall'analisi lessicale e di conseguenza non serve alcuna regola per calcolarli.
+Questo concett risulta ppiù chiaro se si tiene bene a mente che gli attributi servono per valorizzare i caratteri di una parola: i non-terminali hanno un valore che dipende da che funzione rappresentano e da quali terminali "utilizzano", i terminali invece rappresentano le variabili, ovvero dei valori ben definiti che sono già stati riconosciuti e salvati nel momento dell'analisi lessicale.
+
+Di fatto l'analizzatore lessicale prende il codice, sostituisce i terminali con i loro identificatori e ne memorizza il valore.
+L'analizzatore lessicale passa poi all'analizzatore sintattico la tabella dei simboli in cui ogni identificatore ha associato il suo valore lessicale (che in seguito indicheremo con la keyword \texttt{lexval}).
+
+È arrivato, come da prassi, il momento di applicare la nostra filosofia del \emph{learning by doing}, osservando un esempio di utilizzo di una grammatica attribuita.
+
+\subsection{Esempio}
+Prendiamo come esempio la nostra grammatica per la valutazione delle espressioni aritmetiche per valutare l'espressione rappresentata dall'albero di derivazione in Fig.\ref{fig:first-ex_sdd}.
+\begin{align*}
+    insert grammar here
+\end{align*}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth]{first-ex_sdd.jpg}
+    \caption{Albero di derivazione per una somma}
+    \label{fig:first-ex_sdd}
+\end{figure}
+Prendiamo il caso in cui il primo digit abbia assegnato come valore 3, mentre il secondo abbia valore 4.
+Questi valori, come spiegato prima, sono memorizzati nella tabella dei simboli.
+
+Naturalmente essendo questa una somma tra 3 e 4 ci aspettiamo di trovare, una volta terminata la fase di valutazione, che il valore riportato in \(V\) sia 7.
+
+Vediamo subito quale forma deve avere l'sdd per la grammatica che stiamo utilizzando:
+\begin{align}
+    \label{reg:regola-1}
+    V &\to E & &\{V.val = E.val\} \\
+    \label{reg:regola-2}
+    E &\to E_1 + T & &\{E.val = E_1.val + T.val\} \\
+    \label{reg:regola-3}
+    E &\to T & &\{E.val = T.val\} \\
+    \label{reg:regola-4}
+    T &\to T_1 * F & &\{T.val = T_1.val * F.val\} \\
+    \label{reg:regola-5}
+    T &\to F & &\{T.val = F.val\} \\
+    \label{reg:regola-6}
+    F &\to (E) & &\{F.val = E.val\} \\
+    \label{reg:regola-7}
+    F &\to digit & &\{F.val = digit.lexval\}
+\end{align}
+\paragraph*{Signifiato delle regole} quelle che abbiamo elencato sulla destra delle produzioni tra parentesi graffe sono le regole che compongono una grammatica attribuita.
+
+\noindent Tutto ciò che si trova all'interno delle regolo sono gli attributi (nota però che i simboli + e * in questo caso non sono attributi, ma sono proprio le operazioni matematiche).
+
+\noindent Proviamo ora a dare una spiegazione del significato delle varie regole così da aiutare il lettore a capire melgio qual è lo scopo delle grammatiche attribuite.
+\begin{itemize}
+    \item[Reg.\ref{reg:regola-1}] la prima produzione è una produzione aggiuntiva che abbiamo inserito noi  (un po' come \(S' \to S\)) e ci dice che quando incontriamo produzioni \(V \to E\) il valore di \(V\) è \(E.val\);
+    \item[Reg.\ref{reg:regola-2}] per produzioni come \(E \to E_1 + T\) avremo che il valore di \(E\) corrisponde alla somma del sottoalbero \(E_1\) più il valore di \(T\) (nota che \(E_1\) è usato solo per differenziare da \(E\));
+    \item[Reg.\ref{reg:regola-3}] se ho una produzione \(E \to T\) il valore di \(E\) è uguale al valore di \(T\);
+    \item[Reg.\ref{reg:regola-4}] se ho una produzione \(T\to T_1 * F\) il valore di \(T\) corrisponde al valore del sottoalbero \(T_1\) moltiplicato per il valore di \(F\) (nota che \(T_1\) è usato solo per differenziare da \(T\));
+    \item[Reg.\ref{reg:regola-5}] se ho una produzione del tipo \(T\to F\) il valore di \(T\) è uguale a \(F.val\);
+    \item[Reg.\ref{reg:regola-6}] se ho una produzione del tipo \(F \to (E)\) il valore che assegno a \(F\) corrisponde a \(E.val\);
+    \item[Reg.\ref{reg:regola-7}] se ho una produzione del tipo \(F \to digit\) mi aspetto che il valore di \(F\) sia il valore riposrtato nella tabella dei simboli per tale \(digit\).
+\end{itemize}
+
+\paragraph*{Utilizzo dell'SDD} ora che abbiamo la grammatica attribuita possiamo utilizzarla appunto per dare un valore al parse tree della nostra somma.
+
+Per valutare un albero di derivazione si utilizza un parse tree annotato. Questo è un parse tree in cui ogni nodo contiene le annotazioni che riguardano gli attributi del simbolo che si trova in quel nodo.
+Si può capire al volo cosa intendiamo guardando il parse tree annotato corrispondente al parse tree precedente (Fig.\ref{fig:first-ex_sdd})) che è raffigurato qui sotto.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth]{first-ex_noted-parse-tree.jpg}
+    \caption{Parse tree annotiato per la somma in \ref{fig:first-ex_sdd}}
+    \label{fig:first-ex_noted-parse-tree}
+\end{figure}
+Ciò a cui si deve fare attenzione in questo caso è che ad ogni nodo è aggiunta l'annotazione riguardante il valore del nodo stesso.
+
+Ma a cosa serve il parse tree annotato? È presto detto!
+
+\noindent Il parse tree annotato viene letto dal basso verso l'alto seguendo le regole di attribuzione che sono segnate sui vari nodi per ottenere la valutazione dell'albeo stesso. Vediamo ora questo procedimento passo per passo.
+
+\begin{enumerate}
+    \item Partendo dal basso applichiamo innanzitutto la regola
+    \begin{align*}
+        F &\to digit & &\{F.val = digit.lexval\}
+    \end{align*}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=.5\textwidth]{first-ex_sdd-resolution-step-1.jpg}
+        \caption{Passo 1 della valutazione tramite SDD}
+    \end{figure}
+    \item Il secondo passo prevede di applicare la regola
+    \begin{align*}
+        T &\to F & &\{T.val = F.val\}
+    \end{align*}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=.5\textwidth]{first-ex_sdd-resolution-step-2.jpg}
+        \caption{Passo 2 della valutazione tramite SDD}
+    \end{figure}
+    \item Successivamente applichiamo la regola
+    \begin{align*}
+        E &\to T & &\{E.val = T.val\}
+    \end{align*}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=.5\textwidth]{first-ex_sdd-resolution-step-3.jpg}
+        \caption{Passo 3 della valutazione tramite SDD}
+    \end{figure}
+    \item Il quarto passo prevede di applicare la regola
+    \begin{align*}
+        E &\to E_1 + T & &\{E.val = E_1.val + T.val\}
+    \end{align*}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=.5\textwidth]{first-ex_sdd-resolution-step-4.jpg}
+        \caption{Passo 4 della valutazione tramite SDD}
+    \end{figure}
+    \item Infine, andiamo ad applicare la regola
+    \begin{align*}
+        V &\to E & &\{V.val = E.val\}
+    \end{align*}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=.5\textwidth]{first-ex_sdd-resolution-step-5.jpg}
+        \caption{Passo finale della valutazione tramite SDD}
+    \end{figure}
+\end{enumerate}
+Dovrebbe essere chiaro a questo punto come si possa utilizzare una grammatica attribuita per calcolare il valore di una certa parola di una data grammatica:
+\begin{enumerate}
+    \item si crea il parse tree annotato per tale parola;
+    \item si utilizza il parse tree annotato in combinazione con le regole dettate dalla grammatica attribuita per valorizzare un nodo alla volta tutti i nodi del parse tree annotato;
+    \item una volta valorizzata la radice del parse tree annotato si è ricavato il valore della parola.
+\end{enumerate}
+Una nota interessante riguardo all'albero di parsing annotato visto in questo esempio è che gli attributi che compaiono in tutti i nodi sono attributi sintetizzati.
+
+\subsection{Verificare se un parse tree annotato può essere valutato}
+Non è sempre detto che un parse tree annotato possa essere valutato, per verificare che ciò sia possibile dobbiamo utilizziare un grafo delle dipendenze e verificare che non vi siano conflitti tra le dipendenze.
+
+\paragraph*{Costruire il grfo delle dipendenze} per definire un grafo delle dipendenze per un determinato parse tree annotato dobbiamo svolgere i seguenti passi:
+
+\begin{itemize}
+    \item impostiamo un nodo nel grafo delle dipendenze per ogni attributo associato per qualche nodo del parse tree;
+    \item per ogni attributo \(X.x\) usato per definire l'attributo \(Y.y\), creiamo un arco dal nodo di \(X.x\) fino al nodo di \(Y.y\) (rappresentando quindi la dipendenza di \(Y.y\) da \(X.x\)).
+\end{itemize}
+
+\paragraph*{Utilizzare il grafo delle dipendenze} una volta creato il grafo delle dipendenze, per verificare che non vi siano conflitti dobbiamo trovare un ordinamento topologico per tale grafo; se un ordinamento topologico non esiste, allora l'albero di parsing annotato non è valutabile.
+
+\noindent Se ivece esiste un ordinamento topologico per questo dependency graph allora l'SDD è valutabile ed abbiamo anche un ordine da seguire per la valutazione.
+
+Ad esempio per il parse tree annotato dell'esercizio precedente otteniamo questo grafo delle dipendenze in cui le dipendenze sono indicate con le frecce azzurre (mentre la linea tratteggiata rappresenta gli archi del parse tree).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth]{first-ex_sdd-dependency-graph.jpg}
+    \caption{Albero di parsing annotato e relativo grafo delle dipendenze}
+    \label{fig:first-ex_sdd-dependency-graph}
+\end{figure}
+Regola: quando tutti gli attributi sono di tipo sintetizzato allora una visita in postordine può sostituire sempre l'ordinamento topologico, capiremo in seguito le motivazioni dietro questa affermazione.
+
+Visita in postorddine, per chi non avesse ascoltato il Montre a suo tempo:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth]{postorder-visit.jpg}
+    \caption{Algoritmo della visita in postordine, versione PQ}
+    \label{fig:postorder-visit}
+\end{figure}
+Quando un SDD contiene sia elementi sintetizzati che ereditati allora non c'è la garanzia che un ordinamento topologico esista per tale SDD.
+Per esempio, se si ha una regola come 
+\begin{align*}
+    A &\to B & & &\{A.s = B.i; B.i = A.s+7\} 
+\end{align*}
+si potrebbe trovare un ciclo all'interno del grafo delle dipendenze con una forma simile:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.5\textwidth]{dependence-conflict.jpg}
+    \caption{Conflitto di dipendenza}
+    \label{fig:dependence-conflict}
+\end{figure}
+Quindi nel caso generale si calcola sempre l'ordinamento topologico dell'SDD, solo nel caso specifico di SDD costituiti solo da attributi sintetizzati ci basta la visita in postordine.
+
+Esistono due classi di SDD per cui è sempre garantita l'esistenza di un ordinamento topologico:
+\begin{itemize}
+    \item \textbf{S-attributed SDD} (grammatiche o sdd s-attribuiti): tutti gli attributi dell'sdd sono sintetizzati, in questo caso come già detto ci basta fare una visita in postordine;
+    \item \textbf{L-attributed SDD}: ci possono essere anche attributi ereditati che rispettano però il seguente vincolo sulle eredità: si può ereditare solo dal padre o dai fratelli sinistri; scrivendo in linguaggio matematico tale vincolo:
+    \begin{itemize}
+        \item per ogni produzione \(A \to X_1 ... X_n\) la definizione di ogni \(X_j.i\) utilizza solamente
+        \begin{itemize}
+            \item attributi ereditati di A oppure
+            \item attributi sintetizzati o ereditati dei fratelli sinistri di \(X_j\), ovvero \(X_1 ... X_{j-1}\)
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+Gli SDD S-attribuiti sono ideali per il parsing bottom-up, perché si può creare e valutare il parse tree attribuito in contemporanea al parsing della stringa.
+
+\noindent Viceversa gli SDD L-attribuiti sono invece ideali per il parsing top-down, perché si può creare e valutare il parsing tree attribuito in contemporanea al parsing della stringa.
+
+\subsection{Un altro esempio di utilizzo dell'SDD}
+Grammatiche differenti pongono sfide differenti nella definizione degli SDD.
+Nel primo esercizio di applicazione dell'SDD abbiamo studiato una grammatica con ricorsione sinistra, osserviamo ora un caso di grammatica LL(1), consideriamo il caso della grammatica per le espressioni aritmetiche.
+\begin{align*}
+    V &\to E \\
+    E &\to TE' \\
+    E' &\to +TE \mid \varepsilon \\
+    T &\to FT' \\
+    T' &\to *FT' \mid \varepsilon \\
+    F &\to (E) \mid digit \\
+\end{align*}
+Volgiamo definire l'SDD che ci permette di valutare tale grammatica.
+
+Vediamo di costruire il parse tree di \(3*5\)
+Non riportiamo l'intero albero perché la Quaglia non l'ha disegnato.
+Questo è un sottoalbero per l'albero di parsing della formula analizzata:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.5\textwidth]{second-ex-parse-tree-part.jpg}
+    \caption{Pezzo del parse tree di \(3*5\)}
+    \label{fig:second-ex-parse-tree-part}
+\end{figure}
+Osserviamo come in questo caso abbiamo una digit che si trova nel sottoalbero sinistro della radice, mentre l'operatore * e l'altra digit si trovano nel sottoalbero destro della radice.
+Come facciamo a fare in modo che \(T.val\) abbia valore \(15\)?
+
+\noindent \emph{Chiediamo l'intervento degli attributi ereditati}
+
+\noindent Questo è il caso in cui possiamo aiutarci con l'utilizzo di attributi ereditati, presentiamo ora in Fig.\ref{fig:second-ex-dependency-graph-part} come si possono utilizzare gli attributi ereditati; in blu abbiamo ancora una volta gli archi del grafo delle dipendenze e le etichette \(.i\) e \(.s\) rappresentano rispetivamente attributi ereditati e sintetizzati.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part.jpg}
+    \caption{Pezzo del grafo delle dipendenze di \(3*5\)}
+    \label{fig:second-ex-dependency-graph-part}
+\end{figure}
+Vediamo quikndi come in questo caso sia necessario utilizzare gli attributi ereditati, che però aggiungono un livello di complessità.
+
+Quando studiamo la regola per una produzione dobbiamo usare solo le informazioni che abbiamo a quel livello, in quella produzione, così viene affrontata la costruzione dell'SDD.
+
+Andiamo ora a vedere nello specifico come viene affrontata la questione delle dipendenze quando si generano le regole per questo determinato SDD.
+La prima cosa da notare è che quando il valore di \(T'\) viene copiato in \(T\) contiene già il valore della moltiplicazione.
+In questo caso la regola che andiamo ad associare alla produzione rappresentata è
+\begin{align*}
+    T &\to FT' & & &\{T'.i = F.s; \; T.s = T'.s\}
+\end{align*}
+che viene rappresentata graficamente così:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part-1.jpg}
+    % \label{fig:second-ex-dependency-graph-part-1}
+\end{figure}
+Se andiamo invece ad osservare come viene generato il valore di \(T'\) vediamo dal pezzo di parse tree annotato in Fig.\ref{fig:second-ex-dependency-graph-part} che in pirmis ereditiamo un elemento dal fratello di sinistra, poi sappiamo che lo moltiplichiamo per il valore che ci è dato da \(F.s\) per ottenere il valore di \(T'_1\), che poi passeremo a \(T'\).
+
+La regola per questa produzione è quindi
+\begin{align*}
+    T' &\to *FT_1' & & &\{T_1'.i = T'.i * F.s; \; T'.s = T_1'.s\}
+\end{align*}
+che si può rappresentare graficamente così:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part-2.jpg}
+    % \label{fig:second-ex-dependency-graph-part-1}
+\end{figure}
+Ora che abbiamo studiato i due punti critici dell'SDD per questa grammatica riportiamo l'SDD nella sua completezza.
+\begin{align*}
+    &V  \to E & &\{V.s = E.s\} \\
+    &E  \to TE' & &\{E.s = E'.s; \; E'.i = T.s\} \\
+    &E' \to +TE_1' & &\{E'.s = E_1'.s; \; E_1'.i = E'.i + T.s\} \\
+    &E' \to \varepsilon & &\{E'.s = E'.i\} \\
+    &T  \to FT' & &\{T.s = T'.s; \; T'.i = F.s\} \\
+    &T' \to *FT_1' & &\{T'.s = T_1'.s; \; T_1'.i = T'.i * F.s\} \\
+    &T' \to \varepsilon & &\{T'.s = T'.i\} \\
+    &F  \to (E) & &\{F.s = E.s\} \\
+    &F  \to digit & &\{F.s = digit.lexval\}
+\end{align*}
+Commento dell'SDD, parole testuali dell'insegnate
+"Commentiamolo partendo dal fondo
+
+Le prime due sono banali
+
+La terza ci puoi arrivare
+
+La quarta è uno swap
+
+Le prossime due le abbiamo viste prima
+
+Poi abbiamo quelle"
+
+Poi sì vabbè, sbrocca
+
+\noindent Scusate, questa parte è da capire e riscrivere...
+
 \end{document}
