@@ -308,4 +308,224 @@ Poi sì vabbè, sbrocca
 
 \noindent Scusate, questa parte è da capire e riscrivere...
 
+\subsection{Traduzione durante il parsing}
+
+Il nostro obiettivo è considerare la traduzione direttamente durante la fase di parsing per poter ottimizzare le attività della compilazione. Questo ci permette di evitare una prima elaborazione sintattica per ottenere il parse tree e la seconda, semantica, per valutare gli attributi.
+
+Il caso più semplice in cui queste due elaborazioni possono essere eseguite in modo congiunto lo si ha considerando una grammatica adatta al parsing bottom-up a cui possiamo applicare l'algoritmo di shift reduce (i.e. SLR(1), LR(1), LALR(1)) e l'SDD è S-Attribuito (i.e. gli unici attributi presenti sono sintetizzati). Come mai?
+
+L'algoritmo di \(shift/reduce\) si può eseguire con complessità lineare e necessità di due pile: una per mantenere gli stati (stSt) mentre l'altra per la catena dei simboli per poter conservare la derivazione parziale (sySt). L'idea è quella che insieme a queste due pile possiamo mantenerne una terza, che chiameremo \textbf{semSt}, dove conserveremo gli attributi (e.g. nel caso di una grammatica di espressioni aritmetiche degli interi).
+
+\subsubsection{Esempio Algoritmo shift/reduce con semSt}
+
+Per poter fornire un'idea di come utilizzare questa pila vediamo un esempio per cui è possibile eseguire il codice nel momento in cui si hanno a disposizione tutte le informazioni sugli attributi dei simboli del body. 
+
+Consideriamo la seguente grammatica per definire le espressioni aritmetiche:
+\begin{align*}
+    V &\to E \\
+    E &\to E + T \mid T \\
+    T &\to T * F \mid F \\
+    F &\to (E) \mid digit
+\end{align*}
+
+Il nostro obiettivo è quello di svolgere la traduzione durante il parsing ma per poter fare ciò abbiamo anche bisogno delle regole associate ad ogni produzione della grammatica
+
+\begin{align*}
+    V &\to E &\{print(E.val)\} \\
+    E &\to E_1 + T &\{E.val = E_1.val + T.val\} \\
+    E &\to T &\{E.val = T.val\} \\
+    T &\to T_1 * F &\{T.val = T_1.val * F.val\} \\
+    T &\to F &\{T.val = F.val\} \\
+    F &\to (E) &\{F.val = E.val\} \\
+    F &\to digit &\{F.val = digit.lexval\}
+\end{align*}
+
+Come abbiamo potuto osservare nei capitoli precedenti, l'algoritmo \(shift/reduce\) necessita della tabella di parsing per operare. La cortesia di poter osservare che tipo di operazioni venissero eseguite purtroppo non è stata concessa a quei poveri disgraziati che erano a lezione ma, per poter comprendere appieno l'esercizio, ci sentiamo in dovere di fornire, a chiunque stia leggendo, l'automa caratteristico e la relativa tabella di parsing LALR(1).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{lalr-automata.jpg}
+    \label{fig:lalr-automata}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \subimport{assets/tables/}{lalr-parsing-table.tex}
+    \caption{Tabella di parsing LALR(1) Espressioni Aritmetiche}
+    \label{tab:lalr-parsing-table}
+\end{table}
+
+dove
+
+\begin{itemize}
+    \item[r1:] \(V \to E\) 
+    \item[r2:] \(E \to E + T\)
+    \item[r3:] \(E \to T\)
+    \item[r4:] \(T \to T * F\)
+    \item[r5:] \(T \to F\)
+    \item[r6:] \(F \to (E)\)
+    \item[r7:] \(F \to digit\)
+\end{itemize}
+
+Eseguiamo l'algoritmo shift/reduce dato in input \(w = digit + digit\$\) per la grammatica LALR(1) descritta poco sopra. Visto che vogliamo eseguire la traduzione degli attributi durante il parsing supponiamo che il primo abbia valore lessicale pari a 3 (i.e. \(digit.lexval = 3\)) mentre il secondo pari a 4; per questo motivo per poter mantenere traccia degli attributi faremo uso della pila \textbf{semSt} (semantic stack). 
+
+Come sempre iniziamo partendo dallo stato 0 con la seguente situazione iniziale:
+
+\begin{align*}
+    w &= digit + digit\$ \\
+    stSt &= 0 \\
+    symSt &= \\     
+    semSt &= \\
+\end{align*}
+
+Il primo simbolo che leggiamo dall'input buffer è \(digit\) quindi, come è possibile osservare sia dall'automa caratteristico che dalla parsing table, dobbiamo eseguire un'operazione di \texttt{shift} 6. Oltre che valorizzare le pile durante un normale esecuzione dell'algoritmo eseguiamo \texttt{push} \(digit.lexval\) per poter inserire 3 sulla cima di \(semSt\) a seguito dell'operazione di shift.
+
+\begin{align*}
+    w &= \underline{digit} + digit\$ \\
+    stSt &= 0\; 6 \\
+    symSt &= digit \\     
+    semSt &= 3 &\texttt{push}\;digit.lexval \\
+\end{align*}
+
+A questo punto il simbolo letto dall'input buffer è \(+\) e, visto che ci troviamo nello stato 6, abbiamo la possibilità di eseguire \texttt{reduce} \(F \to digit\): a seguito di un'operazione di riduzione dobbiamo anche eseguire il codice associato (i.e. la regola) con la produzione \(F \to digit\) (i.e. \(\{F.val = digit.lexval\}\)). In questo caso ciò si traduce in 
+
+\begin{align*}
+    w &= \underline{digit} + digit\$ \\
+    stSt &= 0\; 4 \\
+    symSt &= F &\texttt{reduce}\; F \to digit \\     
+    semSt &= 3 &\texttt{pop}\;digit.lexval;\; \texttt{push}\;F.val = digit.lexval\\
+\end{align*}
+
+Nello stato 4 abbiamo nuovamente la possibilità di eseguire \texttt{reduce} \(T \to F\) leggendo dall'input buffer un \(+\): in questo caso la regola associata con la produzione è \(\{T.val = F.val\}\) per cui il procedimento sarà simile a quello precedente
+
+\begin{align*}
+    w &= \underline{digit} + digit\$ \\
+    stSt &= 0\; 3 \\
+    symSt &= T &\texttt{reduce}\; T \to F \\     
+    semSt &= 3 &\texttt{pop}\;F.val;\; \texttt{push}\;T.val = F.val\\
+\end{align*}
+
+Il processo è analogo per lo stato 3 in cui eseguiremo una \texttt{reduce} \(E \to T\) e applicheremo la regola associata \(\{E.val = T.val\}\)
+
+\begin{align*}
+    w &= \underline{digit} + digit\$ \\
+    stSt &= 0\; 2 \\
+    symSt &= E &\texttt{reduce}\; E \to T \\     
+    semSt &= 3 &\texttt{pop}\;T.val;\; \texttt{push}\;E.val = T.val \\
+\end{align*}
+
+Giunti finalmente nello stato 2 possiamo eseguire \texttt{shift} 7 che ci porta a consumare il simbolo \(+\) dall'input buffer. Visto che abbiamo eseguito uno shift dovremmo caricare il simbolo \(+\) sulla pila \(semSt\) ma ciò creerebbe un'inconsistenza in quanto, tecnicamente, dovrebbe contenere solamente solo dei numeri interi: per poter superare questa problematica carichiamo lo 0 come dummy in modo da mantenere l'allineamento con la pila dei simboli. 
+
+\begin{align*}
+    w &= \underline{digit \;+}\; digit\$ \\
+    stSt &= 0\; 2\; 7 \\
+    symSt &= E\; + \\     
+    semSt &= 3\; 0 &\texttt{push}\;dummy\\
+\end{align*}
+
+Dallo stato 7 possiamo eseguire \texttt{shift} 6 leggendo dall'input buffer \(digit\): a questo punto possiamo caricare anche il valore del secondo digit sulla pila semantica. 
+
+\begin{align*}
+    w &= \underline{digit + digit}\$ \\
+    stSt &= 0\; 2\; 7\; 6 \\
+    symSt &= E + digit \\     
+    semSt &= 3\; 0\; 4 &\texttt{push}\;digit.lexval\\
+\end{align*}
+
+Il processo a questo risulta essere analogo a quello fatto precedentemente per il primo \(digit\) quindi ci riserviamo la possibilità di non spiegare così nel dettaglio i prossimi passaggi 
+
+\begin{align*}
+    w &= \underline{digit + digit}\$ \\
+    stSt &= 0\; 2\; 7\; 4 \\
+    symSt &= E + F &\texttt{reduce}\; F \to digit\\     
+    semSt &= 3\; 0\; 4 &\texttt{pop}\;digit.lexval;\; \texttt{push}\;F.val = digit.lexval\\
+\end{align*}
+
+\begin{align*}
+    w &= \underline{digit + digit}\$ \\
+    stSt &= 0\; 2\; 7\; 10 \\
+    symSt &= E + T &\texttt{reduce}\; T \to F\\     
+    semSt &= 3\; 0\; 4 &\texttt{pop}\;F.val;\; \texttt{push}\;T.val = F.val\\
+\end{align*}
+
+Nello stato 10 eseguiamo la \texttt{reduce} \(E \to E + T\) leggendo dall'input buffer \$. tale produzione è associata alla regola \(\{E.val = E_1.val + T.val\}\) che ci permette tra le varie cose di eseguire la somma e di rimuovere il dummy dal \(semSt\).
+
+\begin{align*}
+    w &= \underline{digit + digit}\$ \\
+    stSt &= 0\; 2 \\
+    symSt &= E &\texttt{reduce}\; E \to E + T\\     
+    semSt &= 7 &\texttt{pop}\;T.val;\; \texttt{pop}\;dummy;\; \texttt{pop}\;E_1.val;\\ 
+    && \texttt{push}\;E = E_1.val + T.val\\
+\end{align*}
+
+Dallo stato 2 possiamo eseguire questa volta \texttt{reduce} \(V \to E\) in quanto il simbolo che leggiamo dall'input buffer è \$: come sempre associamo a tale produzione la relativa regola (i.e. \(\{print(E.val)\}\)).
+
+\begin{align*}
+    w &= \underline{digit + digit}\$ \\
+    stSt &= 0\; 1 \\
+    symSt &= V &\texttt{reduce}\; V \to E;\; Acc \\     
+    semSt &= 7 &\texttt{pop}\;E.val;\; print(E.val)\\
+\end{align*}
+
+Questo tipo di approccio è sempre possibile nel caso in cui l'SDD sia S-Attribuito: essendo che siamo in grado di calcolare il valore degli attributi del padre di un sottoalbero solamente sulla base degli attributi dei suoi figli, il modo più facile di implementare l'algoritmo è eseguire le azioni nel momento in cui viene effettuata la riduzione (i.e. il momento in cui conosciamo tutti i valori dei figli). 
+
+Avendo la possibilità di fare un po' più di pre-processing si riesce comunque in bottom-up ad eseguire tale procedura per SDD che sono L-Attribuiti. 
+
+\subsection{Tradurre Stringhe in Numeri}
+
+Analizziamo ora delle grammatiche che permettono di tradurre stringhe in numeri: l'idea è che data una certa stringa vogliamo ottenere il loro valore decimale. 
+
+Possiamo pensare di scrivere una grammatica che genera il linguaggio delle stringhe di digit e il relativo schema di traduzione. 
+
+La prima grammatica su cui ragioneremo è
+
+\begin{align*}
+    S &\to Digits	&\{print(Digits.v)\} \\
+    Digits &\to Digits_1 d	&\{Digits.v = Digits_1.v * 10 + d.lexval\} \\
+    Digits &\to d	&\{Digits.v = d.lexval\}
+\end{align*}
+
+La grammatica che abbiamo di fronte è LALR(1) e l'SDD è S-Attribuito: l'ultima affermazione è verificabile dal fatto che il valore del padre dei sottolaberi possibili è sempre e solamente dipendente da quello dei figli. In questo caso dunque è possibile eseguire le due elaborazioni in modo congiunto e quindi possiamo computare il tutto durante il parsing. 
+
+Aggiungiamo una variazione dell'esercizio: ora vogliamo tradurre stringhe di digit al loro valore interpretato in decimale oppure in ottale.
+
+Una possibile grammatica che genera il linguaggio descritto è questa:
+
+\begin{align*}
+    S &\to Num \\
+    Num &\to o \textrm{ } Digits \mid Digits \\
+    Digits &\to Digits \textrm{ } d \mid d
+\end{align*}
+
+Quando ci troviamo nel caso di una stringa con il simbolo \(o\) davanti intendiamo che vogliamo ottenere il valore ottale della sequenza di digit. 
+
+La grammatica anche in questo caso è LALR(1) però abbiamo un problema: non è possibile sintetizzare le informazioni nello stesso modo di prima in quanto queste non sono disponibili nel momento in cui ci servono. Ragionando infatti sulla derivazione \(S \Rightarrow Num \Rightarrow o Digits\) ci si rende conto del fatto che il simbolo \(o\) si trova nel sottoalbero sinistro dell'albero mentre i Digits in quello destro: questo vuol dire che di fatto non siamo in grado di computare il valore fino a quando non raggiungiamo la cima dell'albero e quindi ciò significa che non ci troviamo di fronte a un SDD S-Attribuito (il valore del sottoalbero di destra dipende infatti dal valore dei fratelli e non solamente da quello dei figli).
+
+Per poter raggiungere i nostri obbiettivi a livello di efficienza dobbiamo riprovare modificando la grammatica in modo che ci consenta di svolgere entrambe le operazioni contemporaneamente.
+
+Per poter ottenere un risultato migliore potremmo inserire due nuovi non terminali in modo da poterci aiutare con le regole in un secondo momento: consideriamo infatti di modificare la grammatica nel modo seguente
+
+\begin{align*}
+    S &\to Num \\
+    Num &\to O \textrm{ } Digits \mid D \textrm{ } Digits \\
+    O &\to o \\ 
+    D &\to \epsilon \\
+    Digits &\to Digits \textrm{ } d \mid d
+\end{align*}
+
+Di per sé non sembra essere cambiato molto ma in realtà in questo caso abbiamo la possibilità di inserire delle regole dove possiamo valorizzare delle variabili globali in modo da stabilire la base:
+
+\begin{align*}
+    S &\to Num &\{print(Num.v)\}\\
+    Num &\to O \textrm{ } Digits &\{Num.v = Digits.v\}\\
+    Num &\to D \textrm{ } Digits &\{Num.v = Digits.v\}\\
+    O &\to o &\{base = 8\}\\ 
+    D &\to \epsilon &\{base = 10\}\\
+    Digits &\to Digits_1 \textrm{ } d &\{Digits.v = Digits_1.v * base + d.lexval\}\\
+    Digits &\to d &\{Digits.v = d.lexval\}
+\end{align*}
+
+Stabilendo separatamente la base mediante le regole abbiamo dunque la possibilità di poter svolgere tutti i calcoli necessari senza rinunciare all'efficienza. 
+
+
 \end{document}
