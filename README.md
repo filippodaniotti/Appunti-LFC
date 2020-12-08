@@ -35,11 +35,11 @@ Se lavorate con degli IDE o con degli editor in coppia con dei tool per la scrit
 
 Se non disponete dei prerequisiti per la build indicati sopra (o non volete installarli system-wide), potete
 buildare con docker.  
-Se poi avete sia [VS Code](https://code.visualstudio.com) che [docker](https://www.docker.com/), potete riferirvi a questo [gist](https://gist.github.com/civts/234f4e7be7d13df676937996f4d4f45c) per una configurazione già pronta.
+Se poi avete sia [VS Code](https://code.visualstudio.com) che [Docker](https://www.docker.com/), potete riferirvi a questo [gist](https://gist.github.com/civts/234f4e7be7d13df676937996f4d4f45c) per una configurazione già pronta.
 
 Prerequisiti:
 
-- [docker](https://www.docker.com/)
+- [Docker](https://www.docker.com/)
 - almeno 5/6GB liberi su disco
 
 Procedimento:
@@ -47,9 +47,9 @@ Procedimento:
 1. clonate la repository con `git clone https://github.com/filippodaniotti/Appunti-LFC`
 2. se non siete su linux, buildate l'immagine docker contenuta nel Dockerfile con `docker build -t dispensa_lfc .`  
    Nel caso siate su linux, usate questo comando per buildare `docker build -t dispensa_lfc --build-arg UID=$(id -u) --build-arg GID=$(id -g) .` (si assicura che il vostro userId e groupId corrispondano a quelli che il container userà)
-3. avviate un container, ricordandovi di montare la cartella della dispensa.  
+3. avviate un container, ricordandovi di montare la cartella della dispensa/
 Esempio: `docker run -ti --rm -v $(pwd):/dispensa --name dispensa_lfc dispensa_lfc`
-4. ora avete accesso ad un ambiente con tutte le dipendenze installate e potete buildare usando i comandi della sezione [how to build](#How-to-build) (ad eccezione di Arara, poiché il container non ha una JVM installata).
+4. ora avete accesso ad un ambiente con tutte le dipendenze installate e potete buildare usando i comandi della sezione [how to build](#How-to-build) (ad eccezione di Arara, perché il container non ha una JVM installata)
 
 ## Principali pacchetti impiegati
 
