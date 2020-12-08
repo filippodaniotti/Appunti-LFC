@@ -7,6 +7,7 @@
 % arara: pdflatex: { synctex: yes, shell: yes }
 % arara: latexmk: { clean: partial }
 \begin{document}
+\tableofcontents
 \chapter[Parsing bottom-up: LR(1) e LALR(1)]{Analisi sintattica: parsing bottom-up LR(1) e LALR(1)}
 
 \section{L'automa caratteristico LR(1)}
@@ -170,16 +171,18 @@ Visto che però avevamo già inserito due LR(1)-item con lo stesso LR(0)-item (l
 Bene, ora abbiamo fatto un po' di allenamento con il calcolo degli stati, ma dobbiamo ricordare che non è questo il nostro obiettivo finale, noi vogliamo ricavare l'automa caratteristico!
 
 \subsection{Costruzione di un automa caratteristico LR(1)}
-Partiamo spiegando il modo più semplice per costruire un automa caratteristico LR(1):
+Finalmente possiamo spiegare come si costruisce un automa caratteristico LR(1). 
+
+\paragraph{Idea}
+L'idea di base è semplice:
 \begin{enumerate}
     \item costruiamo lo stato di partenza con l'item \([S' \to \cdot S, {\$}]\);
     \item ricorsivamente aggiungiamo gli stati che si possono raggiungere dagli stati presenti nell'automa;
     \item aggiungamo le transizioni che ci permettono di passare da uno stato all'altro.
 \end{enumerate}
-E come facciamo a capire quali stati sono collegati ad un certo stato \(P\)?
+E come facciamo a capire quali stati sono raggiungibili a partire da un certo stato \(P\)? Se uno stato \(P\) contiene un item nella forma \([A \to \alpha \cdot Y \beta, \Delta]\) allora esiste una transizione da \(P\) ad uno stato \(Q\) che contiene l'item \([A \to \alpha Y \cdot \beta , \Delta]\); inoltre, siccome \(Q\) contiene \([A \to \alpha Y \cdot \beta , \Delta]\), esso contiene anche tutti gli item in \(closure_1([A \to \alpha Y \cdot \beta , \Delta])\).
 
-\noindent Se uno stato \(P\) contiene un item nella forma \([A \to \alpha \cdot Y \beta, \Delta]\) allora esiste una transizione da \(P\) ad uno stato \(Q\) che contiene l'item \([A \to \alpha Y \cdot \beta , \Delta]\); inoltre, siccome \(Q\) contiene \([A \to \alpha Y \cdot \beta , \Delta]\), esso contiene anche tutti gli item in \(closure_1([A \to \alpha Y \cdot \beta , \Delta])\).
-
+\paragraph{Algoritmo}
 Proviamo ora a chiarire tale procedura tramite la sua scrittura in forma algoritmica, si veda \ref{alg:lr1-automata}.
 
 % \begin{figure}
@@ -189,6 +192,7 @@ Proviamo ora a chiarire tale procedura tramite la sua scrittura in forma algorit
 %     \label{alg:construct-lr1-automata}
 % \end{figure}
 \subimport{assets/pseudocode/}{lr1-automata.tex}
+\subsubsection{Esempio di costruzione}
 Indovinate un po' con quale grammatica stiamo per andare a osservare cosa si ottiene con questa procedura? Oh sì! proprio lei:
 \begin{align}
     \label{eq:ex3-slr1-grammarrrrrr-again-and-again}
@@ -196,7 +200,7 @@ Indovinate un po' con quale grammatica stiamo per andare a osservare cosa si ott
     A &\to c \nonumber \\ \notag
     B &\to c \notag
 \end{align}
-Ora chiederemo al lettore di fare uno sforzo mnemonico poderoso e di ricordare che in passato, quando abbiamo provato a costruire l'automa caratteristico di tipo SLR per questa grammatica ci siamo trovati ad avere la situazione rappresentata in figura \ref{fig:lr0-automata_conflict}, che riprtiamo qui sotto per comodità.
+Ora chiederemo al lettore di fare uno sforzo mnemonico poderoso e di ricordare che in passato, quando abbiamo provato a costruire l'automa caratteristico SLR(1) per questa grammatica ci siamo trovati ad avere la situazione rappresentata in figura \ref{fig:lr0-automata_conflict}, che riprtiamo qui sotto per comodità.
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{automa_conflict_LR.tex}
@@ -212,15 +216,15 @@ Abbiamo già calcolato quali sono gli stati LR(1) per la grammatica in questione
 \end{figure}
 Ma siamo sicuri di aver effettivamente risolto il problema? per verificarlo dobbiamo costruire la parsing table!
 
-La costruzione della parsing table per il parsing di tipo LR(1) è semplice da ottenere perché si crea esattamente come la parsing table per l'SLR parsing con queste uniche due differenze:
+\paragraph{}
+Nonostante qui la prenderemo come magia nera per non spostare il focus dalla costruzione dell'automa in sé, possiamo anticipare che la costruzione della tabella di parsing LR(1) è semplice da ottenere, perché si crea esattamente come la sua corrispondente SLR(1), con queste uniche due differenze:
 \begin{itemize}
     \item l'automa caratteristico è di tipo LR(1);
     \item la lookahead function utilizzata è la seguente: per ogni \([A \to \beta \cdot , \Delta] \in P\), \(\mathcal{LA}(P, A \to \beta ) = \Delta\).
 \end{itemize}
-Naturalmente una grammatica \(\mathcal{G}\) è di tipo LR(1) se la sua tabella di parsing LR(1) non presenta conflitti.
+Naturalmente una grammatica \(\mathcal{G}\) è di tipo LR(1) se la sua tabella di parsing LR(1) non presenta conflitti. Sbirciamo quindi cosa sarebbe successo costruendo la parsing table LR(1) per la nostra grammatica preferita.
 
-Sbirciamo quindi cosa sarebbe successo costruendo la parsing table LR(1) per la nostra grammatica preferita.
-
+\paragraph{}
 Innanzitutto, l'automa caratteristico LR(1) si presenta come in Fig.\ref{fig:lr1_automata-complete}
 \begin{figure}[H]
     \centering
@@ -252,10 +256,9 @@ Festa! Festa! non ci sono più conflitti!
 È però notevole il fatto che il numero di stati sia aumentato parecchio: questo è quello che succede quando si va ad utilizzare tecniche di parsing più precise e raffinate.
 
 \section{Costruzione di una tabella di parsing LR(1)}
-\subsection{Esercizi: costruzione di parsing table LR(1)}
-Mettiamoci ora di buona lena ad esercitarci con la costruzione di tabelle di parsing di tipo LR(1).
+Chi avesse seguito con sufficiente costanza e attenzione a questo punto dovrebbe sapere che non ci sarà alcuna nuova informazione in questa sezione, perché la procedura di costruzione della tabella di parsing è la medesima per tutte le tipologie di parsing bottom-up. Di conseguenza, se qualcuno avesse bisogno di una rinfrescata, suggeriamo di tornare al capitolo precedente prima di proseguire; per tutti gli altri, rimbocchiamoci le maniche e andiamo a mettere le mani in pasta su queste tabelle di parsing.  
 
-\subsubsection{Esercizio 1}
+\subsection*{Esercizio 1}
 La prima grammatica che andiamo ad analizzare è la seguente:
 \begin{align}
     \label{gr:pointers-grammar}
@@ -263,92 +266,67 @@ La prima grammatica che andiamo ad analizzare è la seguente:
     L &\to *R \mid id \nonumber \\ \notag
     R &\to L \notag
 \end{align}
-Questa è una grammatica che ci parla di puntatori, ma capiremo in seguito cos significa ciò, per ora concentriamoci sulla sua risoluzione.
+Questa è una grammatica che ci parla di puntatori, ma capiremo in seguito cosa significa ciò, per ora concentriamoci sulla sua risoluzione. 
 
-È il momento di campiare Pokémon, vai DaPips, scelgo te!
-
-
-\section{SPOILER: TUTTO QUELLO CHE SEGUE È UNA LEZIONE NON SCRITTA}
-
-Ripartiamo dalla risoluzione dell'esercizio di ieri.
-Avevamo già osservato tutti gli stati da 0 a 5, riportiamoli qui:
+\paragraph{Definizione stati e costruzione dell'automa}
+Il primo passo, naturalmente, è la costruzione dell'automa caratteristico. Per fare questo è necessario prima definire come sono fatti gli stati del nostro automa, ossia quali LR(1)-items comprenderanno; per fare questo, sappiamo che abbiamo la nostra fida \(closure_1()\).
 \begin{figure}[H]
     \centering
     \includegraphics[width=.8\textwidth]{send_help_1.png}
     \caption{help}
 \end{figure}
-Descrizione degli stati?
-Lo stato 7:
-Il kernel dello stato 7 non presenta possibilità di chiusura, ma conterrà riduzione, passiamo oltre.
+% Descrizione degli stati? Lo stato 7: Il kernel dello stato 7 non presenta possibilità di chiusura, ma conterrà riduzione, passiamo oltre.
 \begin{figure}[H]
     \centering
     \includegraphics[width=.8\textwidth]{send_help_2.png}
     \caption{help}
 \end{figure}
-Per tutti gli stati 8,9 e 10 non ci sono chiusure ma si presentano riduzioni.
-Nello stato 11 il kernel permette di cercare una chiusura per R, la chiusura per R ci porta a R -> .L, {\$}
-che ci permette un'ulteriore chiusura, con conseguente inserimento di L->.*R,{\$} e L->.id,{\$}.
-Passiamo allo stato 12 ha un kernel che potrebbe sembrare uguale allo stato 5, ma il lookahead set è
-diverso… quindi lo stato 12 è diverso dal 5
-Aggiungiamo anche lo stato 13 per rappresentare la transizione \(\tau(11,R)\) ecc. ecc.
-Nota che la Quaglia non ha riportato tutti gli stati ed i relativi items.
-Questo è l'automa che ricaviamo:
+% Per tutti gli stati 8,9 e 10 non ci sono chiusure ma si presentano riduzioni. Nello stato 11 il kernel permette di cercare una chiusura per R, la chiusura per R ci porta a R -> .L, {\$} che ci permette un'ulteriore chiusura, con conseguente inserimento di L->.*R,{\$} e L->.id,{\$}. Passiamo allo stato 12 ha un kernel che potrebbe sembrare uguale allo stato 5, ma il lookahead set è diverso… quindi lo stato 12 è diverso dal 5 Aggiungiamo anche lo stato 13 per rappresentare la transizione \(\tau(11,R)\) ecc. ecc. Nota che la Quaglia non ha riportato tutti gli stati ed i relativi items. Questo è l'automa che ricaviamo:
+Ora che abbiamo gli stati non c'è più nulla di diverso rispetto a quello che facevamo prima, per cui possiamo terminare con la costruzione dell'automa caratteristico. Quest'ultimo (Fig.\ref{fig:pointers-automaton}) è alquanto complicato e pare una strana mappa del tesoro, ma ce l'aspettavamo: abbiamo già sottolineato come e perché gli automi LR(1) sono più complessi di un corrispondente SLR(1).
 \begin{figure}[H]
     \centering
 	\subimport{assets/figures/}{figures_9-7.tex}
-    \caption{help}
+    \caption{Automa caratteristico LR(1) per Eq.\ref{gr:pointers-grammar}}
+    \label{fig:pointers-automaton}
 \end{figure}
-Ora la domanda diventa: questa grammatica è LR(1)?
-Potremmo ripsondere cosruendo la tbella di parsing e controllando che non vi siano conflitti.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.8\textwidth]{send_help_4.png}
-    \caption{help}
-\end{figure}
-Oppure possiamo notare che i conflitti reduce-reduce non sono presenti, perché in nessuno stato
-sono presenti due riduzioni: in nessuno stato è presente più di un item che porta riduzione.
-Ma sono presenti conflitti shift reduce?
-Come si verifica questo?
-Si va a vedere tutti gli stati che presentano riduzioni (tutti quelli con il doppio cerchiolino
-nel'automa) e si verifica che non presentino mosse di shift (frecce uscenti).
-Gli stati 3,5,7,8, ecc. non presentano problemi perché non presentano shift.
-Mentre lo stato 2 potrebbe presentare problemi dato che presenta sia riduzione che shift, ma
-andando subito a verificare ci rendiamo conto che la riduzione viene applicata per \$ mentre lo shift
-viene applicato per =, quindi festa festa non ci sono conflitti, la grammatica è LR(1).
-Ora ci chiediamo invece se la grammatica è slr(1)?
-Ricordiamo che la risoluzione di tipo SLR(1) prevede di utilizzare l'automa LR(0) e di utilizzare come 
-lookahead function follow(B) ; in tal caso l'automa sarebbe stato il seguente:
+A questo punto potremmo chiederci: la grammatica Eq.\ref{gr:pointers-grammar} è effettivamente LR(1)? Non è che abbiamo fatto fatica per niente? Per rispondere, la prima cosa che ci viene in mente è costruire la tabella di parsing a partire dal nostro automa, ma possiamo essere più scaltri di così.
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.8\textwidth]{send_help_4.png}
+%     \caption{help}
+% \end{figure}
+\paragraph{La grammatica è LR(1)?}
+Infatti, possiamo fin da subito escludere la presenza di conflitti r/r (ossia reduce/reduce), perché nessuno stato del nostro automa presenza due reducing items.
+
+Anche per verificare la presenza di conflitti s/r (shift/reduce) abbiamo una furberia simile, anche se un po' meno veloce: dobbiamo accertarci che nessuno degli stati che contengono reducing items abbia contemporaneamente delle mosse di shift; detto in termini semplici, i cerchietti col doppio cerchiettino non devono avere una freccettina uscente. Una volta che abbiamo attivato la nostra vista di falco possiamo vedere che gli stati 3, 5, 7, 8, 9, 10, 12, 13 hanno tutti il doppio cerchiettino (reducing items) ma non hanno nessuna freccia uscente, il che ci farebbe festeggiare, se non fosse per quel dannato stato 2, colpevole di avere e il doppio cerchiettino, e la freccia uscente. È finita, quindi? Abbiamo davvero un conflitto? 
+
+No, fortunatamente: la riduzione, infatti, si applica solo quando il prossimo simbolo in lettura è \$, mentre invece lo shift viene applicato quando in lettura c'è =; non essendoci ulteriori possibilità di conflitto, possiamo felicemente asserire che la nostra grammatica è LR(1).
+
+\paragraph{La grammatica è SLR(1)?}
+Per rispondere a questa domanda è comunque conveniente costruirne il relativo automa caratteristico; per gli smemorati, ricordiamo che l'automa caratteristico SLR(1) si costruisce con stati di LR(0)-items e utilizzando come lookahead function l'insieme follow(\(P\)). Il risultato finale dovrebbe essere più o meno come Fig.\ref{fig:pointers-automaton-slr1}.
 \begin{figure}[H]
     \centering
 	\subimport{assets/figures/}{figures_9-9.tex}
-    \caption{help}
+    \caption{Automa caratteristico SLR(1) per Eq.\ref{gr:pointers-grammar}}
+    \label{fig:pointers-automaton-slr1}
 \end{figure}
-E si sarebbe verificato un problema per lo stato 2, dato che avrebbe presentato uno shift per = ma
-usando come lookahead function follow(B) avremmo inserito = anche come item valido per la
-riduzione, quindi nella casella [2, = ] della tabella di parsing SLR(1) avremmo avuto un conflitto shiftreduce.
-La grammatica quindi risulta essere LR(1) ma non SLR(1).
-A che cosa gioca questa grammatica?
+E purtroppo vediamo subito il problema: dal momento che la nostra lookahead function è follow(B), lo stato 2 presenta sia una mossa di shift verso =, sia una mostra di reduce. Pertanto, nella tabella avremo un conflitto nella cella [2, =], e tanto basta per permetterci di dire che la grammatica Eq.\ref{gr:pointers-grammar} non è SLR(1).
 
-Abbiamo già detto in passato come questa sia una grammatica che ci parla di puntatori, andiamo ora
-ad indagare più a fondo tale affermazione:
+\paragraph{La grammatica dei puntatori}
+Questo paragrafo al momento è vuoto perché a lezione il discorso è stato lasciato cadere magistralmente, ma forse poi ci torniamo sopra perché pare interessante.
+% Abbiamo già detto in passato come questa sia una grammatica che ci parla di puntatori, andiamo ora ad indagare più a fondo tale affermazione:
 
-L sta per left
-R sta per right
+% L sta per left
+% R sta per right
 
-Notiamo che il non-terminale S si presenta una sola volta per derivazione, ed essendo l'unico che
-genera = allora l'= può essere presente all'interno di una derivazione al massimo una volta.. Cosa
-sappiamo del resto?
+% Notiamo che il non-terminale S si presenta una sola volta per derivazione, ed essendo l'unico che genera = allora l'= può essere presente all'interno di una derivazione al massimo una volta.. Cosa sappiamo del resto? Che linguaggio possiamo ricavare da tale grammatica? % {( (*)^n id ) = ( (*)^k id ), n,k>=0} U {(*)^n id, n>=0} forse Continueremo questo discorso? Mah
 
-Che linguaggio possiamo ricavare da tale grammatica?
-% {( (*)^n id ) = ( (*)^k id ), n,k>=0} U {(*)^n id, n>=0} forse
-Continueremo questo discorso? Mah
-
-Qui nel frattempo discutiamo di come in 5 si presenti una riduzione per id
 \begin{figure}[H]
     \centering
 	\subimport{assets/figures/}{figures_9-10.tex}
     \caption{help}
 \end{figure}
+Qui nel frattempo discutiamo di come in 5 si presenti una riduzione per id
 Dato che lo stato 5 contiene l'elemento di riduzione
 Voglio arrivare in 2, voglio capire come faccio ad arrivare in 2 e voglio capire perché qui ci sia un
 conflitto.
@@ -444,8 +422,6 @@ Ora che ho l'automa LRm(1) costruisco la tabella di parsing LALR in questo modo:
 - Le riduzioni le decido utilizzando come lookahead function l'unione dei \(\Delta\) degli item-LR(1)
 degli stati (se uno stato è merged vado a vedere tutti i singoli Delta degli stati che ho mergiato) - Ora che ho l'automa LRm(1) costruisco la tabella di parsing LALR in questo modo:
 
-%IN QUALCHE MODO STE PARTI SI DEVONO COLLEGARE IDKH
-
 \subsubsection{Caso di studio parsing LR(1)}
 
 Prendiamo ancora una volta in considerazione la seguente grammatica:
@@ -473,11 +449,11 @@ Il parsing di tipo SLR(1) non riconosce dunque la differenza fra lo stato 2 e lo
 
 Il problema nel caso del parsing SLR(1) è che andiamo a piazzare un'operazione di reduce per tutti i follow dei driver mentre in quello di tipo LR(1) lo si fa per sottoinsiemi dei follow dei driver.
 
-\section{Parsing LRm(1)}
+\section{Il parsing LRm(1)}
 
 Nonostante il parsing di tipo LR(1) sia il più completo è possibile che l'automa caratteristico risultante contenga delle ridondanze: nell'esempio precedente vi sono infatti delle sottostrutture che sono isomorfe e ciò deriva dal fatto che, visto che le transizioni dipendono sempre dalla prima componente (i.e. item LR(0)), è possibile notare che le ridondanze si verificano nel caso in cui gli stati abbiano la stessa proiezione LR(0).
 
-\subsection{Automi LRm(1)}
+\subsection{L'Automa caratteristico LRm(1)}
 
 L'automa LRm(1) \(\mathcal{AM}\) è costruito a partire dall'automa LR(1) \(\mathcal{A}\) (la lettera m sta per \emph{merged}).
 
@@ -491,7 +467,7 @@ Cosa facciamo per le transizioni? Nell'automa LR(1) abbiamo un'unica transizione
 
 Eseguendo l'operazione descritta la dimensione (i.e. il numero di stati) dell'automa LRm(1) così generato è sicuramente uguale a quella dell'automa LR(0): andando a combinare stati con con gli stessi item LR(0) ci ritroveremo con lo stesso numero di stati dell'automa LR(0) e con lo stesse transizioni. 
 
-\section{Parsing Table LALR(1)}
+\subsection{Costruzionoe di una tabella di parsing LALR(1)}
 
 Le parsing table LALR(1) sono ottenute prendendo:
 
@@ -506,7 +482,7 @@ La grammatica \(\G\) è LALR(1) se e solo se la sua tabella di parsing LALR(1) n
 
 Il vantaggio della grammatica LALR(1) è di essere più potente (i.e. espressiva) della grammatica SLR(1) pur rimanendo con delle dimensioni contenute rispetto alla LR(1). 
 
-\subsection{Esercizio parsing LALR(1) - c'è sì ma in realtà no perchè è LR(1)}
+\subsection*{Esercizio parsing LALR(1) - c'è sì ma in realtà no perchè è LR(1)}
 \begin{align*}
     S &\to AaB \mid b \\
     A &\to BcBaA \mid \epsilon \\
@@ -624,7 +600,7 @@ Visto che non è possibile unire nessuno degli stati dell'automa LR(1), l'automa
 \end{table}
 
 
-\section{Calcolo dell'LRm(1) automa tramite l'automa simbolico}
+\subsection{L'automa simbolico}
 La classe di grammatiche LALR contiene le grammatiche più interessanti per i linguaggi di programmazione.
 Abbiamo visto come la modalità più semplice per ottenere le tabelle di parsing LALR è quella di creare in primis un'automa LR(1) e poi tradurlo in LRm(1).
 
@@ -640,7 +616,7 @@ Sostanzialmente questi item sono del tutto assimilabili agli item LR(1), con l'u
 
 Mentre creaimo l'automa simbolico ci memorizziamo in una tabella delle equazioni che ci serviranno alla fine per tradurre i lookahead set simbolici in lookahead effettivi. Come è ormai consuetudine il modo più semplice per spiegare questo procedimento è applicarlo direttamente ad un esempio.
 
-\subsection{Esempio di costruzione dell'automa simbolico}
+\subsection*{Esempio di costruzione dell'automa simbolico}
 Andiamo a costruire l'automa simbolico per la nostra cara grammatica
 \begin{align*}
     S &\to L = R \mid R \\
@@ -1155,8 +1131,6 @@ Andiamo quindi, per curiosità, ad analizzare gli stati in cui sono presenti le 
 \end{itemize}
 Notimao quindi che non si presentano conflitti, quindi la grammatica è di tipo LALR.
 
-
-\section{Algoritmo Shift/Reduce}
 % \section{Un primo esempio di applicazione}
 % \subsection{Mosse di shift e reduce}
 % Andiamo a introdurre l'algoritmo che utilizzeremo per verificare se una certa parola appartenga o meno al linguaggio denotato da una certa grammatica, rappresentata dal suo automa caratteristico; questo è detto algoritmo di shift/reduce, dal nome delle due mosse che andremo a utilizzare. Come prima cosa, prendiamo familiriatà con le due pile che utilizzeremo nella procedura:
