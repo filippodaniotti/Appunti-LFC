@@ -14,13 +14,13 @@
     \begin{tikzpicture}
         \node[state] (0) {0};
         \node[state, fill=green, right of=0] (1) {1};
-        \node[state, accepting, below right of=0] (2) {2};
+        \node[state, accepting, right of=4] (2) {2};
         \node[state, accepting, left of=0] (3) {3};
         \node[state, below of=0] (4) {4};
-        \node[state, accepting, below left of=4] (7) {7};
-        \node[state, accepting, left of=7] (5) {5};
+        \node[state, accepting, left of=8] (7) {7};
+        \node[state, accepting, above left of=7] (5) {5};
         \node[state, accepting, below of=4] (8) {8};
-        \node[state, below right of=8] (6) {6};
+        \node[state, right of=8] (6) {6};
         \node[state, accepting, below right of=6] (9) {9};
         \draw (0) edge[above] node{S} (1)
         (0) edge[above right] node{L} (2)
@@ -33,7 +33,7 @@
         (4) edge[below right] node{R} (7)
         (4) edge[below left] node{L} (8)
         (6) edge[above right] node{*} (4)
-        (6) edge[below left, bend left=10] node{id} (5)
+        (6) edge[below left, bend left=80] node{id} (5)
         (6) edge[below left] node{L} (8)
         (6) edge[above right] node{R} (9)
         ;
