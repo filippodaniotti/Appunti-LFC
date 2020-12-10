@@ -542,57 +542,68 @@ Se vogliamo fare il parsing della parola \(digit+digit\) otteniamo i seguenti al
 \begin{figure}[H]
     \centering
     \includegraphics[width=.8\textwidth]{ast-first-example.png}
-    \caption{Sulla sinistra AST, sulla destra albero di derivazione della parola \(digit+digit\)}
+    \caption{Due alberi per la parola \(digit+digit\): sulla sinistra albero di sintassi astratta, sulla destra albero di derivazione}
     \label{fig:ast-first-example}
 \end{figure}
 Si noti come l'albero della sintassi astratta a sinistra sia molto più compatto.
 
-Ora affrontiamo invece la questione di come un AST venga salvato in memoria: di fatto questa struttura va a creare un grafo in cui ogni nodo rappresenta un valore intermedio del calcolo rappresentato dalla parola che stiamo analizzando. Il grafo (sì, lo chiamiamo tree ma può essere un grafo) ottenuto dalla semplificazione dell'albero di derivazione viene quindi salvato nodo per nodo nel seguente modo:
+Affrontiamo la questione di come un AST venga salvato in memoria: di fatto questa struttura va a creare un albero in cui ogni nodo rappresenta un passaggio intermedio del processo descritto dalla parola che stiamo analizzando. L'AST ottenuto dalla semplificazione dell'albero di derivazione viene quindi salvato nodo per nodo nel seguente modo:
 \begin{itemize}
     \item le foglie vengono salvate come link a record nella tabella dei simboli, di fatto creeremo una foglia per ogni identificatore ed ogni valore diretto (es.: valore numerico) presente nella parola che stiamo parsando;
-    \item i nodi intermedi del grafo vengono salvati come struttura topologica dell'albero (da chiarire?) e rappresentano tutte le operazioni compiute tra variabili o valori diretti (quindi tutte le operazioni tra foglie).
+    \item i nodi intermedi dell'albero costituiscono la struttura topologica dell'albero e rappresentano tutte le operazioni compiute tra variabili o valori diretti (quindi tutte le operazioni tra foglie).
 \end{itemize}
 
 \subsection{Creazione di un AST}
-L'AST si può creare naturalmente dopo aver ottenuto l'albero di derivazione tramite delle operazoni di compattazione, tuttavia il nostro obiettive è quello di calcolare l'AST direttamente durante la fase di parsing, ovvero direttamente durante la fase di analisi sintattica.
+L'AST si può creare semplicemente dopo aver ottenuto l'albero di derivazione tramite delle operazoni di compattazione, tuttavia il nostro obiettivo è quello di calcolare l'AST direttamente durante la fase di parsing, ovvero contemporaneamente all'analisi sintattica.
 Per fare questo dobbiamo immaginare di avere a disposizione due funzioni:
 \begin{itemize}
-    \item \texttt{newLeaf(label, val)} va a salvare un nodo foglia con due campi: l'etichetta ed il valore;
-    \item \texttt{newNode(label, c1, ..., ck)} crea un nodo con \(k\) figli, l'etichetta è \texttt{label} mentre \texttt{c1, ..., ck} sono le referenze ai nodi figli;
+    \item \texttt{newLeaf(label, val)} che va a salvare un nodo foglia con due campi: l'etichetta ed il valore;
+    \item \texttt{newNode(label, c1, ..., ck)} che crea un nodo con \(k\) figli, l'etichetta è \texttt{label} mentre \texttt{c1, ..., ck} sono i riferimenti ai nodi figli;
 \end{itemize}
 Applicando queste due funzioni all'esempio precedente (Fig.\ref{fig:ast-first-example}) avremo il nodo \(+\) che avrà come etichetta \(+\) e come figli i due nodi \(digit\).
 I nodi \(digit\) saranno nodi foglia con identificatore e valore relativo (il valore è quello che ci viene ritornato dall'analisi lessicale, quindi lo possiamo ricavare con \(digit.lexval\)).\\
 
 \noindent Per creare l'albero di sintssi astratta durante la fase di parsing dobbiamo definire delle regole semantiche (dette anche funzioni di attribuzione) che ci indichino quando e come istanziare un nodo per l'AST durante il parsing.
-Data la grammatica LALR per operazioni algebriche di somma e sottrazione 
+
+\noindent Vediamo un esempio: data la grammatica LALR per operazioni algebriche di somma e sottrazione 
 \begin{align}
     \label{gr:LALR-plus-minus-grammar}
     E &\to E+T \mid E-T \mid T \\  
-    T &\to (E) \mid id \mid num \notag \nonumber \\  
+    T &\to (E) \mid id \mid num \notag \nonumber
 \end{align}
 abbiamo che le regole (le funzioni di attribuzione) per la creazione dell'AST durante il parsing sono le seguenti
-\begin{align*}
-    E &\to E_1+T & & \{E.node = newNode('+', E_1.node, T.node)\} \\
-    ecc.
-\end{align*}
+\begin{align}
+    \label{sdd:LALR-grammar}
+    E &\to E_1+T & & \{E.node = newNode(\textrm{'}+\textrm{'}, E_1.node, T.node)\} \\
+    E &\to E_1-T & & \{E.node = newNode(\textrm{'}-\textrm{'}, E_1.node, T.node)\} \notag \nonumber \\
+    E &\to T & & \{E.node = T.node\} \notag \nonumber \\
+    T &\to (E) & & \{T.node = E.node\} \notag \nonumber \\
+    T &\to id & & \{T.node = newLeaf(id, id.entry)\} \notag \nonumber \\
+    T &\to num & & \{T.node = newLeaf(num, num.lexval)\} \notag \nonumber
+\end{align}
+Nota che i pedici numerici usati in alcune produzioni sono usati solo per differenziare il body dal driver, non hanno nessuna valenza semantica, di fatto \(E_1\) ed \(E\) sono lo stesso non-terminale.
+
 Analizziamo velocemente le regole più significative.
-\(newLeaf(num, num.lexval)\) va a prendere il valore di num che ci è dato dall'analisi lessicale; in modo simile \(newLeaf(id, id.entry)\) ava acreare un nodo foglia in cui abiamo come etichetta l'identificatore mentre il valore del nodo si troverà all'interno della tabella dei simboli compilata in fase di analisi lessicale.
+\(newLeaf(num, num.lexval)\) va a prendere il valore di num che ci è dato dall'analisi lessicale; in modo simile \(newLeaf(id, id.entry)\) va acreare un nodo foglia in cui abiamo come etichetta l'identificatore mentre il valore del nodo si troverà all'interno della tabella dei simboli compilata in fase di analisi lessicale.
 
 Per le altre regole il significato, abbastanza intuitivo, è quello della creazine di un nodo intermedio che mantiene come informazioni l'etichetta dell'operazione da compiere e i riferimenti ai nodi degli operandi necessari.
 
 \subsubsection{Esempio di creazione di un AST}
-Ora che abbiamo le regole da applicare per cocstruire un alber di sintassi astratta, andiamo a costruire un AST per la parola \(id-num+id\) rispetto alla grammatica appena vista (\ref{gr:LALR-plus-minus-grammar}), immaginando che la parola \(id-num+id\) sia riavata dall'analisi lessicale di \(a-4+c\).
+Ora che abbiamo le regole da applicare per cocstruire un albero di sintassi astratta, andiamo a costruirne uno per la parola \(id-num+id\) derivata dalla grammatica appena vista (\ref{gr:LALR-plus-minus-grammar}), immaginando che la parola \(id-num+id\) sia arrivata dall'analisi lessicale di \(a-4+c\).
 
 \noindent Innanzitutto dobbiamo arrivare alla fase del parsing, quindi ci dobbiamo procurare la tabella di parsing.
 
-\noindent O almeno questo ci saremmo aspettati da un esercizio normale, ma invece no! La nostra guida spirituale a questo punto ci fa notare che abbiamo imparato a fare le tabelle di parsing per imparare a non farle più: dato che questa grammatica è SLR oltre che LALR e ci interessano solo le caselle in cui andremmo a piazzare riduzioni all'interno della tabella, possiamo calcolare anche solo una parte della tabella di parsing SLR.  
-Quello a cui siamo interessati è inserire le riduzioni nelle caselle dove compaiono i simboli che stanno nel follow del driver delle produzioni e poi sfruttare effettivamente solo quelle caselle della tabella.
+\noindent O almeno questo ci saremmo aspettati da un esercizio normale, ma invece no! La nostra guida spirituale a questo punto ci fa notare che abbiamo imparato a fare le tabelle di parsing per imparare a non farle più: dato che questa grammatica è SLR oltre che LALR e ci interessano solo le caselle in cui andremmo a piazzare riduzioni all'interno della tabella, ci basta calcolare una parte della tabella di parsing SLR.
 
-Questo metodo Quaglieo è ancora al vaglio degli studiosi, tuttavia sembra plausibile che la spiegazione sia la seguente: dato che le regole per la costruzione dell'AST riguardano solo i punti in cui si applicano le riduzioni a noi interessa solo capire quali riduzioni sono applicate ed in quale ordine.
+Quello a cui siamo interessati è solo capire per quali simboli si utilizzano quali riduzioni, quindi siamo interessati solo alle caselle della tabella in cui si vanno ad inserire le mosse di reduce.
 
-Di fatto tutto il parsing in realtà è effettuato proprio per calcolare quali riduzioni sono applicate ed in quale ordine, dei passaggi intermedi nei vari nodi senza riduzioni non ce ne può proprio fregar di meno; quindi possiamo applicare la strategia dell'ignorare tutte le caselle della tabella di parsing che non contengono mosse di riduzione.
+Questo metodo Quaglieo è ancora al vaglio degli studiosi, tuttavia sembra plausibile che la spiegazione sia la seguente: dato che le regole per la costruzione dell'AST riguardano solo le riduzioni applicate per parsare la parola, a noi interessa solo capire quali riduzioni sono applicate ed in quale ordine.
 
-Comunque, tornando a noi e saltando qualche passaggio (che forse verrà inserito in seguito, dipende da quanto verranno pagati ed onorati gli scrittori della dispensa), la sequenza di riduzioni che si ottiene dal parsing della parola \(id-num+id\) è la seguente:
+Di fatto tutto il parsing in realtà è effettuato proprio per calcolare quali riduzioni sono applicate ed in quale ordine: dei passaggi intermedi nei vari stati senza riduzioni non ce ne può proprio fregar di meno; quindi possiamo applicare la strategia dell'ignorare tutte le caselle della tabella di parsing che non contengono mosse di riduzione.
+
+... inserire qui eventuale tabella di parsing anche se non ci serve ... inserire qui parsing della parola anche se Lady Quail non l'ha fatto (cioè, l'ha fatto ma a mente)...
+
+Comunque, tornando a noi e saltando qualche passaggio (che forse verrà inserito in seguito, dipende da quanto verranno pagati e riveriti gli scrittori della dispensa), la sequenza di riduzioni che si ottiene dal parsing della parola \(id-num+id\) è la seguente:
 \begin{align*}
     T &\to id \\
     E &\to T \\
@@ -601,7 +612,7 @@ Comunque, tornando a noi e saltando qualche passaggio (che forse verrà inserito
     T &\to id \\
     E &\to E+T
 \end{align*}
-Si invita il lettore a fermarsi un attimo e rileggere queste riduzioni per convincersi che siano esattamente le reiduzioni che si ottengono dal parsing bottom-up della parola data; si faccia attenzione all'ordine in cui si incontrano le riduzioni, questo è proprio l'ordine che ci si aspetta dalla procedura bottom-up, ovvero l'ordine inverso della procedura che dallo start symbol ci porta alla parola desiderata.
+Si invita il lettore a fermarsi un attimo e rileggere queste riduzioni per convincersi che siano esattamente le riduzioni che si ottengono dal parsing bottom-up della parola data; si faccia attenzione all'ordine in cui si incontrano le riduzioni, questo è proprio l'ordine che ci si aspetta dalla procedura bottom-up, ovvero l'ordine inverso della procedura che dallo start symbol ci porta alla parola desiderata.
 
 Vediamo ora come viene creato in memoria l'Abstract Syntax Tree mentre stiamo svolgendo il parsing della stringa.
 Ogni volta che incontriamo un riduzione andiamo ad aggiungere un nodo all'AST che stiamo creando. Quale forma avrà questo nodo ci è dato dalle funzioni di attribuzione dei nodi dell'AST; queste funzioni di attribuzione vengono chiamate qualche volta azioni semantiche.
@@ -645,22 +656,47 @@ Osserviamo quindi quale forma viene ad ottenere l'abero di sintassi astratta del
     \end{figure} 
 \end{enumerate}
 
-\subsubsection{Riassumendo}
-Il goal che ci siamo fissati all'inizio di questo esercizio era di costruire \emph{on the fly} l'albero di sintassi astratta duante la fase di parsing per la parola \(id-num+id\) derivata grammatica LALR per le espressioni aritmetiche (\ref{gr:LALR-plus-minus-grammar}).
+\paragraph{Riassumendo} Il goal che ci siamo fissati all'inizio di questo esercizio era di costruire \emph{on the fly} l'albero di sintassi astratta duante la fase di parsing per la parola \(id-num+id\) derivata grammatica LALR per le espressioni aritmetiche (\ref{gr:LALR-plus-minus-grammar}).
 
-\noindent Abbiamo utilizzato uno delle funzioni di attribuzione semantica che prevedono di utilizzare i seguenti attributi sintetizzati per le riduzioni con non-terminali nel body:
+\noindent Abbiamo utilizzato delle funzioni di attribuzione semantica che prevedono di inserire i seguenti attributi sintetizzati per le riduzioni con non-terminali nel body:
 \begin{itemize}
-    \item[E-node] per le riduzioni con driver E;
-    \item[T-node] per le riduzioni con driver T.
+    \item[\textbf{E-node}] per le riduzioni con driver E;
+    \item[\textbf{T-node}] per le riduzioni con driver T.
 \end{itemize}
 Per quanto riguarda le riduzioni con soli terminali nel body (che generano le foglie) abbiamo utilizzato questi attributi sintetizzati:
 \begin{itemize}
-    \item[Id.entry] per le variabili;
-    \item[Num.lexval] per i valori numerici.
+    \item[\textbf{Id.entry}] per le variabili;
+    \item[\textbf{Num.lexval}] per i valori numerici.
 \end{itemize}
 
-Abbiamo visto quindi che si può ricavare l'AST mentre si esegue shift-reduce.
-L'albero di sintassi astratta in questo caso è stato costruito su una grammatica LALR con un SDD con tutti attributi sintetizzati, è questo che ci ha permesso di costruire l'albero di sintassi astratta mentre costruivamo l'albero di parsing.
+Abbiamo visto quindi che si può ricavare l'AST mentre si esegue il nostro caro parsing bottom-up.
+Ma non è sempre così, l'albero di sintassi astratta in questo caso è stato costruito su una grammatica LALR con un SDD con tutti attributi sintetizzati (vedi \ref{sdd:LALR-grammar}, non ci sono attributi ereditati), è questo che ci ha permesso di costruire l'AST mentre costruivamo l'albero di parsing.
+
+Sottolineamo questo aspetto per dire che nel caso in cui abbiamo un SDD l-attribuito non è detto che si possa compiere la costruzione dell'AST mentre si fa il parsing. Per aver ragion di ciò presentiamo subito un esempio in cui compaiono appunto attributi ereditati.
+
+\subsection{Esempio di creazione di un AST ma con attributi ereditati}
+L'esercizio in questo caso ci richiede di calcolare gli attributi per definire le funzioni di attribuzione per le produzioni della grammatica così definita:
+\begin{align}
+    \label{sdd:ex-2-AST}
+    E &\to TE' & & \{...\} \\ 
+    E'&\to +TE_1' & & \{...\} \notag \nonumber \\ 
+    E'&\to -TE_1' & & \{...\} \notag \nonumber \\ 
+    E'&\to \varepsilon & & \{...\} \notag \nonumber \\ 
+    T &\to (E) & & \{...\} \notag \nonumber \\ 
+    T &\to id & & \{...\} \notag \nonumber \\ 
+    T &\to num & & \{...\} \notag \nonumber
+\end{align}
+In questo caso dobbiamo chiamare in causa gli attributi ereditati, e la motivazione è presto detta.
+Per visualizzare la situazione possiamo andare a ri-vedere l'SDD che abbiamo costruito per le operazioni \(+\) e \(*\) drante le prime lezioni dell'analisi semantica (Fig.\ref{fig:second-ex-parse-tree-part}).
+In quel caso i valori sintetizzati in sottoalberi fratelli devono essere utilizzati da altri sottoalberi fratelli per ricavare il loro proprio valore, per esser chiari riportiamo qui la figura.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part.jpg}
+    \caption{Pezzo del grafo delle dipendenze di \(3*5\)}
+\end{figure}
+Osservando quest'immagine è esemplice notare che per risolvere il valore di \(T'\) abbiamo bisogno dei valori nel sottoalbero di \(T'\) ma anche del valore di \(F\) che è fratello sinistro di \(T'\), quindi abbiamo bisogno di introdurre attributi ereditati.
+Lo stesso avviene per la grammatica che stiamo considerando ora, quella per gli operatori \(+\) e \(-\) di cui dobbiamo completare l'SDD (\ref{sdd:ex-2-AST}).
+
 
 \section{Vai Alghisius, parti pure da qui}
 
