@@ -1,0 +1,23 @@
+Cose da sistemare
+Capitolo 1:
+    Non sono sicuro della figura 1.3
+Capitolo 2:
+    Concetto di elementi della base poco chiaro in V*
+    Figura 2.1, chiarire che si tratta di uno dei possibili alberi di derivazione per quella grammatica
+    Magari spiegare che (n+n)*n e n+(n*n)
+    sayonara
+Capitolo 3:
+    3.1
+    Grazie SAM da togliere e sostituire con la dim
+    3.3
+    pulizia etnica da rimuovere
+    epurare  ? magari una parola più bella
+    3.4
+    Figura senza riferimenti o annotazioni, senza nome.
+    3.4.2
+    ES1 ES2 da sistemare (mia colpa...)
+    3.5
+    Prova col pumping lemma, maybe
+Capitolo 4:
+
+etc 
