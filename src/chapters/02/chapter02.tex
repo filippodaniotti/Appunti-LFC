@@ -36,7 +36,7 @@ Il linguaggio di una grammatica è l’insieme di stringhe composte solo da term
 
 \subsection{Derivare il linguaggio di una grammatica generativa}
 Per derivare un linguaggio dalla grammatica generativa dobbiamo applicare (quante volte possiamo) tutte le regole di riscrittura che appartengono alla grammatica stessa.\\
-Ogni riscrittura è chiamata derivation step (simbolo \(\implies\), diverso dal simbolo usato nelle produzioni \(\to\)).
+Ogni riscrittura è chiamata derivation step (denotato dal simbolo \(\implies\), diverso dal simbolo usato nelle produzioni \(\to\)).
 L’operazione di derivazione serve per tradurre stringhe con caratteri non terminali in stringhe composte solo da caratteri terminali (seguendo le regole dettate dalle produzioni).
 
 
@@ -182,28 +182,28 @@ Una volta definiti i componenti di una grammatica generativa, definiamo le conve
     \item Lettere maiuscole alla fine dell’alfabeto (\(X\), \(Y\), \(Z\)…) un generico simbolo del vocabolario, terminale o meno, non si sa (\(\in V\)).
     \item Lettere minuscole inizio alfabeto (\(a\), \(b\)…) per indicare caratteri terminali (\(\in T\)).
     \item Lettere minuscole greche per indicare stringhe che possono essere composte da terminali o non terminali \(\in V^*\), dove \(^*\) significa che possono esserci zero o più ripetizioni di elementi nella base.
-    \item Lettere minuscole in fondo all’alfabeto con pedice numerico (\(w\), \(w_0\)…) per indicare stringhe di caratteri terminali
+    \item Lettere minuscole in fondo all’alfabeto con pedice numerico (\(w\), \(w_0\)…) per indicare stringhe di caratteri terminali. Altrimenti dette \(words\) o parole del linguaggio. 
 \end{itemize}
 Definiamo ora formalmente l'oggetto produzione, esso è una traduzione in questa forma:
 \begin{equation}
     \delta \to \beta
 \end{equation}
 Dove \(\delta \in V^+\), \(\delta\) contiene almeno un non terminale (non traduciamo terminali in altri terminali); il \(^+\) significa che c’è una o più ripetizioni di elementi nella base, che quindi non è vuota (\(\varepsilon\)).\\
-\(\delta\) è detto \textbf{driver} della produzione mentre \(\beta\) è detto \textbf{corpo} della produzione.
+\(\delta\) è detto \textbf{driver} della produzione mentre \(\beta\) è detto \textbf{body} della produzione.
 
 Il linguaggio generato da una grammatica \(\mathcal{G} = (V,T,S,\mathcal{P})\) è così definito:
 \begin{equation}
-    \mathcal{L}(\mathcal{G}) = {w \mid w \in T^* and \; S \implies^* \; w }
+    \mathcal{L}(\mathcal{G}) = \{w \mid w \in T^* and \; S \implies^*\;  w\}
 \end{equation}
-Ovvero l'insieme di tutti gli elementi (anche vuoti) che si possono derivare con uno o più passi dallo starting point.
+dove \( \implies^*\) è il simbolo utilizzato per indicare una sequenza di derivazioni successive compatibili secondo le produzioni ( anche nessuna ). In altre parole il linguaggio generato è l'insieme di tutti gli elementi (anche vuoti) che si possono derivare con uno o più passi dallo starting point. 
 
 \subsection{Tipi di grammatiche generative}
 Esiste una gerarchia delle grammatiche, che non dipende dal genere di analisi che permettono di fare, ma dipende solo dalla struttura delle loro produzioni.
 
-Si parla di Context-free grammars, o free grammars, quando tutte le produzioni sono in forma \(A \to \beta\), ovvero che hanno driver composti \emph{solo} da non terminali.
+Si parla di Context-free grammars, o free grammars, quando tutte le produzioni sono in forma \(A \to \beta\), ovvero che hanno driver composti \emph{esclusivamente} da non terminali.
 
 Queste grammatiche sono molto importanti perché praticamente tutti i linguaggi di programmazione sono derivati da questo tipo di grammatica.
-Si dice di un linguaggio che è context-free se esiste una grammatica libera che genera quello steso linguaggio.
+Si dice di un linguaggio che è context-free se esiste una grammatica libera che genera quello stesso linguaggio.
 \(\mathcal{L}\) è un linguaggio libero se e solo se esiste una grammatica libera \(\mathcal{G}\) tale che \(\mathcal{L}=\mathcal{L}(\mathcal{G})\).
 
 L’operazione di analizzare una stringa e verificare se appartiene ad una determinata grammatica dipende naturalmente dal metodo con cui si decide di applicare la derivazione dallo starting point della grammatica stessa.
@@ -214,7 +214,7 @@ Esistono due tipi di derivazione canonica:
     \item Rightmost (si rimpiazzano sempre prima i non terminali più a destra)
     \item Leftmost (si rimpiazzano sempre prima i non terminali più a sinistra)
 \end{itemize}
-Se utilizziamo come strategia una di queste due tutti i passi analitici di una derivazione sono deterministici, perché ad ogni passo o procedo con l’elemento più a destra o procedo con quello più a sinistra. Per questo motivo queste sono le due modalità di derivazione canonica.
+Se utilizziamo come strategia una di queste due tutti i passi analitici di una derivazione sono deterministici, perché ad ogni passo o si procede con l’elemento più a destra o si procede con quello più a sinistra. Per questo motivo queste sono le due modalità di derivazione canonica.
 
 Le grammatiche libere si prestano in modo naturale ad essere processate tramite il cosiddetto albero di derivazione.
 Questo albero ha come radice lo starting point, poi, per ogni passo di derivazione secondo una produzione in forma \(A \to X_1 \mid X_2 \mid\dots\mid X_n \), si generano \(n\) figli del nodo con la derivazione di \(A\) messa in atto.
@@ -231,7 +231,7 @@ Le foglie dell’albero saranno composte da \(\varepsilon\) oppure da caratteri 
     \label{albero_di_derivazione}
 \end{figure}
 Ma tornando con i piedi per terra, cosa centra tutto questo con i compilatori?\\
-Un certo programma che è stato trasformato in una stringa viene verificato controllando che la tale stringa sia derivata dalla grammatica del linguaggio in cui il programma è scritto. Un modo per verificare questo è trovare l’albero di derivazione della stringa che rappresenta il tal programma.
+Un certo programma che è stato trasformato in una stringa viene verificato controllando che la tale stringa sia derivata dalla grammatica del linguaggio in cui il programma è scritto. Un modo per verificare questo è trovare l’albero di derivazione della stringa che rappresenta tale programma.
 
 \subsection{Ambiguità delle grammatiche}\label{sec:ambiguity}
 Una grammatica \(\mathcal{G}\) si dice ambigua se esiste \(w \in \mathcal{L}(\mathcal{G})\) che può essere derivata da due derivazioni canoniche distinte, entrambe rightmost o entrambe leftmost. Distinte significa che l'ordine di applicazione delle produzioni è differente, ma questo sarà più chiaro in seguito.
@@ -240,6 +240,10 @@ Noi non vogliamo grammatiche ambigue, ci complicano la vita.
 Prendiamo ad esempio la grammatica delle espressioni aritmetiche:
 \begin{equation}
     E \to E+E \mid E*E \mid  n
+\end{equation}
+dove il simbolo \(|\) è una modo compatto per scrivere diverse produzioni con lo stesso driver. La grammatica proposta è equivalente alla seguente: 
+\begin{equation}
+	E \to E+E; E \to E*E; E \to n
 \end{equation}
 Intuitivamente si può leggere come exp -> exp+exp  o  exp*exp  o  numero.\\
 Questa grammatica ci permette di fare operazioni di somma o moltiplicazione, è ambigua o meno?
