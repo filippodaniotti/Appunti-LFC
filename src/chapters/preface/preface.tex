@@ -1,6 +1,6 @@
 \documentclass[class=book, crop=false, oneside, 12pt]{standalone}
 \usepackage{standalone}
-\graphicspath{{./assets/images/}}
+% \graphicspath{{./assets/images/}}
 
 % arara: pdflatex: { synctex: yes, shell: yes }
 % arara: latexmk: { clean: partial }
@@ -8,5 +8,26 @@
 \chapter*{Prefazione}
 \addcontentsline{toc}{chapter}{Prefazione}
 % \addcontentsline{toc}{chapter}{\protect\numberline{}Preface}
+
+\section*{Il progetto}
+Questo testo è una dispensa di appunti scritta da studenti. Gli appunti sono stati presi durante il corso di Linguaggi Formali e Compilatori tenuto dalla professoressa Paola Quaglia per il Corso di Laurea in Informatica, DISI, Università degli studi di Trento, anno accademico 2020-2021. I contenuti provengono quindi primariamente dalle lezioni della Professoressa, mentre invece ordine ed esposizione sono in gran parte originali. Analogamente, la maggior parte degli assets (figure, grafi, tabelle, pseudocodici) sono contenutisticamente tratti dal materiale della professoressa, ma ricreati e molto spesso manipolati dagli autori. Questo è stato fatto per creare un filo espositivo che fosse quanto più intuitivo possibile, anche per lo studente più pigro; per ottenere questo risultato, è stato molto spesso necessario abbandonare quasi del tutto la spiegazione originale della Professoressa e usarla, appunto, come canovaccio per svilupparne una propria.
+
+\section*{Istruzioni per l'uso}
+Il testo è molto lungo, questo è dovuto a diverse ragioni. La più importante è che la narrazione alterna teoria ed esercizi, perché questi ultimi sono spesso fondamentali a un'efficace assimilazione degli stessi concetti teorici su cui poggiano. Inoltre, i passaggi di questi esercizi, nonostante molto meccanici, sono descritti nei dettagli, e spesso risultano quasi ridondanti; questo potrebbe risultare fastidioso agli utenti più \emph{sgai}, per cui consigliamo di valutare di volta in volta se studiare nel dettaglio l'ennesimo esercizio su uno stesso algoritmo, ma nondimeno raccomandiamo di non saltare nessuno di questi a piè pari.
+
+\section*{La squadra}
+Questo progetto è frutto della collaborazione di svariate personalità, ciascuna a suo modo fondamentale per il mantenimento dello stesso.
+\begin{labeling}{team_alghisius}
+    \item[p1ps] Filippo Daniotti: curatore del progetto, ha curato la revisione stilistica, la creazione e il mantenimento di tabelle e pseudocodici, e ha scritto le lezioni sempre con gli appunti degli altri.
+    \item[sam4retas] Samuele Conti: iniziatore e curatore del progetto, ha curato la scrittura e l'esposizione degli esercizi e la revisione e correttezza concettuale di tutto il progetto.
+    \item[frab0zzo] Francesco Bozzo: tecnico, ha curato il coordinamento tecnico la scelta di pacchetti per la creazione degli assets, ha implementato la CI e fornito consulenza in merito ai problemi tecnici di latex.
+    \item[f1zzo] Federico Izzo: tecnico, ha curato la creazione e il mantenimento di grafi e alberi.
+    \item[team_alghisius] Simone Alghisi, Emanuele Beozzo, Samuele Bortolotti: scrittori, hanno curato la rielaborazione e la trascrizione delle lezioni, fornendo le indicazioni sulla scelta degli assets.
+    \item[ch!n4] Michele Yin: revisore, l'asia, la precisione chirurgica, si è occupato di fare una revisione ad ampio respiro sui dettagli matematici e di scrivere alcune lezioni all'occorrenza, principalmente.
+    \item[j4bb] Giacomo Zanolli: revisore, si è occupato di una revisione di ampio respiro e di impostare il setup docker. 
+\end{labeling}
+
+\section*{Nota del curatore}
+Dai è stato divertente adesso vi racconto una barzelletta allora ci sono tre amici
 
 \end{document}
