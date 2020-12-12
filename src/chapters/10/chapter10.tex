@@ -698,8 +698,192 @@ Osservando quest'immagine è esemplice notare che per risolvere il valore di \(T
 Lo stesso avviene per la grammatica che stiamo considerando ora, quella per gli operatori \(+\) e \(-\) di cui dobbiamo completare l'SDD (\ref{sdd:ex-2-AST}).
 
 
-\section{Vai Alghisius, parti pure da qui}
+%TODO bisogna mergiare queste due parti solo che non so che cosa è meglio tenere come introduzione
 
+Il problema in questo caso specifico è che non possiamo sintetizzare tutte le informazioni che ci servono perchè, uno degli elementi necessari per computare il valore dell'espressione e per la formazione dell'abstract syntax tree, non è presente nello stesso sottoalbero nel quale troviamo l'operatore aritmetico e l'altro operando coinvolto nell'operazione. 
 
+Utilizzando gli attributi ereditati non si riesce ad eseguire in maniera immediata tutte le operazioni durante il parsing della grammatica: un'opzione, come già citato più volte, potrebbe essere quella di agire sulla grammatica in modo che, durante un'esecuzione del parsing bottom-up, si possa ottenere lo stesso risultato di una grammatica S-Attribuita. Senza soffermarci troppo sui dettagli, tale operazione passerebbe per l'aggiunta di marker e \(\epsilon\)-transizioni in modo che gli attributi vengano sintetizzati e non ereditati.
+
+In questo caso per poter trasportare le informazioni da un ramo dell'albero ad un altro è necessario utilizzare degli attributi ereditati: in modo simile a quanto fatto per computare il valore delle espressioni aritmetiche, in questo caso assegniamo dei riferimenti a dei nodi. 
+
+Per poter capire al meglio che tipo di regole devono essere applicate è necessario partire da un Parse Tree: prendiamo dunque come esempio particolare la parola \(id - num\), ottenuta dall'analisi lessicale di \(a - 4\); senza troppa fatica dovremmo poterci accorgere che usando una derivazione di tipo leftmost i passi di derivazione sono
+
+\begin{align*}
+    E \Rightarrow TE' \Rightarrow idE' \Rightarrow id-TE' \Rightarrow id-numE' \Rightarrow id-num
+\end{align*}
+
+Il nostro \emph{Parse Tree} in questo particolare caso è così costruito
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=.6\textwidth]{parse-tree-ae.jpg}
+    \caption{Parse Tree Attributi Ereditati}
+    \label{fig:parse-tree-ae}
+\end{figure}
+
+Dal Parse Tree possiamo osservare in modo più esplicito che il calcolo del sottoalbero destro necessita del sottoalbero sinistro e quindi avremo bisogno degli attributi ereditati (quindi non potremo eseguire il parsing e la costruzione dell'Abstract Syntax Tree contemporaneamente).
+
+Facendo delle osservazioni di questo tipo siamo in grado di costruire la prossima struttura che ci servirà, cioè il \emph{Dependency Graph}: 
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=.6\textwidth]{dependency-graph-ae.jpg}
+    \caption{Dependency Graph Attributi Ereditati}
+    \label{fig:dependency-graph-ae}
+\end{figure}
+
+Può sembrare difficile ottenere questa struttura dal nostro Parse Tree, tuttavia i suoi archi rappresentano semplicemente le dipendenze tra gli attributi (i.e. quali sono necessari per poter effettuare una certa operazione); nella figura possiamo inoltre vedere quali fra gli attributi sono sintetizzati e quali ereditati. 
+
+Per rendere più chiaro il grafo utilizziamo un esempio: il sottoalbero sinistro possiede un arco da \(id\) a \(T\) (coincidente con quello del Parse Tree) perchè sottolineiamo che, una volta effettuata l'operazione di riduzione \(T \to id\), \(T\) mantenga un riferimento a \(id\); visto che \(id\) è contenuto nel sottoalbero di \(T\) (i.e. è uno dei suoi figli) tale attributo è sintetizzato. 
+
+La situazione cambia se vogliamo esaminare l'arco esattamente successivo: l'arco da \(T\) ad \(E'\) infatti non coincide con nessun altro arco del Parse Tree e il suo scopo è quello di trasmettere i riferimenti di \(T\) al fratello \(E'\). Questa operazione viene fatta perchè, per poter calcolare in questo caso la differenza, è necessario che \(E'\) riceva le informazioni del fratello \(T\): dovremo dunque servirci di un attributo ereditato.
+
+A questo punto dobbiamo definire le \textbf{regole} associate alle produzioni: tale operazione come sempre non è facile da eseguire ma vedremo di analizzarla passo per passo. 
+
+Cominciamo inserendo le regole delle produzioni finali della grammatica proposta: queste definiscono le foglie del nostro Parse Tree e dovranno occuparsi di generare gli elementi finali dell'Abstract Syntax Tree.
+
+\begin{align*}
+    T &\to id &\{T.node = newLeaf(id, id.entry)\} \\
+    T &\to num &\{T.node = newLeaf(num, num.lexval)\}
+\end{align*}
+
+Queste produzioni ci permettono di creare due foglie:
+
+\begin{itemize}
+    \item una foglia con etichetta id e valore id.entry (i.e. quindi un riferimento alla sua entry nella symbol table per poter recuperare successivamente le informazioni)
+    \item mentre l'altra con etichetta num e valore num.lexval (i.e. il valore ottenuto dall'analisi lessicale)
+\end{itemize}
+
+Come si può intuire, il nostro scopo con tali regole è fare in modo che in T.node siano memorizzate le informazioni della foglia che abbiamo creato in modo da poterle recuperare in seguito.
+
+Come avevamo già potuto mostare in precedenza, il sottoalbero sinistro ha bisogno di passare le proprie informazioni al sottoalbero destro; visto che stiamo parlando di nodi fratelli non possiamo ottenere queste informazioni in altro modo se non ricorrendo agli attributi ereditati: ci servirà dunque una regola del tipo \(E'.i = T.node\).
+
+Associamo dunque per il momento la regola descritta alla produzione corretta 
+
+\begin{align*}
+    E &\to TE' &\{E'.i = T.node\}
+\end{align*}
+
+Volendo chiarire subito alcuni possibili dubbi, sottolineo il fatto che questa non sarà l'unica regola che sarà associata a tale produzione (si è voluto optare per un aggiunta graduale) e che la produzione a cui è stata collegata la regola è quella dove i due nodi fratelli compaiono nel body.
+
+A questo punto possiamo passare alle produzioni che si occupano delle operazioni aritmetiche, nel nostro caso della produzione \(E' \to -TE'\): per via del nostro esempio potremmo limitarci semplicemente ad eseguire il risultato dell'espressione \(E'.i - T.node\) (ricordiamoci che precedentemente abbiamo fatto in modo che E'.i contenesse il valore del sottoalbero sinistro), tuttavia dobbiamo considerare anche i casi per cui vi potrebbero essere altre operazioni in seguito (e.g. id + id - num + id - ...). per questo motivo facciamo in modo di passare ad \(E'\) il risultato di tale operazione in modo che possa utilizzarlo nel caso di produzioni successive: questo potrebbe essere visto come un esempio di ricorsione dove di fatto stiamo mandando avanti i risultati delle operazioni e dovremo in seguito capire qual è il nostro caso base. Aggiungiamo dunque una regola che fa al caso nostro 
+
+\begin{align*}
+    E' &\to -TE_{1}' &\{E_{1}'.i = newNode(-, E'.i, T.node)\}
+\end{align*}
+
+Grazie a questa grammatica siamo in grado di generare un nodo con etichetta \(-\) e con un riferimento per operando: il riferimento di questo nodo viene passato poi ad \(E_1.i\), in questo modo riuscirà a svolgere le operazioni successive. 
+
+Come abbiamo detto precedentemente, dovremo prima o poi interrompere tale ricorsione e quindi necessitiamo di un caso base: banalmente smetteremo di fare nuove chiamate nel momento in cui non avremo più operatori e quindi nel caso in cui utilizzeremo la produzione \(E' \to \epsilon\). In questo momento dovremo riportare il risultato di tutta la nostra computazione (i.e. i nostri riferimenti): per fare ciò semplicemente andiamo ad assegnare a \(E'.node\) i riferimenti ottenuti fino a quel momento
+
+\begin{align*}
+     E' &\to \epsilon &\{E'.node = E'.i\}
+\end{align*}
+
+A questo punto abbiamo trattato il nostro caso base ma è necessario ritornare sulle produzioni già analizzate in modo da poter restituire il tutto al "chiamante": aggiungiamo dunque   
+
+\begin{align*}
+    E &\to TE' &\{E.node = E'.node\} \\
+    E' &\to -TE_{1}' &\{E'.node = E_{1}'.node\}
+\end{align*}
+
+A questo punto possiamo riassumere le regole come segue
+
+\begin{align*}
+    E &\to TE' &\{E.node = E'.node; E'.i = T.node\} \\
+    E' &\to +TE_{1}' &\{E'.node = E_{1}'.node; E_{1}'.i = newNode(+, E'.i, T.node)\} \\
+    E' &\to -TE_{1}' &\{E'.node = E_{1}'.node; E_{1}'.i = newNode(-, E'.i, T.node)\} \\
+    E' &\to \epsilon &\{E'.node = E'.i\} \\
+    T &\to (E) &\{T.node = E.node\} \\
+    T &\to id &\{T.node = newLeaf(id, id.entry)\} \\
+    T &\to num &\{T.node = newLeaf(num, num.lexval)\}
+\end{align*}
+
+Nonostante alcune delle produzioni della grammatica non vengano utilizzate nel nostro caso, non vuol dire che non vi possano essere stringhe passate in input che ne possano usufruire: ricordiamoci che nonostante le strutture che stiamo utilizzando fanno riferimento ad un particolare esempio, è necessario che la grammatica sia generale.
+
+Per questo motivo, possiamo osservare che la produzione \(E' \to +TE'\) svolge lo stesso ruolo di quella che abbiamo già potuto analizzare mentre, \(T \to (E)\), viene utilizzata per poter passare un riferimento al padre. 
+
+A questo punto abbiamo bisogno dell'\emph{Evaluation Order}, ottenuto facendo l'ordinamento topologico del Dependency Graph; si tenga a mente che un qualsiasi ordinamento topologico del grafo può andare bene: è possibile eseguire una visita in profondità e, prima di risalire nella ricorsione, inserire i nodi in uno stack; rimuovere per primi i nodi che non hanno archi entranti; etc... Ricordiamo anche che non è detto che si riesca a trovare un ordinamento topologico: in questo caso non è può valutare il grafo ottenuto.
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=.6\textwidth]{dependency-graph-ae-evaluation-order.jpg}
+    \caption{Dependency Graph Attributi Ereditati con Evaluation Order}
+    \label{fig:dependency-graph-ae-evaluation-order}
+\end{figure}
+
+Finalmente abbiamo la possibilità di osservare passo per passo come costruire il nostro Abstract Syntax Tree seguendo l'evaluation order:
+
+\begin{enumerate}
+    \item Recuperiamo le informazioni relativamente ad \(id\) (i.e. \(a\)) dalla Symbol Table mediante il riferimento presente in \(id.entry\)
+    \item Generiamo la foglia \emph{Leaf(id, 1)} (i.e. una foglia con etichetta id e un riferimento alla Symbol Table) e manteniamo un riferimento ad essa: tale operazione viene eseguita dalla regola \(\{T.node = newLeaf(id, id.entry)\}\) per  \(T \to id\)
+    \item Recuperiamo il valore di \(num\) ottenuto dall'analisi lessicale mediante \(num.lexval\) (i.e. 4)
+    \item Generiamo la foglia \emph{Leaf(num, 3)} e manteniamo un riferimento ad essa: tale operazione viene eseguita dalla regola \(\{T.node = newLeaf(num, num.lexval)\}\) per \(T \to num\)
+    \item Creiamo un riferimento a \emph{Leaf(id, 1)} utilizzando la regola \(\{E'.i = T.node\}\) per  \(E \to TE'\). In questo passaggio dobbiamo recuperare \(T.node\) (che contiene un riferimento alle informazioni del sottoalbero sinistro) e assegnarlo a \(E'.node\), in modo che i passi successivi possano usufruirne
+    \item Generiamo il nodo \emph{Node(-, 5, 4)} e manteniamo un riferimento ad esso: tale operazione viene eseguita dalla regola \(\{E_{1}'.i = newNode(-, E'.i, T.node)\}\) per \(E' \to -TE_{1}'\); anche in questo caso abbiamo bisogno di passare il riferimento ai passi successivi
+    \item Creiamo un riferimento a \emph{Node(-, 5, 4)} utilizzando la regola \(\{E'.node = E'.i\}\) per \(E' \to \epsilon\)
+    \item Creiamo un riferimento a \emph{Node(-, 5, 4)} utilizzando la regola \(\{E'.node = E_{1}'.node\}\) per \(E' \to -TE_{1}'\)
+    \item Creiamo un riferimento a \emph{Node(-, 5, 4)} utilizzando la regola \(\{E.node = E'.node\}\) per \(E \to TE'\)
+\end{enumerate}
+
+Il risultato finale è dunque rappresentabile nel seguente modo:
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=.8\textwidth]{abstract-syntax-tree-ae.jpg}
+    \caption{Abstract Syntax Tree Attributi Ereditati}
+    \label{fig:abstract-syntax-tree-ae}
+\end{figure}
+
+\subsubsection{Es aggiornamento tipo degli identificatori}
+
+Consideriamo la seguente grammatica
+
+\begin{align*}
+    D &\to TL \\
+    T &\to int \\
+    T &\to float \\
+    L &\to L_1, id \\
+    L &\to id
+\end{align*}
+
+L'obbiettivo è quello di associare alle produzioni descritte delle regole per cui si possa aggiungere il tipo nella entry della Symbol Table degli identificatori dichiarati. Per poter aggionrare la tabella è necessario utilizzare la funzione addtype(table\_entry), type\_instance).
+
+Anche in questo caso partiamo da un esempio che può aiutarci per la definizione delle regole: supponiamo di avere la parola \emph{int id, id}, in questo caso per una derivazione leftomost i passi di derivazione che dobbiamo compiere sono
+
+\begin{equation*}
+    D \Rightarrow TL \Rightarrow int\; L \Rightarrow int\; L, id \Rightarrow int\; id, id
+\end{equation*}
+
+dunque il Parse Tree può essere così rappresentato
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=.6\textwidth]{parse-tree-int-float.jpg}
+    \caption{Parse Tree aggiornamento tipo identificatori}
+    \label{fig:parse-tree-int-float}
+\end{figure}
+
+Partiamo dalle produzioni più semplici, cioè quelle che si occupano di definire il tipo degli attributi: in questo caso banalmente possiamo passare l'attributo sintetizzato al driver della produzione
+
+\begin{align*}
+    T &\to int &\{T.type = int\} \\
+    T &\to float &\{T.type = float\}
+\end{align*}
+
+Dal Parse Tree possiamo poi notare che la computazione del sottoalbero destro dipende dal sottoalbero sinistro: una volta scoperto il tipo delle nostre entry abbiamo bisogno di fornire questa informazione alla funzione nell'altro sottoalbero, ma ciò è possibile solamente utilizzando degli attributi ereditati. Per questo motivo possiamo introdurre la seguente regola
+
+\begin{align*}
+    D &\to TL &\{L.i = T.type\} \\
+\end{align*}
+
+Una volta che abbiamo trovato il modo per poterci trasportare il tipo dobbiamo effettivamente utilizzarlo per le nostre entry: a questo scopo possiamo andare a valorizzare le regole per le produzioni rimaste nel seguente modo
+
+\begin{align*}
+    L &\to L_1, id &\{addtype(id.entry, L.i);\; L_1.i = L.i\}\\
+    L &\to id &\{addtype(id.entry, L.i)\}
+\end{align*}
+
+Come è possibile notare, entrambe le produzioni le entry della tabella aggiungendo il tipo; nel primo caso viene aggiunta una regola per garantire la produzione degli attributi per i sottoalberi successivi.  
 
 \end{document}
