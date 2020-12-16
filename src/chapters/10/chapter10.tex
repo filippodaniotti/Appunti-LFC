@@ -529,7 +529,7 @@ Stabilendo separatamente la base mediante le regole abbiamo dunque la possibilit
 
 \section{Alberi di sintassi astratta}
 \subsection{Introduzione}
-Arriviamo finalmente a parlare degli alberi di sintassi astratta (Abstract Syntax trees) che altro non sono che una rappresentazione compatta degli alberi di derivazione che spesso viene utilizzata come rappresentazione intermedia.
+Arriviamo finalmente a parlare degli alberi di sintassi astratta (Abstract Syntax trees) che altro non sono che una rappresentazione compatta degli alberi di derivazione.
 
 Un albero di sintassi astratta si può ottenere dal rispettivo albero di derivazione di una parola tramite dei passi di semplificazione, per avere chiaro a cosa ci riferiamo facciamo subito un esempio.
 Sia data la grammatica
@@ -547,10 +547,10 @@ Se vogliamo fare il parsing della parola \(digit+digit\) otteniamo i seguenti al
 \end{figure}
 Si noti come l'albero della sintassi astratta a sinistra sia molto più compatto.
 
-Affrontiamo la questione di come un AST venga salvato in memoria: di fatto questa struttura va a creare un albero in cui ogni nodo rappresenta un passaggio intermedio del processo descritto dalla parola che stiamo analizzando. L'AST ottenuto dalla semplificazione dell'albero di derivazione viene quindi salvato nodo per nodo nel seguente modo:
+\paragraph{Memorizzazione degli AST} Di fatto questa struttura va a creare in memoiria un albero in cui ogni nodo rappresenta un passaggio intermedio del processo descritto dalla parola che stiamo analizzando. L'AST ottenuto dalla semplificazione dell'albero di derivazione viene quindi salvato nodo per nodo nel seguente modo:
 \begin{itemize}
-    \item le foglie vengono salvate come link a record nella tabella dei simboli, di fatto creeremo una foglia per ogni identificatore ed ogni valore diretto (es.: valore numerico) presente nella parola che stiamo parsando;
-    \item i nodi intermedi dell'albero costituiscono la struttura topologica dell'albero e rappresentano tutte le operazioni compiute tra variabili o valori diretti (quindi tutte le operazioni tra foglie).
+    \item le foglie vengono salvate come link a record nella tabella dei simboli: viene creata una foglia per ogni identificatore ed ogni valore diretto (es.: valore numerico) presente nella parola che stiamo parsando;
+    \item i nodi intermedi dell'albero costituiscono la struttura topologica dell'albero e rappresentano tutte le operazioni compiute tra variabili o valori diretti (quindi tutte le operazioni tra altri nodi).
 \end{itemize}
 
 \subsection{Creazione di un AST}
@@ -558,12 +558,12 @@ L'AST si può creare semplicemente dopo aver ottenuto l'albero di derivazione tr
 Per fare questo dobbiamo immaginare di avere a disposizione due funzioni:
 \begin{itemize}
     \item \texttt{newLeaf(label, val)} che va a salvare un nodo foglia con due campi: l'etichetta ed il valore;
-    \item \texttt{newNode(label, c1, ..., ck)} che crea un nodo con \(k\) figli, l'etichetta è \texttt{label} mentre \texttt{c1, ..., ck} sono i riferimenti ai nodi figli;
+    \item \texttt{newNode(label, c1, ..., ck)} che crea un nodo con \(k\) figli, l'etichetta (che indica l'operazione rappresentata dal nodo) è \texttt{label} mentre \texttt{c1, ..., ck} sono i riferimenti ai nodi figli;
 \end{itemize}
-Applicando queste due funzioni all'esempio precedente (Fig.\ref{fig:ast-first-example}) avremo il nodo \(+\) che avrà come etichetta \(+\) e come figli i due nodi \(digit\).
+Applicando queste due funzioni all'esempio precedente (Fig.\ref{fig:ast-first-example}) avremo l'operazione \(+\) rappresentata da un nodo che avrà come etichetta \(+\) e come figli i due nodi \(digit\).
 I nodi \(digit\) saranno nodi foglia con identificatore e valore relativo (il valore è quello che ci viene ritornato dall'analisi lessicale, quindi lo possiamo ricavare con \(digit.lexval\)).\\
 
-\noindent Per creare l'albero di sintssi astratta durante la fase di parsing dobbiamo definire delle regole semantiche (dette anche funzioni di attribuzione) che ci indichino quando e come istanziare un nodo per l'AST durante il parsing.
+\paragraph{Funzioni di attribuzione} Per creare l'albero di sintssi astratta durante la fase di parsing dobbiamo definire delle regole semantiche (dette anche funzioni di attribuzione o azioni semantiche) che utilizziamo ogni volta che incontriamo una riduzione ci indichino quando e come istanziare un nodo per l'AST durante il parsing.
 
 \noindent Vediamo un esempio: data la grammatica LALR per operazioni algebriche di somma e sottrazione 
 \begin{align}
@@ -583,13 +583,16 @@ abbiamo che le regole (le funzioni di attribuzione) per la creazione dell'AST du
 \end{align}
 Nota che i pedici numerici usati in alcune produzioni sono usati solo per differenziare il body dal driver, non hanno nessuna valenza semantica, di fatto \(E_1\) ed \(E\) sono lo stesso non-terminale.
 
-Analizziamo velocemente le regole più significative.
-\(newLeaf(num, num.lexval)\) va a prendere il valore di num che ci è dato dall'analisi lessicale; in modo simile \(newLeaf(id, id.entry)\) va acreare un nodo foglia in cui abiamo come etichetta l'identificatore mentre il valore del nodo si troverà all'interno della tabella dei simboli compilata in fase di analisi lessicale.
+Analizziamo velocemente le regole più significative:
+\begin{itemize}
+    \item \(newLeaf(num, num.lexval)\) va a prendere il valore di num che ci è dato dall'analisi lessicale; 
+    \item in modo simile \(newLeaf(id, id.entry)\) va a creare un nodo foglia in cui abbiamo come etichetta l'identificatore mentre il valore del nodo si troverà all'interno della tabella dei simboli compilata in fase di analisi lessicale.
+\end{itemize}
 
 Per le altre regole il significato, abbastanza intuitivo, è quello della creazine di un nodo intermedio che mantiene come informazioni l'etichetta dell'operazione da compiere e i riferimenti ai nodi degli operandi necessari.
 
 \subsubsection{Esempio di creazione di un AST}
-Ora che abbiamo le regole da applicare per cocstruire un albero di sintassi astratta, andiamo a costruirne uno per la parola \(id-num+id\) derivata dalla grammatica appena vista (\ref{gr:LALR-plus-minus-grammar}), immaginando che la parola \(id-num+id\) sia arrivata dall'analisi lessicale di \(a-4+c\).
+Ora che abbiamo le regole da applicare per costruire un albero di sintassi astratta, andiamo a costruirne uno per la parola \(id-num+id\) derivata dalla grammatica appena vista (\ref{gr:LALR-plus-minus-grammar}), immaginando che la parola \(id-num+id\) sia arrivata dall'analisi lessicale di \(a-4+c\).
 
 \noindent Innanzitutto dobbiamo arrivare alla fase del parsing, quindi ci dobbiamo procurare la tabella di parsing.
 
@@ -603,7 +606,7 @@ Di fatto tutto il parsing in realtà è effettuato proprio per calcolare quali r
 
 ... inserire qui eventuale tabella di parsing anche se non ci serve ... inserire qui parsing della parola anche se Lady Quail non l'ha fatto (cioè, l'ha fatto ma a mente)...
 
-Comunque, tornando a noi e saltando qualche passaggio (che forse verrà inserito in seguito, dipende da quanto verranno pagati e riveriti gli scrittori della dispensa), la sequenza di riduzioni che si ottiene dal parsing della parola \(id-num+id\) è la seguente:
+Comunque, tornando a noi e saltando qualche passaggio (che forse verrà inserito in seguito, dipende da quanto verranno pagati gli scrittori della dispensa), la sequenza di riduzioni che si ottiene dal parsing della parola \(id-num+id\) è la seguente:
 \begin{align*}
     T &\to id \\
     E &\to T \\
@@ -615,14 +618,14 @@ Comunque, tornando a noi e saltando qualche passaggio (che forse verrà inserito
 Si invita il lettore a fermarsi un attimo e rileggere queste riduzioni per convincersi che siano esattamente le riduzioni che si ottengono dal parsing bottom-up della parola data; si faccia attenzione all'ordine in cui si incontrano le riduzioni, questo è proprio l'ordine che ci si aspetta dalla procedura bottom-up, ovvero l'ordine inverso della procedura che dallo start symbol ci porta alla parola desiderata.
 
 Vediamo ora come viene creato in memoria l'Abstract Syntax Tree mentre stiamo svolgendo il parsing della stringa.
-Ogni volta che incontriamo un riduzione andiamo ad aggiungere un nodo all'AST che stiamo creando. Quale forma avrà questo nodo ci è dato dalle funzioni di attribuzione dei nodi dell'AST; queste funzioni di attribuzione vengono chiamate qualche volta azioni semantiche.
+Ogni volta che incontriamo una riduzione andiamo ad aggiungere un nodo all'AST che stiamo creando. Quale forma avrà questo nodo ci è dato dalle funzioni di attribuzione dei nodi dell'AST.
 Osserviamo quindi quale forma viene ad ottenere l'abero di sintassi astratta della nostra parola \(id-num+id\) mentre incontriamo le riduzioni passo dopo passo.
 \begin{enumerate}
     \item La prima riduzone che incontriamo è \(T \to id\), che ha come funzione di attribuzione \(\{T.node = newLeaf(id, id.entry)\}\); la rappresentazione grafica di quello che si ottiene in questo caso è la seguente:
     \begin{figure}[H]
         \centering
         \includegraphics[width=.6\textwidth]{ex-ast-creation-1.png}
-        \caption{Creaione del nodo foglia per l'identificatore che identifica \(a\)}
+        \caption{Creaizone del nodo foglia per l'identificatore che referenzia la variabile \(a\)}
     \end{figure}
     \item La seconda riduzione che incontriamo, \(E \to T\), ci porta ad un semplice passaggio di rinominazione di un nodo dell'AST, in quanto la sua azione semantica è \(\{E.node = T.node\}\).
     \begin{figure}[H]
@@ -636,7 +639,7 @@ Osserviamo quindi quale forma viene ad ottenere l'abero di sintassi astratta del
         \includegraphics[width=.6\textwidth]{ex-ast-creation-3.png}
         \caption{Creazione di una nuova foglia con valore numerico associato}
     \end{figure} 
-    \item La prossima riduzione che incontriamo è \(E \to E_1 - T\), con azione semantica \(\{E.node  newNode('-', E_1.node, T.node)\}\), che viene rappresentata graficamente creando un nuovo nodo intermedio per l'AST, la cui forma può essere osservata nella figura sottostante.
+    \item La prossima riduzione che incontriamo è \(E \to E_1 - T\), con azione semantica \(\{E.node = newNode('-', E_1.node, T.node)\}\), che viene rappresentata graficamente creando un nuovo nodo intermedio per l'AST, la cui forma può essere osservata nella figura sottostante.
     \begin{figure}[H]
         \centering
         \includegraphics[width=.6\textwidth]{ex-ast-creation-4.png}
@@ -648,7 +651,7 @@ Osserviamo quindi quale forma viene ad ottenere l'abero di sintassi astratta del
         \includegraphics[width=.6\textwidth]{ex-ast-creation-5.png}
         \caption{Creazione di un nodo foglia per \(id\) associato a \(c\)}
     \end{figure} 
-    \item Infine applichiamo la riduzine \(E \to E_1 + T\), che prevede l'azione semantica \(\{E.node = newNode ('+', E_1.node, T.node)\}\) e va a completare il nostro AST che possiamo finalmente osservare in tutta la sua bellezza:
+    \item Infine applichiamo la riduzione \(E \to E_1 + T\), che prevede l'azione semantica \(\{E.node = newNode ('+', E_1.node, T.node)\}\) e va a completare il nostro AST che possiamo finalmente osservare in tutta la sua bellezza:
     \begin{figure}[H]
         \centering
         \includegraphics[width=.6\textwidth]{ex-ast-creation-6.png}
@@ -657,16 +660,17 @@ Osserviamo quindi quale forma viene ad ottenere l'abero di sintassi astratta del
 \end{enumerate}
 
 \paragraph{Riassumendo} Il goal che ci siamo fissati all'inizio di questo esercizio era di costruire \emph{on the fly} l'albero di sintassi astratta duante la fase di parsing per la parola \(id-num+id\) derivata grammatica LALR per le espressioni aritmetiche (\ref{gr:LALR-plus-minus-grammar}).
+Anche se abbiamo barato, utilizzando un parsing già fatto, è facile accorgersi che le funzioni di attribuzione che abbiamo usato ora le avremmo potute usare in contemporanea all'esecuzione del parsing, usandole direttamente ogni volta che avremmo incontrato una riduzione.
 
-\noindent Abbiamo utilizzato delle funzioni di attribuzione semantica che prevedono di inserire i seguenti attributi sintetizzati per le riduzioni con non-terminali nel body:
-\begin{itemize}
-    \item[\textbf{E-node}] per le riduzioni con driver E;
-    \item[\textbf{T-node}] per le riduzioni con driver T.
-\end{itemize}
-Per quanto riguarda le riduzioni con soli terminali nel body (che generano le foglie) abbiamo utilizzato questi attributi sintetizzati:
+\noindent Per quanto riguarda le riduzioni con soli terminali nel body (che generano le foglie) abbiamo utilizzato questi attributi sintetizzati:
 \begin{itemize}
     \item[\textbf{Id.entry}] per le variabili;
     \item[\textbf{Num.lexval}] per i valori numerici.
+\end{itemize}
+Mwntre per le riduzioni con non-terminali nel body abbiamo utilizzato delle funzioni di attribuzione semantica che prevedono di inserire i seguenti attributi sintetizzati:
+\begin{itemize}
+    \item[\textbf{E-node}] per le riduzioni con driver E;
+    \item[\textbf{T-node}] per le riduzioni con driver T.
 \end{itemize}
 
 Abbiamo visto quindi che si può ricavare l'AST mentre si esegue il nostro caro parsing bottom-up.
@@ -687,7 +691,7 @@ L'esercizio in questo caso ci richiede di calcolare gli attributi per definire l
     T &\to num & & \{...\} \notag \nonumber
 \end{align}
 In questo caso dobbiamo chiamare in causa gli attributi ereditati, e la motivazione è presto detta.
-Per visualizzare la situazione possiamo andare a ri-vedere l'SDD che abbiamo costruito per le operazioni \(+\) e \(*\) drante le prime lezioni dell'analisi semantica (Fig.\ref{fig:second-ex-parse-tree-part}).
+Per visualizzare la situazione possiamo andare a rivedere l'SDD che abbiamo costruito per le operazioni \(+\) e \(*\) nella prima parte riguardo l'analisi semantica (Fig.\ref{fig:second-ex-parse-tree-part}, ma si può osservare tranquillamente la figura  qui sotto per rendersi conto).
 In quel caso i valori sintetizzati in sottoalberi fratelli devono essere utilizzati da altri sottoalberi fratelli per ricavare il loro proprio valore, per esser chiari riportiamo qui la figura.
 \begin{figure}[H]
     \centering
@@ -699,10 +703,11 @@ Lo stesso avviene per la grammatica che stiamo considerando ora, quella per gli 
 
 
 %TODO bisogna mergiare queste due parti solo che non so che cosa è meglio tenere come introduzione
+% Ti dirò che a me sembrano carini così
 
-Il problema in questo caso specifico è che non possiamo sintetizzare tutte le informazioni che ci servono perchè, uno degli elementi necessari per computare il valore dell'espressione e per la formazione dell'abstract syntax tree, non è presente nello stesso sottoalbero nel quale troviamo l'operatore aritmetico e l'altro operando coinvolto nell'operazione. 
+Il problema in questo caso specifico è che non possiamo sintetizzare tutte le informazioni che ci servono perchè, uno degli elementi necessari per ricavare il valore dell'espressione e per la formazione dell'abstract syntax tree, non è presente nello stesso sottoalbero nel quale troviamo l'operatore aritmetico e l'altro operando coinvolto nell'operazione. 
 
-Utilizzando gli attributi ereditati non si riesce ad eseguire in maniera immediata tutte le operazioni durante il parsing della grammatica: un'opzione, come già citato più volte, potrebbe essere quella di agire sulla grammatica in modo che, durante un'esecuzione del parsing bottom-up, si possa ottenere lo stesso risultato di una grammatica S-Attribuita. Senza soffermarci troppo sui dettagli, tale operazione passerebbe per l'aggiunta di marker e \(\epsilon\)-transizioni in modo che gli attributi vengano sintetizzati e non ereditati.
+Utilizzando gli attributi ereditati non si riesce ad eseguire in maniera immediata tutte le operazioni durante il parsing della grammatica: un'opzione, come già citato più volte, potrebbe essere quella di agire sulla grammatica in modo che, durante un'esecuzione del parsing bottom-up, si possa ottenere lo stesso risultato di una grammatica S-attribuita. Senza soffermarci troppo sui dettagli, tale operazione passerebbe per l'aggiunta di marker e \(\epsilon\)-transizioni in modo che gli attributi vengano sintetizzati e non ereditati.
 
 In questo caso per poter trasportare le informazioni da un ramo dell'albero ad un altro è necessario utilizzare degli attributi ereditati: in modo simile a quanto fatto per computare il valore delle espressioni aritmetiche, in questo caso assegniamo dei riferimenti a dei nodi. 
 
@@ -721,7 +726,7 @@ Il nostro \emph{Parse Tree} in questo particolare caso è così costruito
     \label{fig:parse-tree-ae}
 \end{figure}
 
-Dal Parse Tree possiamo osservare in modo più esplicito che il calcolo del sottoalbero destro necessita del sottoalbero sinistro e quindi avremo bisogno degli attributi ereditati (quindi non potremo eseguire il parsing e la costruzione dell'Abstract Syntax Tree contemporaneamente).
+Dal Parse Tree possiamo osservare in modo più esplicito che il calcolo del sottoalbero destro (con radice in \(E'\)) necessita del sottoalbero sinistro (con radice in \(T\)) e quindi avremo bisogno degli attributi ereditati (quindi non potremo eseguire il parsing e la costruzione dell'Abstract Syntax Tree contemporaneamente).
 
 Facendo delle osservazioni di questo tipo siamo in grado di costruire la prossima struttura che ci servirà, cioè il \emph{Dependency Graph}: 
 
@@ -732,15 +737,15 @@ Facendo delle osservazioni di questo tipo siamo in grado di costruire la prossim
     \label{fig:dependency-graph-ae}
 \end{figure}
 
-Può sembrare difficile ottenere questa struttura dal nostro Parse Tree, tuttavia i suoi archi rappresentano semplicemente le dipendenze tra gli attributi (i.e. quali sono necessari per poter effettuare una certa operazione); nella figura possiamo inoltre vedere quali fra gli attributi sono sintetizzati e quali ereditati. 
+Può sembrare difficile ottenere questa struttura dal nostro Parse Tree, tuttavia i suoi archi rappresentano semplicemente le dipendenze tra gli attributi (i.e. quali sono necessari per poter effettuare una certa operazione); nella figura possiamo inoltre vedere quali fra gli attributi sono sintetizzati (in blu) e quali ereditati (in rosso). 
 
 Per rendere più chiaro il grafo utilizziamo un esempio: il sottoalbero sinistro possiede un arco da \(id\) a \(T\) (coincidente con quello del Parse Tree) perchè sottolineiamo che, una volta effettuata l'operazione di riduzione \(T \to id\), \(T\) mantenga un riferimento a \(id\); visto che \(id\) è contenuto nel sottoalbero di \(T\) (i.e. è uno dei suoi figli) tale attributo è sintetizzato. 
 
 La situazione cambia se vogliamo esaminare l'arco esattamente successivo: l'arco da \(T\) ad \(E'\) infatti non coincide con nessun altro arco del Parse Tree e il suo scopo è quello di trasmettere i riferimenti di \(T\) al fratello \(E'\). Questa operazione viene fatta perchè, per poter calcolare in questo caso la differenza, è necessario che \(E'\) riceva le informazioni del fratello \(T\): dovremo dunque servirci di un attributo ereditato.
 
-A questo punto dobbiamo definire le \textbf{regole} associate alle produzioni: tale operazione come sempre non è facile da eseguire ma vedremo di analizzarla passo per passo. 
+A questo punto dobbiamo definire le \textbf{funzioni di attribuzione} associate alle produzioni: tale operazione come sempre non è facile da eseguire ma vedremo di analizzarla passo per passo. 
 
-Cominciamo inserendo le regole delle produzioni finali della grammatica proposta: queste definiscono le foglie del nostro Parse Tree e dovranno occuparsi di generare gli elementi finali dell'Abstract Syntax Tree.
+Cominciamo inserendo le azioni semantiche delle produzioni finali della grammatica proposta: queste definiscono le foglie del nostro Parse Tree e dovranno occuparsi di generare gli elementi finali dell'Abstract Syntax Tree.
 
 \begin{align*}
     T &\to id &\{T.node = newLeaf(id, id.entry)\} \\
@@ -750,9 +755,9 @@ Cominciamo inserendo le regole delle produzioni finali della grammatica proposta
 Queste produzioni ci permettono di creare due foglie:
 
 \begin{itemize}
-    \item una foglia con etichetta id e valore id.entry (i.e. quindi un riferimento alla sua entry nella symbol table per poter recuperare successivamente le informazioni)
-    \item mentre l'altra con etichetta num e valore num.lexval (i.e. il valore ottenuto dall'analisi lessicale)
-\end{itemize}
+    \item una foglia con etichetta id e valore id.entry (i.e. quindi un riferimento alla sua entry nella symbol table per poter recuperare successivamente le informazioni);
+    \item una seconda foglia con etichetta num e valore num.lexval (i.e. il valore ottenuto dall'analisi lessicale)
+\end{itemize}.
 
 Come si può intuire, il nostro scopo con tali regole è fare in modo che in T.node siano memorizzate le informazioni della foglia che abbiamo creato in modo da poterle recuperare in seguito.
 
@@ -764,15 +769,15 @@ Associamo dunque per il momento la regola descritta alla produzione corretta
     E &\to TE' &\{E'.i = T.node\}
 \end{align*}
 
-Volendo chiarire subito alcuni possibili dubbi, sottolineo il fatto che questa non sarà l'unica regola che sarà associata a tale produzione (si è voluto optare per un aggiunta graduale) e che la produzione a cui è stata collegata la regola è quella dove i due nodi fratelli compaiono nel body.
+Volendo chiarire subito alcuni possibili dubbi, sottolineo il fatto che questa non sarà l'unica regola che sarà associata a tale produzione (si è voluto optare per un aggiunta graduale) e che le produzioni a cui è stata aggiunta l'azione semantica sono quelle dove \(T\) ed \(E'\) compaiono nel body.
 
-A questo punto possiamo passare alle produzioni che si occupano delle operazioni aritmetiche, nel nostro caso della produzione \(E' \to -TE'\): per via del nostro esempio potremmo limitarci semplicemente ad eseguire il risultato dell'espressione \(E'.i - T.node\) (ricordiamoci che precedentemente abbiamo fatto in modo che E'.i contenesse il valore del sottoalbero sinistro), tuttavia dobbiamo considerare anche i casi per cui vi potrebbero essere altre operazioni in seguito (e.g. id + id - num + id - ...). per questo motivo facciamo in modo di passare ad \(E'\) il risultato di tale operazione in modo che possa utilizzarlo nel caso di produzioni successive: questo potrebbe essere visto come un esempio di ricorsione dove di fatto stiamo mandando avanti i risultati delle operazioni e dovremo in seguito capire qual è il nostro caso base. Aggiungiamo dunque una regola che fa al caso nostro 
+A questo punto possiamo passare alle produzioni che si occupano delle operazioni aritmetiche, nel nostro caso della produzione \(E' \to -TE'\): per via del nostro esempio potremmo limitarci semplicemente ad eseguire il risultato dell'espressione \(E'.i - T.node\) (ricordiamoci che precedentemente abbiamo fatto in modo che \(E'.i\) contenesse il valore del sottoalbero sinistro), tuttavia dobbiamo considerare anche i casi per cui vi potrebbero essere altre operazioni in seguito (e.g. id + id - num + id - ...). Per questo motivo facciamo in modo di passare ad \(E'\) il risultato di tale operazione in modo che possa utilizzarlo nel caso di produzioni successive: questo potrebbe essere visto come un esempio di ricorsione dove di fatto stiamo mandando avanti i risultati delle operazioni e dovremo in seguito capire qual è il nostro caso base. Aggiungiamo dunque una regola che fa al caso nostro 
 
 \begin{align*}
     E' &\to -TE_{1}' &\{E_{1}'.i = newNode(-, E'.i, T.node)\}
 \end{align*}
 
-Grazie a questa grammatica siamo in grado di generare un nodo con etichetta \(-\) e con un riferimento per operando: il riferimento di questo nodo viene passato poi ad \(E_1.i\), in questo modo riuscirà a svolgere le operazioni successive. 
+Grazie a questa azione semantica siamo in grado di generare un nodo con etichetta \(-\) e con un riferimento per ogni operando: il riferimento di questo nodo viene passato poi ad \(E_1.i\), in questo modo riuscirà a svolgere le operazioni successive. 
 
 Come abbiamo detto precedentemente, dovremo prima o poi interrompere tale ricorsione e quindi necessitiamo di un caso base: banalmente smetteremo di fare nuove chiamate nel momento in cui non avremo più operatori e quindi nel caso in cui utilizzeremo la produzione \(E' \to \epsilon\). In questo momento dovremo riportare il risultato di tutta la nostra computazione (i.e. i nostri riferimenti): per fare ciò semplicemente andiamo ad assegnare a \(E'.node\) i riferimenti ottenuti fino a quel momento
 
@@ -799,11 +804,11 @@ A questo punto possiamo riassumere le regole come segue
     T &\to num &\{T.node = newLeaf(num, num.lexval)\}
 \end{align*}
 
-Nonostante alcune delle produzioni della grammatica non vengano utilizzate nel nostro caso, non vuol dire che non vi possano essere stringhe passate in input che ne possano usufruire: ricordiamoci che nonostante le strutture che stiamo utilizzando fanno riferimento ad un particolare esempio, è necessario che la grammatica sia generale.
+Nonostante alcune delle produzioni della grammatica non vengano utilizzate nel nostro caso, non vuol dire che non vi possano essere stringhe passate in input che ne possano usufruire: ricordiamoci che nonostante le strutture che stiamo utilizzando fanno riferimento ad un particolare esempio, è necessario che la grammatica sia generale, allo stesso modo devono essere generali anche le relative azioni semantiche.
 
 Per questo motivo, possiamo osservare che la produzione \(E' \to +TE'\) svolge lo stesso ruolo di quella che abbiamo già potuto analizzare mentre, \(T \to (E)\), viene utilizzata per poter passare un riferimento al padre. 
 
-A questo punto abbiamo bisogno dell'\emph{Evaluation Order}, ottenuto facendo l'ordinamento topologico del Dependency Graph; si tenga a mente che un qualsiasi ordinamento topologico del grafo può andare bene: è possibile eseguire una visita in profondità e, prima di risalire nella ricorsione, inserire i nodi in uno stack; rimuovere per primi i nodi che non hanno archi entranti; etc... Ricordiamo anche che non è detto che si riesca a trovare un ordinamento topologico: in questo caso non è può valutare il grafo ottenuto.
+A questo punto abbiamo bisogno dell'\emph{Evaluation Order}, ottenuto facendo l'ordinamento topologico del Dependency Graph; si tenga a mente che un qualsiasi ordinamento topologico del grafo può andare bene: è possibile eseguire una visita in profondità e, prima di risalire nella ricorsione, inserire i nodi in uno stack; rimuovere per primi i nodi che non hanno archi entranti; etc... Ricordiamo anche che non è detto che si riesca a trovare un ordinamento topologico: in questo caso non è possibile valutare il grafo ottenuto.
 
 \begin{figure}[H]
 	\centering
@@ -816,14 +821,14 @@ Finalmente abbiamo la possibilità di osservare passo per passo come costruire i
 
 \begin{enumerate}
     \item Recuperiamo le informazioni relativamente ad \(id\) (i.e. \(a\)) dalla Symbol Table mediante il riferimento presente in \(id.entry\)
-    \item Generiamo la foglia \emph{Leaf(id, 1)} (i.e. una foglia con etichetta id e un riferimento alla Symbol Table) e manteniamo un riferimento ad essa: tale operazione viene eseguita dalla regola \(\{T.node = newLeaf(id, id.entry)\}\) per  \(T \to id\)
+    \item Generiamo una foglia con etichetta id e un riferimento ad \(a\) nella Symbol Table) e manteniamo un riferimento ad essa: tale operazione viene eseguita dalla regola \(\{T.node = newLeaf(id, id.entry)\}\) per  \(T \to id\)
     \item Recuperiamo il valore di \(num\) ottenuto dall'analisi lessicale mediante \(num.lexval\) (i.e. 4)
-    \item Generiamo la foglia \emph{Leaf(num, 3)} e manteniamo un riferimento ad essa: tale operazione viene eseguita dalla regola \(\{T.node = newLeaf(num, num.lexval)\}\) per \(T \to num\)
-    \item Creiamo un riferimento a \emph{Leaf(id, 1)} utilizzando la regola \(\{E'.i = T.node\}\) per  \(E \to TE'\). In questo passaggio dobbiamo recuperare \(T.node\) (che contiene un riferimento alle informazioni del sottoalbero sinistro) e assegnarlo a \(E'.node\), in modo che i passi successivi possano usufruirne
-    \item Generiamo il nodo \emph{Node(-, 5, 4)} e manteniamo un riferimento ad esso: tale operazione viene eseguita dalla regola \(\{E_{1}'.i = newNode(-, E'.i, T.node)\}\) per \(E' \to -TE_{1}'\); anche in questo caso abbiamo bisogno di passare il riferimento ai passi successivi
-    \item Creiamo un riferimento a \emph{Node(-, 5, 4)} utilizzando la regola \(\{E'.node = E'.i\}\) per \(E' \to \epsilon\)
-    \item Creiamo un riferimento a \emph{Node(-, 5, 4)} utilizzando la regola \(\{E'.node = E_{1}'.node\}\) per \(E' \to -TE_{1}'\)
-    \item Creiamo un riferimento a \emph{Node(-, 5, 4)} utilizzando la regola \(\{E.node = E'.node\}\) per \(E \to TE'\)
+    \item Generiamo la foglia per il valore di \(num\) e manteniamo un riferimento ad essa: tale operazione viene eseguita dalla regola \(\{T.node = newLeaf(num, num.lexval)\}\) per \(T \to num\)
+    \item Creiamo un riferimento alla foglia di \(a\) utilizzando la regola \(\{E'.i = T.node\}\) per  \(E \to TE'\). In questo passaggio dobbiamo recuperare \(T.node\) (che contiene un riferimento alle informazioni del sottoalbero sinistro) e assegnarlo a \(E'.i\), in modo che i passi successivi possano usufruirne
+    \item Generiamo il nodo per la sottrazione \(a-4\): tale operazione viene eseguita dalla regola \(\{E_{1}'.i = newNode(-, E'.i, T.node)\}\) per \(E' \to -TE_{1}'\); anche in questo caso abbiamo bisogno di passare il riferimento ai passi successivi
+    \item Creiamo un riferimento al nodo della sottrazione appena creatp utilizzando la regola \(\{E'.node = E'.i\}\) per \(E' \to \epsilon\)
+    \item Creiamo un riferimento allo stesso nodo utilizzando la regola \(\{E'.node = E_{1}'.node\}\) per \(E' \to -TE_{1}'\)
+    \item Infine creiamo un riferimento ancora allo steso nodo (esato, è proprio questo che si fa quando si ritorna da una ricorsione) utilizzando la regola \(\{E.node = E'.node\}\) per \(E \to TE'\)
 \end{enumerate}
 
 Il risultato finale è dunque rappresentabile nel seguente modo:
@@ -835,7 +840,7 @@ Il risultato finale è dunque rappresentabile nel seguente modo:
     \label{fig:abstract-syntax-tree-ae}
 \end{figure}
 
-\subsubsection{Es aggiornamento tipo degli identificatori}
+\subsubsection{Es attribuzione tipo degli identificatori}
 
 Consideriamo la seguente grammatica
 
@@ -847,7 +852,7 @@ Consideriamo la seguente grammatica
     L &\to id
 \end{align*}
 
-L'obbiettivo è quello di associare alle produzioni descritte delle regole per cui si possa aggiungere il tipo nella entry della Symbol Table degli identificatori dichiarati. Per poter aggionrare la tabella è necessario utilizzare la funzione addtype(table\_entry), type\_instance).
+L'obbiettivo è quello di associare alle produzioni descritte delle regole per cui si possa aggiungere il tipo nella entry della Symbol Table degli identificatori dichiarati. Per poter aggionrare la tabella è necessario utilizzare la funzione \texttt{addtype(table\_entry, type\_instance)}.
 
 Anche in questo caso partiamo da un esempio che può aiutarci per la definizione delle regole: supponiamo di avere la parola \emph{int id, id}, in questo caso per una derivazione leftomost i passi di derivazione che dobbiamo compiere sono
 
@@ -871,7 +876,7 @@ Partiamo dalle produzioni più semplici, cioè quelle che si occupano di definir
     T &\to float &\{T.type = float\}
 \end{align*}
 
-Dal Parse Tree possiamo poi notare che la computazione del sottoalbero destro dipende dal sottoalbero sinistro: una volta scoperto il tipo delle nostre entry abbiamo bisogno di fornire questa informazione alla funzione nell'altro sottoalbero, ma ciò è possibile solamente utilizzando degli attributi ereditati. Per questo motivo possiamo introdurre la seguente regola
+Guardando il parse tree osserviamo che la risoluzione del sottoalbero destro dipende dal sottoalbero sinistro: una volta scoperto il tipo delle nostre entry abbiamo bisogno di fornire questa informazione alla funzione nell'altro sottoalbero, ma ciò è possibile solamente utilizzando degli attributi ereditati. Per questo motivo possiamo introdurre la seguente regola
 
 \begin{align*}
     D &\to TL &\{L.i = T.type\} \\
