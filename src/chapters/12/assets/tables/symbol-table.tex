@@ -1,0 +1,23 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+
+\setlength\lightrulewidth{0.1pt}
+\providecommand\lightrule{%
+	\arrayrulecolor{black!30}%
+	\midrule[\lightrulewidth]%
+	\arrayrulecolor{black}}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+\begin{tabularx}{\textwidth}{XXX}
+    Reference & Name & Other attributes \\
+        \midrule
+        1 & position & \dots \\
+        2 & initial & \dots \\
+        3 & rate & \dots \\
+\end{tabularx}
+\end{document}
