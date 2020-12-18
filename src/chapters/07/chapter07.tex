@@ -697,22 +697,30 @@ Andiamo quindi a eseguire la nostra procedura e otteniamo la seguente grammatica
     \mathcal{G'}: E &\to (E)E' \mid idE' \\
     E' &\to +EE' \mid \ast EE' \mid \varepsilon
 \end{align*}
-Questa grammatica è LL(1)? Sfortunatamente, se costruiamo la tabella di parsing per questa grammatica, troviamo che la cella [\(E', +\)] contiene due produzioni:
+Questa grammatica è LL(1)? Sfortunatamente, se costruiamo la tabella di parsing (Tab.\ref{tab:ll-rem-efficiency-table}) per questa grammatica, troviamo che le celle [\(E', +\)] e [\(E', \ast\)] contengono due produzioni:
 \begin{itemize}[noitemsep]
-    \item \(+EE'\);
+    \item \(+EE'\) o \(*EE'\) rispettivamente;
     \item \(E' \to \varepsilon\).
 \end{itemize}
-
-%TODO tabella di parsing
-
+\begin{table}
+    \centering 
+    \subimport{assets/tables/}{ll-rem-efficiency-table.tex}
+    \caption{Tabella di parsing LL(1) per \(\G'\)}
+    \label{tab:ll-rem-efficiency-table}
+\end{table}
 Ne abbiamo un ulteriore conferma se andiamo a calcolare i first/follow per \(E\) e \(E'\):
-\begin{figure}[H]
+\begin{table}[H]
     \centering
-    \includegraphics[width=.4\textwidth,keepaspectratio]{fxness-lrremove-fftable.png}
+    \subimport{assets/tables/}{ll-rem-efficiency-ff.tex}
     \caption{Tabella con i first/follow per \(E\) e \(E'\)}
-    \label{fxness-lrremove- fftable}
-\end{figure}
-
+    \label{ll-rem-efficiency-ff}
+\end{table}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.4\textwidth,keepaspectratio]{fxness-lrremove-fftable.png}
+%     \caption{Tabella con i first/follow per \(E\) e \(E'\)}
+%     \label{fxness-lrremove- fftable}
+% \end{figure}
 \paragraph{Conclusione}
 Nota bene: non dobbiamo cadere nell'errore di supporre che, magari, la nostra procedura funzioni a meno che non sia lanciata su grammatiche ambigue, perché non ne abbiamo fornito alcuna prova. Da questo  esempio possiamo solamente concludere, a malincuore, che la procedura di eliminazione della ricorsione sinistra \emph{non garantisce} di ottenere delle grammatiche LL(1).
 
@@ -842,7 +850,7 @@ Ma quindi, questa \(\mathcal{G}'\) che abbiamo appena ottenuto è una grammatica
     \item first(\(S'\)) = \(\{a, b\}\) e follow(\(S'\)) = \(\{\$, b\}\).
 \end{itemize}
 Per cui la tabella di parsing viene costruita come segue:
-\begin{table}[h]
+\begin{table}[H]
     \centering
     \subimport{assets/tables/}{topDownParsingAfterFactorization.tex}
     \caption{Top Down Parsing Table - Dopo fattorizzazione sinistra}

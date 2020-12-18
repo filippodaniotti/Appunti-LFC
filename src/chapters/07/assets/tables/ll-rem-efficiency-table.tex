@@ -1,0 +1,39 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage[table]{xcolor}
+
+\setlength\lightrulewidth{0.1pt}
+\providecommand\lightrule{%
+	\arrayrulecolor{black!30}%
+	\midrule[\lightrulewidth]%
+	\arrayrulecolor{black}} 
+    
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+\begin{tabularx}{\textwidth}{mXhXXXs}
+    & \((\) & \()\) & \(id\) & \(+\) & \(\ast\) & \$ \\
+    \midrule
+        \(E\)
+        &
+        \(E \to (E)E'\)
+        & &
+        \(E \to id\;E'\)
+        & & &
+        \\ \lightrule
+
+        \(E'\)
+        & &
+        \(E' \to \varepsilon\)
+        & &
+        \(E' \to +EE'\), \(E' \to \varepsilon\)
+        &
+        \(E' \to *EE'\), \(E' \to \varepsilon\)
+        &
+        \(E' \to \varepsilon\)
+        \\
+\end{tabularx}
+\end{document}

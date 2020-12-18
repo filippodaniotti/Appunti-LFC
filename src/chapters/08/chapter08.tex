@@ -617,17 +617,29 @@ Tutto questo è fantastico, ma purtroppo c'è un grosso elefante nella nostra st
     \center
     \includegraphics[width=.6\textwidth]{ex2-sh_re-table.png}
     \caption{tabella di parsing SLR(1) per la grammatica \ref{eq:ex2-sh/re-grammar}}
-    \label{tab:ex2-sh/re-table}
+    % \label{tab:ex2-sh/re-table}
 \end{figure}
+\begin{table}[H]
+    \centering
+    \subimport{assets/tables/}{ex2-sh/re-table.tex}
+    \caption{tabella di parsing SLR(1) per la grammatica \ref{eq:ex2-sh/re-grammar}}
+    \label{tab:ex2-sh/re-table}
+\end{table}
 \noindent Quindi, se vogliamo perseguire la nostra ricerca di un parsing deterministico (e lo vogliamo), toccherà rimboccarsi le maniche e andare a capire come possiamo risolvere questi conflitti, non diversamente da quanto già avevamo fatto nel parsing top-down con le entries multiple defined.
 
 I nostri conflitti sono localizzati solo in quattro situzioni, ossiamo quando ci troviamo in uno tra gli stati 5 o 6 e, contemporaneamente, troviamo in lettura un simbolo tra \(+\) o \(\ast\).
-\begin{figure}[H]
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.6\textwidth]{ex2-sh_re-table_conf.png}
+%     \caption{Dettaglio di Tab.\ref{tab:ex2-sh/re-grammar_conf}}
+%     % \label{tab:ex2-sh/re-table_conf}
+% \end{figure}
+\begin{table}[H]
     \centering
-    \includegraphics[width=.6\textwidth]{ex2-sh_re-table_conf.png}
+    \subimport{assets/tables/}{ex2-sh/re-table_conf.tex}
     \caption{Dettaglio di Tab.\ref{tab:ex2-sh/re-grammar_conf}}
     \label{tab:ex2-sh/re-table_conf}
-\end{figure}
+\end{table}
 
 \paragraph{La situazione}
 Proviamo a capire bene qual è il punto di tutta questa situazione. Se il nostro parser si trova nello stato 5, questo vuol dire che, in testa alla nostra pila dei simboli \(symSt\), avremo necessariamente \(E + E\); possiamo vederlo facilmente, è sufficiente buttare un occhio al nostro automa caratteristico (Fig.\ref{fig:ex2-sh/re-automata}) per renderci conto che lo stato 5 è raggiungibile solo dallo stato \(3\), il quale a sua volta può essere raggiunto o dalla sequenza di stati \((0, 1)\), \((4, 6)\) o \((3, 5)\), in tutti questi casi sulla testa di \(symSt\) si troverà \(E + E\). Il discorso è del tutto analogo se passiamo allo stato 6, dove avremo la testa di \(symSt\) popolata di \(E * E\), poiché 6 è raggiungibile tramite \(\dots \to 0 \to 1 \to 4 \to 6\), \(\dots \to 4 \to 6 \to 4 \to 6\) oppure \(\dots \to 3 \to 5 \to 4 \to 6\).
@@ -681,9 +693,15 @@ A questo punto possiamo andare ad analizzare i quattro conflitti che abbiamo tro
     \item \(M[5, *]\): torniamo adesso a parlare dello stato 5; la testa di \(symSt\) è popolata come prima, ma questa volta il lettura troviamo un simbolo \(\ast\). Questo cambia le carte in tavola, perché noi vogliamo che l'operatore \(\ast\) abbia precedenza più alta di \(+\); per ottenere questo, scegliamo la mossa di shift \(s4\), il che significa che rimandiamo la parentesizzazione della testa di \(symSt\) e proseguiamo nella lettura.
     \item \(M[6, +]\): qui abbiamo trovato \(E * E\) nella testa di \(symSt\) e ci sta arrivando un \(+\) in lettura, e ormai l'idea dovrebbe essere chiara: coerentemente con le regole di precedenza (\(\ast \prec +\)), vogliamo che la testa di \(symSt\) sia parentesizzata prima di proseguire con la lettura di \(+\), per cui qui teniamo la reduce \(r2\).
 \end{itemize}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.6\textwidth]{ex2-sh_re-table_conf_solved.png}
+%     \caption{Soluzione dei conflitti di Tab.\ref{tab:ex2-sh/re-grammar_conf}}
+%     \label{tab:ex2-sh/re-table_conf_solved}
+% \end{figure}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.6\textwidth]{ex2-sh_re-table_conf_solved.png}
+    \subimport{assets/tables/}{ex2-sh/re-table_conf_solved.tex}
     \caption{Soluzione dei conflitti di Tab.\ref{tab:ex2-sh/re-grammar_conf}}
     \label{tab:ex2-sh/re-table_conf_solved}
 \end{figure}
