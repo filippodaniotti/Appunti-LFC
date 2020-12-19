@@ -22,7 +22,7 @@
     Siano \(\mathcal{L}_1\) e \(\mathcal{L}_2\) dei linguaggi liberi; questo vuol dire che devono esistere due grammatiche libere, ciascuna delle quali ha generato uno dei due linguaggi. In simboli:
 
   \begin{equation*}
-    \exists \mathcal{G}_1 = (V_1, T_1, S_1, \mathcal{P}_1), \exists \mathcal{G}_2 = (V_2, T_2, S_2, \mathcal{P}_2) : \mathcal{L}_1 = \mathcal{L}(\mathcal{G}_1) \textrm{ e } \mathcal{L}_2 = \mathcal{L}(\mathcal{G}_2)
+    \exists\; \mathcal{G}_1 = (V_1, T_1, S_1, \mathcal{P}_1), \mathcal{G}_2 = (V_2, T_2, S_2, \mathcal{P}_2) : \mathcal{L}_1 = \mathcal{L}(\mathcal{G}_1) \textrm{ e } \mathcal{L}_2 = \mathcal{L}(\mathcal{G}_2)
   \end{equation*}
 
   Vediamo quindi come costruire una nuova grammatica libera che possa generare l'unione dei due linguaggi generati dalle rispettive grammatiche viste sopra. Consideriamo quindi una nuova grammatica \(\mathcal{G}\), i cui elementi sono così definiti:
@@ -119,13 +119,10 @@
 
 \end{lemma}
 
-\begin{proof}
-  La dimostrazione sembra assolutamente uguale a quella del lemma della chiusura all'unione, sono confuso ma domani cercherò di chiarire.
-  
-  Alla fine ha chiarito il Sam, grazie Sam.\\
+\begin{proof}% La dimostrazione sembra assolutamente uguale a quella del lemma della chiusura all'unione, sono confuso ma domani cercherò di chiarire.Alla fine ha chiarito il Sam, grazie Sam.\\
   Consideriamo due linguaggi liberi \(\mathcal{L}_1\) e \(\mathcal{L}_2\); ciò implica che esistano due grammatiche libere \(\mathcal{G}_1\) e \(\mathcal{G}_2\) che soddisfano la seguente equazione:
   \begin{equation*}
-    \exists \mathcal{G}_1 = (V_1, T_1, S_1, \mathcal{P}_1), \exists \mathcal{G}_2 = (V_2, T_2, S_2, \mathcal{P}_2) : \mathcal{L}_1 = \mathcal{L}(\mathcal{G}_1) \textrm{ e } \mathcal{L}_2 = \mathcal{L}(\mathcal{G}_2)
+    \exists\; \mathcal{G}_1 = (V_1, T_1, S_1, \mathcal{P}_1), \mathcal{G}_2 = (V_2, T_2, S_2, \mathcal{P}_2) : \mathcal{L}_1 = \mathcal{L}(\mathcal{G}_1) \textrm{ e } \mathcal{L}_2 = \mathcal{L}(\mathcal{G}_2)
   \end{equation*}
   Consideriamo quindi una nuova grammatica \(\mathcal{G}\), i cui elementi sono così definiti:
 
@@ -161,7 +158,7 @@
     \mathcal{L}_1 \cap \mathcal{L}_2 = \{ a^n b^n c^n \mid n > 0 \}
   \end{align*}
 
-  \noindent Questo linguaggio non è libero, e provarlo è molto semplice (si veda l'esercizio \ref{ex-freeNotFree_1}).
+  \noindent Questo linguaggio non è libero, e provarlo è molto semplice (si veda Tab.~\ref{tab:ex-freeNotFree_1}).
 
 \end{proof}
 
@@ -314,7 +311,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
   Ulteriori considerazioni:
    \begin{itemize}
      \item per come abbiamo scelto le occorrenze di \(A\), la profondità del sottoalbero radicato in \(A_2\) è minore del numero di non-terminali presenti nella grammatica considerata, da cui, per definizione stessa del valore \(p\), \(|vwx| < p\);
-     \item la grammatica \(\mathcal{G}\) che genera il linguaggio che stiamo considerando è pulita, per cui nelle derivazioni di forma \(A \implies^* \alpha A \beta\), almeno uno dei due simboli \(\alpha, \beta\) deve fornire uno ulteriore; questo ci permette di affermare che \(|vx| > 0\).
+     \item la grammatica \(\mathcal{G}\) che genera il linguaggio che stiamo considerando è ripulita, per cui nelle derivazioni di forma \(A \implies^* \alpha A \beta\), almeno uno dei due simboli \(\alpha, \beta\) deve fornire uno ulteriore; questo ci permette di affermare che \(|vx| > 0\).
    \end{itemize}
 
    \paragraph{Dimostrazione se \(\varepsilon \in \mathcal{L}\)}
@@ -399,14 +396,14 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 	Per esempio supponiamo sia \(|vwx|=b^p\), allora ci è facile prendere \(uv^0wx^0y\) e verificare che questo non può avere la forma \(a^pb^pa^pb^p\)
 	Dunque abbiamo trovato un elemento che contraddice il \emph{Pumping Lemma} e dunque l'ipotesi iniziale non è valida, ovvero \(\mathcal{L}\) non è \emph{free}
 
-\section{Alcuni esercizi che contestualizzerò meglio più avanti}
+\section{Esercizi di riepilogo}
 \subsection*{Esercizio 1 - I seguenti linguaggi sono liberi?}
 
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{ex-freeNotFree_1.tex}
     \caption{Esercizio 1}
-    \label{ex-freeNotFree_1}
+    \label{tab:ex-freeNotFree_1}
 \end{table}
 
 \paragraph{Spiegazione \ref{ex-freeNotFree_1}}

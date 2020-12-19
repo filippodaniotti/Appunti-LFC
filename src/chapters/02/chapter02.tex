@@ -98,7 +98,7 @@ Diventa quindi semplice vedere che il linguaggio di questa grammatica è lo stes
 \subsubsection*{Spiegazione di \ref{Esercizio 2}:}
 Come prima si parte dal simbolo \(S\) che anche questa volta ci permette una sola produzione, quindi deriviamo senza ulteriori indugi: \(S \implies AB\).
 
-In seguito ci rendiamo conto che le productions dell'esercizio altro non sono che delle regole per generare un numero a nostro piacimento di terminali \(a\) e \(b\), quindi deriviamo tranquillamente il seguente linguaggio: \(\{a^n b^m \mid n,m>1\}\).
+In seguito ci rendiamo conto che le productions dell'esercizio altro non sono che delle regole per generare un numero a nostro piacimento di terminali \(a\) e \(b\), quindi deriviamo tranquillamente il seguente linguaggio: \(\{a^n b^m \mid n,m \ge 1\}\).
 
 \begin{table}[H]
 	\centering
@@ -136,7 +136,7 @@ Essendo il linguaggio definito come un insieme di parole che la grammatica può 
     \label{Esercizio 5}
 \end{table}
 \subsubsection*{Spiegazione di \ref{Esercizio 5}:}
-Non c'è molto da dire in questo caso se non che l’insieme contenente la parola vuota è diverso dall’insieme vuoto \(\{\varepsilon\} \neq \Phi\).
+Non c'è molto da dire in questo caso se non che l’insieme contenente la parola vuota è diverso dall’insieme vuoto \(\{\varepsilon\} \neq \emptyset\).
 
 \begin{table}[H]
 	\centering
@@ -182,7 +182,7 @@ Una volta definiti i componenti di una grammatica generativa, definiamo le conve
     \item Lettere maiuscole alla fine dell’alfabeto (\(X\), \(Y\), \(Z\)…) un generico simbolo del vocabolario, terminale o meno, non si sa (\(\in V\)).
     \item Lettere minuscole inizio alfabeto (\(a\), \(b\)…) per indicare caratteri terminali (\(\in T\)).
     \item Lettere minuscole greche per indicare stringhe che possono essere composte da terminali o non terminali \(\in V^*\), dove \(^*\) significa che possono esserci zero o più ripetizioni di elementi nella base.
-    \item Lettere minuscole in fondo all’alfabeto con pedice numerico (\(w\), \(w_0\)…) per indicare stringhe di caratteri terminali. Altrimenti dette \(words\) o parole del linguaggio. 
+    \item Lettere minuscole in fondo all’alfabeto con pedice numerico (\(w\), \(w_0\)…) per indicare stringhe di caratteri terminali, dette anche \(words\) o \(parole\) del linguaggio. 
 \end{itemize}
 Definiamo ora formalmente l'oggetto produzione, esso è una traduzione in questa forma:
 \begin{equation}
@@ -195,12 +195,12 @@ Il linguaggio generato da una grammatica \(\mathcal{G} = (V,T,S,\mathcal{P})\) �
 \begin{equation}
     \mathcal{L}(\mathcal{G}) = \{w \mid w \in T^* and \; S \implies^*\;  w\}
 \end{equation}
-dove \( \implies^*\) è il simbolo utilizzato per indicare una sequenza di derivazioni successive compatibili secondo le produzioni ( anche nessuna ). In altre parole il linguaggio generato è l'insieme di tutti gli elementi (anche vuoti) che si possono derivare con uno o più passi dallo starting point. 
+Quell'\( \implies^*\) è il simbolo utilizzato per indicare una sequenza di derivazioni successive compatibili secondo le produzioni (anche nessuna); in altre parole, il linguaggio generato è l'insieme di tutti gli elementi (anche vuoti) che si possono derivare con uno o più passi dallo start symbol. 
 
 \subsection{Tipi di grammatiche generative}
 Esiste una gerarchia delle grammatiche, che non dipende dal genere di analisi che permettono di fare, ma dipende solo dalla struttura delle loro produzioni.
 
-Si parla di Context-free grammars, o free grammars, quando tutte le produzioni sono in forma \(A \to \beta\), ovvero che hanno driver composti \emph{esclusivamente} da non terminali.
+Si parla di Context-free grammars, o free grammars, quando tutte le produzioni sono in forma \(A \to \beta\), ovvero che hanno driver composti \emph{solamente} da non terminali.
 
 Queste grammatiche sono molto importanti perché praticamente tutti i linguaggi di programmazione sono derivati da questo tipo di grammatica.
 Si dice di un linguaggio che è context-free se esiste una grammatica libera che genera quello stesso linguaggio.
@@ -241,10 +241,12 @@ Prendiamo ad esempio la grammatica delle espressioni aritmetiche:
 \begin{equation}
     E \to E+E \mid E*E \mid  n
 \end{equation}
-dove il simbolo \(|\) è una modo compatto per scrivere diverse produzioni con lo stesso driver. La grammatica proposta è equivalente alla seguente: 
-\begin{equation}
-	E \to E+E; E \to E*E; E \to n
-\end{equation}
+dove il simbolo \(\mid\) è una modo compatto per scrivere diverse produzioni con lo stesso driver. La grammatica proposta è equivalente alla seguente: 
+\begin{align*}
+    E &\to E+E \\
+    E &\to E*E \\
+    E &\to n
+\end{align*}
 Intuitivamente si può leggere come exp -> exp+exp  o  exp*exp  o  numero.\\
 Questa grammatica ci permette di fare operazioni di somma o moltiplicazione, è ambigua o meno?
 
