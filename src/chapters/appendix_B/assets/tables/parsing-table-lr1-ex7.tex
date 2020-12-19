@@ -1,0 +1,25 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+
+\setlength\lightrulewidth{0.1pt}
+\providecommand\lightrule{%
+	\arrayrulecolor{black!30}%
+	\midrule[\lightrulewidth]%
+	\arrayrulecolor{black}}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+\begin{tabularx}{\textwidth}{XXXXXXXX}
+         & a & b & c & \$ & S & A & B \\
+        \midrule
+            ...
+            \\ \lightrule
+            \(9\) & r4 & & r5 & & & 10 & 4
+            \\ \lightrule
+            ...
+    \end{tabularx}
+\end{document}

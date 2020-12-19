@@ -1,0 +1,29 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{tabularx}
+
+\setlength\lightrulewidth{0.1pt}
+\providecommand\lightrule{%
+	\arrayrulecolor{black!30}%
+	\midrule[\lightrulewidth]%
+	\arrayrulecolor{black}}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+\begin{tabularx}{\textwidth}{XXXXX}
+        & \(a\) & \(b\) & \(c\) & \$ \\
+        \midrule
+            B
+            &
+            \(B \to epsilon\)
+            &
+            
+            &
+            \(B \to epsilon\)
+            &
+            \(B \to epsilon\)
+    \end{tabularx}
+\end{document}
