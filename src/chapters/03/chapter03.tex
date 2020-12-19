@@ -14,7 +14,7 @@
 \begin{lemma}
   La classe dei linguaggi liberi è chiusa rispetto all'operazione di unione d'insiemi.
   \begin{equation*}
-    \textrm{Se } \mathcal{L}_1 \land \mathcal{L}_2 \textrm{ sono liberi} \implies \mathcal{L}_1 \cup \mathcal{L}_2 \textrm{ è libero}
+    \textrm{Se } \mathcal{L}_1 \textrm{ è libero} \land \mathcal{L}_2 \textrm{ è libero} \implies \mathcal{L}_1 \cup \mathcal{L}_2 \textrm{ è libero}
   \end{equation*}
 \end{lemma}
 
@@ -22,7 +22,7 @@
     Siano \(\mathcal{L}_1\) e \(\mathcal{L}_2\) dei linguaggi liberi; questo vuol dire che devono esistere due grammatiche libere, ciascuna delle quali ha generato uno dei due linguaggi. In simboli:
 
   \begin{equation*}
-    \exists \mathcal{G}_1 = (V_1, T_1, S_1, \mathcal{P}_1), \mathcal{G}_2 = (V_2, T_2, S_2, \mathcal{P}_2) : \mathcal{L}_1 = \mathcal{L}(\mathcal{G}_1) \textrm{ e } \mathcal{L}_2 = \mathcal{L}(\mathcal{G}_2)
+    \exists\; \mathcal{G}_1 = (V_1, T_1, S_1, \mathcal{P}_1), \mathcal{G}_2 = (V_2, T_2, S_2, \mathcal{P}_2) : \mathcal{L}_1 = \mathcal{L}(\mathcal{G}_1) \textrm{ e } \mathcal{L}_2 = \mathcal{L}(\mathcal{G}_2)
   \end{equation*}
 
   Vediamo quindi come costruire una nuova grammatica libera che possa generare l'unione dei due linguaggi generati dalle rispettive grammatiche viste sopra. Consideriamo quindi una nuova grammatica \(\mathcal{G}\), i cui elementi sono così definiti:
@@ -114,18 +114,15 @@
   La classe dei linguaggi liberi è chiusa rispetto all'operazione di concatenazione.
 
   \begin{equation*}
-    \textrm{Se } \mathcal{L}_1 \land \mathcal{L}_2 \textrm{ sono liberi} \implies \{w_1w_2 \mid w_1 \in \mathcal{L}_1 \land w_2 \in \mathcal{L}_2\} \textrm{ è un linguaggio libero.}
+    \textrm{Se } \mathcal{L}_1 \textrm{ è libero} \land \mathcal{L}_2 \textrm{ è libero} \implies \{w_1w_2 \mid w_1 \in \mathcal{L}_1 \land w_2 \in \mathcal{L}_2\} \textrm{ è un linguaggio libero.}
   \end{equation*}
 
 \end{lemma}
 
-\begin{proof}
-  La dimostrazione sembra assolutamente uguale a quella del lemma della chiusura all'unione, sono confuso ma domani cercherò di chiarire.
-  
-  Alla fine ha chiarito il Sam, grazie Sam.\\
+\begin{proof}% La dimostrazione sembra assolutamente uguale a quella del lemma della chiusura all'unione, sono confuso ma domani cercherò di chiarire.Alla fine ha chiarito il Sam, grazie Sam.\\
   Consideriamo due linguaggi liberi \(\mathcal{L}_1\) e \(\mathcal{L}_2\); ciò implica che esistano due grammatiche libere \(\mathcal{G}_1\) e \(\mathcal{G}_2\) che soddisfano la seguente equazione:
   \begin{equation*}
-    \exists \mathcal{G}_1 = (V_1, T_1, S_1, \mathcal{P}_1), \mathcal{G}_2 = (V_2, T_2, S_2, \mathcal{P}_2) : \mathcal{L}_1 = \mathcal{L}(\mathcal{G}_1) \textrm{ e } \mathcal{L}_2 = \mathcal{L}(\mathcal{G}_2)
+    \exists\; \mathcal{G}_1 = (V_1, T_1, S_1, \mathcal{P}_1), \mathcal{G}_2 = (V_2, T_2, S_2, \mathcal{P}_2) : \mathcal{L}_1 = \mathcal{L}(\mathcal{G}_1) \textrm{ e } \mathcal{L}_2 = \mathcal{L}(\mathcal{G}_2)
   \end{equation*}
   Consideriamo quindi una nuova grammatica \(\mathcal{G}\), i cui elementi sono così definiti:
 
@@ -135,7 +132,7 @@
   La definizione dei vari elementi della precedente equazione procede pari passo a quella già vista nel lemma della chiusura rispetto all'unione.
   L'unica differenza è la definizione del linguaggio \(\mathcal{L}(\mathcal{G})\) che appunto qui è costruito per concatenazione e non per unione:
   \begin{equation*}
-    \mathcal{L(G)} = \{w_1 w_2 \mid w_1 \in \mathcal{L(G_1)} \land w_2 \in \mathcal{L(G_2)} \}
+    \mathcal{L(G)} = \{w_1 w_2 \mid w_1 \in \mathcal{L}(\mathcal{G}_1) \land w_2 \in \mathcal{L}(\mathcal{G}_2) \}
   \end{equation*}
   La dimostrazione del lemma di chiusura rispetto alla concatenazione procede pari passo a quella del lemma di chiusura rispetto all'unione, di conseguenza non è qui riportata. 
 \end{proof}
@@ -161,7 +158,7 @@
     \mathcal{L}_1 \cap \mathcal{L}_2 = \{ a^n b^n c^n \mid n > 0 \}
   \end{align*}
 
-  \noindent Questo linguaggio non è libero, e provarlo è molto semplice (si veda \ref{ex-freeNotFree_1}).
+  \noindent Questo linguaggio non è libero, e provarlo è molto semplice (si veda Tab.~\ref{tab:ex-freeNotFree_1}).
 
 \end{proof}
 
@@ -200,7 +197,7 @@ Le grammatiche che possiedono queste caratteristiche sono più sintetiche e gene
 Non è nostro interesse entrare nel dettaglio degli algoritmi per effettuare questa pulizia, poiché dimostrarne la correttezza richiederebbe un considerevole impegno. Andremo però ad analizzare come possiamo, se non altro,  eliminare le \(\varepsilon\)-produzioni.
 
 \subsection{Come eliminare le produzioni di parole vuote}
-Per eliminare le \(\varepsilon\)-produzioni bisogna procedere ad individuare i non-terminali \emph{annullabili}, ovvero quei non-terminali che, con qualche derivazione, producono la parola vuota (\(A : A \rightarrow^\ast \varepsilon\)). Si può procedere ricorsivamente:
+Per eliminare le \(\varepsilon\)-produzioni bisogna procedere ad individuare i non-terminali \emph{annullabili} (\emph{nullable}), ovvero quei non-terminali che, con qualche derivazione, producono la parola vuota (\(A : A \rightarrow^\ast \varepsilon\)). Si può procedere ricorsivamente:
 \begin{description}
   \item[Base] se la grammatica comprende una produzione della forma \(A \rightarrow \varepsilon\), allora quel non-terminale \(A\) è annullabile;
   \item[Step] se la grammatica comprende una produzione della forma \(A \rightarrow Y_1Y_2 \ldots Y_n\) e i non terminali \(Y_1, Y_2, \ldots, Y_3\) sono tutti annullabili, allora anche \(A\) è annullabile. 
@@ -333,7 +330,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 
 	Qui passiamo alle applicazioni del \emph{Pumping Lemma}. In particolare può essere utilizzato per provare che un linguaggio \(\mathcal{L}\) non è libero.
 
-	In generale, da un'implicazione logica del tipo \(A \implies B\), è possibile ottenere la negazione \(\neg A \implies \neg B\). Nel nostro caso, da \(\mathcal{L}\) libero \(\implies\) Tesi del \emph{Pumping Lemma}, abbiamo \(Not\) tesi del \emph{Pumping Lemma} \(\implies\) \(\mathcal{L}\) \(Not\) libero.
+	In generale, da un'implicazione logica del tipo \(A \implies B\), è possibile ottenere la negazione \(\neg B \implies \neg A\). Nel nostro caso, da \(\mathcal{L}\) libero \(\implies\) Tesi del \emph{Pumping Lemma}, abbiamo \(Not\) tesi del \emph{Pumping Lemma} \(\implies\) \(\mathcal{L}\) \(Not\) libero.
 	La negazione della tesi del \emph{Pumping Lemma} è la seguente:
 
 	\begin{itemize}
@@ -395,17 +392,17 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 	DIM
 	Sia \(\mathcal{L}\) libero
 	sia \(z=a^pb^pa^pb^p, z\in \mathcal{L}, z=uvwxy, |vwx|\leq p \)
-	Per esempio supponiamo sia \(|vwx|=b^p\), allora ic è facile prendere \(uv^0wx^0y\) e verificare che questo non può avere la forma \(a^pb^pa^pb^p\)
+	Per esempio supponiamo sia \(|vwx|=b^p\), allora ci è facile prendere \(uv^0wx^0y\) e verificare che questo non può avere la forma \(a^pb^pa^pb^p\)
 	Dunque abbiamo trovato un elemento che contraddice il \emph{Pumping Lemma} e dunque l'ipotesi iniziale non è valida, ovvero \(\mathcal{L}\) non è \emph{free}
 
-\section{Alcuni esercizi che contestualizzerò meglio più avanti}
+\section{Esercizi di riepilogo}
 \subsection*{Esercizio 1 - I seguenti linguaggi sono liberi?}
 
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{ex-freeNotFree_1.tex}
     \caption{Esercizio 1}
-    \label{ex-freeNotFree_1}
+    \label{tab:ex-freeNotFree_1}
 \end{table}
 
 \paragraph{Spiegazione \ref{ex-freeNotFree_1}}
@@ -511,8 +508,8 @@ Intuitivamente, è facile convincersene: supponiamo infatti di produrre, a parti
 Si richiede di dire quali grammatiche generano i seguenti linguaggi:
 
 \begin{enumerate}
-  \item \(\mathcal{L}_1(\mathcal{G}_1) = \{ a^k b^n c^2k \mid k, n > 0 \}\)
-  \item \(\mathcal{L}_2(\mathcal{G}_2) = \{ a^k b^n c^2k \mid k, n \geq 0 \}\)
+  \item \(\mathcal{L}_1(\mathcal{G}_1) = \{ a^k b^n c^{2k} \mid k, n > 0 \}\)
+  \item \(\mathcal{L}_2(\mathcal{G}_2) = \{ a^k b^n c^{2k} \mid k, n \geq 0 \}\)
 \end{enumerate}
 
 \paragraph{Soluzione 4.1}

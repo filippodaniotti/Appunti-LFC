@@ -43,7 +43,7 @@ Il primo passaggio che compie il compilatore è l’analisi lessicale.
 
 Traduce un flusso di caratteri in un flusso di \emph{tokens}, ciò significa che risolve ogni “stringa” riconoscendo il suo ruolo. Per esempio, traduce:
 
-\texttt{Pippo = 2*3}\\
+\texttt{pippo = 2*3}\\
 In:
 
 \texttt{<ID, pippo> ASS <NUM,2 > MUL <NUM,3> SEMCOL}\\
@@ -82,7 +82,7 @@ Non è facile scrivere una grammatica che possa essere analizzata con efficienza
 
 L’output dell’analisi sintattica è chiamato \emph{tree}, ma non necessariamente è un albero: spesso può essere un grafo. Ad esempio in un’operazione del tipo:
 \texttt{pippo = pippo * 2}
-Il nodo pippo sarebbe collegato sia alla radice che all’operatore \texttt{ASS}, creando quindi un grafo.
+il nodo pippo sarebbe collegato sia alla radice che all’operatore \texttt{ASS}, creando quindi un grafo.
 \begin{figure}[H]
 	\centering
 	\subimport{assets/figures/}{pippo-tree.tex}
