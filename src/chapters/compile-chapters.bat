@@ -29,4 +29,20 @@ cd ..
 cd 08
 arara -v chapter08
 cd ..
+
+cd 09
+arara -v chapter08
+cd ..
+
+cd 12
+arara -v chapter08
+cd ..
+
+cd 11
+arara -v chapter08
+cd ..
+
+cd 12
+arara -v chapter08
+cd ..
 pause
