@@ -26,6 +26,6 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: Daje che ci siamo quasi
+          message: Oh fioi proviamo a finire entro il 23 mattina che poi Giuseppi non mi fa più uscire di casa per stampare lol
           document: src/main.pdf
         if: ${{ success() }}
