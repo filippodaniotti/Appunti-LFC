@@ -9,114 +9,197 @@
 \begin{document}
 \part{Aftermath}
 \chapter{La generazione del codice intermedio}
-Tiriamo le fila sul compiler frontend
+\section{Riepilogo sulla fase frontend della compilazione}
+Durante il nostro percorso abbiamo avuto modo di attraversare quasi tutte le fasi che costituiscono il cosiddetto \emph{frontend} della compilazione:
+\begin{itemize}
+    \item l'analisi lessicale ha il compito di distinguere i vari lessemi in un dato input e successivamente restituire una string di tokens, ossia di elementi che possono essere correttamente letti da un analizzatore sintattico; inoltre, ha il compito di iniziare a popolare la tabella dei simboli;
+    \item l'analisi sintattica, su cui non ci dilunghiamo troppo in questa sede dal momento che costituisce circa \(\frac{1}{3}\) di questo elaborato già da sola; è però interessante specificare che, in molti casi, a questa fase vengono accorpate ulteriori operazioni, come ad esempio la stessa analisi semantica;
+    \item l'analisi semantica, che si occupa di fare controlli statici, ad esempio circa la compatibilità di operandi e operatori nei vari statements (è qui che si scoprono errori come potrebbero essere un tentativo di somma di un \texttt{int} con un \texttt{float} o il tentativo di convertire tipi se sto usando un operatore che consente operazioni tra tipi misti), o anche altri riguardanti la validità di istruzioni condizionali e di controllo (\texttt{if}, \texttt{while} e \texttt{break}).
+\end{itemize}
+A valle di tutto questo troviamo l'ultima fase del frontend della compilazione, la generazione del codice intermedio; al pari dell'analisi semantica, è possibile che anche quest'ultima fase venga implementata come parte integrante dell'analisi sintattica, e in particolare ci sono degli schemi di traduzione che vanno a sfruttare gli alberi di sintassi astratta (AST) che abbiamo visto quando abbiamo parlato di analisi semantica.
 
-Le fasi sono: an lessicale, distingue I vari lessemi nell'input fornito, in particolare l'output è una stringa di token che deve essere confrontata rispetto al fatto se possa essere generata dalla grammatica considerata; ci sono anche elementi che vengono usati per iniziare  popolare la tabella dei simoli (tipo la roba vista ieri)
+\section{Il codice intermedio}
+Il codice  intermedio è una rappresentazione del nostro codice di partenza, abbastanza astratta da nascondere alcune specifiche che sono tipiche del codice macchina e che ne rendono la lettura poco agevole (come ad esempio i movimenti di informazioni tra registri o tra memoria e registri), ma comunque più specifica del linguaggio originale da cui siamo partiti.
 
-An sintattica: fase centrale, in realtà ci sono molte altre attività vengono eseguite al momento del "parsing" (an semantica) 
+\subsection{Rappresentazione del codice intermedio}
+Non abbiamo una sola possibilità per rappresentare il codice intermedio; a seguito presenteremo quelle più comunemente utilizzate.
 
-An semantica: controlli statici, operandi compatibili con gli operatori (magari ho due operatori somma, uno per gli interi e uno per I float; magari posso usarli entrambi, ma devo fare una converisione di tipo). Altri controlli riguardano while e switch statement, magari sono un diobel e ho scritto un break statement;
+\paragraph{Strutture a grafo}
+Una prima via è quella di utilizzare delle strutture a grafo partendo dai parse trees, come ad esempio gli stessi AST o dei grafi diretti aciclici (DAG). Questi ultimi sono spesso più succinti degli AST: immaginiamo che un AST abbia due foglie con uno stesso identificatore \(a\): in un DAG avremmo lo stesso nodo con più archi entranti. Gli AST sono a loro volta più succinti dei parse trees: questi spesso devono ricorrere a cammini molto lunghi per rappresentare certe derivazioni, rallentando di molto le operazioni che ci troveremo a fare in seguito.
 
-Dopo tutto questo processo c'è la generazione di codice intermedio, fatta con traduzioni dirette dalla sintassi (schemi di traduzione fatti durante il parsing, non sempre ma spesso)
+\paragraph{Codice a tre indirizzi}
+Una possibilità, leggermente migliore, è anche quella di utilizzare il cosiddetto \emph{codice a tre indirizzi}, così chiamato perché non prevede la possibilità di referenziare più di tre valori in un singolo statement (che quindi avrà forma \texttt{x = y op z}), limitando enormemente la complessità degli stessi.
 
-Cos'è il codice intermedio? È una rappresentazione astratta, abbastanza da non avere tutti I dettagli che trovo nei linguaggi macchina (muovi registro bla bla, illeggibile, vogliamo più astratto), ma deve essere comunque più specifico del linguaggio originale da cui lo abbiamo analizzato
+\paragraph{Codice in un altro linguaggio}
+Una terza strada percorribile è quella di utilizzare un altro linguaggio di programmazione vero e proprio come codice intermedio. Questo approccio ci risparmia inoltre il problema di implementare da noi un backend per la compilazione, perché da questo momento in poi possiamo tranquillamente utilizzare la catena di compilazione del linguaggio che stiamo usando come codice intermedio. In questi casi la scelta favorita è il C, perché è un linguaggio incredibilmente flessibile e dispone dell'eccellente compilatore \texttt{gcc}.
 
-Di solito per la rapp intermedia abbiamo delle possibilità
-
-Abbiamo strutture tipo grafo, come gli AST o un DAG vero e proprio, strutture ottenuto da AST o da parse trees
-Dobbiamo immaginare un AST con due foglie, entrambe che rappresentano un identif A, nelDAG avremmo un unico nodo per A e più edge che arrivano alla ehhhh----- insomma I DAG quindi sono più succinti degli AST, che a loro volta sono più succinti dei parse tree
-I parse tree sono poco succinti, hanno spesso un botto di cammini lunghi per rappresentare le derivazioni, ma per le operazioni successive sono troppo lenti
-
-Altra possibilità (meglio) è il trhree address code, il nome viene dal fatto che in ciascuna possibile istruzione non possono comparire più di tre indirizzi (e.g. x = y op z)
-
-Terza via è proprio un altro linguaggio, di solito C; questo evita il problema di gestire il backend di compilazione, perché abbiamo già un compilatore per questo linguaggio.
-Di solito si usa C perché gcc è figo ed è un linguaggio incredibilmente flessibile
-
-THREE ADDRESS CODE
-Rappresentazione linarizzata dei syntax tree, la loro bontà è qui
-È una rappresentazione testual- NOOOO ESEMPIO
-
-Passare da ast a three address code
+\subsection{Il codice a tre indirizzi}
+In un certo senso, il codice a tre indirizzi è una rappresentazione testuale di un AST. Per capire di cosa stiamo parlando, è utile andare subito a vedere un esempio di traduzione da AST a codice a tre indirizzi. Consideriamo il seguente AST:
 \begin{figure}[H]
     \centering
     \includegraphics[width=.5\textwidth]{ex1.png}
-    \caption{}
-    \label{}
+    \caption{AST per l'espressione \texttt{x = (a + b) * c}}
+    \label{fig:ast-to-tac-ex1}
 \end{figure}
-In pratica scorriamo dal basso (?) ed eseguiamo le robe intermedie, salvando in cose temporanee come si vede in figura
+In questo caso abbiamo l'AST per una banale espressione aritmetica (con un minimo di parentesizzazione), abbastanza semplice da ricostruire partendo dalle foglie dei livelli più bassi. In questo caso una rappresentazione a tre indirizzi può essere ottenuta salvando l'esito delle operazione intermedie in dei registri temporanei, come segue:
+\begin{align*}
+    t_1 &= a + b \\
+    t_2 &= t_1 * c \\
+    x &= t_2
+\end{align*}
+Avere una rappresentazione testuale di un AST è comodo perché semplifica la generazione di linguaggio macchina e la sua ottimizzazione; è interessantema non molto frequente, perché è dipendente dalla macchina per cui stiamo scrivendo il backend (machine dependent).
 
-Come mai vogliamo la rappresentazione testuale? Mah, vari motivi. In generale diventa molto più semplice fare la generazione di linguaggio macchina oppure operare le ottimizzazioni di questo three address code
-È roba che non facciamo ma interessante, parzialmente machine dependent, dipende dal codice macchina su cui stiamo scrivendo il backend
+\subsection{Esempio di generazione del codice intermedio}
+Supponiamo di partire con un'espressione come questa\footnote{Originariamente l'espressione era stata scritta come \(\textrm{\texttt{if (x < 100 || x > 200 \&\& x != y) x = 0;}}\), ma noi abbiamo deciso di aggiungere quelle parentesi perché è così che è stata effettivamente valutata nella traduzione, almeno se applichiamo il corretto ordine di precedenza degli operatori logici (\(\textrm{\texttt{\&\&}} \preceq \textrm{\texttt{||}}\)).}:
+\begin{equation*}
+    \textrm{\texttt{if (x < 100 || (x > 200 \&\& x != y)) x = 0;}}
+\end{equation*}
+Una prima approssimazione di codice intermedio che possiamo ottenere è questa:
+\begin{minted}{asm}
+    if x < 100 goto L2
+    goto L3
+L3: if x > 200 goto L4
+    goto L1
+L4: if x!= y goto L2
+    goto L1
+L2: x = 0
+L1:
+\end{minted}
+Possiamo osservare come in questa traduzione siano state sfruttate le regole di cortocircuitazione: se infatti \texttt{x < 100} viene valutata come vera, allora si esce subito dal controllo. Tuttavia, in quella traduzione abbiamo numerosi \texttt{goto} ridondanti; è verosimile che questa cosa si verifichi ogniqualvolta ci troviamo a tradurre espressioni con numerosi istruzioni condizionali, per cui ci permettiamo di presentare una traduzione leggermente migliore:
+\begin{minted}{asm}
+    if x < 100 goto L2
+    iffalse x > 200 goto L1
+    iffalse x!= y goto L1   
+L2: x = 0
+L1:
+\end{minted}
+il controllo sulla falsità di \texttt{x} ci permette di ridurre il numero di righe e labels utilizzate, nonché sfruttare meglio la corticircuitazione, caratteristica fondamentale per un buon compilatore. Si tenga sempre a mente che non sempre le condizioni vengono valutate nello stesso esatto ordine in cui sono state scritte dal programmatore.
 
-Codice intermedio: esempio
-Immaginate che partiamo da 
-% img2
-Come la traduciamo in codice intermedio?
-Una prima approssimazione è questa
-% img3
-Se x < 100 tutto è vautato come vero (precedenza degli op booleani), quindi vado a L2 (x = 0); altrimenti passo ai controlli successivi che mi portano entrambi a dopo x = 0, altrimeti fannoa nche x = 0
-Comunque possiamo fare di meglio
-% img4
-Controllando se x > 200 è falso possiamo risparmiarci delle etichette e delle righe, sfruttando meglio la corticircuitazione
-AHAHAHAHH SE NON È FALSO PASSO A x!=y "PER GRAVITÀ"
-Appunto sul fatto che I compilatori sonon furbi perché sfruttano bene la cortocircuitazione? Ok?
-Anhce se occhio non è detto che la prima condizione che scriviamo in un'espressione booleana sia la prima a essere valutata
+\section{Statement per il controllo di flusso}
+A questo punto possiamo andare a vedere più da vicino la traduzione in codice intermedio di alcuni statements. In particolare ci interessano i seguenti:
+\begin{align*}
+    P &\to S \\
+    S &\to if (B) S_1 \\
+    S &\to while (B) S_1 \\
+    &\ldots \\
+    B &\to \textrm{\texttt{true}} \\
+    B &\to \textrm{\texttt{false}} \\
+    B &\to B_1\; ||\; B_2 \\
+    B &\to B_1\; \&\&\; B_2
+\end{align*}
+In questo schema \(P\) sta per \emph{program}, \(S\) sta per \emph{statement} e \(B\) sta per \emph{boolean}.
 
-Oggi vediamo come si genera il codice intermedio
-Cerchiamo statements di questo tiipo
-% img5
-
-P sta per programma e poi kaboom pausa
-
-Allora sì vediamo come fare la trauzione del codice intermedio degli if-then
+\subsection{Istruzioni condizionali}
+Diamo un'occhiata alla generazione del codice intermedio di un'istruzione condizionale come potrebbe essere un comune costrutto \texttt{if-then}. Possiamo schematizzarne la strutturain questo modo:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.5\textwidth]{if-then-abstract.png}
+    \includegraphics[width=.3\textwidth]{if-then-abstract.png}
     \caption{}
     \label{}
 \end{figure}
-All'inizio del body del then abbiamo un'etichetta B. true che indica che inizia il body, mentre abbiamo una seconda etichetta B.false che punta alla prima riga successiva al then(?)
+dove l'etichetta \(B.true\) punta al body dell'istruzione condizionale (perché naturalmente vuol dire che la condizione è stata verificata), mentre l'etichetta \(B.false\) punta alla prima istruzione successiva alla chiusura del blocco \texttt{then}.
 
-Attributi: 
-Abbiamo s.next, ereditato, dice qual è la posizione della primissima istruzione di codice da eseguire alla fine di S. teniamo l'etichetta perché s potrebbe essere uno statement composto, potrebbe tenere un while con dentro una catena di if, dobbiamo sempre sapere dopo l'esecuzione del padre
-S.code, sintetizzato, andremo a specificare meglio, sequenza di codice intermedio che implementa S
-B.true, ereditato, etichetta l'inizio del codice da eseguire se B è vero
-Analogamente B.false, dice dove dobbiamo andare se B è falso
-B.Code, ereditato, sintetizzato se guardiamo solo l'sdd delle condizioni booleane; è la sequenza dei passi di codice intermedio che implementano la condizione booleana, vanno a b.true se vero e b.false se no
+\paragraph{Attributi}
+Andiamo a vedere di preciso quali attributi abbiamo in questo processo:
+\begin{itemize}
+    \item \(S.next\), attributo ereditato: ci dice qual è la posizione della primissima istruzione di codice da eseguire alla fine di \(S\); conservare l'etichetta è utile, perché \(S\) potrebbe avere degli altri statements di controllo annidati (ad esempio un ciclo \texttt{while} o una catena di \texttt{if}), per cui è importante poter sempre sapere qual è la prossima istruzione da eseguire dopo l'esecuzione dello statement padre;
+    \item \(S.code\), attributo sintetizzato: è il codice intermedio che implementa lo statement che stiamo considerando, e termina con un istruzione di salto a \(S.next\);
+    \item \(B.true\), attributo ereditato: questa etichetta punta alla prima istruzinoe da eseguire se la condizione di \(B\) risulta vera;
+    \item \(B.false\), attributo ereditato: per analogia a \(B.true\), questo attributo punta alla prima istruzione da eseguire nel caso in cui \(B\) sia falso;
+    \item \(B.Code\), attributo ereditato per gli statements, sintetizzato se guardiamo solo l'SDD delle condizioni booleane: è la sequenza dei passi di codice intermedio che implementano la condizione booleana e determinano se passare a \(B.true\) o \(B.false\).
+\end{itemize}
 
-I booleani hanno due funzioni:
-Alterare il flusso di controllo
-Calcolare dei valori logici nelle espressioni booleani
-Il focus di oggi è sulla prima cosa, nella compilazione si distinguono queste due "ortogonali" utilizzi dei booleani, sarebbe anche se utilizzassimo degli interi comme condizioni
-% img7
-\(P \to S\): il programma è globalmente uno statement
-Newlabel() è una funzione che possiamo invocare per la generazione di un'etichetta non ancora utilizzata, mentre triangolo sta per la concatenzione di segmenti di codice intermedio, cioè P.Code è S.code cui si attacca label(S.next); insomma, il codice di è il codice di S a cui è attaccato il riferimento al codice che segue P
+\paragraph{Nota sui booleani}
+In questo è bene puntualizzare un distinguo sui due diversi ruoli che possono assumere i booleani:
+\begin{itemize}
+    \item alterare il flusso di esecuzione, e quindi operare come \emph{condizioni booleane};
+    \item calcolare il valore di espressioni logiche, e quindi comportarsi come \emph{espressioni booleane} (e quindi come r-values).
+\end{itemize}
+Quella che noi consideriamo oggi è la prima funzione; nel secondo caso si comportano esattamente come delle normali espressioni aritmetiche, che lavorano con valori e operatori logici anziché numerici. Molto spesso le grammatiche si trovano ad avere non-terminali diversi per questi due ruoli.
 
-S.next = newlabel() è l'inizio dei tempi
-È ereditato dal body della produzione iniziale
-P.code è sintetizzato, wtf
-% img 8
-Nell'if-then abbiamo bisognod I una label per B.true, e ok
-Ne prendiamo una anche er B.false
-Quindi creiamo S.code concatenando il corpo dell'espressione da valutare a label(B.true) e \(S_1.Code\)
-Come andiamo a generare bene sta roba?
-% img9
-% img10
-Generiamo una newlable come begin
-B.true è una nuovaetichetta
-B.false ci porta direttamente a S.next
-\(S_1.next\) ci riporta a begin, ovviamente
+\subsection{Il programma come statement}
+Andiamo ora a vedere da vicino la prima istruzione dalla nostra lista, \(P \to S\);ne approfitteremo per dare un'occhiata anche a quale tipo di notazioni e regole di sintassi (più o meno) utilizzeremo in questo processo.
+\begin{align*}
+    P &\to S & S.next &= newlabel() \\
+    & & P.code &= S.code \triangleright label(S.next)
+\end{align*}
+Il senso stesso dell'espressione \(P \to S\) sembra suggerire che il programma \(P\) possa essere visto globalmente come uno statement.
+\begin{itemize}
+    \item \(newlabel()\) è una funzione che, una volta invocata, genera una nuova etichetta;
+    \item \(\triangleright\) è un opereatore che denota la concatezione di due (o più) segmenti di codice intermedio;
+    \item \(label(L)\) assegna l'etichetta \(L\) alla prossima istruzione a tre indirizzi generata;
+    \item \(S.next\), come intuibile, è l'etichetta che denota la prima istruzione da eseguire dopo la fine di \(S\); se ipoteticamente volessimo uscire da \(S\) prima della chiamata a \(S.next\), allora dovremmo esplicitamente eseguire un \texttt{goto}.
+\end{itemize}
+Inoltre possiamo vedere come l'attributo sintetizzato \(P.code\) venga definito con l'ausilio dell'operatore \(\triangleright\).
 
-Quindi come prima cosa label della condizione booleana, poi il codice della condizione; ci mettiamo l'etichetta true, così andiamo al codice, e infine un gen(goto begin) per tornare sopra
+\subsection{Semplice blocco \texttt{if-then}}
+Vediamo adesso nello specifico come tradurre uno statement \(S\) che si compone di un'istruzione di \texttt{if-then} semplice, senza un blocco \texttt{else}.
+\begin{align*}
+    S &\to if (B) S_1 & B.true &= newlabel() \\
+    & & B.false &= S_1.next = S.next \\
+    & & S.code &= B.code \triangleright label(B.true) \triangleright S_1.code
+\end{align*}
+La prima cosa che facciamo è creare una nuova label \(B.true\) che etichetti l'inizio del blocco di codice da eseguire nel caso in cui la condizione \(B\) sia verificata. Nel caso in cui \(B\) risulti invece falsa, quello ceh facciamo è assegnare all'etichetta di \(B.false\) il blocco \(S_1\), che codice successivo al blocco \texttt{then}; dal momento che in questo caso non abbiamo anche un \texttt{else}, il codice successivo a \(S_1\) sarà quello successivo a tutto lo statement \(S\).
 
-% img11
-Esempio non completo perché la quaglia è gran puttana
+Complessivamente, il valore che assegnamo al nostro statement \(S\) sarà quindi costituito dal codice della condizione booleana \(B\) (\(B.code\)), l'etichetta \(B.true\) e il blocco di codice da eseguire nel caso in cui l'istruzione sia verificata (\(S_1.code\)).
 
-Adesso vediamo la generazione di un or
-% img12
-% img13
-Definiamo true e false
-Il codice della b è dato dal codice della \(b_1\), cui segue la label \(B_1.true\), seguito da \(B_2.code\)
-Eh vabb sta parte è sfanculata
+\subsection{Blocco \texttt{if-then-else}}
+Supponiamo di voler tradurre un'istruzione condizionale che comprende anche un blocco \texttt{else}. Questo naturalmente cambia leggermente la traduzione, poiché l'etichetta \(B.false\) non punterà più alla prima istruzione successiva al blocco \texttt{then}, bensì dovrà essere creata ex novo, e punterà alla prima istruzione del blocco \texttt{else}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.4\textwidth]{if-else-trans.png}
+    \caption{}
+    \label{}
+\end{figure}
+Entrambe le etichette \(S_1.next\) e \(S_2.next\) punteranno all'istruzione successiva all'intero statement.
+\begin{align*}
+    S &\to if (B) S_1 else S_2 & B.false =\; &newlabel() \\
+    & & B.true =\; &newlabel() \\
+    & & S_1.next =\; &S.next \\
+    & & S_2.next =\; &S.next \\
+    & & S.code =\; &B.code \triangleright label(B.true) \triangleright S_1.code\; \triangleright \\
+    & & &gen(goto\; S.next) \triangleright label(B.false) \triangleright S_2.code
+\end{align*}
+Il codice intermedio dello statement \(S\) è dato quindi dalla concatenazione di tutti questi blocchi; particolare riguardo all'istruzione \(gen(goto\; S.next)\), che giuro su Dio non posso dire altro se non che scommetterei sul fatto che ti manda a \(S.next\).
+
+\subsection{Traduzione di un ciclo \texttt{while}}
+Prendiamo adesso visione del codice intermedio di un ciclo. 
+\begin{itemize}
+    \item La prima cosa che facciamo è assegnare due \(newlabels()\); una la chiameremo \(begin\), e punta all'inizio del ciclo (quindi all'espressione \(B\)), e \(B.true\), che invece marchia l'inizio del corpo del ciclo \(S_1\) e a cui andiamo quindi in caso l'espressione \(B\) sia verificata.
+    \item Nelle istruzioni condizionali viste prima ci siamo abituati ad vedere \(S_1.next\) puntare a \(S.next\), poiché al termine del corpo di un'istruzione condizionale normalmente proseguiamo con l'esecuzione del codice; in questo caso, invece, al termine del corpo dell'istruzione dovremmo tornare ad eseguire il controllo \(B\) e, eventualmente, rieseguire il corpo del ciclo stesso, per cui \(S_1.next\) dovrà puntare a \(begin\).
+\end{itemize}
+A questo punto, la composizione dell'attributo sintetizzato \(S.code\) dovrebbe seguire naturalmente.
+\begin{align*}
+    S &\to while (B) S_1 & begin =\; &newlabel() \\
+    & & B.true =\; &newlabel() \\
+    & & B.false =\; &S.next \\
+    & & S_1.next =\; &begin \\
+    & & S.code =\; &label(begin) \triangleright B.code \triangleright label(B.true)\; \triangleright \\
+    & & &S_1.code \triangleright gen(goto\; begin)
+\end{align*}
+
+\subsection{Traduzione di operazioni booleane}
+Per concludere, diamo un'occhiata rapida alla traduzione di delle espressioni logiche. Lo faremo andando a confrontare la diversa traduzione di due semplici operazioni di OR e AND:
+\begin{align*}
+    B &\to B_1\; ||\; B_2 & B &\to B_1\; \&\&\; B_2 
+\end{align*}
+Andiamo a confrontare il codice intermedio di queste due espressioni riga per riga, in modo da apprezzarne le analogie e il modo in cui sfruttano la cortocircuitazione:
+\begin{itemize}
+    \item l'etichetta \(B_1.true\) rimanda direttamente all'etichetta \(B.true\) dell'intero statement nel caso dell'OR (perché naturalmente è sufficiente che un elemento sia \(true\) per rendere valida l'intera espressione), mentre invece in un AND viene semplicemente creata una nuova label;
+    \item la situazione è assolutamente analoga ma con le parti invertite per l'etichetta \(B_1.false\);
+    \item nelle due righe successive andiamo a definire le etichette per il secondo elemento delle nsotre espressioni, e in entrambi i casi queste ultime punteranno alle etichette di uscita dell'intero statement; questo è perché sono l'ultimo elemento dell'espressione, per il loro valore andrà a determinare quello dell'intera espressione;
+    \item la differenza nella composizione di \(B.code\) sta quindi esclusivamente nell'etichetta che si frappone fra il codice del primo e del secondo elemento: nel caso dell'OR, infatti, il secondo elemento verrà valutato solo se il primo risulta falso (e qui infatti mettiamo la nuova etichetta \(B_1.false\)), mentre viceversa nell'AND valutiamo il secondo solo se il primo è vero, e quindi l'etichetta frapposta è \(B_2.false\).
+\end{itemize}
+\begin{align*}
+    &B_1.true &=\; &B.true & &B_1.true &=\; &newlabel() \\
+    &B_1.false &=\; &newlabel() & &B_1.false &=\; &B.false \\
+    &B_2.true &=\; &B.true & &B_2.true &=\; &B.true \\
+    &B_2.false &=\; &B.false & &B_2.false &=\; &B.false \\
+    &B.code &=\; &B_1.code\; \triangleright & &B.code &=\; &B_1.code\; \triangleright \\
+    &&&label(B_1.false) \triangleright  B_2.code & &&&  label(B_1.true) \triangleright B_2.code
+\end{align*}
+
+\section*{Una precisazione}
+Se a questo punto avete l'impressione che tutto questo capitolo sia molto sconnesso e senza una conclusione (o in realtà del vero e proprio contenuto), be', sappiate che è la stessa sensazione che ha provato l'autore. Tutta la squadra ha avuto l'impressione che l'argomento sia stato per nulla approfondito e in realtà abbiamo il sospetto che la professoressa sia una grande fan di Speedy Gonzales, ma hey, questo è quello che passa il convento e pare che nemmeno siano presenti all'esame, questi argomenti. Mai dire mai però, quindi occhi aperti e guarda alta.
 
 \end{document}
