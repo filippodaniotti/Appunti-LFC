@@ -357,7 +357,7 @@ Nel preambolo abbiamo la dichiarazione di tre variabili che ci serviranno nelle 
 Nella parte centrale del file abbiamo invece le seguenti associazioni pattern-azione:
 
 \begin{itemize}
-    \item \texttt{word} comporta l'esecuzione del seguente pezzo di codice \mintinline{c}{{wordCount++; charCount += yyleng; }}, dove la variabile \texttt{wordCount} viene postincrementata, mentre alla variabile \texttt{charCount} viene sommato un numero pari a \texttt{yyleng}, che contiene la lunghezza della stringa riconosciuta e, per via dell'espressione regolare alla base della shorthand, equivalente a quella della parola;
+    \item \texttt{word} comporta l'esecuzione del seguente pezzo di codice \texttt{\{wordCount++; charCount += yyleng; \}}, dove la variabile \texttt{wordCount} viene postincrementata, mentre alla variabile \texttt{charCount} viene sommato un numero pari a \texttt{yyleng}, che contiene la lunghezza della stringa riconosciuta e, per via dell'espressione regolare alla base della shorthand, equivalente a quella della parola;
     \item il secondo pattern è \texttt{\textbackslash n}, cioè nel caso in cui si trovi una sequenza di caratteri composta solamente da una new line; l'azione legata è il blocco \mintinline{c}{{charCount++; lineCount++; }}, dove si postincrementano sia \mintinline{c}{charCount} che \mintinline{c}{lineCount};
     \item infine, l'ultimo pattern, il punto (\texttt{.}), comporta solamente il postincremento della variabile \mintinline{c}{charCount}.
 \end{itemize}
@@ -387,7 +387,7 @@ Nel preambolo viene dichiarata una variabile intera \mintinline{c}{comma}, che �
 \paragraph{Parte centrale}
 Andiamo a vedere da vicino le coppie pattern-azione che troviamo nella parte centrale.
 \begin{itemize}
-    \item La regular expression \mintinline{c}{[a-zA-Z0-9]+}, che indica la sequenza di uno o più caratteri alfanumerici, comporta l'esecuzione di \mintinline{c}{{printf("\(<\)td\(>\) "); ECHO; comma = 0;}}, dove viene creata una nuova colonna per la tabella, viene inserita la sequenza appena letta e viene impostato il valore dell'intero \mintinline{c}{comma} a \(0\).
+    \item La regular expression \mintinline{c}{[a-zA-Z0-9]+}, che indica la sequenza di uno o più caratteri alfanumerici, comporta l'esecuzione di \texttt{printf("\textbackslash(<\textbackslash)td\textbackslash(>\textbackslash) "); ECHO; comma = 0;}, dove viene creata una nuova colonna per la tabella, viene inserita la sequenza appena letta e viene impostato il valore dell'intero \mintinline{c}{comma} a \(0\).
     \item La seconda espressione è "\texttt{,}", che vuol dire che bisogna trovare il carattere che corrisponde alla virgola e che nel \texttt{csv} serve per separare i dati, comporta l'esecuzione del blocco di codice
     \begin{minted}[breaklines, tabsize = 2]{c}
     {            
@@ -404,7 +404,7 @@ Andiamo a vedere da vicino le coppie pattern-azione che troviamo nella parte cen
     \item In ultimo, \texttt{\textbackslash n}, cioè per ogni new line viene eseguito il blocco di codice \mintinline{c}{{printf("\(<\)/tr\(>\) \n \(<\)tr\(>\)"); comma = 0;}} dove viene chiusa la riga precedente ed aperta quella successiva.
 \end{itemize}
 
-\paragraph{Epilogo}
+\paragraph{Epilogo}xxx
 Nell'epilogo troviamo una routine custom dove viene creato l'html di base per creare la tabella e, tra le varie cose, viene anche aperta la prima riga. Dopo aver stampato lo scheletro della struttura viene invocata la procedura \mintinline{c}{yylex()}, la quale cerca i pattern nel testo; infine, la tabella viene chiusa.
 
 \subsection{Ulteriori informazioni su Flex}
