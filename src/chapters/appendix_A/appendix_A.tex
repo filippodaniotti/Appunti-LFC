@@ -1,6 +1,7 @@
 \documentclass[class=book, crop=false, oneside, 12pt]{standalone}
 \usepackage{standalone}
 \usepackage{../../style}
+\usepackage{../../style_automata}
 \usepackage[normalem]{ulem}
 \graphicspath{{./assets/images/}}
 
@@ -74,7 +75,7 @@ Partiamo dal primo caso: vogliamo avere la possibilità di generare 0 o più rip
 
 \begin{figure}[H]
 	\centering
-    \includegraphics[width=.3\textwidth]{dfa-pt1-ex3.jpg}
+    \subimport{assets/figures/}{es3-a.tex}
     \caption{Es 1: DFA Parziale \(b^*\)}
     \label{fig:dfa-pt1-ex3}
 \end{figure}
@@ -84,7 +85,7 @@ Passiamo ora al secondo insieme di parole riconosciute: essendo che la prima par
 
 \begin{figure}[H]
 	\centering
-    \includegraphics[width=.6\textwidth]{dfa-pt2-ex3.jpg}
+    \subimport{assets/figures/}{es3-b.tex}
     \caption{Es 1: DFA Parziale \(b^* a (\varepsilon \mid a \mid b)^*\)}
     \label{fig:dfa-pt2-ex3}
 \end{figure}
@@ -93,7 +94,7 @@ A questo punto abbiamo quasi concluso, la cosa che ci manca è unificare questi 
 
 \begin{figure}[H]
 	\centering
-    \includegraphics[width=.6\textwidth]{dfa-pt3-ex3.jpg}
+    \subimport{assets/figures/}{es3-c.tex}
     \caption{Es 1: DFA Parziale \(b^* \mid b^* a (\varepsilon \mid a \mid b)^*\)}
     \label{fig:dfa-pt3-ex3}
 \end{figure}
@@ -110,7 +111,7 @@ Il DFA minimizzato \(\mathcal{D}\) è dunque così costruito:
 
 \begin{figure}[H]
 	\centering
-    \includegraphics[width=.3\textwidth]{dfa-minimized-ex3.jpg}
+    \subimport{assets/figures/}{es3-d.tex}
     \caption{Es 1: DFA Minimizzato \(b^* \mid b^* a (\varepsilon \mid a \mid b)^*\)}
     \label{fig:dfa-minimized-ex3}
 \end{figure}
@@ -125,7 +126,7 @@ Per maggiore chiarezza possiamo rappresentare l'automa per intero:
 
 \begin{figure}[H]
 	\centering
-    \includegraphics[width=.8\textwidth]{nfa-ex4.jpg}
+    \subimport{assets/figures/}{es4-a.tex}
     \caption{Es 1: NFA di partenza}
     \label{fig:nfa-ex4}
 \end{figure}
@@ -143,7 +144,7 @@ Eseguiamo dunque la Subset Construction:
 
 \begin{figure}[H]
 	\centering
-    \includegraphics[width=.8\textwidth]{sc-ex4.jpg}
+    \subimport{assets/figures/}{es4-b.tex}
     \caption{Es 1: DFA risultante dalla Subset Construction}
     \label{fig:sc-ex4}
 \end{figure}

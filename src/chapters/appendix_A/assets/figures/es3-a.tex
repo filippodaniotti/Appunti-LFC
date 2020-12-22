@@ -1,0 +1,15 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+ 
+\usepackage{../../../../style_automata}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{tikzpicture}
+        \node[state, accepting] (t1) {$1$};
+	    \draw (t1) edge[loop above] node{b} (t1);
+    \end{tikzpicture}
+\end{document}
