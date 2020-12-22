@@ -107,10 +107,21 @@ Quindi si può dire che in questo caso l’analisi semantica chiarisce quale sig
 
 In questa fase viene creato un codice testuale creato traducendo il parse tree. Queste istruzioni sono leggibili dall’uomo ma non è né assembly né codice effettivo, d’altronde si chiama intermedio, no?
 
-Nel caso in \ref{codice_intermedio} sulla destra abbiamo il parse tree e sulla sinistra abbiamo un esempio del codice intermedio generato.
+Nel caso in \ref{codice_intermedio} sulla sinistra abbiamo il parse tree e sulla destra abbiamo un esempio del codice intermedio generato.
 \begin{figure}[H]
-	\centering
-	\subimport{assets/figures/}{codice-intermedio.tex}
+    \begin{minipage}{.5\textwidth}
+		\raggedleft
+		\subimport{assets/figures/}{codice-intermedio.tex}
+	\end{minipage}
+	% \hfill
+	\begin{minipage}{.5\textwidth}
+		\raggedright
+		\begin{minted}{asm}
+		MOVE 2, R1
+		MULT 3, R1
+		MOVE R1, ID1
+		\end{minted}
+	\end{minipage}
 	\caption{Generazione del codice intermedio}
 	\label{codice_intermedio}
 \end{figure}
