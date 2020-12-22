@@ -54,7 +54,7 @@ Notiamo subito alcune differenze rispetto alla notazione che abbiamo impiegato f
     \item inoltre, la convenzione rispetto alla capitalizzazione è invertita: qui osserviamo che gli elementi in maiuscolo indicano i terminali, mentre invece quelli in minuscolo rappresentano non terminali; ad esempio, in figura sopra possiamo notare che il non-letterale \texttt{primary\_expression} ha una produzione per cui può risultare o in una serie di letterali (\texttt{IDENTIFIER}, \texttt{CONSTANT}), oppure in una forma \texttt{'(' expression ')'}, dove \texttt{expression} è un altro non-letterale, che a sua volta avrà altre produzioni.
 \end{itemize}
 
-Questo file, inoltre, è pensato per essere utilizzato in tandem con un analizzatore sintattico; per questo motivo, nell'intestazione dello stesso possiamo trovare le dichiarazione di quelli che sono i token (vale a dire, lo ripetiamo, i terminali della grammatica descritta). Saranno espressi nella forma rappresentata in Fig.\ref{token_c99}:
+Questo file, inoltre, è pensato per essere utilizzato in tandem con un analizzatore sintattico; per questo motivo, nell'intestazione dello stesso possiamo trovare le dichiarazione di quelli che sono i token (vale a dire, lo ripetiamo, i terminali della grammatica descritta). La forma con cui saranno espressi è rappresentata dall'immagine sottostante:
 
 \ifthenelse{\boolean{isCompiledFromMain}}{%
 \inputminted[lastline = 22, linenos, breaklines, tabsize = 2, fontsize = \small]{c}{chapters/06/assets/resources/c99.y}%
@@ -93,7 +93,7 @@ Questa dichiarazione in realtà potrebbe non essere presente su alcuni file cont
 
 Il ruolo dell’analizzatore lessicale è quindi analizzare il sorgente e decidere, di volta in volta, quale derivazione può essere applicata a ciascuna delle righe del sorgente analizzato. Una volta completato l'albero di derivazione e quindi arrivato presso un terminale (ad esempio \texttt{IDENTIFIER}), l'analizzatore lessicale andrà anche ad associargli informazioni come valre e tipo, dal momento che è necessario distinguere quell'\texttt{IDENTIFIER} da un altro. Nel programma potremmo appunto avere due \texttt{IDENTIFIER} di diverso tipo, ma in ogni caso dovremo conservare delle informazioni aggiuntive di qualche tipo (nome, tipo, scope e altro ancora). Tutte queste informazioni vengono conservate in una \emph{symbol table}.
 
-Infine, le ultime rihe del file contengono informazioni utili al particolare analizzatore sintattico utilizzato; avremo modo di parlarne nel dettaglio in futuro.
+Infine, le ultime rige del file contengono informazioni utili al particolare analizzatore sintattico utilizzato; avremo modo di parlarne nel dettaglio in futuro.
 
 \subsection{Classi di tokens}
 Si potrebbe a ragione considerare superfluo specificare che ogni diversa grammatica (e quindi ogni linguaggio) presenta diverse categorie di tokens; banalmente, il lettore è probabilmente ben cosciente che linguaggi diversi possiedono generalmente keyword diverse. Ad ogni modo, a seguito presentiamo alcune tra le scelte più ricorrenti:
@@ -130,7 +130,7 @@ Quindi questi lessemi, essendo descritti da delle espressioni regolari, possono 
 È molto semplice intuire graficamente che ciascun percorso che termini in uno stato finale ritorna un token, sotto forma di coppia, in cui il \texttt{token-name} è appunto quello della classe \texttt{relop}, mentre il \texttt{token-value} indica qual è l'elemento della classe da ritornare.
 
 \paragraph{Retract}
-Possiamo notare che i due stati finali il cui arco entrante è marcato come \(other\) hanno anche un asterisco: questo indica che, quando consumo quella transizione, devo ricordarmi di tornare indietro di un simbolo, perché quest'ultimo simbolo \(other\) (cioè che non fa parti di alcun elemento appartenente alla classe \texttt{relop}) potrebbe essere un elemento di un token successivo, e se non compiano quanto detto sopra rischieremmo di saltarla nell'analisi e ottenere un flusso di token incorretto. Questa operazione è detta \(retract\).
+Possiamo notare che i due stati finali il cui arco entrante è marcato come \(other\) hanno anche un asterisco: questo indica che, quando consumo quella transizione, devo ricordarmi di tornare indietro di un simbolo, perché quest'ultimo simbolo \(other\) (cioè che non fa parti di alcun elemento appartenente alla classe \texttt{relop}) potrebbe essere un elemento di un token successivo, e se non compiamo quanto detto sopra rischieremmo di saltarla nell'analisi e ottenere un flusso di token incorretto. Questa operazione è detta \(retract\).
 
 L'operazione di retract è uno dei tanti elementi legati alla gestione dell'input e del buffer che ci fanno pensare che la macchina a stati è un modello molto vicino al più noto, per noi, automa a stati finiti, ma quanto è profondo questo legame?
 
@@ -154,7 +154,7 @@ Il procedimento che seguiamo è il seguente:
     \item innanzitutto simuliamo l'NFA creato come sopra descritto;
     \item nel caso di ambiguità, ossia di situazioni come quella descritta sopra tra \mintinline{c}{if} e \mintinline{c}{iffoff}, la convenzione è di preoseguire la simulazione finché nessun’altra transizione è possibile, solitamente quando incontriamo uno spazio o un \texttt{\(\backslash\)n}, privilegiando quindi il match più lungo (si parla di cercare il \emph{longest match});
     \item se nell'insieme di stati che abbiamo raggiunto ci sono delle azioni disponibili, allora andremo ad eseguire quella appartenente al longest match, in caso di pareggio ciascuna azione avrà una priorità, e noi eseguiremo quella con più alta priorità;
-    \item se nessun'azione è disponibile, invece dobbiamo torniamo indietro nella sequenza di stati percorsi, fermarci nel primo insieme di stati che presenta almeno uno stato finale e delle azioni associate e cercare di nuovo quella prioritaria; per ognuno di questi passi all'indietro, dobbiamo ricordari di aggiornare il puntatore all'input buffer.
+    \item se nessun'azione è disponibile, dobbiamo invece tornare indietro nella sequenza di stati percorsi, fermarci nel primo insieme di stati che presenta almeno uno stato finale e delle azioni associate e cercare di nuovo quella prioritaria; per ognuno di questi passi all'indietro, dobbiamo ricordari di aggiornare il puntatore all'input buffer.
 \end{enumerate}
 
 Tutto questo funzionerebbe in maniera analoga se utilizzassimo un DFA: dovremmo semplicemente costruire il DFA a partire dal NFA, dimodoché l'insieme degli stati del DFA sia un sottoinsieme di quello dell'NFA corrispondente.
@@ -162,12 +162,12 @@ Tutto questo funzionerebbe in maniera analoga se utilizzassimo un DFA: dovremmo 
 \subsection{Generatori di analizzatori lessicali}
 Andiamo a parlare quindi di questi generatori. L'idea di creare un generatore di analizzatori lessicali è nata in concomitanza con la prima definizione e implementazione del compilatore del C, e l'idea era di evitare di dover scrivere ogni volta, per ogni programma, un analizzatore lessicale e uno sintattico a mano.
 
-\emph{Flex} è il primo della sua storia\footnote{o meglio, una sua versione più moderna: il primo vero e proprio si chiamava \emph{lex} e quella \emph{f}, aggiunta successivamente, sta per fast.} ed è solitamente compreso nelle distribuzioni di C; l'idea è risultata talmente valida che oggiggiorno ogni linguaggio possiede un proprio generatore di analizzatore lessiale e sintattico.
+\emph{Flex} è il primo della sua storia\footnote{o meglio, una sua versione più moderna: il primo vero e proprio si chiamava \emph{lex} e quella \emph{f}, aggiunta successivamente, sta per fast.} ed è solitamente compreso nelle distribuzioni di C; l'idea è risultata talmente valida che oggigiorno ogni linguaggio possiede un proprio generatore di analizzatore lessiale e sintattico.
 
 Il funzionamento è il seguente: 
 \begin{itemize}
     \item andremo a creare un file del tipo \texttt{file.l}, il quale sarà l'input del generatore e in cui scriveremo quali sono i pattern che vogliamo riconoscere e quali sono le azioni da compiere in corrispondenza dei vari matches;
-    \item a quel punto, possiamo comiplare \texttt{file.l} utilizzando il comando \texttt{Flex}, e questo ci restituirà un file di nome \texttt{lex.yy.c}\footnote{La ragione di questo nome è puramente convenzionale e deriva dal fatto che, storicamente, il generatore Flex è stato usato in coppia all'analizzatore \emph{Yacc}};
+    \item a quel punto, possiamo compilare \texttt{file.l} utilizzando il comando \texttt{Flex}, e questo ci restituirà un file di nome \texttt{lex.yy.c}\footnote{La ragione di questo nome è puramente convenzionale e deriva dal fatto che, storicamente, il generatore Flex è stato usato in coppia all'analizzatore \emph{Yacc}};
     \item compilando questo \texttt{lex.yy.c} con il compilatore \texttt{gcc} otteniamo il lexer, cioè quel signore che si occupa di gestire l'input buffering, di fare le operazioni di retract e altro ancora.
 \end{itemize} 
 \begin{minted}[breaklines, tabsize = 2]{bash}
@@ -180,22 +180,19 @@ Si tenga bene a mente che queste tre righe descrivono come utilizzare Flex da so
 \subsection{Struttura del \texttt{file.l}}
 I file con estensione \texttt{.l} che diamo da fagocitare a Flex hanno la seguente struttura:
 \begin{minted}[breaklines, tabsize = 2]{bash}
-...(Preambolo)
+...
+//(Preambolo)
 % { code
-% } %
+% }
 // shorthand for patterns
 %%
-/*
-(Parte centrale)
+//(Parte centrale)
 pattern-1 {action-1};
 pattern-2 {action-2};
 ...
-*/
 %%
-/*
-(Epilogo)
-user rountes
-*/
+//(Epilogo)
+user routines
 \end{minted}
 Il contenuto di queste tre macrosezioni è ben determinato, andiamo a vederlo più da vicino:
 \begin{labeling}{Parte centrale}
@@ -219,9 +216,9 @@ Dal momento che tutte le coppie \texttt{pattern \{azione\}} sono scritte in ling
     \item[\texttt{[]}] denota le classi di caratteri: al posto di \(a \mid b \mid \ldots \mid z\), posso scrivere \texttt{[a-z]};
     \item[\texttt{\(^\wedge\)}] inizio di riga, negazione se usato in una classe di caratteri;
     \item[\texttt{\$}] end of line;
-    \item[\texttt{a|b}] pipe, semantica consueta;
+    \item[\texttt{a|b}] pipe, semantica consueta  (i.e. a or b);
     \item[\texttt{()}] raggruppamenti;
-    \item[\texttt{"+"}] somma letterale di due elementi
+    \item[\texttt{"+"}] il literal \texttt{"+"} (è necessario usare qusto metodo di escape per poter far riferimento ad un carattere qualunque e non al metacarattere)
     \item[\texttt{\{\}}] espressioni regolari scritte nel preambolo
 \end{labeling}
 
@@ -275,14 +272,14 @@ Possiamo notare anche un'altra cosa molto interessante: solitamente, per poter u
 % \end{figure}
 
 \paragraph{Preambolo}
-Diversamente dall'esempio precedente, in questo \texttt{file1.l} abbiamo del contenuto nel preambolo. Andiamo a vederlo da vicino cosa ci troviamo:
+Diversamente dall'esempio precedente, in questo \texttt{file1.l} abbiamo del contenuto nel preambolo. Andiamo a vederlo nel dettaglio:
 
 \begin{enumerate}
     \item la prima riga (in questo caso vuota) è identificata dal simbolo di apertura \texttt{\%\{} e cui può seguire del codice C;
     \item la seconda riga, invece, è successiva al simbolo di chiusura \texttt{\%\}} e contiene quelli che sono gli shorthands per i pattern, vale a dire degli alias per delle regular expression.
 \end{enumerate}
 
-Rifacendoci sempre alla sintassi di Flex, possiamo analizzare l'espressione regolare definita nel preambolo e arrivare alla conclusione che faccia riferimento a quell'insieme di caratteri (\texttt{[ ]}) che si ripetono \(0\) o più volte (*) e che sono diversi (\^{}) da '\texttt{ }', '\texttt{\textbackslash t}' e '\texttt{\textbackslash n}'; questo significa che comporteranno un match tutte quelle sequenze di caratteri che sono separate da spazi, tab o new line; più semplicemente, saranno le parolea causare un match.
+Rifacendoci sempre alla sintassi di Flex, possiamo analizzare l'espressione regolare definita nel preambolo e arrivare alla conclusione che faccia riferimento a quell'insieme di caratteri (\texttt{[ ]}) che si ripetono \(0\) o più volte (*) e che sono diversi (\^{}) da '\texttt{ }', '\texttt{\textbackslash t}' e '\texttt{\textbackslash n}'; questo significa che comporteranno un match tutte quelle sequenze di caratteri che sono separate da spazi, tab o new line; più semplicemente, saranno le parole a causare un match.
 
 \paragraph{Parte centrale}
 Come descritto precedentemente, nella parte centrale i pattern sono associati alle relative azioni; in questo caso, le coppie che troviamo sono le seguenti:
@@ -326,7 +323,7 @@ A seguire abbiamo la parte centrale del file, dove:
     \item[] \emph{Quia aperiam nesciunt. Qui est voluptate. Aut temporibus perspiciatis.}
     \item[] \emph{Repudiandae delectus omnis. Modi earum doloribus. Quis eaque quidem.}
 \end{itemize}
-Allora avremmo che verrebbe riscritto come segue:
+Allora verrebbe riscritto come segue:
 \begin{enumerate}[noitemsep]
     \item[\texttt{1}] \emph{Autem quo ea. Voluptatum saepe porro. Quibusdam illo eum.}
     \item[\texttt{2}] \emph{Quia aperiam nesciunt. Qui est voluptate. Aut temporibus perspiciatis.}
@@ -387,7 +384,7 @@ Nel preambolo viene dichiarata una variabile intera \mintinline{c}{comma}, che �
 \paragraph{Parte centrale}
 Andiamo a vedere da vicino le coppie pattern-azione che troviamo nella parte centrale.
 \begin{itemize}
-    \item La regular expression \mintinline{c}{[a-zA-Z0-9]+}, che indica la sequenza di uno o più caratteri alfanumerici, comporta l'esecuzione di \texttt{printf("\textbackslash(<\textbackslash)td\textbackslash(>\textbackslash) "); ECHO; comma = 0;}, dove viene creata una nuova colonna per la tabella, viene inserita la sequenza appena letta e viene impostato il valore dell'intero \mintinline{c}{comma} a \(0\).
+    \item La regular expression \mintinline{c}{[a-zA-Z0-9]+}, che indica la sequenza di uno o più caratteri alfanumerici, comporta l'esecuzione di \texttt{printf("<td>"); ECHO; comma = 0;}, dove viene creata una nuova colonna per la tabella, viene inserita la sequenza appena letta e viene impostato il valore dell'intero \mintinline{c}{comma} a \(0\).
     \item La seconda espressione è "\texttt{,}", che vuol dire che bisogna trovare il carattere che corrisponde alla virgola e che nel \texttt{csv} serve per separare i dati, comporta l'esecuzione del blocco di codice
     \begin{minted}[breaklines, tabsize = 2]{c}
     {            
@@ -401,7 +398,7 @@ Andiamo a vedere da vicino le coppie pattern-azione che troviamo nella parte cen
     \end{minted}
         
     dove viene verificato il numero di virgole incontrate fino a quel punto: se si sono incontrate 0 virgole, allora si chiude semplicemente la colonna precedentemente aperta; se invece si è già incontrata \(1\) virgola e, consecutivamente, se ne legge un'altra (o comunque le due occorrenze risultano essere separate da sequenze non alfanumeriche), viene creata una colonna vuota, in quanto nel \texttt{csv} non vi sono dati rilevanti. In ogni caso alla fine del blocco viene impostato il valore di comma ad \(1\).
-    \item In ultimo, \texttt{\textbackslash n}, cioè per ogni new line viene eseguito il blocco di codice \mintinline{c}{{printf("\(<\)/tr\(>\) \n \(<\)tr\(>\)"); comma = 0;}} dove viene chiusa la riga precedente ed aperta quella successiva.
+    \item In ultimo, \texttt{\textbackslash n}, cioè per ogni new line viene eseguito il blocco di codice \mintinline{c}{{printf("</tr> \n <tr>"); comma = 0;}} dove viene chiusa la riga precedente ed aperta quella successiva.
 \end{itemize}
 
 \paragraph{Epilogo}
