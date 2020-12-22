@@ -66,7 +66,7 @@ La risposta all'esercizio è dunque \textbf{“VERO”}.
 
 \section*{Esercizio 3}
 
-Sia \(r=b^* \mid b^* a (\epsilon \mid a \mid b)^*\)e sia \(\mathcal{D}\) il DFA minimo per il riconoscimento di \(\L(r)\). Dire quanti stati ha \(\mathcal{D}\) e quanti di questi stati sono finali.
+Sia \(r=b^* \mid b^* a (\varepsilon \mid a \mid b)^*\)e sia \(\mathcal{D}\) il DFA minimo per il riconoscimento di \(\L(r)\). Dire quanti stati ha \(\mathcal{D}\) e quanti di questi stati sono finali.
 
 Per poter risolvere l'esercizio è possibile applicare la Thompson's Construction per ottenere un NFA, successivamente la Subset Construction per trasformarlo in un DFA ed infine la DFA Minimization per ottenere \(\mathcal{D}\). Il procedimento, seppur efficacie, è troppo lungo da svolgere (i.e. o saltate l'esercizio e ci ritornate dopo oppure trovate un metodo furbo per farlo): per questo motivo è meglio osservare direttamente la regex. Il linguaggio denotato è \(\{b^k \mid k \geq 0\} \cup \{b^i a a^j b^k \mid i \geq 0, j \geq 0, k \geq 0\}\): se riuscissimo a trovare un DFA che ci permette di ottenere questo linguaggio poi potremmo ridurlo. 
 
@@ -85,7 +85,7 @@ Passiamo ora al secondo insieme di parole riconosciute: essendo che la prima par
 \begin{figure}[H]
 	\centering
     \includegraphics[width=.6\textwidth]{dfa-pt2-ex3.jpg}
-    \caption{Es 1: DFA Parziale \(b^* a (\epsilon \mid a \mid b)^*\)}
+    \caption{Es 1: DFA Parziale \(b^* a (\varepsilon \mid a \mid b)^*\)}
     \label{fig:dfa-pt2-ex3}
 \end{figure}
 
@@ -94,7 +94,7 @@ A questo punto abbiamo quasi concluso, la cosa che ci manca è unificare questi 
 \begin{figure}[H]
 	\centering
     \includegraphics[width=.6\textwidth]{dfa-pt3-ex3.jpg}
-    \caption{Es 1: DFA Parziale \(b^* \mid b^* a (\epsilon \mid a \mid b)^*\)}
+    \caption{Es 1: DFA Parziale \(b^* \mid b^* a (\varepsilon \mid a \mid b)^*\)}
     \label{fig:dfa-pt3-ex3}
 \end{figure}
 
@@ -111,7 +111,7 @@ Il DFA minimizzato \(\mathcal{D}\) è dunque così costruito:
 \begin{figure}[H]
 	\centering
     \includegraphics[width=.3\textwidth]{dfa-minimized-ex3.jpg}
-    \caption{Es 1: DFA Minimizzato \(b^* \mid b^* a (\epsilon \mid a \mid b)^*\)}
+    \caption{Es 1: DFA Minimizzato \(b^* \mid b^* a (\varepsilon \mid a \mid b)^*\)}
     \label{fig:dfa-minimized-ex3}
 \end{figure}
 
@@ -164,8 +164,8 @@ Riportiamo \(\G_1\) per praticità
 
 \begin{align*}
     S &\to AaB \mid b \\
-    A &\to BcBaA \mid \epsilon \\
-    B &\to \epsilon
+    A &\to BcBaA \mid \varepsilon \\
+    B &\to \varepsilon
 \end{align*}
 
 Per poter calcolare la tabella di parsing \(LL(1)\) è necessario computare innanzitutto first e follow per ogni driver della grammatica \(\G_1\).
@@ -180,8 +180,8 @@ Per poter calcolare la tabella di parsing \(LL(1)\) è necessario computare inna
 A questo punto è possibile applicare l'algoritmo per la computazione della parsing table \(LL(1)\): visto che ci interessa solamente la riga relativa al non-terminale \(B\) concentriamoci solamente sulla produzione \(B \to epsilon\)
 
 \begin{itemize}
-    \item \(\forall b \in first(B) \setminus \epsilon, \textrm{ add } B \to epsilon \textrm{ to } M[B, b]\) (che non comporta nessuna modifica nella tabella)
-    \item Visto che \(\epsilon \in first(B)\), allora \(\forall x \in follow(B), \textrm{ add } B \to epsilon \textrm{ to } M[B, x]\)
+    \item \(\forall b \in first(B) \setminus \varepsilon, \textrm{ add } B \to epsilon \textrm{ to } M[B, b]\) (che non comporta nessuna modifica nella tabella)
+    \item Visto che \(\varepsilon \in first(B)\), allora \(\forall x \in follow(B), \textrm{ add } B \to epsilon \textrm{ to } M[B, x]\)
 \end{itemize}
 
 La riga identificata dal non-terminale \(B\), nonché soluzione dell'esercizio, sarà dunque così rappresentata:
@@ -201,8 +201,8 @@ Riportiamo \(\G_1\) per praticità
 
 \begin{align*}
     S &\to AaB \mid b \\
-    A &\to BcBaA \mid \epsilon \\
-    B &\to \epsilon
+    A &\to BcBaA \mid \varepsilon \\
+    B &\to \varepsilon
 \end{align*}
 
 Nonostante sia possibile eseguire tutta la costruzione dell'automa caratteristico di tipo \(LR(1)\) e la successiva computazione della tabella, anche in questo caso non è consigliabile procedere in quel modo: la cosa migliore è invece computare solo gli stati dell'automa caratteristico per poter arrivare in \(I[BcBa]\) utilizzando le transizioni corrette. Se il lettore fosse interessato, può trovare lo svolgimento completo dell'esercizio nel capitolo ~\ref{subsec:lalr1-parsing-table} \emph{Costruzione di una tabella di parsing LALR(1)}: per coerenza qui verranno utilizzati gli stessi numeri per gli stati riportati nell'esercizio indicato. 
@@ -222,7 +222,7 @@ Nonostante sia possibile eseguire tutta la costruzione dell'automa caratteristic
     \end{align*}
     Essendo questi gli item per lo stato 0, possiamo identificare quattro possibili transizioni (e quindi quattro possibili nuovi stati): \(\tau(0,S)=1 \textrm{, } \tau(0,A)=2 \textrm{, } \tau(0,b)=3 \textrm{ e } \tau(0,B)=4\).
     
-    Interessante notare che le produzioni del tipo \(A \to \epsilon\) vengono convertite in reducing item \(A \to \cdot\).
+    Interessante notare che le produzioni del tipo \(A \to \varepsilon\) vengono convertite in reducing item \(A \to \cdot\).
     \item Visto che siamo interessati a una transizione con etichetta \(B\), computiamo lo stato 4; il suo kernel è 
     \begin{equation*}
         A \to B \cdot cBaA, \{a\} 
@@ -263,7 +263,7 @@ Mediante le informazioni contenute nello stato 10 del nostro automa caratteristi
     \caption{LR(1) \& LALR(1) Parsing Table}
     \label{tab:parsing-table-lr1-ex7}
 \end{table}
-dove \(r4 =  A \to \epsilon\) e \(r5 =  B \to \epsilon\).
+dove \(r4 =  A \to \varepsilon\) e \(r5 =  B \to \varepsilon\).
 
 Visto che la riga relativa allo stato 9 della tabella di parsing \(LR(1)\) per \(\G_1\) non presenta conflitti, allora la risposta corretta è \textbf{“NO CONFLICT”}.
 
@@ -275,8 +275,8 @@ Riportiamo \(\G_1\) per praticità
 
 \begin{align*}
     S &\to AaB \mid b \\
-    A &\to BcBaA \mid \epsilon \\
-    B &\to \epsilon
+    A &\to BcBaA \mid \varepsilon \\
+    B &\to \varepsilon
 \end{align*}
 
 Come nel caso dell'esercizio precedente, adottiamo una tecnica che ci permetta di computare il minimo numero di stati possibili dell'automa caratteristico per poter calcolare quanto richiesto:
@@ -325,8 +325,8 @@ Riportiamo \(\G_1\) per praticità
 
 \begin{align*}
     S &\to AaB \mid b \\
-    A &\to BcBaA \mid \epsilon \\
-    B &\to \epsilon
+    A &\to BcBaA \mid \varepsilon \\
+    B &\to \varepsilon
 \end{align*}
 
 Prima di procedere alla risoluzione dell'esercizio è necessario fare una precisazione: visto che uno svolgimento molto simile per per un automa caratteristico \(LR(1)\) è già stato eseguito per l'esercizio 7 di questa appendice, il metodo più efficiente per arrivare alla risposta è, vista anche la grande similitudine tra gli item impiegati nel parsing \(LALR(1)\), quello di orientare la risoluzione di questo esercizio basandosi sui risultati già ottenuti in precedenza. Per poter seguire meglio il ragionamento, andiamo a riportare gli stati incontrati fino ad ora, sostituendo il loro lookahead set con le variabili tipiche del parsing \(LALR(1)\)
@@ -392,7 +392,7 @@ A questo punto è il momento di tirare le dovute somme, iniziando dal riportare 
     \end{equation*}
 \end{itemize}
 
-Come è possibile osservare, lo stato presenta una transizione \(\tau(6, B)=8\) e un reducing item: ciò si traduce nella presenza di un'operazione di \texttt{goto} 8 in corrispondenza del non-terminale \(B\) e di \texttt{reduce} \(B \to \epsilon\) in corrispondenza di \(a\). Apparentemente non sembrerebbero esserci conflitti in questo stato ma siamo sicuri di non dimenticarci nulla? La risposta banalmente è sì, questo perchè:
+Come è possibile osservare, lo stato presenta una transizione \(\tau(6, B)=8\) e un reducing item: ciò si traduce nella presenza di un'operazione di \texttt{goto} 8 in corrispondenza del non-terminale \(B\) e di \texttt{reduce} \(B \to \varepsilon\) in corrispondenza di \(a\). Apparentemente non sembrerebbero esserci conflitti in questo stato ma siamo sicuri di non dimenticarci nulla? La risposta banalmente è sì, questo perchè:
 
 \begin{enumerate}
     \item abbiamo solo un reducing item, per cui non è possibile un conflitto r/r

@@ -195,7 +195,7 @@ Prima di procedere, dobbiamo definire la nozione di \emph{State Equivalence}.
     \noindent dove la funzione multi-passo \(\textrm{move}_{d}\!^{*}\) è definita per induzione sulla lunghezza della stringa considerata nel seguente modo:
 
     \begin{labeling}{Step}
-        \item[Base] \(\textrm{move}_{d}\!^{*}(s,\epsilon)=s\) 
+        \item[Base] \(\textrm{move}_{d}\!^{*}(s,\varepsilon)=s\) 
         \item[Step] \(\textrm{move}_{d}\!^{*}(s,wa)= \textrm{move}_{d}(\textrm{move}_{d}\!^{*}(s,w),a)\)
     \end{labeling}    
 \end{definition}
@@ -628,7 +628,7 @@ I linguaggi regolari sono chiusi rispetto alle seguenti operazioni:
 Andiamo a vedere più da vicino le motivazioni per ciascuna di queste.
 
 \paragraph{Unione}
-Se prendiamo due linguaggi regolari e ne operiamo l'unione, il risultato di questa è ancora un linguaggio regolare. Come nel caso precedente, essendo che i linguaggi sono regolari, allora è possibile costruire un DFA sia per il primo che per il secondo; se a questo punto si prendono i due automi così costruiti e li si lega tramite una \(\epsilon\)-transizione, per l'operazione di \emph{alternanza} si ottiene nuovamente 
+Se prendiamo due linguaggi regolari e ne operiamo l'unione, il risultato di questa è ancora un linguaggio regolare. Come nel caso precedente, essendo che i linguaggi sono regolari, allora è possibile costruire un DFA sia per il primo che per il secondo; se a questo punto si prendono i due automi così costruiti e li si lega tramite una \(\varepsilon\)-transizione, per l'operazione di \emph{alternanza} si ottiene nuovamente 
 un linguaggio regolare.
 
 \paragraph{Concatenazione}
