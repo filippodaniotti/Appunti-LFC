@@ -509,7 +509,7 @@ Per poter ottenere un risultato migliore potremmo inserire due nuovi non termina
     S &\to Num \\
     Num &\to O \textrm{ } Digits \mid D \textrm{ } Digits \\
     O &\to o \\ 
-    D &\to \epsilon \\
+    D &\to \varepsilon \\
     Digits &\to Digits \textrm{ } d \mid d
 \end{align*}
 
@@ -520,7 +520,7 @@ Di per sé non sembra essere cambiato molto ma in realtà in questo caso abbiamo
     Num &\to O \textrm{ } Digits &\{Num.v = Digits.v\}\\
     Num &\to D \textrm{ } Digits &\{Num.v = Digits.v\}\\
     O &\to o &\{base = 8\}\\ 
-    D &\to \epsilon &\{base = 10\}\\
+    D &\to \varepsilon &\{base = 10\}\\
     Digits &\to Digits_1 \textrm{ } d &\{Digits.v = Digits_1.v * base + d.lexval\}\\
     Digits &\to d &\{Digits.v = d.lexval\}
 \end{align*}
@@ -707,7 +707,7 @@ Lo stesso avviene per la grammatica che stiamo considerando ora, quella per gli 
 
 Il problema in questo caso specifico è che non possiamo sintetizzare tutte le informazioni che ci servono perchè, uno degli elementi necessari per ricavare il valore dell'espressione e per la formazione dell'abstract syntax tree, non è presente nello stesso sottoalbero nel quale troviamo l'operatore aritmetico e l'altro operando coinvolto nell'operazione. 
 
-Utilizzando gli attributi ereditati non si riesce ad eseguire in maniera immediata tutte le operazioni durante il parsing della grammatica: un'opzione, come già citato più volte, potrebbe essere quella di agire sulla grammatica in modo che, durante un'esecuzione del parsing bottom-up, si possa ottenere lo stesso risultato di una grammatica S-attribuita. Senza soffermarci troppo sui dettagli, tale operazione passerebbe per l'aggiunta di marker e \(\epsilon\)-transizioni in modo che gli attributi vengano sintetizzati e non ereditati.
+Utilizzando gli attributi ereditati non si riesce ad eseguire in maniera immediata tutte le operazioni durante il parsing della grammatica: un'opzione, come già citato più volte, potrebbe essere quella di agire sulla grammatica in modo che, durante un'esecuzione del parsing bottom-up, si possa ottenere lo stesso risultato di una grammatica S-attribuita. Senza soffermarci troppo sui dettagli, tale operazione passerebbe per l'aggiunta di marker e \(\varepsilon\)-transizioni in modo che gli attributi vengano sintetizzati e non ereditati.
 
 In questo caso per poter trasportare le informazioni da un ramo dell'albero ad un altro è necessario utilizzare degli attributi ereditati: in modo simile a quanto fatto per computare il valore delle espressioni aritmetiche, in questo caso assegniamo dei riferimenti a dei nodi. 
 
@@ -779,10 +779,10 @@ A questo punto possiamo passare alle produzioni che si occupano delle operazioni
 
 Grazie a questa azione semantica siamo in grado di generare un nodo con etichetta \(-\) e con un riferimento per ogni operando: il riferimento di questo nodo viene passato poi ad \(E_1.i\), in questo modo riuscirà a svolgere le operazioni successive. 
 
-Come abbiamo detto precedentemente, dovremo prima o poi interrompere tale ricorsione e quindi necessitiamo di un caso base: banalmente smetteremo di fare nuove chiamate nel momento in cui non avremo più operatori e quindi nel caso in cui utilizzeremo la produzione \(E' \to \epsilon\). In questo momento dovremo riportare il risultato di tutta la nostra computazione (i.e. i nostri riferimenti): per fare ciò semplicemente andiamo ad assegnare a \(E'.node\) i riferimenti ottenuti fino a quel momento
+Come abbiamo detto precedentemente, dovremo prima o poi interrompere tale ricorsione e quindi necessitiamo di un caso base: banalmente smetteremo di fare nuove chiamate nel momento in cui non avremo più operatori e quindi nel caso in cui utilizzeremo la produzione \(E' \to \varepsilon\). In questo momento dovremo riportare il risultato di tutta la nostra computazione (i.e. i nostri riferimenti): per fare ciò semplicemente andiamo ad assegnare a \(E'.node\) i riferimenti ottenuti fino a quel momento
 
 \begin{align*}
-     E' &\to \epsilon &\{E'.node = E'.i\}
+     E' &\to \varepsilon &\{E'.node = E'.i\}
 \end{align*}
 
 A questo punto abbiamo trattato il nostro caso base ma è necessario ritornare sulle produzioni già analizzate in modo da poter restituire il tutto al "chiamante": aggiungiamo dunque   
@@ -798,7 +798,7 @@ A questo punto possiamo riassumere le regole come segue
     E &\to TE' &\{E.node = E'.node; E'.i = T.node\} \\
     E' &\to +TE_{1}' &\{E'.node = E_{1}'.node; E_{1}'.i = newNode(+, E'.i, T.node)\} \\
     E' &\to -TE_{1}' &\{E'.node = E_{1}'.node; E_{1}'.i = newNode(-, E'.i, T.node)\} \\
-    E' &\to \epsilon &\{E'.node = E'.i\} \\
+    E' &\to \varepsilon &\{E'.node = E'.i\} \\
     T &\to (E) &\{T.node = E.node\} \\
     T &\to id &\{T.node = newLeaf(id, id.entry)\} \\
     T &\to num &\{T.node = newLeaf(num, num.lexval)\}
@@ -826,7 +826,7 @@ Finalmente abbiamo la possibilità di osservare passo per passo come costruire i
     \item Generiamo la foglia per il valore di \(num\) e manteniamo un riferimento ad essa: tale operazione viene eseguita dalla regola \(\{T.node = newLeaf(num, num.lexval)\}\) per \(T \to num\)
     \item Creiamo un riferimento alla foglia di \(a\) utilizzando la regola \(\{E'.i = T.node\}\) per  \(E \to TE'\). In questo passaggio dobbiamo recuperare \(T.node\) (che contiene un riferimento alle informazioni del sottoalbero sinistro) e assegnarlo a \(E'.i\), in modo che i passi successivi possano usufruirne
     \item Generiamo il nodo per la sottrazione \(a-4\): tale operazione viene eseguita dalla regola \(\{E_{1}'.i = newNode(-, E'.i, T.node)\}\) per \(E' \to -TE_{1}'\); anche in questo caso abbiamo bisogno di passare il riferimento ai passi successivi
-    \item Creiamo un riferimento al nodo della sottrazione appena creatp utilizzando la regola \(\{E'.node = E'.i\}\) per \(E' \to \epsilon\)
+    \item Creiamo un riferimento al nodo della sottrazione appena creatp utilizzando la regola \(\{E'.node = E'.i\}\) per \(E' \to \varepsilon\)
     \item Creiamo un riferimento allo stesso nodo utilizzando la regola \(\{E'.node = E_{1}'.node\}\) per \(E' \to -TE_{1}'\)
     \item Infine creiamo un riferimento ancora allo steso nodo (esato, è proprio questo che si fa quando si ritorna da una ricorsione) utilizzando la regola \(\{E.node = E'.node\}\) per \(E \to TE'\)
 \end{enumerate}

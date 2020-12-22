@@ -500,8 +500,8 @@ Il vantaggio della grammatica LALR(1) è di essere più potente (i.e. espressiva
 \subsection*{Esercizio parsing LALR(1) - c'è sì ma in realtà no perchè è LR(1)}
 \begin{align*}
     S &\to AaB \mid b \\
-    A &\to BcBaA \mid \epsilon \\
-    B &\to \epsilon
+    A &\to BcBaA \mid \varepsilon \\
+    B &\to \varepsilon
 \end{align*}
 
 Il nostro obbiettivo è quello di costruire la parsing table LALR(1) per la grammatica citata: per poter procedere dobbiamo però prima costruire l'automa caratteristico.
@@ -521,7 +521,7 @@ Il nostro obbiettivo è quello di costruire la parsing table LALR(1) per la gram
     \end{align*}
     Essendo questi gli item per lo stato 0, possiamo identificare quattro possibili transizioni (e quindi quattro possibili nuovi stati): \(\tau(0,S)=1 \textrm{, } \tau(0,A)=2 \textrm{, } \tau(0,b)=3 \textrm{ e } \tau(0,B)=4\).
     
-    Interessante notare che le produzioni del tipo \(A \to \epsilon\) vengono convertite in reducing item \(A \to \cdot\).
+    Interessante notare che le produzioni del tipo \(A \to \varepsilon\) vengono convertite in reducing item \(A \to \cdot\).
     \item Analizziamo ora lo stato 1; il suo kernel è 
     \begin{equation*}
         S' \to S \cdot, \{\$\}    
@@ -603,8 +603,8 @@ Visto che non è possibile unire nessuno degli stati dell'automa LR(1), l'automa
     \item \(S \to AaB\) 
     \item \(S \to b\) 
     \item \(A \to BcBaA\) 
-    \item \(A \to \epsilon\) 
-    \item \(B \to \epsilon\)
+    \item \(A \to \varepsilon\) 
+    \item \(B \to \varepsilon\)
 \end{enumerate}
 
 \begin{table}[H]
@@ -677,7 +677,7 @@ Procedendo un passettino alla volta la chiusura dello stato 0 si fa così:
             L &\to \cdot *R, \; \{=\} \\
             L &\to \cdot id, \; \{=\}
         \end{align*}
-        in questo caso, dato che \(\beta \neq \epsilon\), vediamo come il lookahead set corrisponda ad un carattere e non una variabile, questo è possibile mentre stiamo calcolando la chiusura di item simbolici;
+        in questo caso, dato che \(\beta \neq \varepsilon\), vediamo come il lookahead set corrisponda ad un carattere e non una variabile, questo è possibile mentre stiamo calcolando la chiusura di item simbolici;
     \end{itemize}
     \item infine, avendo introdotto anche \(R\), dobbiamo calcolare la chiusura indotta dalle produzioni di \(R\):
     \begin{itemize}

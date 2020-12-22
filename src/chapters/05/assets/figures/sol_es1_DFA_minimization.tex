@@ -9,10 +9,10 @@
 % arara: latexmk: { clean: partial }
 \begin{document}
     \begin{tikzpicture}
-        \node[state, initial] (ac) {$A,C$};
-        \node[state, right of=ac] (b) {$B$};
-        \node[state, right of=b] (d) {$D$};
-        \node[state, accepting, right of=d] (e) {$E$};
+        \node[state, initial] (ac) {$T0,T2$};
+        \node[state, right of=ac] (b) {$T1$};
+        \node[state, right of=b] (d) {$T3$};
+        \node[state, accepting, right of=d] (e) {$T4$};
 	    \draw (ac) edge [loop below] node{b} (A)
 	    (ac) edge [above] node{a} (b)
 	    (b) edge [loop above] node{a} (b)

@@ -153,7 +153,7 @@ Nel caso di automa a stati finiti non deterministico i calcoli sono spesso più 
 \section{Automa a stati finiti non deterministico}
 Un automa a stati finiti non deterministico (Non-Deterministic Finite Automata abbreviato in NFA) è rappresentabile con una tupla
 \begin{equation}
-    \mathcal{N} := (S, \mathcal{A}, \textrm{move}_n, s_0, F)
+    \mathcal{N} := (S, \mathcal{A}, \textrm{move}_n, S_0, F)
     \label{nfa_tupla}
 \end{equation}
 in cui:
@@ -166,7 +166,7 @@ in cui:
 \end{itemize}
 
 \subsection{Rappresentazione grafica}
-La tupla \((S, \mathcal{A}, \textrm{move}_n, s_0, F)\) può essere rappresentata con un grafo diretto seguendo queste convenzioni:
+La tupla \((S, \mathcal{A}, \textrm{move}_n, S_0, F)\) può essere rappresentata con un grafo diretto seguendo queste convenzioni:
 \begin{itemize}
     \item gli stati rappresentano i nodi;
     \item lo stato iniziale è identificato da una freccia entrante;
@@ -297,7 +297,7 @@ Posseggo l’automa \(\mathcal{N}(r_1)\), che ha un solo stato iniziale ed un so
 Siccome voglio poter avere \(\varepsilon\) come parola possibile, introduco un nuovo arco \(\varepsilon\) che collega il nuovo stato iniziale al nuovo stato finale, quindi implemento la ripetizione con degli altri archi \(\varepsilon\) come in figura; la spiegazione è abbastanza banale.
 
 \subsubsection{Parentesi}
-Guardiamo il caso della parentesizzazione \(r = ( r_1 )\), il quale risulta estremamente banale, così tanto che l'interpretazione è lasciata al lettore.
+Il caso della parentesizzazione \(r = ( r_1 )\) risulta estremamente banale: di fatto l'automa non subisce alcuna modifica.
 
 Questo è il modo di utilizzare il processo di Thompson per costruire automi complessi, ci renderemo conto più avanti di quante \(\varepsilon\) questo ci costringe ad utilizzare e di cosa questo comporti.
 
@@ -405,7 +405,7 @@ La risposta è sì, possiamo farlo! Per vedere in che modo dobbiamo prima introd
 
 
 \subsection{\(\varepsilon\)-chiusura di un automa}
-Sia \((S, \mathcal{A}, \textrm{move}_n, s_0, F)\) un NFA, sia \(t\) uno stato in \(S\) e \(T\) un sottoinsieme di \(S\).
+Sia \((S, \mathcal{A}, \textrm{move}_n, S_0, F)\) un NFA, sia \(t\) uno stato in \(S\) e \(T\) un sottoinsieme di \(S\).
 
 Definiamo \(\varepsilon\)-chiusura\((\{t\})\) l’insieme di stati in \(S\) che sono raggiungibili da \(t\) tramite zero o più \(\varepsilon\)-transizioni (nota che \(t\) è sempre in questo insieme).
 
@@ -444,7 +444,7 @@ Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'a
 \subimport{assets/pseudocode/}{nfa-simulation.tex}
 
 Dove \texttt{\$} è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \texttt{\$}).
-Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(s_0\) e la aggiungiamo all'insieme \texttt{states}; prendiamo il primo simbolo nella parola tramite \(nextChar()\) e poi entriamo nel ciclo che compone il corpo della procedura.
+Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(S_0\) e la aggiungiamo all'insieme \texttt{states}; prendiamo il primo simbolo nella parola tramite \(nextChar()\) e poi entriamo nel ciclo che compone il corpo della procedura.
 
 In questo corpo si utilizza la \(\varepsilon\)-chiusura per salvare in \texttt{states} la \(\varepsilon\)-chiusura di tutti gli stati che posso raggiungere tramite una \texttt{symbol}-transizione (una transizione marcata con \texttt{symbol}); una volta trovati questi nodi, il \texttt{symbol} prende il valore del prossimo carattere di \(w\).
 
@@ -486,7 +486,7 @@ Continuo così finché non finisco i simboli; a quel punto devo verificare se es
 
 \subsection{Nota sulla \(\varepsilon\)-chiusura}
 \begin{theorem}
-    Sia \(N(S, \mathcal{A}, \textrm{move}_n, s_0, F)\) un NFA e sia \(M \subseteq S\).
+    Sia \(N = (S, \mathcal{A}, \textrm{move}_n, S_0, F)\) un NFA e sia \(M \subseteq S\).
     
     Allora la \(\varepsilon\)-chiusura\((M)\) è il più piccolo insieme \(X \subseteq S\) tale che \(X\) è una soluzione alla seguente equazione:
     \begin{equation}
@@ -599,7 +599,7 @@ Adesso possiamo affrontare il problema dello studio della complessità della sim
     \item il secondo (\texttt{nextStack}) è invece  nel left value e verrà aggiornato durante la attuale iterazione.
 \end{itemize}
 
-\noindent Abbiamo anche il nostro vettore \texttt{alreadyOn} di dimensione \(|S|\) e, naturalmente, il vettore bidimensionale per conservare \(\textrm{move}_2\).
+\noindent Abbiamo anche il nostro vettore \texttt{alreadyOn} di dimensione \(|S|\) e, naturalmente, il vettore bidimensionale per conservare \(\textrm{move}_n\).
 
 Ci rendiamo conto che il ciclo \texttt{while} domina la complessità, soprattutto perché al suo interno avviene una chiamata di \(\varepsilon\)-chiusura, completata dall'estrazione di tutti gli elementi da \texttt{nextStack} e il loro inserimento in \texttt{currentStack}, oltre alla reinizializzazione di \texttt{alreadyOn}.
 
@@ -615,7 +615,7 @@ Possiamo pensare di utilizzare queste strutture per decidere se accettare delle 
 Introdunciamoli per differenza rispetto agli NFA. Si tenga a mente la definizione di NFA:
 
 \begin{gather*}
-    \mathcal{N} := (S, \mathcal{A}, \textrm{move}_n, s_0, F), \textrm{ dove } \\
+    \mathcal{N} := (S, \mathcal{A}, \textrm{move}_n, S_0, F), \textrm{ dove } \\
     \textrm{move}_n : S \times (\mathcal{A} \cup \{\varepsilon\}) \to 2^S
 \end{gather*}
 
@@ -624,7 +624,7 @@ Si noti la funzione di transizione, che opera con uno stato e un simbolo dell'al
 Un automa a stati finiti deterministici è invece definito come segue:
 
 \begin{gather}
-    \mathcal{D} := (S, \mathcal{A}, \textrm{move}_d, s_0, F), \textrm{ dove } \\
+    \mathcal{D} := (S, \mathcal{A}, \textrm{move}_d, S_0, F), \textrm{ dove } \\
     \textrm{move}_d : S \times \mathcal{A} \to S
 \end{gather}
 
@@ -635,7 +635,7 @@ Evidenziamo le caratteristiche dei DFA:
 \begin{itemize}
     \item non presentano \(\varepsilon\)-transizioni (ma c'è un cavillo di cui ci occuperemo più avanti);
     \item se \(\textrm{move}_d\) è \emph{totale}, allora per ogni stato c'è \textbf{esattamente} una \(a\)-transizione \(\forall a \in \mathcal{A}\);
-    \item se \(\textrm{move}_d\) è \emph{parziale}, allora per ogni stato c'è \textbf{almeno} una \(a\)-transizione \(\forall a \in \mathcal{A}\); in altre parole, per alcune coppie \((s,a) \in S \times A\) la funzione non è definita.
+    \item se \(\textrm{move}_d\) è \emph{parziale}, allora per ogni stato c'è \textbf{al massimo} una \(a\)-transizione \(\forall a \in \mathcal{A}\); in altre parole, per alcune coppie del dominio (\((s,a) \in S \times A\)) la funzione non è definita.
 \end{itemize}
 
 \begin{figure}[H]
@@ -654,22 +654,22 @@ Evidenziamo le caratteristiche dei DFA:
 \end{figure}
 
 \subsection{Linguaggi rionosciuti dai DFA}
-Prendiamoci un certo DFA \(\mathcal{D} = (S, \mathcal{A}, \textrm{move}_d, s_0, F)\); il linguaggio \(\mathcal{L(D)}\) da lui riconosciuto è l'insieme di parole \(w\) tale che:
+Prendiamoci un certo DFA \(\mathcal{D} = (S, \mathcal{A}, \textrm{move}_d, S_0, F)\); il linguaggio \(\mathcal{L(D)}\) da lui riconosciuto è l'insieme di parole \(w\) tale che:
 
 \begin{itemize}
-    \item o esiste un cammino, che chiamiamo qui \(w = a_1, \ldots, a_k\), con \(k \ge 1\), che vada dallo stato iniziale \(s_0\) a un qualche stato finale in \(F\);
-    \item oppure vale che \(s_0 \in F \land w = \epsilon\); per l'appunto, quello in cui lo stato di partenza è uno stato finale è l'unico caso in cui un DFA possiede la parola vuota.
+    \item o esiste un cammino, che chiamiamo qui \(w = a_1, \ldots, a_k\), con \(k \ge 1\), che vada dallo stato iniziale \(S_0\) a un qualche stato finale in \(F\);
+    \item oppure vale che \(S_0 \in F \land w = \varepsilon\); per l'appunto, quello in cui lo stato di partenza è uno stato finale è l'unico caso in cui un DFA possiede la parola vuota.
 \end{itemize}
 
 \subsection{Simulazione di un DFA con transizione totale}
 In questo caso abbiamo la certezza che, per ogni  simbolo che leggiamo, ci sia un qualche arco che lo colleghi a uno stato successivo nel grafo, e questo semplifica di molto la procedura per determinare se una certa parola \(w\) appartenza o meno al linguaggio del nostro DFA.
 
-Per l'appunto, è sufficiente partire dallo stato iniziale \(s_0\) e seguire il cammino dato dagli elementi di \(w\); se terminiamo in un qualche stato finale in \(F\), allora \(w\) appartiene al linguaggio, altrimenti no; la complessità, pertanto, è \(\mathcal{O}(|w|)\).
+Per l'appunto, è sufficiente partire dallo stato iniziale \(S_0\) e seguire il cammino dato dagli elementi di \(w\); se terminiamo in un qualche stato finale in \(F\), allora \(w\) appartiene al linguaggio, altrimenti no; la complessità, pertanto, è \(\mathcal{O}(|w|)\).
 
 \subsection{Simulazione di un DFA con transizione parziale}
-Poiché qui abbiamo una funzione di transizione totale, dobbiamo considerare la possibilità di arrivare a uno stato in cui non non possiamo più proseguire. 
+Poiché qui abbiamo una funzione di transizione parziale, dobbiamo considerare la possibilità di arrivare a uno stato in cui non non possiamo più proseguire. 
 
-Iniziamo comunque dallo stato iniziale e, di nuovo, seguiamo il cammino dato dallo spelling della parola \(w = a_1, a_2, \ldots, a_k\); se sto leggendo un qualche simbolo per cui non c'è una transizione "etichettato" da quel simbolo, allora posso direttamente ritornare una risposta negativa; se invece riesco a leggere tutta la parola e a raggiungere uno stato finale, posso rispondere affermativamente.
+Iniziamo comunque dallo stato iniziale e, di nuovo, seguiamo il cammino dato dallo spelling della parola \(w = a_1, a_2, \ldots, a_k\); se sto leggendo un qualche simbolo per cui non c'è una transizione "etichettata" da quel simbolo, allora posso direttamente ritornare una risposta negativa; se invece riesco a leggere tutta la parola e a raggiungere uno stato finale, posso rispondere affermativamente.
 
 \subsection{Funzioni di transizioni a confronto}
 Dato un DFA \(\mathcal{D}\) con funzione di transizione parziale, ho un modo per definire un DFA \(\mathcal{D}'\) che abbia funzione di transizione totale e che riconosca esattamente lo stesso linguaggio (\(\mathcal{L(D) = \mathcal{L}(\mathcal{D}')}\))?

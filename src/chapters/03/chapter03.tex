@@ -167,7 +167,7 @@
 Una grammatica libera \(\mathcal{G} = (V, T, S, \mathcal{P})\) è in \emph{Chomsky Normal Form} se e solo se:
 \begin{itemize}
   \item non ha alcuna \(\varepsilon\)-produzione, al massimo \(S \rightarrow \varepsilon\);
-  \item tutte le sue non \(\varepsilon\)-produzioni  una tra le due seguenti forme:
+  \item tutte le sue non \(\varepsilon\)-produzioni hanno una tra le due seguenti forme:
   \begin{itemize}
     \item \(A \rightarrow a\)
     \item \(A \rightarrow BC\)
@@ -227,7 +227,7 @@ Osserviamo subito che \(C\) ha solo una produzione e questa conduce a \(\varepsi
 % \end{figure}
 
 \begin{align*}
-  S\; & \to\; ABC\; \mid abc\; \mid AB\; \mid AC\; \mid AC\; \mid BC\; \mid A\; \mid B\; \mid C \\
+  S\; & \to\; ABC\; \mid abc\; \mid AB\; \mid AC\; \mid BC\; \mid A\; \mid B\; \mid C \\
   A\; & \to \; aB \\
   B\; & \to\; bA\; \mid C
 \end{align*}
@@ -294,7 +294,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
   \end{figure}
 
 
-  Allo stesso modo sappiamo che, se a partire da \(A_1\) possiamo otteniamo un sottoalbero di derivazioni \(w\), questo stesso sottoalbero può essere ottenuto a partire da \(A_2\).
+  Allo stesso modo sappiamo che, se a partire da \(A_1\) possiamo ottenere un sottoalbero di derivazioni \(w\), questo stesso sottoalbero può essere ottenuto a partire da \(A_2\).
 
   \begin{figure}
     \centering
@@ -382,8 +382,8 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 	\(Ab \rightarrow bA \)
 	\(Ba \rightarrow aB \)
 	\(Bb \rightarrow bB \)
-	\(C \rightarrow \epsilon \)
-	\(D \rightarrow \epsilon \)
+	\(C \rightarrow \varepsilon \)
+	\(D \rightarrow \varepsilon \)
 
 	Si verifica facilmente che il linguaggio generato da tale grammatica è \(\mathcal{L(G)} =\{ww | w\in\{a,b\}^*\}\)
 	Ci chiediamo allore se tale linguaggio sia libero o meno
@@ -405,17 +405,17 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
     \label{tab:ex-freeNotFree_1}
 \end{table}
 
-\paragraph{Spiegazione \ref{ex-freeNotFree_1}}
-Questo linguaggio non è libero perché non è possibile trovare una grammatica che sia libera e che lo generi (c'è anche una qualche prova? Pumping lemma maybe?)
+\paragraph{Spiegazione \ref{tab:ex-freeNotFree_1}}
+Come osservato per l'esempio precedente, questo linguaggio non è libero e ciò si dimostra mediante il Pumping Lemma. 
 
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{ex-freeNotFree_2.tex}
     \caption{Esercizio 2}
-    \label{ex-freeNotFree_2}
+    \label{tab:ex-freeNotFree_2}
 \end{table}
 
-\paragraph{Spiegazione \ref{ex-freeNotFree_2}}
+\paragraph{Spiegazione \ref{tab:ex-freeNotFree_2}}
 Per provare che questo linguaggio è libero possiamo sfruttare la chiusura dei linguaggi liberi rispetto alla concatenazione. È semplice trovare una grammatica libera che generi il linguaggio \( \{ a^nb^n \mid n > 0 \} \), come ad esempio la seguente:
 
 \begin{align*}
@@ -436,17 +436,17 @@ Per provare che questo linguaggio è libero possiamo sfruttare la chiusura dei l
   C\; & \to\; c\; \mid cC
 \end{align*}
 
-\noindent Si noti che questa procedura, con le dovute accortezze, è la medesima utilizzata per ricavare la risposta di \ref{ex-freeNotFree_3}.
+\noindent Si noti che questa procedura, con le dovute accortezze, è la medesima utilizzata per ricavare la risposta di \ref{tab:ex-freeNotFree_3}.
 
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{ex-freeNotFree_3.tex}
     \caption{Esercizio 3}
-    \label{ex-freeNotFree_3}
+    \label{tab:ex-freeNotFree_3}
 \end{table}
 
-\paragraph{Spiegazione \ref{ex-freeNotFree_3}}
-Si proceda analogamente a \ref{ex-freeNotFree_2}.
+\paragraph{Spiegazione \ref{tab:ex-freeNotFree_3}}
+Si proceda analogamente a \ref{tab:ex-freeNotFree_2}.
 
 \subsection*{Esercizio 2}
 Consideriamo la seguente grammatica:
@@ -517,7 +517,7 @@ La soluzione quindi avrà la seguente forma:
 
 \begin{align*}
   S\; &\to\; aScc\; \mid  aTcc \\
-  T\; &\to\; bT\; \mid T
+  T\; &\to\; bT\; \mid b
 \end{align*}
 
 \paragraph{Soluzione 4.2}

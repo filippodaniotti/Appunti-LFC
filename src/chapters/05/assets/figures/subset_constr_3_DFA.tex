@@ -12,14 +12,14 @@
     node distance=2.5cm, % specifies the minimum distance between two nodes.
     }
     \begin{tikzpicture}
-        \node[state, initial] (a) {$A$};
-        \node[state, below of=a] (b) {$B$};
-        \node[state, below left of=b] (c) {$C$};
-        \node[state, below right of=b] (d) {$D$};
-        \node[state, accepting, below left of=c] (e) {$E$};
-        \node[state, accepting, below of=c] (f) {$F$};
-        \node[state, accepting, below right of=c] (g) {$G$};
-        \node[state, accepting, below right of=d] (h) {$H$};
+        \node[state, initial] (a) {$T0$};
+        \node[state, below of=a] (b) {$T1$};
+        \node[state, below left of=b] (c) {$T2$};
+        \node[state, below right of=b] (d) {$T3$};
+        \node[state, accepting, below left of=c] (e) {$T4$};
+        \node[state, accepting, below of=c] (f) {$T5$};
+        \node[state, accepting, below right of=c] (g) {$T6$};
+        \node[state, accepting, below right of=d] (h) {$T7$};
         \draw (a) edge[loop above] node{b} (a)
         (a) edge[right] node{a} (b)
         (b) edge[below right] node{a} (c)
