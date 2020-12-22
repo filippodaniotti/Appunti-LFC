@@ -24,7 +24,7 @@ Durante questo e durante i prossimi capitoli andremo a conoscere diverse variant
     \item una volta cche avremo l'automa, possiamo usarlo per calcolarne una tabella di parsing bottom-up;
     \item infine, utilizzando la tabella, lanceremo un algoritmo chiamato \texttt{shift/reduce} che, con l'ausilio della tabella appena calcolata, effettuerà il parsing vero e proprio della nostra parola \(w\) rispetto alla grammatica \(\G\).
 \end{enumerate}
-Consigliamo al lettore di tornare spesso a rivedere questo elenco numerato, perché la andremo a trattare ciascun passaggio in maniera piuttosto estesa e si rischia di perdere lo sguardo d'insieme del processo.
+Consigliamo al lettore di tornare spesso a rivedere questo elenco numerato, perché andremo a trattare ciascun passaggio in maniera piuttosto estesa e si rischia di perdere lo sguardo d'insieme del processo.
 
 \subsection{Tipologie di parsing}
 \paragraph{Le sigle}
@@ -79,7 +79,7 @@ Ma non sarà l'unico item a risiedere in \(P_0\).  Guardiamo bene \ref{eq:balanc
 Questi verranno inseriti nel nostro \(P_0\), assieme all'item \(S' \to \cdot S\) che avevamo identificato prima. 
 
 \subsection{Chiusura di un insieme di LR(0)-items}
-Nel nostro esempio precedente abbiamo cercato di capire intuitivamente quali items è logico inserire negli stati, ma è chiaro che serve ben poca complessità per mettere fuori gioco il nostro intuito. Abbiamo bisogno di un procedimento formale per determinare quali items andranno inseriti nei vari stati, e per fare in questo ci viene in aiuto il concetto di chiusura di un insieme di LR(0)-items:
+Nel nostro esempio precedente abbiamo cercato di capire intuitivamente quali items è logico inserire negli stati, ma è chiaro che serve ben poca complessità per mettere fuori gioco il nostro intuito. Abbiamo bisogno di un procedimento formale per determinare quali items andranno inseriti nei vari stati, e in questo ci viene in aiuto il concetto di chiusura di un insieme di LR(0)-items:
 
 \begin{definition}
     Sia \(P\) un insieme di LR(0)-items; allora, \(closure_0(P)\) è il più piccolo insieme che soddisfa la seguente equazione:
@@ -139,7 +139,7 @@ In primis, definiamo il kernel dello stato iniziale come \(P_0 = \{S' \to \cdot 
 \paragraph{Svolgimento}
 Fino a che non esauriamo gli stati ancora da visitare andiamo a prenderli uno alla volta e li analizziamo nel segiente modo:
 \begin{enumerate}
-    \item calcoliamo il la chiusura del kernel dello stato, questo insieme rappresenta tutte le produzioni che si possono compiere da un certo stato per transitare verso altri stati;
+    \item calcoliamo la chiusura del kernel dello stato, questo insieme rappresenta tutte le produzioni che si possono compiere da un certo stato per transitare verso altri stati;
     \item una volta calcolata la chiusura del kernel, le produzioni (gli item) che abbiamo già collezionato avranno forma \(A \to \alpha \cdot x \beta\), il che significa che nello stato in cui mi trovo, diciamo \(P\), ho già visto \(\alpha\) e posso fare una transizione tramite \(x\);
     \item esiste quindi una transizione da \(P\) a uno stato \(P'\) attraverso l'item \(A \to \alpha x \cdot \beta\); se \(x\) è un terminale, tale transizione rappresenta un'operazione di shift (come abbiamo visto nell'esercizio della sezione scorsa). Questo significa che avrò una transizione etichettata con \(x\) che mi porta da \(P\) a \(P'\);
     \item a questo punto genero il nuovo stato \(P'\) che contiene come kernel l'item \(A \to \alpha x \cdot \beta\), ricordando che poi andrò a includere tra gli item di \(P'\) anche gli item che appartengono a \(closure_0 (\{ A \to \alpha x \cdot \beta \})\), poiché se \(\beta\) è un non-terminale allora mi aspetto di poter trovare in \(P'\) anche tutto ciò che deriva da \(\beta\).
@@ -200,7 +200,7 @@ Questi stati però potrebbero essere già presenti! Non è questo il caso dato c
         S &\to aA \cdot Be \\
         A &\to A \cdot bc
     \end{align*}
-    Per verificare se questo stato è già stato raggiunto, vado a verificare che non siano presenti stati con gli stessi item; in questo casp non ce ne sono, per cui lo stato \(3\) non è ancora stato effettivamente aggiunto e quindi lo tengo. Calcoliamo la chiusura dello stato, che ci porta ad aggiungere la seguente produzione:
+    Per verificare se questo stato è già stato raggiunto, vado a verificare che non siano presenti stati con gli stessi item; in questo caso non ce ne sono, per cui lo stato \(3\) non è ancora stato effettivamente aggiunto e quindi lo tengo. Calcoliamo la chiusura dello stato, che ci porta ad aggiungere la seguente produzione:
     \begin{equation*}
         B \to \cdot d
     \end{equation*}
@@ -378,7 +378,7 @@ Dal momento che \(\G\) dà origine a una nuova grammatica senza creare alcun con
 Prima di passare alla prossima sezione è necessario precisare che \emph{solamente} le celle vuote che hanno per colonna un terminale o \$ sarebbero valorizzate a \texttt{error}: infatti, le celle vuote che hanno per colonna un non-terminale rimangono semplicemente vuote, in quanto sono dei casi che non è possibile che si verifichino. 
 
 \section{Algoritmo Shift/Reduce}
-Infine, eccoci arrivati: possiamo finalmente presentare l'algoritmo di shift/reduce, che ricordiamo essere quell'algoritmo che usiamo per ottenere il parsing di una parola \(W\) data la tabella di parsing bottom-up di una certa grammatica \(\G\). Ricordiamo inoltre che l'algoritmo di s/r viene uisto indipendentemente dalla classe di parsing considerata.
+Infine, eccoci arrivati: possiamo finalmente presentare l'algoritmo di shift/reduce, che ricordiamo essere quell'algoritmo che usiamo per ottenere il parsing di una parola \(W\) data la tabella di parsing bottom-up di una certa grammatica \(\G\). Ricordiamo inoltre che l'algoritmo di s/r viene visto indipendentemente dalla classe di parsing considerata.
 \begin{itemize}
     \item \textbf{Input}: una stringa \(w\) e la tabella di parsing \(M\) per \(\G = (V, T, S, \P)\);
     \item \textbf{Output}: una derivazione di \(w\) in ordine inverso se \(w \in \mathcal{L}(\G)\) (per trovare i passi di derivazione che ci portano a \(w\) dovremo leggere tutte le reduce che abbiamo applicato in ordine inverso); otterremo invece \texttt{error} se \(w \notin \mathcal{L}(\G)\);
@@ -647,7 +647,7 @@ Proviamo a capire bene qual è il punto di tutta questa situazione. Se il nostro
 
 È chiaro che abbiamo dei conflitti quando siamo nella situazione in cui due simboli legati da un operatore sono stati già letti (\(E + E\) o \(E * E\)) e, subito dopo, leggiamo un terzo simbolo. Questo è dovuto proprio al fatto che la grammatica, nella sua ambiguità, non riesce a esprimere opportunamente né associatività, né precedenza per i due operatori.
 
-E insomma, qual è il segreto per risolvere questi dannati conflitti? Quello che faremo (almeno in questo caso) è, per ogni cella in cui abbiamo un conflitto, scegliere manualmente quale mossa mantenere\footnote{Qualcuno potrebbe a ragione pensare che, in questo modo stiamo barando, e a dirla tutta avrebbe ragione; ma nel reame dei compilatori è meglio tenere la conscienza sporca e fare del parsing efficace  rispetto a conservare l'integrità ma fare del parsing leeeeento.}. Questa scelta pare essere in mano nostra, e nel nostro specifico esempio faremo sì che il parser finisca per conformarsi a quelle che sono le comuni regole di precedenza e associatività per \(+\) e \(*\). 
+E insomma, qual è il segreto per risolvere questi dannati conflitti? Quello che faremo (almeno in questo caso) è, per ogni cella in cui abbiamo un conflitto, scegliere manualmente quale mossa mantenere\footnote{Qualcuno potrebbe a ragione pensare che, in questo modo stiamo barando, e a dirla tutta avrebbe ragione; ma nel reame dei compilatori è meglio tenere la coscienza sporca e fare del parsing efficace  rispetto a conservare l'integrità ma fare del parsing leeeeento.}. Questa scelta pare essere in mano nostra, e nel nostro specifico esempio faremo sì che il parser finisca per conformarsi a quelle che sono le comuni regole di precedenza e associatività per \(+\) e \(*\). 
 
 \paragraph{L'utilità dei parse trees}
 Possiamo aiutarci se pensiamo ai parse tree della nostra grammatica: gli alberi, infatti, per loro stessa costruzione, veicolano informazioni sull'annidamento dei loro elementi in maniera molto efficace, e l'annidamento può tranquillamente avere una corrispondenza diretta con la parentesizzazione. Di fatto assumendo, come facciamo noi, che i sottoalberi vengano risolti prima degli alberi padri, stabiliamo delle regole di precedenza del tutto simili a quelle che si possono ottenere con una parentesizzazione.
@@ -684,7 +684,7 @@ Nello specifico, noi siamo interessati a esprimire l'associatività sinistra deg
     \caption{}
     \label{fig:ex2-sh_re-ptree}
 \end{figure}
-In questa interpretazione possiamo vedere le mosse di reduce come una parentesizzazione, perché stiamo assegnando un padre a un determinato sottoalbero del tipo \(E + E\) o \(E * E\)\footnote{QUesta frase è importantissima e invitiamo il lettore a spenderci alcuni minuti, perché afferrarne appieno il significato implica di aver ottenuto una buona comprensione del parsing bottom -up.}.
+In questa interpretazione possiamo vedere le mosse di reduce come una parentesizzazione, perché stiamo assegnando un padre a un determinato sottoalbero del tipo \(E + E\) o \(E * E\)\footnote{Questa frase è importantissima e invitiamo il lettore a spenderci alcuni minuti, perché afferrarne appieno il significato implica di aver ottenuto una buona comprensione del parsing bottom-up.}.
 
 \paragraph{Risoluzione dei conflitti}
 A questo punto possiamo andare ad analizzare i quattro conflitti che abbiamo trovato e, per ciascuna cella, scegliere la mossa che rende il parsing conforme alle regole che abbiamo stabilito. Tenendo a mente Tab.\ref{tab:ex2-sh/re-table_conf}, rimbocchiamoci le maniche.

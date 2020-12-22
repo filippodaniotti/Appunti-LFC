@@ -7,8 +7,7 @@
 % arara: pdflatex: { synctex: yes, shell: yes }
 % arara: latexmk: { clean: partial }
 \begin{document}
-\chapter{Esami}
-\section{Prototipo di test di LFC, 2021}
+\chapter{Prototipo di test di LFC, 2021}
 
 %dovremmo in qualche modo inserire di bruttanza il testo della prova perchè non ho la minima voglia di ricopiare le parti iniziali quando possiamo rubarle
 
@@ -22,7 +21,7 @@ Benvenuti in questa meravigliosa sezione dove avremo modo di affrontare assieme 
 
 Detto questo, cominciamo.
 
-\subsection{Esercizio 1}
+\section*{Esercizio 1}
 
 Se \(\{ww \mid w \in \L((a \mid b)^*)\}\) è un linguaggio regolare rispondere “SI”, altrimenti rispondere “NO”.
 
@@ -51,7 +50,7 @@ Dovrebbe essere infatti abbastanza facile osservare che in questo caso, per non 
 
 Dunque tale linguaggio non è regolare e la risposta corretta è \textbf{“NO”}. Visto che non è richiesta alcuna dimostrazione un modo per potersi accorgere di ciò è immaginare un NFA o DFA che rappresenti il linguaggio: ciò è impossibile perchè dovrebbe memorizzare il valore di \(w\) per poi ripeterlo. Questo vorrebbe dire creare infiniti stati per cui, letta una parola, l'automa obblighi a crearne una identica di seguito. 
 
-\subsection{Esercizio 2}
+\section*{Esercizio 2}
 
 Se la seguente affermazione è vera rispondere “VERO”, altrimenti rispondere “FALSO”: “Se i linguaggi \(\L_1 \textrm{ e } \L_2\) sono entrambi regolari allora \(\L_1 \cup \L_2\) è regolare.”
 
@@ -65,7 +64,7 @@ e quindi \(\L\) è ancora un linguaggio regolare.
 
 La risposta all'esercizio è dunque \textbf{“VERO”}.
 
-\subsection{Esercizio 3}
+\section*{Esercizio 3}
 
 Sia \(r=b^* \mid b^* a (\epsilon \mid a \mid b)^*\)e sia \(\mathcal{D}\) il DFA minimo per il riconoscimento di \(\L(r)\). Dire quanti stati ha \(\mathcal{D}\) e quanti di questi stati sono finali.
 
@@ -118,7 +117,7 @@ Il DFA minimizzato \(\mathcal{D}\) è dunque così costruito:
 
 \(\mathcal{D}\) possiede dunque \textbf{1 stato} e \textbf{1 stato finale}
 
-\subsection{Esercizio 4}
+\section*{Esercizio 4}
 
 Chiamiamo \(\mathcal{D}\) il DFA ottenuto da \(\mathcal{N}_1\) per subset construction e \(Q_l\) lo stato iniziale di \(\mathcal{D}\).  Dire a quale sottoinsieme degli stati di \(\mathcal{N}_1\) corrisponde \(Q[ab]\).
 
@@ -133,7 +132,7 @@ Per maggiore chiarezza possiamo rappresentare l'automa per intero:
 
 Eseguiamo dunque la Subset Construction:
 
-\begin{table}[h]
+\begin{table}[H]
     \centering
     \subimport{assets/tables/}{subset-construction-ex4.tex}
     \caption{Es 4: Subset Construction}
@@ -151,13 +150,13 @@ Eseguiamo dunque la Subset Construction:
 
 A questo punto, partendo dallo stato iniziale \(T_1\), è possibile spostarsi allo stato indicato seguendo il percorso \(ab\): lo stato di destinazione è dunque lo stato \(T_1\), quindi la risposta è corretta è \textbf{\{A, B, C, E\}}
 
-\subsection{Esercizio 5}
+\section*{Esercizio 5}
 
 Chiamiamo \(\mathcal{D}_m\) il  DFA  ottenuto  per  minimizzazione  di \(\mathcal{D}_1\) e \(P_1\) o  stato  iniziale  di \(\mathcal{D}_m\). Dire a quale sottoinsieme degli stati di \(\mathcal{D}_1\) corrisponde \(P[abab]\)
 
 L'esercizio proposto è identico a quello svolto durante una lezione del corso: la sua risoluzione si può trovare in ~\ref{subsec:dfa-minimization} \emph{Esercizi sulla minimizzazione DFA, Esercizio 2}.
 
-\subsection{Esercizio 6}
+\section*{Esercizio 6}
 
 Scrivere l’intera riga della tabella di parsing \(LL(1)\) per \(\G_1\) relativa al non-terminale \(B\).
 
@@ -171,7 +170,7 @@ Riportiamo \(\G_1\) per praticità
 
 Per poter calcolare la tabella di parsing \(LL(1)\) è necessario computare innanzitutto first e follow per ogni driver della grammatica \(\G_1\).
 
-\begin{table}[h]
+\begin{table}[H]
     \centering
     \subimport{assets/tables/}{first-follow-ex6.tex}
     \caption{Es 6: First e Follow \(\G_1\)}
@@ -187,14 +186,14 @@ A questo punto è possibile applicare l'algoritmo per la computazione della pars
 
 La riga identificata dal non-terminale \(B\), nonché soluzione dell'esercizio, sarà dunque così rappresentata:
 
-\begin{table}[h]
+\begin{table}[H]
     \centering
     \subimport{assets/tables/}{parsing-table-ll1-ex6.tex}
     \caption{Es 6: Riga Parsing Table \(LL(1)\)}
     \label{tab:parsing-table-ll1-ex6}
 \end{table}
 
-\subsection{Esercizio 7}
+\section*{Esercizio 7}
 
 Siano: \(I\) lo stato iniziale dello \(LR(1)\)-automa per \(\G_1\); \(T\) la tabella di parsing \(LR(1)\) per \(G_1\).  Se \(T\) non contiene alcun conflitto nello stato \(I[BcBa]\), rispondere “NO CONFLICT”.  Altrimenti, per ciascuna \(X\) tale che la entry \(T(I[BcBa],X)\) contiene un conflitto, dire, specificando a quale \(X\) ci si riferisce:  (i) di che tipo di conflitto si tratta; (ii) quale/i riduzione/i sono coinvolte.
 
@@ -258,7 +257,7 @@ Nonostante sia possibile eseguire tutta la costruzione dell'automa caratteristic
 
 Mediante le informazioni contenute nello stato 10 del nostro automa caratteristico siamo in grado di ricavare la seguente riga della tabella di parsing \(LR(1)\):
 
-\begin{table}[h]
+\begin{table}[H]
     \centering
     \subimport{assets/tables/}{parsing-table-lr1-ex7.tex}
     \caption{LR(1) \& LALR(1) Parsing Table}
@@ -268,7 +267,7 @@ dove \(r4 =  A \to \epsilon\) e \(r5 =  B \to \epsilon\).
 
 Visto che la riga relativa allo stato 9 della tabella di parsing \(LR(1)\) per \(\G_1\) non presenta conflitti, allora la risposta corretta è \textbf{“NO CONFLICT”}.
 
-\subsection{Esercizio 8}
+\section*{Esercizio 8}
 
 Sia \(J\) lo stato iniziale dello \(LR(1)\)-automa per \(\G_1\). Elencare gli item LR(1) che appartengono a \(J[Aa]\).
 
@@ -318,7 +317,7 @@ Gli item \(LR(1)\) che appartengono allo stato target 5 del nostro automa caratt
      B &\to \cdot, \{\$\}
 \end{align*}
 
-\subsection{Esercizio 9}
+\section*{Esercizio 9}
 
 Siano: \(H\) lo stato iniziale dell’automa caratteristico per il parsing \(LALR(1)\) di \(\G_1\); \(T\) la tabella di parsing \(LALR(1)\) per \(\G_1\). Se non ci sono conflitti nello stato \(H[BcBaBc]\) di \(T\), rispondere “NO CONFLICT”. Altrimenti, per ciascuna \(X\) tale che la entry \(T(H[BcBaBc], X)\) contiene un conflitto, dire, specificando a quale \(X\) ci si riferisce:  (i) di che tipo di conflitto si tratta; (ii) quale/i riduzione/i sono coinvolte.
 
@@ -402,7 +401,7 @@ Come è possibile osservare, lo stato presenta una transizione \(\tau(6, B)=8\) 
 
 La risposta corretta per l'esercizio è dunque \textbf{“NO CONFLICT”}.
 
-\subsection{Esercizio 10}
+\section*{Esercizio 10}
 
 Sia \(\G\) la grammatica con produzioni nell'insieme \(\{S \to SS+ \mid SS* \mid a\}\) e sia \(w=aaa*+\).  Se \(w \notin L(\G)\) rispondere “NON APPARTIENE”. Altrimenti fornire una derivazione rightmost di \(w\).
 
@@ -414,7 +413,7 @@ La soluzione all'esercizio dunque è
     S \Rightarrow SS+ \Rightarrow S SS* + \Rightarrow  SSa*+ \Rightarrow  Saa*+ \Rightarrow  aaa*+
 \end{equation}
 
-\subsection{Esercizio 11}
+\section*{Esercizio 11}
 
 Sia \(P\) lo  stato  iniziale  del  parser  \(LALR(1)\)  per  la  grammatica  dello  \(SDD \; \mathcal{V}_1\). Il parser ha 4  conflitti shift/reduce:  uno in \((P[EaE],a)\), uno in \((P[EaE],b)\), uno in \((P[EbE],a)\) e uno in \((P[EbE],b)\).  Supponiamo  che  tutti  e  4  i  conflitti  siano  risolti  a  favore  dello  shift.   Supponiamo  inoltre  che  l’attributo \(n.lexval\) del terminale \(n\) sia il numero intero rappresentato da \(n\).  Se l'input \(2a3b4\) non è riconosciuto, rispondere “ERROR”. Altrimenti dire quale valore viene valutato per \(S.v\) su input \(2a3b4\).
 
@@ -450,7 +449,7 @@ Caliamoci dunque nei panni del parser e immaginiamo come dovremmo considerare la
 
 La risposta corretta risulta dunque essere \(S.v = E.v = 14\)
 
-\subsection{Esercizio 12}
+\section*{Esercizio 12}
 
 Sia \(P\) lo  stato  iniziale  del  parser  \(LALR(1)\)  per  la  grammatica  dello  \(SDD \; \mathcal{V}_1\). Il parser ha 4  conflitti shift/reduce:  uno in \((P[EaE],a)\), uno in \((P[EaE],b)\), uno in \((P[EbE],a)\) e uno in \((P[EbE],b)\).   Alcuni di  questi  conflitti  dipendono  dal  fatto  che  la  grammatica  non  modella  la  precedenza  dell'operatore  di moltiplicazione (operatore \(a\)) sull'operatore di somma (operatore \(b\)).  Si dica quali conflitti sono dovuti alla suddetta carenza della grammatica e si dica come risolvere ciascuno di essi per fare in modo che \(a\) abbia precedenza su \(b\).
 
@@ -476,7 +475,7 @@ I conflittti generati dalla precedenza sono duqnque \((P[EaE],b)\), che viene ri
 
 Se il lettore fosse interessato, può trovare una spiegazione più dettagliata su un esempio analogo nella sezione ~\ref{subsec:precedence-conflicts} \emph{Gestione dei conflitti}
 
-\subsection{Esercizio 13}
+\section*{Esercizio 13}
 
 %TODO Merita un'occhiata in più perchè davvero non ho molte idee su come approcciarlo
 
