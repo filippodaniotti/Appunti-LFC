@@ -31,16 +31,16 @@ Dopo questa piccola introduzione passiamo a visualizzare subito il codice dell'a
 \subimport{assets/pseudocode/}{subset-construction.tex} 
 \noindent Procediamo quindi ora con una spiegazione discorsiva di questo algoritmo.
 \paragraph*{Input}
-L'algoritmo prende come input un NFA specificato dalla tupla \(\mathcal{N} := (S, \mathcal{A}, \textrm{move}_n, s_0, F)\)
+L'algoritmo prende come input un NFA specificato dalla tupla \(\mathcal{N} := (S, \mathcal{A}, \textrm{move}_n, S_0, F)\)
 
 \paragraph*{Output}
-L'algoritmo ritorna come output un DFA specificato dalla tupla \(\mathcal{D} := (R, \mathcal{A}, \textrm{move}_d, s_0, E)\) tale da soddisfare la seguente condizione: \(\mathcal{L}(\mathcal{D}) = \mathcal{L}(\mathcal{N})\).
+L'algoritmo ritorna come output un DFA specificato dalla tupla \(\mathcal{D} := (R, \mathcal{A}, \textrm{move}_d, T_0, E)\) tale da soddisfare la seguente condizione: \(\mathcal{L}(\mathcal{D}) = \mathcal{L}(\mathcal{N})\).
 
 \paragraph*{Introduzione}
 Per prima cosa si calcola quello che sarà lo stato iniziale del DFA, ovvero \(T_0\); esso coinciderà, come già detto in precedenza, con la \(\varepsilon\)-chiusura dello stato iniziale dell'NFA \(S_0\). Una volta calcolato questo \(T_0\),  lo si inserisce nell'insieme \(R\) e lo si segna come \texttt{unmarked}.
 
 \paragraph*{Ciclo while}
-Qui inizia il corpo centrale dell'algoritmo: questo ciclo serve per iterare su tutti gli stati che si stanno inserendo mano a mano nell'insieme \(S\) degli stati del DFA. 
+Qui inizia il corpo centrale dell'algoritmo: questo ciclo serve per iterare su tutti gli stati che si stanno inserendo mano a mano nell'insieme \(R\) degli stati del DFA. 
 
 Di fatto, dentro al ciclo si scorrono tutti gli stati in \(R\) e ci si sofferma sugli stati \(T \in R\) segnati come \texttt{unmarked}. Di volta in volta, quando se ne identifica uno, lo si marca, dimodoché non venga più elaborato in seguito, quindi si procede con le successive istruzioni.
 
@@ -54,7 +54,7 @@ In questa fase si scorrono tutti gli elementi \(a\) dell'alfabeto \(\mathcal{A}\
 \end{itemize}
 
 \paragraph*{Foreach finale}
-Questa fase serve per definire quali sono gi stati (sd) finali del nuovo insieme di stati \(R\), ovvero quali sono gli stati finali del DFA \(\mathcal{D}\). Questi stati (ribadiamo, sd) si identificano perché contengono \emph{almeno uno} stato (snd) finale, ovvero uno stato \(T \in R\) è uno stato finale per \(\mathcal{D}\) se \(T \cap F \neq \emptyset\).
+Questa fase serve per definire quali sono gli stati (sd) finali del nuovo insieme di stati \(R\), ovvero quali sono gli stati finali del DFA \(\mathcal{D}\). Questi stati (ribadiamo, sd) si identificano perché contengono \emph{almeno uno} stato (snd) finale, ovvero uno stato \(T \in R\) è uno stato finale per \(\mathcal{D}\) se \(T \cap F \neq \emptyset\).
 
 Arriva però il momento di porsi un'importante domanda: qual è la complessità di questo algoritmo?
 Poniamo le basi per affrontare una risposta: supponiamo che l’NFA abbia \(n\) stati ed \(m\) archi, mentre supponiamo che il DFA abbia \(n_d\) stati.
@@ -206,14 +206,14 @@ L'idea generale su cui si basa l'algoritmo di minimizzazione qui proposto è che
 Grazie a questa procedura arriveremo a partizionare gli stati in \(2\) blocchi, dove per blocchi intendiamo dei sottinsiemi disgiunti di stati.
 
 \begin{itemize}
-    \item Iniziamo con \(2\) blocchi generici, \(B_{1}=F\) e \(B_{2}=S\setminus F\). Questa scelta fa sì che i due blocchi non abbiano stati equivalenti, poiché se consideriamo due stati \(s, t\) tali che \(s\in B_{1}\) e \(t\in B_{2}\), allora vale che \(\textrm{move}_{d}\!^{*}(s,\varepsilon)\in F\) e \(\textrm{move}_{d}\!^{*}(t,\epsilon)\notin F\).
+    \item Iniziamo con \(2\) blocchi generici, \(B_{1}=F\) e \(B_{2}=S\setminus F\). Questa scelta fa sì che i due blocchi non abbiano stati equivalenti, poiché se consideriamo due stati \(s, t\) tali che \(s\in B_{1}\) e \(t\in B_{2}\), allora vale che \(\textrm{move}_{d}\!^{*}(s,\varepsilon)\in F\) e \(\textrm{move}_{d}\!^{*}(t,\varepsilon)\notin F\).
     \item Proseguiamo controllando se un blocco ha stati non equivalenti; se sì, li dividiamo in blocchi distinti, separando tra di loro gli stati non equivalenti; se no, analizziamo altri blocchi. Ripetiamo quest'operazione fino a quando non vi sono più blocchi con stati non equivalenti.
     \item In maniera formale, se tutti gli stati \(B_{i}=\{s_{1}, \ldots, s_{k}\}\) di un blocco sono equivalenti, per ogni transizione \(a \in \mathcal{A}\) il target di tale transazione appartiene allo stesso blocco.
     \item Il blocco \(B_{i}\) può essere spezzato in due se per qualche \(s,t \in B_{i}\) vale \(\textrm{move}_{d}(s,a)\in B_{j}\) e \(\textrm{move}_{d}(t,a)\notin B_{j}\), ossia se ci sono due stati non equivalenti.
-    \item Nel concreto, dividere un certo blocco \(B_{i}\) rispetto a \(a,B_{j}\) consiste nel sostituire \(B_{i}\) con due nuovi blocchi:
+    \item Nel concreto, dividere un certo blocco \(B_{i}\) rispetto a (\(a,B_{j}\)) consiste nel sostituire \(B_{i}\) con due nuovi blocchi:
     \begin{itemize}
-        \item \( B_{i_1} = \{s \in B_{j} \mid \textrm{move}_{d}(s,a)\in B_j\}\);
-        \item \( B_{i_2} = \{s \in B_{j} \mid \textrm{move}_{d}(s,a)\notin B_j\}\).
+        \item \( B_{i_1} = \{s \in B_{i} \mid \textrm{move}_{d}(s,a)\in B_j\}\);
+        \item \( B_{i_2} = \{s \in B_{i} \mid \textrm{move}_{d}(s,a)\notin B_j\}\).
     \end{itemize}
 \end{itemize}
 Di seguito lo pseudocodice per la procedura appena descritta.
@@ -227,7 +227,7 @@ Di seguito lo pseudocodice per la procedura appena descritta.
 % \end{figure}
 \subimport{assets/pseudocode/}{partition-refinement.tex}
 
-La divisione consiste di \(B_{i}\) considerando \(a,B_{j}\) consiste nel sostituire \(B_{i}\) con due blocchi, \( B_{i1} = {s \in B_{j} \mid move_{d}(s,a)\in B}\) e \( B_{i2} = {s \in B_{j} \mid move_{d}(s,a)\notin B}\)
+La divisione consiste di \(B_{i}\) considerando (\(a,B_{j}\)) consiste nel sostituire \(B_{i}\) con due blocchi, \( B_{i1} = \{s \in B_{i} \mid move_{d}(s,a)\in B\}\) e \( B_{i2} = \{s \in B_{i} \mid move_{d}(s,a)\notin B\}\)
 
 \subsection{Esercizi sulla minimizzazione DFA}
 \subsubsection{Esercizio 1}
@@ -240,7 +240,7 @@ Passiamo ad applicare la procedura di minimizzazione ad uno degli esempi già vi
 	\label{mindfa-es-1}
 \end{figure}
 
-Iniziamo con due blocchi iniziali: \(B_{1}=\{E\}\), dato dallo stato finale, e \(B_{2}=\{A,B,C,D\}\). Notiamo che \((b,B_{1})\) spezza \(B_{2}\), per cui abbiamo due blocchi \(B_{21}=\{D\}\) e \(B_{22}=\{A,B,C\}\). Notiamo ancora che è possibile spezzare \(B_{22}\) in \(B_{221}=\{B\}\) e \(B_{222}=\{A,C\}\). Otteniamo quindi il DFA minimo illustrato in figura \ref{mindfa-es1-sol}. 
+Iniziamo con due blocchi iniziali: \(B_{1}=\{T4\}\), dato dallo stato finale, e \(B_{2}=\{T0,T1,T2,T3\}\). Notiamo che \((b,B_{1})\) spezza \(B_{2}\), per cui abbiamo due blocchi \(B_{21}=\{T3\}\) e \(B_{22}=\{T0,T1,T2\}\). Notiamo ancora che è possibile spezzare \(B_{22}\) in \(B_{221}=\{T1\}\) e \(B_{222}=\{T0,T2\}\). Otteniamo quindi il DFA minimo illustrato in figura \ref{mindfa-es1-sol}. 
 
 \begin{figure}[H]
 	\centering
@@ -290,7 +290,7 @@ Da questo eliminiamo il blocco \(B_{212}\), in quanto il blocco \emph{Sink} non 
 Passiamo ora ad un esercizio più completo. Si richiede di trasformare l'NFA in Fig.\ref{mindfa-es-3} in un DFA e successivamente in un min DFA.
 \begin{figure}[H]
 	\centering
-  \subimport{assets/figures/}{nfa2.tex}
+  \subimport{assets/figures/}{nfa3.tex}
 	\caption{Esercizio 3}
 	\label{mindfa-es-3}
 \end{figure}
@@ -313,7 +313,7 @@ Procediamo ora con l’algoritmo di partition refinement per minimizzare il prec
 Il primo passo è quello di dividere l'insieme \(S\) degli stati in due blocchi: gli stati finali (\(B2\)) e gli stati non finali (\(B1\)).
 In questo caso le partizioni sono le seguenti:
 \begin{equation*}
-    B1 = \{A,B,C,D\} \quad \textrm{e} \quad B2 = \{E,F,G,H\}
+    B1 = \{T0,T1,T2,T3\} \quad \textrm{e} \quad B2 = \{T4,T5,T6,T7\}
 \end{equation*}
 
 A questo punto procediamo con le raffinazioni successive. Se all’interno dello stesso blocco troviamo due stati che, tramite una \(a\)-transizione, portano a due blocchi distinti (con \(a\) terminale qualsiasi dell’alfabeto \(\mathcal{A}\)), allora splittiamo questo blocco in due nuovi blocchi nel seguente modo:
@@ -323,30 +323,30 @@ A questo punto procediamo con le raffinazioni successive. Se all’interno dello
 \end{enumerate} 
 Preme sottolineare che la scelta di quale blocco splittare influisce molto sull’efficienza dell’algoritmo, e gli algoritmi più efficienti svolgono questa scelta in maniera mirata.
 
-Osservo che \(\textrm{move}_d (C,a)\) non ha lo stesso blocco target di \(\textrm{move}_d (A,a) \): infatti, con una \(a\)-transizione da \(A\) raggiungo \(B1\), con una \(a\)-transizione da \(C\) raggiungo \(B2\). Decido quindi di splittare \(B1\) secondo \(\textrm{move}_d (A,a) \). In questo caso il risultato della partizione è il seguente:
+Osservo che \(\textrm{move}_d (T2,a)\) non ha lo stesso blocco target di \(\textrm{move}_d (T0,a) \): infatti, con una \(a\)-transizione da \(T0\) raggiungo \(B1\), con una \(a\)-transizione da \(T2\) raggiungo \(B2\). Decido quindi di splittare \(B1\) secondo \(\textrm{move}_d (T0,a) \). In questo caso il risultato della partizione è il seguente:
 \begin{equation*}
-    \{A, B\};\; \{C, D\};\; \{E,F,G,H\}
+    \{T0, T1\};\; \{T2, T3\};\; \{T4,T5,T6,T7\}
 \end{equation*}
 
-Questa nuova partizione è ulteriormente splittabile? Sì! Posso eseguire uno split su \(\textrm{move}_d(A, a)\), dato che attraverso una \(a\)-transizione da \(A\) mi muovo in \(\{A,B\}\), mentre da \(B\) mi muovo in \(\{C,D\}\). Splitto quindi il blocco \(\{A,B\}\) e ottengo questa nuova suddivisione:
+Questa nuova partizione è ulteriormente splittabile? Sì! Posso eseguire uno split su \(\textrm{move}_d(T0, a)\), dato che attraverso una \(a\)-transizione da \(T0\) mi muovo in \(\{T0,T1\}\), mentre da \(T1\) mi muovo in \(\{T2,T3\}\). Splitto quindi il blocco \(\{T1,T2\}\) e ottengo questa nuova suddivisione:
 \begin{equation*}
-    \{A\};\; \{B\};\; \{C, D\};\; \{E,F,G,H\}
+    \{T0\};\; \{T1\};\; \{T2, T3\};\; \{T4,T5,T6,T7\}
 \end{equation*}
-Ora procediamo ad oltranza con i raffinamenti successivi. Posso splittare su \(\textrm{move}_d(G,b)\) e \(\textrm{move}_d(H,b)\), ottenendo:
+Ora procediamo ad oltranza con i raffinamenti successivi. Posso splittare su \(\textrm{move}_d(T6,b)\) e \(\textrm{move}_d(T7,b)\), ottenendo:
 \begin{equation*}
-    \{A\};\; \{B\};\; \{C, D\};\; \{E,F,H\};\; \{G\}
+    \{T0\};\; \{T1\};\; \{T2, T3\};\; \{T4,T5,T7\};\; \{T6\}
 \end{equation*}
-Il prossimo è lo split su \(\textrm{move}_d(C, a)\) e \(\textrm{move}_d(D, a)\), che mi porta ad ottenere:
+Il prossimo è lo split su \(\textrm{move}_d(T2, a)\) e \(\textrm{move}_d(T3, a)\), che mi porta ad ottenere:
 \begin{equation*}
-    \{A\};\; \{B\};\; \{C\};\; \{D\};\; \{E,F,H\};\; \{G\}
+    \{T0\};\; \{T1\};\; \{T2\};\; \{T3\};\; \{T4,T5,T7\};\; \{T6\}
 \end{equation*}
-E ora splitto su \(\textrm{move}_d(E, a)\) e \(\textrm{move}_d(H, a)\):
+E ora splitto su \(\textrm{move}_d(T4, a)\) e \(\textrm{move}_d(T7, a)\):
 \begin{equation*}
-    \{A\};\; \{B\};\; \{C\};\; \{D\};\; \{E,F\};\; \{H\};\; \{G\}
+    \{T0\};\; \{T1\};\; \{T2\};\; \{T3\};\; \{T4,T5\};\; \{T7\};\; \{T6\}
 \end{equation*}
-Infine, posso splittare anche su \(\textrm{move}_d(E, a)\) ed \(\textrm{move}_d(F, a)\), arrivando quindi al raffinamento con la seguente forma:
+Infine, posso splittare anche su \(\textrm{move}_d(T4, a)\) ed \(\textrm{move}_d(T5, a)\), arrivando quindi al raffinamento con la seguente forma:
 \begin{equation*}
-    \{A\};\; \{B\};\; \{C\};\; \{D\};\; \{E\};\; \{F\};\; \{H\};\; \{G\}
+    \{T0\};\; \{T1\};\; \{T2\};\; \{T3\};\; \{T4\};\; \{T5\};\; \{T7\};\; \{T6\}
 \end{equation*}
 A questo punto ho raggiunto una partizione in cui tutti i blocchi contengono un solo stato.
 
@@ -423,16 +423,16 @@ Questo lemma quindi ci offre una stima per il numero minimo di stati di un DFA c
         \begin{itemize}
             \item \(z = uvw\)  e
             \item \(|uv| \le p\)  e
-            \item \(|v| \ge 0\)  e
+            \item \(|v| > 0\)  e
             \item \(\forall i \in \mathbb{N} \; . \; uv^iw \in \mathcal{L}\)
         \end{itemize}
     \end{itemize}
 \end{lemma}
 \noindent Ovvero, come il lettore avrà ben notato, questo è il corrispettivo del pumping lemma per i linguaggi regolari. Illustriamo ora la dimostrazione di questo lemma.
 \begin{proof}
-    Dato che \(\mathcal{L}\) è un linguaggio regolare, sappiamo che esiste un DFA \(\mathcal{D} = (S,\mathcal{A},\textrm{move}_d ,s_0, F)\) tale per cui \(\mathcal{L} = \mathcal{L}(\mathcal{D})\).
+    Dato che \(\mathcal{L}\) è un linguaggio regolare, sappiamo che esiste un DFA \(\mathcal{D} = (S,\mathcal{A},\textrm{move}_d ,S_0, F)\) tale per cui \(\mathcal{L} = \mathcal{L}(\mathcal{D})\).
 
-    Fissiamo quindi \(p=|S|-1\); ciò significa che tutti i cammini che partono da \(s_0\) ed arrivano ad uno stato finale, passando per ogni stato al massimo una volta, hanno lunghezza limitata da \(p\).
+    Fissiamo quindi \(p=|S|-1\); ciò significa che tutti i cammini che partono da \(S_0\) ed arrivano ad uno stato finale, passando per ogni stato al massimo una volta, hanno lunghezza limitata da \(p\).
 
     Quindi, se per una parola \(z\) vale \(|z|>p\), allora possiamo scomporre \(z\) in \(z = a_1 \dots a_p z'\) e abbiamo la certezza che almeno uno stato, diciamo \(s^\ast\), sia attraversato più di una volta lungo il cammino \(a_1 \dots a_p\).
 
@@ -458,11 +458,11 @@ Ripetiamo la tesi, per amor di chiarezza, e ne scriviamo in seguito la negazione
     \item[Tesi] 
     \(\exists p \in \mathbb{N}^+ . \;\forall z \in \mathcal{L}:|z|>p . \; \exists \;u, v, w . \; P\), \\ 
     dove \\
-    \(P \equiv (z = uvw \textrm{ and } |uv| \le p \textrm{ and } |v| \ge 0 \textrm{ and } \forall i \in \mathbb{N} . \; uv^iw \in \mathcal{L}) \)
+    \(P \equiv (z = uvw \textrm{ and } |uv| \le p \textrm{ and } |v| > 0 \textrm{ and } \forall i \in \mathbb{N} . \; uv^iw \in \mathcal{L}) \)
     \item[Negato]
     \(\forall p \in \mathbb{N}^+ . \;\exists z \in \mathcal{L}:|z|>p . \; \forall \;u, v, w . \; Q\), \\
     dove \\
-    \(Q \equiv (z = uvw \textrm{ and } |uv| \le p \textrm{ and } |v| \ge 0) \implies (\exists i \in \mathbb{N} . \; uv^iw \notin \mathcal{L}) \) 
+    \(Q \equiv (z = uvw \textrm{ and } |uv| \le p \textrm{ and } |v| > 0) \implies (\exists i \in \mathbb{N} . \; uv^iw \notin \mathcal{L}) \) 
 \end{labeling}
 
 \subsection{Applicazioni del pumping lemma per linguaggi regolari}
@@ -637,14 +637,14 @@ un linguaggio regolare.
 \paragraph{Complementazione}
 Se \(\mathcal{L}\) è un linguaggio regolare su un certo alfabeto \(\mathcal{A}\), la complementazione è data dal linguaggio delle parole su \(\mathcal{A} \setminus \mathcal{L}\). Se un linguaggio è regolare allora anche il suo complemento è regolare. 
 
+In precedenza abbiamo visto l'automa che riconosce \(\mathcal{L}_2\), ovvero che accetta tutte quelle parole dove \(a\) occorre un numero pari di volte. Il complementare di tale automa corrisponde a quello per cui si hanno parole con un numero dispari di occorrenze. Utilizzando l'automa che denota \(\mathcal{L}_2\), vi è la possibilità di applicare una particolare operazione per trasformarlo nel suo complementare? Sì, è possibile: basta semplicemente rendere finali tutti quegli stati che prima non lo erano e, simmetricamente, non finali tutti quelli che prima lo erano.
+
+Relativamente questo procedimento è però necessario fare una precisazione: tale metodo funziona solamente se il DFA presenta una funzione di transizione \textbf{totale}: intuitivamente, è necessario riconoscere tutte quelle parole che non appartengono al linguaggio regolare in quanto queste apparterranno al linguaggio del DFA complementare; se per assurdo si avesse la mancanza di una \(a\)-transizione (non fondamentale nel primo DFA) non si avrebbe la possibilità di costruire il set completo delle parole.
+
 \paragraph{Intersezione}
 È derivabile dall'unione utilizzando le regole di \emph{De Morgan}: 
 \begin{equation*}
     \mathcal{L}_1 \cap \mathcal{L}_2 = \lnot (\lnot (L1 \cap L2)) = \lnot (\lnot \mathcal{L}_1 \cup \lnot \mathcal{L}_2)
 \end{equation*}
-
-In precedenza abbiamo visto l'automa che riconosce \(\mathcal{L}_2\), ovvero che accetta tutte quelle parole dove \(a\) occorre un numero pari di volte. Il complementare di tale automa corrisponde a quello per cui si hanno parole con un numero dispari di occorrenze. Utilizzando l'automa che denota \(\mathcal{L}_2\), vi è la possibilità di applicare una particolare operazione per trasformarlo nel suo complementare? Sì, è possibile: basta semplicemente rendere finali tutti quegli stati che prima non lo erano e, simmetricamente, non finali tutti quelli che prima lo erano.
-
-Relativamente questo procedimento è però necessario fare una precisazione: tale metodo funziona solamente se il DFA presenta una funzione di transizione \textbf{totale}: intuitivamente, è necessario riconoscere tutte quelle parole che non appartengono al linguaggio regolare in quanto queste apparterranno al linguaggio del DFA complementare; se per assurdo si avesse la mancanza di una \(a\)-transizione (non fondamentale nel primo DFA) non si avrebbe la possibilità di costruire il set completo delle parole.
 
 \end{document}

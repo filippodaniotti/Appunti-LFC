@@ -26,8 +26,8 @@
         \textsc{Set} \Pst = \{\Bu, \Bd\}\;
         \While{qualche \(B_i \in\) \Pst può essere spezzato rispetto a qualche \((a, B_j)\)} {
             \Pst.\Rm{\(B_i\)}\;
-            \Pst.\Ins{\(\{s \in B_{j} \mid\) \Moved{s,a} \(\in B_j\}\)}\;
-            \Pst.\Ins{\(\{s \in B_{j} \mid\) \Moved{s,a} \(\notin B_j\}\)}\;
+            \Pst.\Ins{\(\{s \in B_{i} \mid\) \Moved{s,a} \(\in B_j\}\)}\;
+            \Pst.\Ins{\(\{s \in B_{i} \mid\) \Moved{s,a} \(\notin B_j\}\)}\;
             % Update \(P\) by removing \(B_i\) and adding the two blocks \(\{s \in B_{j} \mid \textrm{move}_{d}(s,a)\in B_j\}\) and \(\{s \in B_{j} \mid \textrm{move}_{d}(s,a)\notin B_j\}\)\;
         }
 
