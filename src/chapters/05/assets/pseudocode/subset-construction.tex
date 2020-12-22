@@ -22,19 +22,20 @@
         \SetKwFunction{NC}{nextChar}
         \SetKwFunction{Moved}{\(\textrm{move}_d\)}
 
-        \(T_0\) = \Closure{\(\{S_0\}\)}\;
-        \(R\) = \(T_0\)\;
-        \While{qualche \(T \in R\) è unmarked} {
-            \Mark{\(T\)}\;
-            \ForEach{\(a \in \mathcal{A}\)} {
+		\(T_0\) = \Closure{\(\{S_0\}\)}\;
+        	\(R\) = \(T_0\)\;
+        	\While{qualche \(T \in R\) è unmarked} {
+            	\Mark{\(T\)}\;
+            	\ForEach{\(a \in \mathcal{A}\)} {
                 \(T'\) = \Closure{\(\bigcup_{t \in \textrm{\States}}\) \Moved{t, a}}
-            }
-            \If{\(T'\) \(\neq \emptyset\)} {
-                \Moved{\(T\), a} = \(T'\)\;
-                \If{\(T' \notin R\)} {
-                    add \(T'\) to \(R\)\;
-                    \Unmark{\(T'\)}\;
-                }
+                
+         		\If{\(T'\) \(\neq \emptyset\)} {
+                		\Moved{\(T\), a} = \(T'\)\;
+                		\If{\(T' \notin R\)} {
+                    		add \(T'\) to \(R\)\;
+                    		\Unmark{\(T'\)}\;
+                		}
+            		}
             }
         }
 
