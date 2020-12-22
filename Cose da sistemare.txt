@@ -19,5 +19,9 @@ Capitolo 3:
     3.5
     Prova col pumping lemma, maybe
 Capitolo 4:
+    L'algoritmo \epsilion-closure non mi piace per niente. 
+    Lo usiamo come usasse variabili globali/riferimenti ma nell'algoritmo successivo facciamo un assegnamento senza return
+    La tabella simulazione di NFA sarebbe più carina con T0={} sulle colonne a dx. 
+    Ci ho provato ma mi  ha distrutto la tabella e ho lasciato stare
 
 etc 

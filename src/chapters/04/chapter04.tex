@@ -40,7 +40,7 @@ La precedente strategia sicuramente è ottima quando il linguaggio ha una forma 
     S \to a \mid b \mid … \mid z \mid aS \mid bS \mid … \mid zS
 \end{equation}
 
-Per riconoscere parole generate da una tale grammatica il metodo di analisi naturale è una macchina a stati come quella in figura \ref{macchina_a_stati_finiti}.
+Per riconoscere parole generate da una tale grammatica il metodo di analisi naturale è una automa a stati finiti come quella in figura \ref{macchina_a_stati_finiti}.
 
 \begin{figure}[H]
 	\centering
@@ -56,12 +56,12 @@ La grammatica che produce tutte le lettere dell’alfabeto (il linguaggio \ref{a
 
 \section{Grammatiche regolari}
 
-Le grammatiche regolari sono un sottoinsieme delle grammatiche libere che rispetta le seguenti restrizioni rispetto alle loro produzioni:
+Le grammatiche regolari sono un sottoinsieme delle grammatiche libere tale che le loro produzioni sono in una delle seguenti forme:
 
 \begin{itemize}
-    \item o il body è un solo terminale (\(A \to a\));
-    \item o il body è composto da un terminale e un non-terminale, nella seguente forma: \(A \to aB\);  
-    \item altrimenti, il body è la parola vuota (\(A \to \varepsilon\)).
+    \item il body è un solo terminale (\(A \to a\));
+    \item il body è composto da un terminale e un non-terminale, nella seguente forma: \(A \to aB\);  
+    \item il body è la parola vuota (\(A \to \varepsilon\)).
 \end{itemize}
 
 Queste grammatiche possono generare espressioni regolari, che introdurremo a breve; inoltre, i linguaggi generati da queste grammatiche sono riconosciuti dagli automi a stati finiti, sia deterministici che non deterministici.
@@ -85,7 +85,7 @@ Le espressioni regolari sono esprimibili tramite il meccanismo dell'induzione in
 \end{labeling}
 
 \subsection{I linguaggi delle espressioni regolari}
-Se un linguaggio può essere ricavato da un'espressione regolare si dice che l'espressione \emph{denota} quel linguaggio; si presti attenzione a non utilizzare il termine \emph{generare}, poiché quest'ultimo è riservato per le grammatiche generative.
+Se un linguaggio può essere ricavato da un'espressione regolare si dice che l'espressione regolare \emph{denota} quel linguaggio; si presti attenzione a non utilizzare il termine \emph{generare}, poiché quest'ultimo è riservato per le grammatiche generative.
 
 Detto ciò, come capiamo qual è il linguaggio denotato da un’espressione regolare?
 Consideriamo un’espressione regolare \(r\) su \(\mathcal{A}\) , il linguaggio denotato da quell'espressione \(\mathcal{L}(r)\) è anch'esso definibile tramite induzione:
@@ -97,7 +97,7 @@ Consideriamo un’espressione regolare \(r\) su \(\mathcal{A}\) , il linguaggio 
     \item[Step] \begin{itemize}
                     \item se \(r = r_1 \mid r_2 \) \\
                     allora \(\mathcal{L}(r)= \mathcal{L}(r_1) \cup \mathcal{L}(r_2)\)
-                    \item se \(r=r_1 r_2\) \\
+                    \item se \(r=r_1 \cdot r_2\) \\
                     allora \(\mathcal{L}(r) = \{w_1 w_2 \mid w_1 \in \mathcal{L}(r_1) \land w_2 \in \mathcal{L}(r_2)\}\)
                     \item se \(r = r_1\)\(^\ast\) \\
                     allora \( \mathcal{L}(r) = \{ \varepsilon \} \cup \{ w_1 w_2 ... w_k \mid k \ge 1 \land \forall i : 1 \le i \le k.w_i \in \mathcal{L}(r_1)\} \)
@@ -148,10 +148,10 @@ Ecco presentati in veloce sequenza una serie di semplici esercizi sulle operazio
 Gli automi a stati finiti sono usati per decidere se le parole appartengono ad un linguaggio denotato da una certa espressione regolare.
 Vedremo due tipi diversi di automa a stati finiti: deterministico e non deterministico; di questi tipi poi studieremo i casi di utilizzo ottimali.
 
-Nel caso di automa a stati finiti non deterministico i calcoli sono spesso più pesanti, perché un automa non deterministico deve vagliare più percorsi di derivazione rispetto ai loro colleghi deterministici, i quali hanno il vantaggio di dover vagliare solo i percorsi deterministici, che sono un sottoinsieme del totale.
+Nel caso di automa a stati finiti non deterministico i calcoli sono spesso più pesanti, perché un automa non deterministico deve vagliare più percorsi di derivazione rispetto alla loro controparte deterministica, i quali hanno il vantaggio di dover vagliare solo i percorsi deterministici, che sono un sottoinsieme del totale.
 
 \section{Automa a stati finiti non deterministico}
-Un automa a stati finiti non deterministico (NFA) è rappresentabile con una tupla
+Un automa a stati finiti non deterministico (Non-Deterministic Finite Automata abbreviato in NFA) è rappresentabile con una tupla
 \begin{equation}
     \mathcal{N} := (S, \mathcal{A}, \textrm{move}_n, S_0, F)
     \label{nfa_tupla}
@@ -160,8 +160,8 @@ in cui:
 \begin{itemize}
     \item \(S\) è un insieme di stati;
     \item \(\mathcal{A}\) è un alfabeto con \(\varepsilon \notin \mathcal{A}\);
-    \item \(S_0 \in S\) è lo stato iniziale;
-    \item \(F \subseteq S\) è l’insieme degli stati finali o accettabili;
+    \item \(s_0 \in S\) è lo stato iniziale;
+    \item \(F \subseteq S\) è l’insieme degli stati finali o accettati;
     \item \(\textrm{move}_n : S \times (\mathcal{A} \cup \{\varepsilon\}) \to 2^S\) è la funzione di transizione: da un certo stato e con un certo simbolo (che può essere anche \(\varepsilon\)), mi muovo in un certo stato compreso nei sottoinsiemi di \(S\).
 \end{itemize}
 
@@ -302,7 +302,7 @@ Il caso della parentesizzazione \(r = ( r_1 )\) risulta estremamente banale: di 
 Questo è il modo di utilizzare il processo di Thompson per costruire automi complessi, ci renderemo conto più avanti di quante \(\varepsilon\) questo ci costringe ad utilizzare e di cosa questo comporti.
 
 \subsection{Applicazione di Thompson}
-Presentiamo ora un esempio particolare per assimilare meglio questa costruzione. Analizziamo il seguente linguaggio:
+Presentiamo ora un esempio particolare per assimilare meglio questa costruzione. Analizziamo la seguente espressione regolare
 
 \begin{equation}
     r = (a \mid b)^\ast abb
@@ -419,7 +419,7 @@ Per calcolare la \(\varepsilon\)-chiusura di un nodo di un automa useremo queste
 
 \begin{enumerate}
     \item Uno stack;
-    \item Un array booleano \texttt{alreadyOn} che ci serve per segnalare se uno stato \(t\) è già sulla pila o meno (la sua lunghezza è \(|S|\));
+    \item Un array booleano \texttt{alreadyOn} che ci serve per segnalare se uno stato \(t\) è già sulla pila o meno (la sua dimensione è \(|S|\));
     \item Un array bidimensionale per ricordare \(\textrm{move}_n\). Ogni entry \((t,x)\) è una lista linkata contenente tutti gli stati che sono raggiungibili con un \(x\)-transizione da \(t\).
 \end{enumerate}
 
@@ -444,13 +444,13 @@ Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'a
 \subimport{assets/pseudocode/}{nfa-simulation.tex}
 
 Dove \texttt{\$} è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \texttt{\$}).
-Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(S_0\) e la aggiungiamo all'insieme \texttt{states}; prendiamo il primo simbolo nella parola e poi entriamo nel ciclo che compone il corpo della procedura.
+Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(S_0\) e la aggiungiamo all'insieme \texttt{states}; prendiamo il primo simbolo nella parola tramite \(nextChar()\) e poi entriamo nel ciclo che compone il corpo della procedura.
 
-In questo corpo si utilizza la \(\varepsilon\)-chiusura per salvare in \texttt{states} la \(\varepsilon\)-chiusura di tutti gli stati che posso raggiungere tramite una \texttt{symbol}-transizione (una transizione marcata con \texttt{symbol}); una volta trovati questi nodi passo \texttt{symbol} prende il valore del prossimo carattere di \(w\).
+In questo corpo si utilizza la \(\varepsilon\)-chiusura per salvare in \texttt{states} la \(\varepsilon\)-chiusura di tutti gli stati che posso raggiungere tramite una \texttt{symbol}-transizione (una transizione marcata con \texttt{symbol}); una volta trovati questi nodi, il \texttt{symbol} prende il valore del prossimo carattere di \(w\).
 
 Una volta che \texttt{symbol} prende il valore di \texttt{\$}, mi fermo e controllo il contenuto di \texttt{states}.
 
-Se \(\textrm{\texttt{states}} \; \cap \; F \neq \emptyset\), allora significa che esiste uno stato in \texttt{states} che è anche uno stato finale dell'automa e quindi abbiamo trovato un percorso che riconosce la parola \(w\) e termina in uno stato finale (ammissibile). Ottimo, abbiamo appena dimostrato che \(w\) appartiene al linguaggio riconosciuto dall'automa.
+Se \(\textrm{\texttt{states}} \; \cap \; F \neq \emptyset\), allora significa che esiste uno stato in \texttt{states} che è anche uno stato finale dell'automa e quindi abbiamo trovato un percorso che inizia da \(s_0\) riconosce la parola \(w\) e termina in uno stato finale (ammissibile). Ottimo, abbiamo appena dimostrato che \(w\) appartiene al linguaggio riconosciuto dall'automa.
 
 Se invece la condizione precedente non è verificata, allora si è avverato uno dei seguenti casi (o anche entrambi): o non esistono percorsi che riconoscono \(w\), o non esistono percorsi che riconoscono \(w\) e terminano in uno stato finale.
 
@@ -486,11 +486,11 @@ Continuo così finché non finisco i simboli; a quel punto devo verificare se es
 
 \subsection{Nota sulla \(\varepsilon\)-chiusura}
 \begin{theorem}
-    Sia \((S, \mathcal{A}, \textrm{move}_n, S_0, F)\) un NFA e sia \(M \subseteq S\).
+    Sia \(N = (S, \mathcal{A}, \textrm{move}_n, S_0, F)\) un NFA e sia \(M \subseteq S\).
     
     Allora la \(\varepsilon\)-chiusura\((M)\) è il più piccolo insieme \(X \subseteq S\) tale che \(X\) è una soluzione alla seguente equazione:
     \begin{equation}
-        X = M \cup \{ N’ \mid N \in X \land N’ \in \textrm{move}_n (N,\varepsilon)\}
+        X = M \cup \{ N’ \mid N \in X \cap N’ \in \textrm{move}_n (N,\varepsilon)\}
         \label{eps-closure-set-eq}
     \end{equation}
 \end{theorem}
@@ -628,14 +628,14 @@ Un automa a stati finiti deterministici è invece definito come segue:
     \textrm{move}_d : S \times \mathcal{A} \to S
 \end{gather}
 
-Balza subito la differente formulazione della funzione di transizione, il cui dominio esclude la possibilità di compiere \(\varepsilon\)-transizioni. Inoltre, quest'ultima ha due modi di presentarsi: totale o parziale, e il possesso dell'una o dell'altra qualificazione inficerà la scelta delle procedure da applicare.
+Balza subito la differente formulazione della funzione di transizione \(move_d\), il cui dominio esclude la possibilità di compiere \(\varepsilon\)-transizioni. Inoltre, quest'ultima ha due modi di presentarsi: totale o parziale, e il possesso dell'una o dell'altra qualificazione inficerà la scelta delle procedure da applicare.
 
 Evidenziamo le caratteristiche dei DFA:
 
 \begin{itemize}
     \item non presentano \(\varepsilon\)-transizioni (ma c'è un cavillo di cui ci occuperemo più avanti);
     \item se \(\textrm{move}_d\) è \emph{totale}, allora per ogni stato c'è \textbf{esattamente} una \(a\)-transizione \(\forall a \in \mathcal{A}\);
-    \item se \(\textrm{move}_d\) è \emph{parziale}, allora per ogni stato c'è \textbf{al massimo} una \(a\)-transizione \(\forall a \in \mathcal{A}\); in altre parole, per alcune coppie del dominio la funzione non è definita.
+    \item se \(\textrm{move}_d\) è \emph{parziale}, allora per ogni stato c'è \textbf{al massimo} una \(a\)-transizione \(\forall a \in \mathcal{A}\); in altre parole, per alcune coppie del dominio (\((s,a) \in S \times A\)) la funzione non è definita.
 \end{itemize}
 
 \begin{figure}[H]
@@ -658,7 +658,7 @@ Prendiamoci un certo DFA \(\mathcal{D} = (S, \mathcal{A}, \textrm{move}_d, S_0, 
 
 \begin{itemize}
     \item o esiste un cammino, che chiamiamo qui \(w = a_1, \ldots, a_k\), con \(k \ge 1\), che vada dallo stato iniziale \(S_0\) a un qualche stato finale in \(F\);
-    \item oppure vale che \(S_0 \in F \land w \in \varepsilon\); per l'appunto, quello in cui lo stato di partenza è uno stato finale è l'unico caso in cui un DFA possiede la parola vuota.
+    \item oppure vale che \(S_0 \in F \land w = \varepsilon\); per l'appunto, quello in cui lo stato di partenza è uno stato finale è l'unico caso in cui un DFA possiede la parola vuota.
 \end{itemize}
 
 \subsection{Simulazione di un DFA con transizione totale}
@@ -678,6 +678,6 @@ Posso farlo con l'uso di un \emph{sink} (anche detto dead state, o in italiano s
 
 In questo modo, quando vado a trovarmi in quelle situazioni in cui non potevo più proseguire, posso invece proseguire e andare nel sink; in questo modo potrò comunque continuare, esaurire la parola in uno stato non terminale e quindi tornare un risultato coerente al linguaggio considerato.
 
-In generale si preferisce lavorare con DFA con funzione di transizione parziale, e ancora più in generale con automi che abbiamo il minor numero di stati (nodi e archi) possibile; tuttavia, l'algoritmo di minimizzazione (vedremo più avanti), che usiamo per "ridurre al minimo" il suo numero di archi e nodi, non funziona con DFA privi di funzione di transizione totale. Il motivo sta nel fatto che questa procedura lavora sulla funzione inversa di \(\textrm{move}_d\), che chiaramente non è definita se la funzione non è totale.
+In generale si preferisce lavorare con DFA con funzione di transizione parziale, e ancora più in generale con automi che abbiamo il minor numero di stati (nodi e archi) possibile; tuttavia, l'algoritmo di minimizzazione (vedremo più avanti), che usiamo per "ridurre al minimo" il suo numero di archi e nodi, non funziona con DFA dotati di funzione di transizione parziale. Il motivo sta nel fatto che questa procedura lavora sulla funzione inversa di \(\textrm{move}_d\), che chiaramente non è definita se la funzione non è totale.
 
 \end{document}
