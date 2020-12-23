@@ -313,10 +313,14 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 
 \subsection{Applicazioni}
   \paragraph{Scopo del pumping lemma}
-  Tutto (quasi) bello, ma a cosa serve questo pumping lemma? È presto detto: il pumping lemma di permette di determinare con certezza se un certo linguaggio \(\L\) \emph{non} è libero. Perché mai dovremmo volere questa informazione? Perché gli algoritmi di parsing\footnote{Il processo inverso della derivazione; non abbiate fretta, che fra poco arrivano un centinaio di pagine solo su quello.} che abbiamo a disposizione per verificare se una parola appartiente a un linguaggio generato da una grammatica libera sono esageratamente più efficienti di quelli che abbiamo per per i linguaggi generati da grammatiche dipendenti da contesto\footnote{Tutti questi algoritmi sono al più \(\O(n^3)\), ma per i linguaggi generati da alcune sottoclassi di grammatiche libere abbiamo a disposizione algoritmi lineari.}.
+  Tutto (quasi) bello, ma a cosa serve questo pumping lemma? È presto detto: il pumping lemma di permette di determinare con certezza se un certo linguaggio \(\L\) \emph{non} è libero. Perché mai dovremmo volere questa informazione? Perché gli algoritmi di parsing\footnote{Il processo inverso della derivazione; non abbiate fretta, che fra poco arrivano un centinaio di pagine solo su quello.} che abbiamo a disposizione per verificare se una parola appartiente a un linguaggio generato da una grammatica libera sono esageratamente più efficienti di quelli che abbiamo per per i linguaggi generati da grammatiche dipendenti da contesto\footnote{Tutti questi algoritmi sono al più \(\mathcal{O}(n^3)\), ma per i linguaggi generati da alcune sottoclassi di grammatiche libere abbiamo a disposizione algoritmi lineari.}.
 
   \paragraph{Il negato del pumping lemma}
-  Di preciso, come possiamo usare il pumping lemma per ottenere quest'informazione? Pensiamo al fatto che questo lemma è, formalmente, una semplice implicazione logica \(A \implies B\), dove l' ipotesi \(A\) è che un certo linguaggio \(\L\) sia libero e \(B\) è invece la tesi stessa del pumping lemma, la quale afferma che \(\L\) avrà una certa forma. Questo vuol dire che, usando il suo negato \(\neg (A \implies B) \equiv \neg B \implies \neg A\), possiamo vedere come verificare il negato della tesi del pumping lemma per un linguaggio \(\L\) implichi necessariamente che \(\L\) non è libero.
+  Di preciso, come possiamo usare il pumping lemma per ottenere quest'informazione? Pensiamo al fatto che questo lemma è, formalmente, una semplice implicazione logica \(A \implies B\), dove l' ipotesi \(A\) è che un certo linguaggio \(\L\) sia libero e \(B\) è invece la tesi stessa del pumping lemma, la quale afferma che \(\L\) avrà una certa forma. Questo vuol dire che, usando il suo negato \(\neg (A \implies B) \equiv \neg B \implies \neg A\), possiamo vedere come verificare il negato della tesi del pumping lemma per un linguaggio \(\L\) implichi necessariamente che \(\L\) non è libero:
+  \begin{equation}
+    \label{eq:pl-neg-abstract}
+    \neg ThesisPL(\L) \implies \L\; \textrm{non è libero,}\; \forall \L
+  \end{equation}
 
   \subparagraph*{}
   Insomma, dobbiamo verificare il negato della tesi del pumping lemma per un certo linguaggio \(\L\). La tesi del pumping lemma però appare alquanto ostica da manipolare:
@@ -355,38 +359,56 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
     (P_1 \land P_2 \land P_3) \implies \exists i \in \mathbb{N}. \neg(uv^iwx^iy \in \L)
   \end{gather*}
   In sostanza, il negato della tesi del pumping lemma apparirà così:
-	\begin{itemize}
-		\item \(\forall p \in \mathbb{N}^+\) tale che
-		\item \(\exists z \in \mathcal{L} : |z| > p\), allora
-		\item \(\forall u, v, w, x, y\) tale che:
-		\item \((z = uvwxy\; \land |vwx| \leq p \; \land |vx| > 0) \implies \exists i \in \mathbb{N}.uv^iwx^iy \not\in \mathcal{L})\)
-  \end{itemize}
+  \begin{align}
+		&\forall p \in \mathbb{N}^+ \; \textrm{tale che} \label{eq:pl-neg_1} \\
+		&\exists z \in \mathcal{L} : |z| > p,\; \textrm{allora} \label{eq:pl-neg_2} \\
+		&\forall u, v, w, x, y : (z = uvwxy\; \land |vwx| \leq p \; \land |vx| > 0) \implies \label{eq:pl-neg_3} \\
+		&\exists i \in \mathbb{N}.uv^iwx^iy \not\in \mathcal{L}) \label{eq:pl-neg_4}
+  \end{align}
   Che tutto questo possa non risultare proprio chiarissimo a tutti è una cosa che francamente non ci stupisce; a tal proposito, proponiamo una descrizione discorsiva di questo negato della tesi del pumping lemma:
   \begin{displayquote}
     Per un qualsiasi numero naturale \(p\) \textbf{arbitrariamente} scelto e scegliendo una parola \(z\) appartenente al linguaggio e la cui lunghezza è maggiore di \(p\), dobbiamo mostrare che qualsiasi decomposizione di \(z\) in sottostringhe di forma \(uvwxy\), in cui la lunghezza delle sottostringhe \(vwx\) è minore di \(p\) e la lunghezza di \(vx\) è non nulla, possiamo sempre trovare un indice \(i\) per cui la parola \(z\), le cui sottostringhe sono state alterate secondo \(uv^iwx^iy\), non appartiene al linguaggio considerato.
   \end{displayquote}
   Bene, questo blocco infinito di logica e insiemistica è finito; per chi avesse sentito una paura folle montare dentro, niente paura, adesso passeremo a degli esempi pratici, che sapranno spiegare la teoria su cui essi stessi sono basati meglio di qualsiasi spiegazione a parole.
 
-	% Passiamo dunque ad esempi pratici.
-	% ES 1
-	% Sia \(\mathcal{G}\) così definito
-	% \(S \rightarrow aSb \ abc\)
-	% \(cB \rightarrow Bc\)
-	% \(bB \rightarrow bb\)
-	% ci chiediamo dunque se \(\mathcal{G}\) è \emph{context dependent} o \emph{free}. Ovviamente è \emph{context dependent}.
-	% Ci chiediamo quale sia il linguaggio generato da \(\mathcal{G}\), \(\mathcal{L(G)}\) ed è \({a^n b^n b^n | n>0}\)
-	% Ci chiediamo infine se il linguaggio \(\mathcal{L(G)}\) sia o meno un linguaggio libero. Per farlo possiamo semplicemente utilizzare la negazione del \emph{Pumping Lemma} per dimostrare che \(\mathcal{L(G)}\) non è libero.
-
-	% Sia \( p \in N^+\) un numero intero arbitrario
-	% Possiamo prendere un numero \(z=a^pb^pc^p \in \mathcal{L}\) che soddisfa la condizione \(|z|\leq p\)
-	% Quindi possiamo prendere qualsiasi decomposizione di \(z = uvwxy, |vwx|\leq p |vx|>0\).
-	% Sappiamo che la parola \(z\) è composta in questo modo. \(\underbrace{aa...a}_\text{\emph{p}}\underbrace{bb...b}_\text{\emph{p}}\underbrace{cc...c}_\text{\emph{p}}\).
-	% La sottostringa \(vwx\) deve essere sicuramente in una di queste possibili posizioni
-	% \(a\underbrace{a...a}_\text{\emph{vwx}}
-	% a\underbrace{a...abb...b}_\text{\emph{vwx}}
-	% b\underbrace{b...b}_\text{\emph{vwx}}
-	% b\underbrace{b...bc...c}_\text{\emph{vwx}}
-	% c\underbrace{c...c}_\text{\emph{vwx}}c\)
+	\subsection{Esempi di utilizzo}
+  \subsubsection{Esercizio 1}
+  Consideriamo questa grammatica \(\G\):
+  \begin{align*}
+    \G: \quad S &\to aSBc \mid abc \\
+    \quad cB &\to Bc\\
+    \quad bB &\to bb
+  \end{align*}
+  L'abbiamo già incontrata, è una grammatica contestuale che genera un linguaggio di questo tipo: \(\L(\G) = \{a^nb^nc^n \mid n > 0\}\). A questo punti ci chiediamo se \(\L(\G)\) è libero oppure no, il che significa, lo ripetiamo, riuscire a trovare una seconda grammatica \(\G'\). che generi lo stesso linguaggio (\(\L(\G') = \L(\G)\)) ma che sia anche libera. La risposta è negativa, quello non è un linguaggio libero, ed è il momento di tirare fuori il nostro pumping lemma e rendere ragione di ciò.
+  \begin{proof}
+    La dimostrazione è ovviamente per contraddizione, perché la nostra supposizione è che \(\L\) sia libero e stiamo per tentare di verificare la validità del negato della tesi del pumping lemma e questo contraddirrebbe la nostra supposizione (Eq.\ref{eq:pl-neg-abstract}). Diamo il via alle danze:
+    \begin{itemize}
+      \item prendiamoci un intero \(P \in \mathbb{N}^+\) scelto arbitrariamente (Eq.\ref{eq:pl-neg_1});
+      \item scegliamoci una parola \(z\) che appartenga a \(\L\) e abbia una lunghezza maggiore di \(p\); noi scegliamo la parola \(z = a^pb^pc^p\), che ha lunghezza \(|z| = 3p > p\) e certamente appartiene al linguaggio:
+      \begin{equation*}
+        \underbrace{aa...a}_\text{\emph{p}}\underbrace{bb...b}_\text{\emph{p}}\underbrace{cc...c}_\text{\emph{p}}
+      \end{equation*}
+      la scelta di quale parola \(z\) usare è fondamentale per arrivare agevolmente alla conclusione, quindi si presti bene attenzione in questa fase (Eq.\ref{eq:pl-neg_2});
+      \item questo è il punto in cui si parla della decomposizione di \(z\) (Eq.\ref{eq:pl-neg_3}): consideriamo infatti delle sottostringe \(u, v, w, x, y\) arbitrarie, per cui:
+      \begin{itemize}
+        \item sono una decomposizione della parola \(z\) (\(z = uvwxy\));
+        \item la sottostringa \(vwx\) ha dimensione inferiore o uguale a \(p\) (\(|vwx| \le p\));
+        \item le due sottostringe \(v\) e \(x\) hanno dimensione non nulla (\(|vx| > 0\));
+      \end{itemize}
+      notiamo in particolare quali posizioni potrà assumere la sottostringa \(vwx\) all'interno della parola \(z\):
+      \begin{equation*}
+        a\underbrace{a...a}_{vwx}
+        a\underbrace{a...abb...b}_{vwx}
+        b\underbrace{b...b}_{vwx}
+        b\underbrace{b...bc...c}_{vwx}
+        c\underbrace{c...c}_{vwx}
+      \end{equation*}
+      quindi \(vwx\) o non conterrà alcuna occorrenza di \(c\) (nei primi tre casi), o non conterrà alcuna occorrenza di \(a\) (negli ultimi tre);
+      \item l'implicazione di ques'ultima affermazione è che è possibile costruire una sottoparola \(vwx\) non bilanciata, e quindi non appartenente al linguaggio \(\L\), semplicemente considerando \(uv^0wx^0y\) (Eq.\ref{eq:pl-neg_4}).
+    \end{itemize}
+    Abbiamo quindi verificato che il negato del pumping lemma, per il nostro linguaggio \(\L\), non è valido: questo contraddice la nostra supposizione e implica che \(\L\) non è libero.
+  \end{proof}
+  \subsubsection{Esercizio 2}
 	% da cui abbiamo che qualsiasi sia la posizione di \(vwx\) all'interno della parola \(z\) è possibile costruire una parola con un numero non bilanciato di \(a,b,c\) semplicemente ponendo \(v^i,x^i,i=0\)
 	% Dunque troviamo una parola che non appartiene al linguaggio. Se il linguaggio fosse libero, tutte le parole costruite in questa maniera dovrebbero appartenere al linguaggio. Dunque il linguaggio non è
 	% \emph{free}
