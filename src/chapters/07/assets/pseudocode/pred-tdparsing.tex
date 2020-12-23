@@ -16,7 +16,7 @@
         \SetKwData{noteq}{\(\neq\)}
         \SetKwData{err}{error}
 
-        \SetKwData{w}{\(w\$\)}
+        \SetKwData{w}{\(w\mrk\)}
         \SetKwArray{TD}{M}
         \SetKwData{b}{\(b\)}
         \SetKwData{X}{\(X\)}
@@ -25,19 +25,21 @@
         \SetKwFunction{Ns}{nextSymbol}
         \SetKwFunction{Push}{push}
         \SetKwFunction{Pop}{pop}
+        \SetKwFunction{Top}{top}
         \SetKwFunction{ist}{isTerminal}
         \SetKwFunction{ferr}{error}
         \SetKwFunction{out}{output}
         \SetKwFunction{Moved}{\(\textrm{move}_d\)}
 
         \textsc{Stack} \Tmp = Stack()\;
+        \Tmp.\Push{\mrk}\;
         \Tmp.\Push{S}
         \tcp*[r]{S è starting symbol di \(\mathcal{G}\)}
         \textsc{Symbol} \b \(=\) \w.\Fs{}\;
-        \textsc{Symbol} \X \(=\) \Tmp.\Pop{}\;
+        \textsc{Symbol} \X \(=\) \Tmp.\Top{}\;
         \While{\X \noteq \mrk} {
-            \uIf{\X \(=\) \b} {
-                \Tmp.\Pop{\X}\;
+            \uIf{\X \(==\) \b} {
+                \Tmp.\Pop{}\;
                 \b = \w.\Ns{}\;
             } \uElseIf{\ist{\X}} {
                 \ferr{}\;
@@ -45,12 +47,12 @@
                 \ferr{}\;
             } \ElseIf{\TD{\X , \b} \(==\) \X \(\to Y_1, \ldots, Y_k\) } {
                 \out{\X \(\to Y_1, \ldots, Y_k\)}\;
-                \Tmp.\Pop{\X}\;
-                \For{\(Y_i \in Y_1, \ldots, Y_k\)} {
+                \Tmp.\Pop{}\;
+                \For{\(Y_i \in Y_k, \ldots, Y_1\)} {
                     \Tmp.\Push{\(Y_i\)}\;
                 }
             }
-            \X \(=\) \Tmp.\Pop{}\;
+            \X \(=\) \Tmp.\Top{}\;
         }
 
         \caption{predictiveTopDownParsing(\textsc{Word} \(w\), \textsc{Symbol}[][] M)}
