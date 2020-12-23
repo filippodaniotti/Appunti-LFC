@@ -7,9 +7,9 @@
 % arara: latexmk: { clean: partial }
 \begin{document}
 \chapter{Proprietà dei linguaggi context free}
-
+È il momento di fare una gita domenicale di famiglia presso il supermercato MondoMatematica\textregistered e perderci tra i gli scaffali invitanti e variopinti, stregati dalla capitalistica attrazione che tutte quelle proprietà, quei lemmi e quei teoremi esercitano su di noi.
+  
 \section{Proprietà di chiusura}
-
 \subsection*{Chiusura rispetto all'unione}
 \begin{lemma}
   La classe dei linguaggi liberi è chiusa rispetto all'operazione di unione d'insiemi.
@@ -235,11 +235,8 @@ Osserviamo subito che \(C\) ha solo una produzione e questa conduce a \(\varepsi
 Si noti che, in questa grammatica, il non-letterale \(C\) è non utile.
 
 \section{Pumping lemma for free languages}
-
 \subsection{Definizione e formulazione}
-
 Si segua lentamente formulazione e dimostrazione per questo tanto articolato quanto importante lemma.
-
 \begin{lemma}
   Consideriamo un linguaggio libero \(\mathcal{L}\), allora:
   \begin{itemize}
@@ -254,7 +251,6 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
     \end{itemize}
   \end{itemize}
 \end{lemma}
-
 \begin{proof}
   Partiamo considerando un linguaggio libero \(\mathcal{L}\) che non comprende la parola vuota (\(\varepsilon \notin \mathcal{L}\)); sappiamo quindi che deve esistere una grammatica libera "epurata" \(\mathcal{G}\) che generi il linguaggio \(\mathcal{L}\) (\(\mathcal{L} = \mathcal{L(G)}\)).
 
@@ -265,21 +261,16 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
   Adesso, per un qualche albero di derivazione, andiamo a considerare la più profonda coppia di occorrenze dello stesso non-terminale lungo un qualche cammino; con più profonda coppia di occerrenze intendiamo la coppia composta dalla più lontana e dalla seconda più lontana occorrenza dalla radice di uno stesso non terminale.
 
   Andiamo a visualizzare la situazione attraverso un albero di derivazione, considerando le due occorrenze di un non-terminale \(A\).
-
   \begin{figure}
     \centering
     \includegraphics[width=.25\textwidth,keepaspectratio]{pl-proof_1}
   \end{figure}
-
   Possiamo dire, nelle due occorrenze di \(A\), sono radicati due sottoalberi distinti, che noi qui rappresenteremo colorati di verde e porpora. La parola \(z\) può quindi essere "spacchettata" in cinque sottoparole, come illustrato di seguito.
-
   \begin{figure}
     \centering
     \includegraphics[width=.8\textwidth,keepaspectratio]{pl-proof_2}
   \end{figure}
-
   Dal momento che \(A_1\) e \(A_2\) sono occorrenze di uno stesso non-terminale, condividono la medesima famiglia di produzioni. Questo fatto è notevole: se, a partire da \(A_2\), siamo riusciti a trovare una qualche sequenza di derivazioni tale da essere arrivati a \(A_1\), allora con la stessa sequenza possiamo trovare una nuova occorrenza di \(A\), il che ci rende ragionevolmente certi che possiamo generare un numero arbitrario di sottostringhe \(v, x\) di \(z\).
-
   \begin{figure}[H]
     \centering
     \begin{minipage}{0.25\textwidth}
@@ -292,21 +283,15 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
       \includegraphics[width=\textwidth,keepaspectratio]{pl-proof_4}
     \end{minipage}
   \end{figure}
-
-
   Allo stesso modo sappiamo che, se a partire da \(A_1\) possiamo ottenere un sottoalbero di derivazioni \(w\), questo stesso sottoalbero può essere ottenuto a partire da \(A_2\).
-
   \begin{figure}
     \centering
     \includegraphics[width=.25\textwidth,keepaspectratio]{pl-proof_5}
   \end{figure}
-
   Queste affermazioni possono essere riassunte, per l'appunto, nella formula:
-
   \begin{equation*}
     \forall i \in \mathbb{N}.uv^iwx^iy \in \mathcal{L}
   \end{equation*}
-
   Ulteriori considerazioni:
    \begin{itemize}
      \item per come abbiamo scelto le occorrenze di \(A\), la profondità del sottoalbero radicato in \(A_2\) è minore del numero di non-terminali presenti nella grammatica considerata, da cui, per definizione stessa del valore \(p\), \(|vwx| < p\);
@@ -327,73 +312,107 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 \end{proof}
 
 \subsection{Applicazioni}
+  \paragraph{Scopo del pumping lemma}
+  Tutto (quasi) bello, ma a cosa serve questo pumping lemma? È presto detto: il pumping lemma di permette di determinare con certezza se un certo linguaggio \(\L\) \emph{non} è libero. Perché mai dovremmo volere questa informazione? Perché gli algoritmi di parsing\footnote{Il processo inverso della derivazione; non abbiate fretta, che fra poco arrivano un centinaio di pagine solo su quello.} che abbiamo a disposizione per verificare se una parola appartiente a un linguaggio generato da una grammatica libera sono esageratamente più efficienti di quelli che abbiamo per per i linguaggi generati da grammatiche dipendenti da contesto\footnote{Tutti questi algoritmi sono al più \(\O(n^3)\), ma per i linguaggi generati da alcune sottoclassi di grammatiche libere abbiamo a disposizione algoritmi lineari.}.
 
-	Qui passiamo alle applicazioni del \emph{Pumping Lemma}. In particolare può essere utilizzato per provare che un linguaggio \(\mathcal{L}\) non è libero.
+  \paragraph{Il negato del pumping lemma}
+  Di preciso, come possiamo usare il pumping lemma per ottenere quest'informazione? Pensiamo al fatto che questo lemma è, formalmente, una semplice implicazione logica \(A \implies B\), dove l' ipotesi \(A\) è che un certo linguaggio \(\L\) sia libero e \(B\) è invece la tesi stessa del pumping lemma, la quale afferma che \(\L\) avrà una certa forma. Questo vuol dire che, usando il suo negato \(\neg (A \implies B) \equiv \neg B \implies \neg A\), possiamo vedere come verificare il negato della tesi del pumping lemma per un linguaggio \(\L\) implichi necessariamente che \(\L\) non è libero.
 
-	In generale, da un'implicazione logica del tipo \(A \implies B\), è possibile ottenere la negazione \(\neg B \implies \neg A\). Nel nostro caso, da \(\mathcal{L}\) libero \(\implies\) Tesi del \emph{Pumping Lemma}, abbiamo \(Not\) tesi del \emph{Pumping Lemma} \(\implies\) \(\mathcal{L}\) \(Not\) libero.
-	La negazione della tesi del \emph{Pumping Lemma} è la seguente:
-
+  \subparagraph*{}
+  Insomma, dobbiamo verificare il negato della tesi del pumping lemma per un certo linguaggio \(\L\). La tesi del pumping lemma però appare alquanto ostica da manipolare:
+  \begin{equation*}
+    \neg(\exists p \in \mathbb{N}^+. \forall z \in \L: |z| > p. \exists u, v, w, x, y. P)
+  \end{equation*}
+  Dove quel vaso di pandora \(P\) è definito come \(P \equiv P_1 \land P_2 \land P_3 \land P_4\):
+  \begin{itemize}
+    \item \(P_1 \equiv z = uvwxy \; \land\)
+    \item \(P_2 \equiv |vwx| \leq p \; \land\)
+    \item \(P_3 \equiv |vx| > 0 \; \land\)
+    \item \(P_4 \equiv \forall i \in \mathbb{N}.uv^iwx^iy \in \mathcal{L}\)
+  \end{itemize}
+  Richiamando alla mente le regole di equivalenza tra i quantificatori (\(\neg\forall.x \equiv \exists.x\) e \(\neg\exists.x \equiv \forall.x\)) e facendo un passaggio per volta non dovrebbe esserce difficile raggiungere il risultato cercato:
+  \begin{gather*}
+    \neg(\exists p \in \mathbb{N}^+. \forall z \in \L: |z| > p. \exists u, v, w, x, y. P) \\
+    \\
+    \forall p \in \mathbb{N}^+. \neg(\forall z \in \L: |z| > p. \exists u, v, w, x, y. P) \\
+    \\
+    \forall p \in \mathbb{N}^+. \exists z \in \L: |z| > p. \neg(\exists u, v, w, x, y. P) \\
+    \\
+    \forall p \in \mathbb{N}^+. \exists z \in \L: |z| > p. \exists u, v, w, x, y. \neg(P)
+  \end{gather*}
+  L'espressione \(P\) sarà invece manipolata in modo un po' meno "liscio", perché questa formulazione ci risulterà più comoda nelle applicazioni reali.
+  \begin{gather*}
+    \neg(P_1 \land P_2 \land P_3 \land P_4) \\
+    \\
+    \neg((P_1 \land P_2 \land P_3) \land P_4) \\
+    \\
+    \neg(P_1 \land P_2 \land P_3) \lor P_4 \\
+    \\
+    (P_1 \land P_2 \land P_3) \implies \neg P_4 \\
+    \\
+    (P_1 \land P_2 \land P_3) \implies \neg(\forall i \in \mathbb{N}.uv^iwx^iy \in \L) \\
+    \\
+    (P_1 \land P_2 \land P_3) \implies \exists i \in \mathbb{N}. \neg(uv^iwx^iy \in \L)
+  \end{gather*}
+  In sostanza, il negato della tesi del pumping lemma apparirà così:
 	\begin{itemize}
 		\item \(\forall p \in \mathbb{N}^+\) tale che
 		\item \(\exists z \in \mathcal{L} : |z| > p\), allora
 		\item \(\forall u, v, w, x, y\) tale che:
+		\item \((z = uvwxy\; \land |vwx| \leq p \; \land |vx| > 0) \implies \exists i \in \mathbb{N}.uv^iwx^iy \not\in \mathcal{L})\)
+  \end{itemize}
+  Che tutto questo possa non risultare proprio chiarissimo a tutti è una cosa che francamente non ci stupisce; a tal proposito, proponiamo una descrizione discorsiva di questo negato della tesi del pumping lemma:
+  \begin{displayquote}
+    Per un qualsiasi numero naturale \(p\) \textbf{arbitrariamente} scelto e scegliendo una parola \(z\) appartenente al linguaggio e la cui lunghezza è maggiore di \(p\), dobbiamo mostrare che qualsiasi decomposizione di \(z\) in sottostringhe di forma \(uvwxy\), in cui la lunghezza delle sottostringhe \(vwx\) è minore di \(p\) e la lunghezza di \(vx\) è non nulla, possiamo sempre trovare un indice \(i\) per cui la parola \(z\), le cui sottostringhe sono state alterate secondo \(uv^iwx^iy\), non appartiene al linguaggio considerato.
+  \end{displayquote}
+  Bene, questo blocco infinito di logica e insiemistica è finito; per chi avesse sentito una paura folle montare dentro, niente paura, adesso passeremo a degli esempi pratici, che sapranno spiegare la teoria su cui essi stessi sono basati meglio di qualsiasi spiegazione a parole.
 
-		\begin{itemize}
-			\item \(z = uvwxy \textrm{ } \land\)
-			\item \(|vwx| \leq p \textrm{ } \land\)
-			\item \(|vx| > 0 \textrm{ }\land\)
-			\item \(\exists i \in \mathbb{N}.uv^iwx^iy \not\in \mathcal{L}\)
-		\end{itemize}
+	% Passiamo dunque ad esempi pratici.
+	% ES 1
+	% Sia \(\mathcal{G}\) così definito
+	% \(S \rightarrow aSb \ abc\)
+	% \(cB \rightarrow Bc\)
+	% \(bB \rightarrow bb\)
+	% ci chiediamo dunque se \(\mathcal{G}\) è \emph{context dependent} o \emph{free}. Ovviamente è \emph{context dependent}.
+	% Ci chiediamo quale sia il linguaggio generato da \(\mathcal{G}\), \(\mathcal{L(G)}\) ed è \({a^n b^n b^n | n>0}\)
+	% Ci chiediamo infine se il linguaggio \(\mathcal{L(G)}\) sia o meno un linguaggio libero. Per farlo possiamo semplicemente utilizzare la negazione del \emph{Pumping Lemma} per dimostrare che \(\mathcal{L(G)}\) non è libero.
 
-	\end{itemize}
+	% Sia \( p \in N^+\) un numero intero arbitrario
+	% Possiamo prendere un numero \(z=a^pb^pc^p \in \mathcal{L}\) che soddisfa la condizione \(|z|\leq p\)
+	% Quindi possiamo prendere qualsiasi decomposizione di \(z = uvwxy, |vwx|\leq p |vx|>0\).
+	% Sappiamo che la parola \(z\) è composta in questo modo. \(\underbrace{aa...a}_\text{\emph{p}}\underbrace{bb...b}_\text{\emph{p}}\underbrace{cc...c}_\text{\emph{p}}\).
+	% La sottostringa \(vwx\) deve essere sicuramente in una di queste possibili posizioni
+	% \(a\underbrace{a...a}_\text{\emph{vwx}}
+	% a\underbrace{a...abb...b}_\text{\emph{vwx}}
+	% b\underbrace{b...b}_\text{\emph{vwx}}
+	% b\underbrace{b...bc...c}_\text{\emph{vwx}}
+	% c\underbrace{c...c}_\text{\emph{vwx}}c\)
+	% da cui abbiamo che qualsiasi sia la posizione di \(vwx\) all'interno della parola \(z\) è possibile costruire una parola con un numero non bilanciato di \(a,b,c\) semplicemente ponendo \(v^i,x^i,i=0\)
+	% Dunque troviamo una parola che non appartiene al linguaggio. Se il linguaggio fosse libero, tutte le parole costruite in questa maniera dovrebbero appartenere al linguaggio. Dunque il linguaggio non è
+	% \emph{free}
+	% Passiamo dunque ad un altro esempio riprendendo l'esercizio lasciato per casa a suo tempo
+	% ES 2
 
-	Lasciamo al lettore immaginare gli altri modi in cui è possibile riscrivere la negazione della tesi del \emph{Pumping Lemma} applicando le basi di algebra booleana.
-	Passiamo dunque ad esempi pratici.
-	ES 1
-	Sia \(\mathcal{G}\) così definito
-	\(S \rightarrow aSb \ abc\)
-	\(cB \rightarrow Bc\)
-	\(bB \rightarrow bb\)
-	ci chiediamo dunque se \(\mathcal{G}\) è \emph{context dependent} o \emph{free}. Ovviamente è \emph{context dependent}.
-	Ci chiediamo quale sia il linguaggio generato da \(\mathcal{G}\), \(\mathcal{L(G)}\) ed è \({a^n b^n b^n | n>0}\)
-	Ci chiediamo infine se il linguaggio \(\mathcal{L(G)}\) sia o meno un linguaggio libero. Per farlo possiamo semplicemente utilizzare la negazione del \emph{Pumping Lemma} per dimostrare che \(\mathcal{L(G)}\) non è libero.
+	% \(S \rightarrow CD \)
+	% \(C \rightarrow aCA | bCB \)
+	% \(AD \rightarrow aD \)
+	% \(BD \rightarrow bD \)
+	% \(Aa \rightarrow aA \)
+	% \(Ab \rightarrow bA \)
+	% \(Ba \rightarrow aB \)
+	% \(Bb \rightarrow bB \)
+	% \(C \rightarrow \varepsilon \)
+	% \(D \rightarrow \varepsilon \)
 
-	Sia \( p \in N^+\) un numero intero arbitrario
-	Possiamo prendere un numero \(z=a^pb^pc^p \in \mathcal{L}\) che soddisfa la condizione \(|z|\leq p\)
-	Quindi possiamo prendere qualsiasi decomposizione di \(z = uvwxy, |vwx|\leq p |vx|>0\).
-	Sappiamo che la parola \(z\) è composta in questo modo. \(\underbrace{aa...a}_\text{\emph{p}}\underbrace{bb...b}_\text{\emph{p}}\underbrace{cc...c}_\text{\emph{p}}\).
-	La sottostringa \(vwx\) deve essere sicuramente in una di queste possibili posizioni
-	\(a\underbrace{a...a}_\text{\emph{vwx}}
-	a\underbrace{a...abb...b}_\text{\emph{vwx}}
-	b\underbrace{b...b}_\text{\emph{vwx}}
-	b\underbrace{b...bc...c}_\text{\emph{vwx}}
-	c\underbrace{c...c}_\text{\emph{vwx}}c\)
-	da cui abbiamo che qualsiasi sia la posizione di \(vwx\) all'interno della parola \(z\) è possibile costruire una parola con un numero non bilanciato di \(a,b,c\) semplicemente ponendo \(v^i,x^i,i=0\)
-	Dunque troviamo una parola che non appartiene al linguaggio. Se il linguaggio fosse libero, tutte le parole costruite in questa maniera dovrebbero appartenere al linguaggio. Dunque il linguaggio non è
-	\emph{free}
-	Passiamo dunque ad un altro esempio riprendendo l'esercizio lasciato per casa a suo tempo
-	ES 2
-
-	\(S \rightarrow CD \)
-	\(C \rightarrow aCA | bCB \)
-	\(AD \rightarrow aD \)
-	\(BD \rightarrow bD \)
-	\(Aa \rightarrow aA \)
-	\(Ab \rightarrow bA \)
-	\(Ba \rightarrow aB \)
-	\(Bb \rightarrow bB \)
-	\(C \rightarrow \varepsilon \)
-	\(D \rightarrow \varepsilon \)
-
-	Si verifica facilmente che il linguaggio generato da tale grammatica è \(\mathcal{L(G)} =\{ww | w\in\{a,b\}^*\}\)
-	Ci chiediamo allore se tale linguaggio sia libero o meno
-	Un lettore naive potrebbe essere portato ad applicare la proprietà di chiusura dei linguaggi liberi rispetto alla operazione di concatenazione per dimostrare che suddetto linguaggio sia libero, in quanto sappiamo che \(\mathcal{L'(G)} =\{w | w\in\{a,b\}^*\}\) è un linguaggio libero. Tuttavia l'operazione di concatenazione non rispetta la proprietà di palindromia di \(\mathcal{L}\).
-	È infatti semplice provare che \(\mathcal{L}\) non è libero
-	DIM
-	Sia \(\mathcal{L}\) libero
-	sia \(z=a^pb^pa^pb^p, z\in \mathcal{L}, z=uvwxy, |vwx|\leq p \)
-	Per esempio supponiamo sia \(|vwx|=b^p\), allora ci è facile prendere \(uv^0wx^0y\) e verificare che questo non può avere la forma \(a^pb^pa^pb^p\)
-	Dunque abbiamo trovato un elemento che contraddice il \emph{Pumping Lemma} e dunque l'ipotesi iniziale non è valida, ovvero \(\mathcal{L}\) non è \emph{free}
+	% Si verifica facilmente che il linguaggio generato da tale grammatica è \(\mathcal{L(G)} =\{ww | w\in\{a,b\}^*\}\)
+	% Ci chiediamo allore se tale linguaggio sia libero o meno
+	% Un lettore naive potrebbe essere portato ad applicare la proprietà di chiusura dei linguaggi liberi rispetto alla operazione di concatenazione per dimostrare che suddetto linguaggio sia libero, in quanto sappiamo che \(\mathcal{L'(G)} =\{w | w\in\{a,b\}^*\}\) è un linguaggio libero. Tuttavia l'operazione di concatenazione non rispetta la proprietà di palindromia di \(\mathcal{L}\).
+	% È infatti semplice provare che \(\mathcal{L}\) non è libero
+	% DIM
+	% Sia \(\mathcal{L}\) libero
+	% sia \(z=a^pb^pa^pb^p, z\in \mathcal{L}, z=uvwxy, |vwx|\leq p \)
+	% Per esempio supponiamo sia \(|vwx|=b^p\), allora ci è facile prendere \(uv^0wx^0y\) e verificare che questo non può avere la forma \(a^pb^pa^pb^p\)
+	% Dunque abbiamo trovato un elemento che contraddice il \emph{Pumping Lemma} e dunque l'ipotesi iniziale non è valida, ovvero \(\mathcal{L}\) non è \emph{free}
 
 \section{Esercizi di riepilogo}
 \subsection*{Esercizio 1 - I seguenti linguaggi sono liberi?}
