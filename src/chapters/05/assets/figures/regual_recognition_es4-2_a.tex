@@ -10,10 +10,13 @@
 \begin{document}
     \tikzset{
     node distance=2.5cm, % specifies the minimum distance between two nodes.
+    greenText/.style={text=red},
+    greenNode/.style={greenText, draw=red}
     }
     \begin{tikzpicture}
         \node[align=center, text=red] at (-0.7, 0.2) {{$\omega$}};
         \node[align=center, text=red] at (-0.7, -2.3) {{$\omega$}};
+        \node[greenText, align=center] at (4, 0) {{$w = aba$}};
         \node[state, initial] (0) {A};
         \node[state, accepting, right of=0] (1) {B};
         \node[state, below of=1] (2) {B};

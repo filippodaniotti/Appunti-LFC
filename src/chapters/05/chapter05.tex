@@ -583,38 +583,40 @@ Sicuramente l'idea precedente è corretta, ma c'era un altro modo per arrivare d
     \item se mi trovo in entrambi gli automi su uno stato finale allora \(w \in \mathcal{L}\)
     \item se uno dei due stati su cui mi trovo non è uno stato finale allora \(w \notin \mathcal{L}\)
 \end{enumerate}
+Osserviamo subito con un esempio questo approccio messo in pratica: vogliamo verificare se la parola \(aba \in \mathcal{L}\).
+Per fare questa verifica useremo appunto entrambi gli automi ricavati per \(\mathcal{L}_1\) e per \(\mathcal{L}_2\).
 \begin{figure}[H]
     \begin{minipage}[b]{0.4\textwidth}
         \centering
         \subimport{assets/figures/}{regual_recognition_es4-2_a.tex}
-        \subcaption{step by step by mike by bisognaspiegarlo}
+        \subcaption{siamo all'inizio della simulazione, l'automa in alto riconosce il \(\mathcal{L}_1\), quello in basso \(\mathcal{L}_2\), a questo punto andremo a leggere i caratteri della parola \(aba\) uno alla volta e ci sposteremo su entrambi gli automi per verificare che la parola sia riconosciuta da entrambi;}
         \label{pl-es4-sbs_1}
     \end{minipage}
     \hfill
     \begin{minipage}[b]{0.4\textwidth}
         \centering
         \subimport{assets/figures/}{regual_recognition_es4-2_b.tex}
-        \subcaption{step by step by mike by bisognaspiegarlo 2}
+        \subcaption{leggiamo il carattere \(a\), nel primo automa questo ci porta a compiere un self-loop su \(A\), nel secondo porta a transitare verso lo stato \(B\), in nessuno dei due automi siamo in uno stato finale, questo perché la parola \(a\) che ha \(a\) dispari e \(b\) pari non appartiene né a \(\mathcal{L}_1\) né \(\mathcal{L}_2\);}
         \label{pl-es4-sbs_2}
     \end{minipage}
 
     \begin{minipage}[b]{0.4\textwidth}
         \centering
         \subimport{assets/figures/}{regual_recognition_es4-2_c.tex}
-        \subcaption{step by step by mike by bisognaspiegarlo 3}
+        \subcaption{A questo punto leggiamo \(b\), quindi nel primo automa ci spostiamo nello stato \(B\), mentre nel secondo abbiamo un self-loop su \(B\), in questo caso vediamo che ci troviamo in uno stato finale nell'automa per \(\mathcal{L}_1\): questo perché la parola \(ab\) ha un numero dispari di \(b\), quindi appartiene al linguaggio \(\mathcal{L}_1\);}
         \label{pl-es4-sbs_3}
     \end{minipage}
     \hfill
     \begin{minipage}[b]{0.4\textwidth}
         \centering
         \subimport{assets/figures/}{regual_recognition_es4-2_d.tex}
-        \subcaption{step by step by mike by bisognaspiegarlo 4}
+        \subcaption{infine leggiamo il carattere \(a\), che ci porta in \(B\) nel primo automa ed in \(A\) nel secondo, entrambi sono stati finali: la parola \(aba\) è riconosciuta da entrambi gli automi poiché contiene un numero dispari di \(b\) ed un numero pari di \(a\).}
         \label{pl-es4-sbs_4}
     \end{minipage}
     \caption{}
 \end{figure}
 
-Per poter semplificare la procedura possiamo immaginare di fare il prodotto cartesiano degli stati dei due automi.
+Per poter semplificare la procedura possiamo immaginare di fare il prodotto cartesiano degli stati dei due automi anche se questo potrebbe risultare più complesso da immaginare.
 
 \section{Proprietà di chiusura nei linguaggi regolari}
 
