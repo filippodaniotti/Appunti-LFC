@@ -23,7 +23,13 @@
             \ForEach{\(A\)} {
                 find the largest prefix \(\alpha\) common to \(2\) or more productions for \(A\)\;
                 \If{\(\alpha \ne \varepsilon\)} {
-                    sostituisci ma bisogna trovare un bel modo per dirlo
+                    choose a \emph{fresh} non-terminal \(A'\) and replace
+                    
+                    \(A \to \alpha \beta_1 \mid \ldots \mid \alpha \beta_n \mid \gamma_1 \mid \ldots \mid \gamma_k\) by
+                    
+                    \(A \to \alpha A' \mid \gamma_1 \mid \ldots \mid \gamma_k\)
+                    
+                    \(A' \to \beta_1 \mid \ldots \mid \beta_n\)
                 }
             }
         }

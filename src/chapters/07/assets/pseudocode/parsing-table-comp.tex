@@ -22,11 +22,11 @@
         \SetKwFunction{Add}{add}
         
         \ForEach{\(A \to \alpha \in \mathcal{P}\)} {
-            \ForEach{\(b \in\) \First{\(\alpha\)}} {
+            \ForEach{\(b \in\) (\First{\(\alpha\)}\(\setminus \{\varepsilon\}\))} {
                 add \(A \to \alpha\) to \TD{\(A, b\)}\;
             }
             \If{\(\varepsilon \in\) \First{\(\alpha\)}} {
-                \ForEach{\( \in\) \Follow{\(A\)}} {
+                \ForEach{\(x \in\) \Follow{\(A\)}} {
                     add \(A \to \alpha\) to \TD{\(A, x\)}\;
                 }
             }
