@@ -409,33 +409,51 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
     Abbiamo quindi verificato che il negato del pumping lemma, per il nostro linguaggio \(\L\), non è valido: questo contraddice la nostra supposizione e implica che \(\L\) non è libero.
   \end{proof}
   \subsubsection{Esercizio 2}
-	% da cui abbiamo che qualsiasi sia la posizione di \(vwx\) all'interno della parola \(z\) è possibile costruire una parola con un numero non bilanciato di \(a,b,c\) semplicemente ponendo \(v^i,x^i,i=0\)
-	% Dunque troviamo una parola che non appartiene al linguaggio. Se il linguaggio fosse libero, tutte le parole costruite in questa maniera dovrebbero appartenere al linguaggio. Dunque il linguaggio non è
-	% \emph{free}
-	% Passiamo dunque ad un altro esempio riprendendo l'esercizio lasciato per casa a suo tempo
-	% ES 2
-
-	% \(S \rightarrow CD \)
-	% \(C \rightarrow aCA | bCB \)
-	% \(AD \rightarrow aD \)
-	% \(BD \rightarrow bD \)
-	% \(Aa \rightarrow aA \)
-	% \(Ab \rightarrow bA \)
-	% \(Ba \rightarrow aB \)
-	% \(Bb \rightarrow bB \)
-	% \(C \rightarrow \varepsilon \)
-	% \(D \rightarrow \varepsilon \)
-
-	% Si verifica facilmente che il linguaggio generato da tale grammatica è \(\mathcal{L(G)} =\{ww | w\in\{a,b\}^*\}\)
-	% Ci chiediamo allore se tale linguaggio sia libero o meno
-	% Un lettore naive potrebbe essere portato ad applicare la proprietà di chiusura dei linguaggi liberi rispetto alla operazione di concatenazione per dimostrare che suddetto linguaggio sia libero, in quanto sappiamo che \(\mathcal{L'(G)} =\{w | w\in\{a,b\}^*\}\) è un linguaggio libero. Tuttavia l'operazione di concatenazione non rispetta la proprietà di palindromia di \(\mathcal{L}\).
-	% È infatti semplice provare che \(\mathcal{L}\) non è libero
-	% DIM
-	% Sia \(\mathcal{L}\) libero
-	% sia \(z=a^pb^pa^pb^p, z\in \mathcal{L}, z=uvwxy, |vwx|\leq p \)
-	% Per esempio supponiamo sia \(|vwx|=b^p\), allora ci è facile prendere \(uv^0wx^0y\) e verificare che questo non può avere la forma \(a^pb^pa^pb^p\)
-	% Dunque abbiamo trovato un elemento che contraddice il \emph{Pumping Lemma} e dunque l'ipotesi iniziale non è valida, ovvero \(\mathcal{L}\) non è \emph{free}
-
+  \begin{align*}
+    \G: \quad S &\to CD \\
+    C &\to aCA \mid bCB \mid \varepsilon \\
+    AD &\to aD \\
+    BD &\to bD \\ \notag
+    Aa &\to aA \\
+    Ab &\to bA \\ \notag
+    Ba &\to aB \\ \notag
+    Bb &\to bB \\ \notag
+    D &\to \varepsilon \notag
+  \end{align*}
+  \paragraph{Il linguaggio generato}
+  Trovandoci davanti a una grammatica contestuale così articolata, la prima cosa che dobbiamo chiederci è quale sia il linguaggio \(\L\) generato. Facciamo delle rapide considerazioni:
+  \begin{itemize}
+    \item la produzione iniziale è sempre \(S \to CD\), per cui non possiamo prescindere dallo sviluppo di \(C\) (nel prossimo punto capiremo perché è importante);
+    \item le stringhe crescono in lunghezza solamente grazie sviluppo del non-terminale \(C\);
+    \item il non-terminale \(D\) agisce come un delimitatore destro, dal momento che quando ha alla sua sinsitra un terminale \(A\) o \(B\) ci permette di svilupparlo nel relativo terminale;
+    \item quando un terminale (\(a\) o \(b\)) si trova a destra di un non-terminale (\(B\) o \(B\)), la posizione di questi può essere scambiata (\(Ab \to bA\)).
+  \end{itemize}
+  Proviamo quindi a sviluppare delle derivazioni di prova e vedere cosa succede.
+  \begin{align*}
+    &\underline{S} & &\textrm{con}\; S \to CD\\
+    &\Rightarrow \underline{C}D  & &\textrm{con}\; C \to aCA \\
+    &\Rightarrow a\underline{C}AD & &\textrm{con}\; C \to aCA \\
+    &\Rightarrow aa\underline{C}AAD & &\textrm{con}\; C \to bCB \\
+    &\Rightarrow aab\underline{C}BAAD & &\textrm{con}\; C \to \varepsilon \\
+    &\Rightarrow aabBA\underline{AD} & &\textrm{con}\; AD \to aD \\
+    &\Rightarrow aabB\underline{Aa}D & &\textrm{con}\; Aa \to aA \\
+    &\Rightarrow aab\underline{Ba}AD & &\textrm{con}\; Ba \to aB \\
+    &\Rightarrow aabaB\underline{AD} & &\textrm{con}\; AD \to aD \\
+    &\Rightarrow aaba\underline{Ba}D & &\textrm{con}\; Ba \to aB \\
+    &\Rightarrow aabaa\underline{BD} & &\textrm{con}\; BD \to bD \\
+    &\Rightarrow aabaab\underline{D} & &\textrm{con}\; D \to \varepsilon \\
+    &\Rightarrow aabaab 
+  \end{align*}
+  A questo punto, sfruttando anche un filo di intuizione e fantasia, possiamo concludere che il linguaggio generato comprende tutte quelle parole formate dalla ripetizione di una stessa parola su \(a\) e \(b\): \(\L(\G) =\{ww \mid w\in\{a,b\}^*\}\); questo linguaggio, sfortunatamente, non è libero. 
+  
+  \paragraph{Dove la chiusura alla concatenazione fallisce}
+  Prima di vedere la dimostrazione effettiva, però, qualcuno potrebbe giustamente chiedersi se possiamo fare la dimostrazione considerando un linguaggio \(\L'(\G) = \{ww \mid w\in\{a,b\}^*\}\) utilizzando la chiusura rispetto alla concatenazione. Questo però non è corretto, perché le parole che appartengono a \(\L(\G)\) hanno una struttura precisa, ossia possono sempre essere divise in due sottostringe di pari lunghezza ed equivalenti; la chiusura alla concatenazione, impostata in quel modo, rischia di non rispettare questa struttura\footnote{Questa ultima affermazione è moooolto dubbia, vorrei approfondire but damn time is running out.}. \\
+  Detto questo, andiamo a vedere rapidamente la dimostrazione corretta.
+  \begin{proof}
+    Dal momento che la dimostrazione procede in maniera analoga a quella precedente, focalizziamoci su uno dei punti cardini, ossia la scelta di \(z\): in questo caso scegliamo \(z=a^pb^pa^pb^p\), perché ci permette di concludere la dimostrazione quasi a colpo d'occhio, perché a questo punto possiamo decomporre \(z\) in \(uvwxy\) e scegliere \(vwx = b^p\); questa \(vwx\) rispetta il vincolo \(|vwx| \le p\) e possiamo sbilanciarla scegliendo, di nuovo, un indice 0 (\(uv^0wx^0y\)), per cui il negato del pumping lemma è verificato e il linguaggio considerato non è libero.
+  \end{proof}
+  % Un lettore naive potrebbe essere portato ad applicare la proprietà di chiusura dei linguaggi liberi rispetto alla operazione di concatenazione per dimostrare che suddetto linguaggio sia libero, in quanto sappiamo che \(\mathcal{L'(G)} =\{w | w\in\{a,b\}^*\}\) è un linguaggio libero. Tuttavia l'operazione di concatenazione non rispetta la proprietà di palindromia di \(\mathcal{L}\).
+  
 \section{Esercizi di riepilogo}
 \subsection*{Esercizio 1 - I seguenti linguaggi sono liberi?}
 
