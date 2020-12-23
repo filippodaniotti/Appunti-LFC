@@ -10,7 +10,7 @@
 \chapter[Parsing bottom-up: LR(1) e LALR(1)]{Analisi sintattica: parsing bottom-up LR(1) e LALR(1)}
 
 \section{L'automa caratteristico LR(1)}
-Riprendiamo il filo del discorso: nel precedente capitolo siamo andati a discutere tutti i passaggi che, partendo da una grammatica, ci conducono ad eseguire il parsing bottom-up. Consigliamo di tornare a dare un occhio allo schema presentato in \autoref{subsec:schema}. Ci eravamo lasciati con una questione alquanto spinosa: avevamo constato che è possibile ritrovarsi con due reducing items in uno stesso stato anche se la grammatica di partenza non è ambigua, e questa situazione potrebbe essere risolta conservando, per ogni stato, delle informazioni rispetto a quali simboli potrebbero seguirgli in lettura. Ci eravamo resi conto di non aver modo di conservare e impiegare efficacemente queste informazioni con la tecnica di costruzione dell'automa SLR(1), il che lascia pensare solo a una cosa: è il momento di abbandonare questa tecnica e guardare a soluzioni più complesse, certo, ma senza dubbio più efficaci. È il momento di affrontare la costruzione di un automa caratteristico LR(1).
+Riprendiamo il filo del discorso: nel precedente capitolo siamo andati a discutere tutti i passaggi che, partendo da una grammatica, ci conducono ad eseguire il parsing bottom-up. Consigliamo di tornare a dare un occhio allo schema presentato in \autoref{subsec:schema}. Ci eravamo lasciati con una questione alquanto spinosa: avevamo constato che è possibile ritrovarsi con due reducing items in uno stesso stato anche se la grammatica di partenza non è ambigua, e questa situazione potrebbe essere risolta conservando, per ogni stato, delle informazioni rispetto a quali simboli potrebbero seguirgli in lettura. Ci eravamo resi conto di non aver modo di conservare e impiegare efficacemente queste informazioni con la tecnica di costruzione dell'automa SLR(1), il che lascia pensare solo a una cosa: è il momento di abbandonare questa tecnica e guardare a soluzioni più complesse, certo, ma senza dubbio più efficaci. È il momento di affrontare la costruzione di un automa caratteristico LR(1) (Left Rightmost 1).
 \subsection{Stati}
 \paragraph{Gli LR(1)-items}
 Per prima cosa dobbiamo ricordarci che la principale differenza sta proprio in cosa popola gli stati dei diversi automi: per gli automi SLR(1) utilizzavamo gli LR(0)-items, gli automi LR(1) invece utilizzano gli LR(1)-items.
@@ -59,7 +59,7 @@ Dal momento che la Def.\ref{def:lr1-closure} non risponde molto bene al richiamo
 % \end{figure}
 \subimport{assets/pseudocode/}{lr1-closure.tex}
 In questo algoritmo si deve fare conto che \(B \to \cdot \gamma \notin prj(P)\) significa che non è ancora presente in \(closure_1(P)\) una produzione \(B \to \cdot \gamma\).
-Di fatto quello che succede all'interno del \texttt{foreach} centrale è che se l'elemento è nuovo vado ad aggiungerlo con il suo \(\Delta\), se l'elemento è già presente vado a vedere se è il caso di aggiungere al \(\Delta\) di questa qualche elemento. Il procedimento potrebbe risultare un po' ostico, ma sarà tutto più chiaro dopo qualche esercizio esplicativo, come al solito.
+Di fatto quello che succede all'interno del \texttt{foreach} centrale è che se l'item è nuovo vado ad aggiungerlo con il suo \(\Delta\), se l'item è già presente vado vado ad aggiornare il suo lookahead set \(\Delta\). Il procedimento potrebbe risultare un po' ostico, ma sarà tutto più chiaro dopo qualche esercizio esplicativo, come al solito.
 
 \subsubsection{Esercizio di calcolo di \(closure_1(P)\)}
 Facendo riferimento alla grammatica dell'esercizio precedente (riportata qui sotto), calcolare tutti gli stati dell'automa caratteristico LR(1).
@@ -113,12 +113,12 @@ Come già detto prima, la prima parte di questi item è esattamente corrisponden
     \end{align*}
     Come succedeva nell'esempio con il parsing LR(0), nello stato 2 possiamo osservare la presenza di tre transizioni e quindi di tre possibili nuovi stati che sono \(\tau(2,A)=4 \textrm{, } \tau(2,B)=5 \textrm{ e } \tau(2,c)=6\).
     \item[...]
-    \item[6.] Ovviamente la parte interessante dell'esercizio è verificare se siamo riusciti a risolvere il conflitto che occorreva nel parsing SLR(0). In modo pressoché analogo a quanto accadeva, abbiamo che il kernel per lo stato 6 è :
+    \item[6.] Ovviamente la parte interessante dell'esercizio è verificare se siamo riusciti a risolvere il conflitto che occorreva nel parsing SLR. In modo pressoché analogo a quanto accadeva, abbiamo che il kernel per lo stato 6 è :
     \begin{align*}
         [A &\to c \cdot, \{d\}] \\
         [B &\to c \cdot, \{e\}]
     \end{align*}
-    Anche questa volta nello stato sono presenti due item di riduzione, ma non troviamo più il conflitto che avevamo con il parsing LR(0), perché in questo caso la riduzione \(A \to c\) si applica solo se nell'input buffer si sta leggendo \(d\), mentre la riduzione \(B \to c\) si applica solo nel caso in cui nell'input \emph{buffer} si sta leggendo \(e\). Questo implica che nello stato 6, grazie al parsing LR(1), è stata eliminata l'ambiguità del conflitto r/r.
+    Anche questa volta nello stato sono presenti due item di riduzione, ma non troviamo più il conflitto che avevamo con il parsing LR(0), perché in questo caso la riduzione \(A \to c\) si applica solo se nell'input buffer si sta leggendo \(d\), mentre la riduzione \(B \to c\) si applica solo nel caso in cui nell'input buffer si sta leggendo \(e\). Questo implica che nello stato 6, grazie al parsing LR(1), è stata eliminata l'ambiguità del conflitto r/r.
 \end{enumerate}
 
 \subsubsection{Facciamone un altro, dai}
@@ -158,7 +158,7 @@ Nonostante la produzione con driver \(L\) sia già stata analizzata (vedi Eq.\re
     [L &\to \cdot *R, \{\$\}] \\
     [L &\to \cdot id, \{\$\}]
 \end{align*}
-Visto che però avevamo già inserito due LR(1)-item con lo stesso LR(0)-item (la parte \(L \to \cdot qualcosa\)) possiamo semplicemente accrescere i lookahead-set corrispondenti. Il risultato finale per la chiusura degli item dello stato iniziale è:
+Visto che però avevamo già inserito due LR(1)-item con lo stesso LR(0)-item (la parte \(L \to \cdot qualcosa\)) andiamo semplicemente ad aggiornare i lookahead-set corrispondenti. Il risultato finale per la chiusura degli item dello stato iniziale è:
 \begin{align*}
     [&S'\to \cdot S, \{\$\}] \\
     [&S \to \cdot L = R, \{\$\}] \\
@@ -203,7 +203,7 @@ Ora chiederemo al lettore di fare uno sforzo mnemonico poderoso e di ricordare c
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{automa_conflict_LR.tex}
-    \caption{Automa di tipo LR(0), si noti il conflitto sullo stato 6}
+    \caption{Automa di tipo LR(0), si noti il conflitto r/r sullo stato 6}
     \label{fig:lr0-automata_conflict}
 \end{figure}
 Abbiamo già calcolato quali sono gli stati LR(1) per la grammatica in questione in un esercizio precedente (vedi \ref{ex:closure-lr1}), ed applicando l'algoritmo per la costruzione degli automi LR(1) arriviamo ad ottenere il seguente automa (parziale):
@@ -235,24 +235,24 @@ Negli stati 6 e 9, che ci avrebbero causato problemi con la costruzione di tipo 
 \begin{itemize}
     \item Stato 6
     \begin{align*}
-        A &\to c \cdot , {d} \\
-        B &\to c \cdot , {e}    
+        A &\to c \cdot , \{d\} \\
+        B &\to c \cdot , \{e\}    
     \end{align*}
     \item Stato 9
     \begin{align*}
-        A &\to c \cdot , {e} \\
-        B &\to c \cdot , {d}    
+        A &\to c \cdot , \{e\} \\
+        B &\to c \cdot , \{d\}    
     \end{align*}
 \end{itemize}
  Quindi, seguendo le regole di compilazione della tabella di parsing LR(1) avremmo:
  \begin{itemize}
-     \item nella casella M[6,d] la riduzione \(A \to c \cdot , {d}\);
-     \item nella casella M[6,e] la riduzione \(B \to c \cdot , {e}\);
-     \item nella casella M[9,e] la riduzione \(A \to c \cdot , {e}\);
-     \item nella casella M[9,d] la riduzione \(B \to c \cdot , {d}\);
+     \item nella casella M[6,d] la riduzione \(A \to c \cdot , \{d\}\);
+     \item nella casella M[6,e] la riduzione \(B \to c \cdot , \{e\}\);
+     \item nella casella M[9,e] la riduzione \(A \to c \cdot , \{e\}\);
+     \item nella casella M[9,d] la riduzione \(B \to c \cdot , \{d\}\);
  \end{itemize}
 Festa! Festa! non ci sono più conflitti!
-È però notevole il fatto che il numero di stati sia aumentato parecchio: questo è quello che succede quando si va ad utilizzare tecniche di parsing più precise e raffinate.
+È però notevole il fatto che il numero di stati sia aumentato parecchio: questo è quello che succede quando si va ad utilizzare tecniche di parsing più precise e raffinate, Larry.
 
 \section{Costruzione di una tabella di parsing LR(1)}
 Chi avesse seguito con sufficiente costanza e attenzione a questo punto dovrebbe sapere che non ci sarà alcuna nuova informazione in questa sezione, perché la procedura di costruzione della tabella di parsing è la medesima per tutte le tipologie di parsing bottom-up. Di conseguenza, se qualcuno avesse bisogno di una rinfrescata, suggeriamo di tornare al capitolo precedente prima di proseguire; per tutti gli altri, rimbocchiamoci le maniche e andiamo a mettere le mani in pasta su queste tabelle di parsing.  
@@ -264,11 +264,12 @@ La prima grammatica che andiamo ad analizzare è la seguente:
     S &\to L = R \mid R \\
     L &\to *R \mid id \nonumber \\ \notag
     R &\to L \notag
-\end{align}
-Questa è una grammatica che ci parla di puntatori, ma capiremo in seguito cosa significa ciò, per ora concentriamoci sulla sua risoluzione. 
+\end{align} 
+
+%TODO: SCRIVERE IL PROCEDIMENTO
 
 \paragraph{Definizione stati e costruzione dell'automa}
-Il primo passo, naturalmente, è la costruzione dell'automa caratteristico. Per fare questo è necessario prima definire come sono fatti gli stati del nostro automa, ossia quali LR(1)-items comprenderanno; per fare questo, sappiamo che abbiamo la nostra fida \(closure_1()\).
+Il primo passo, naturalmente, è la costruzione dell'automa caratteristico. Per fare questo è necessario prima definire come sono fatti gli stati del nostro automa, ossia quali LR(1)-items comprenderanno; è giunto il momento di sfoderare la nostra fida \(closure_1\).
 \begin{figure}[H]
     \centering
     \includegraphics[width=.8\textwidth]{send_help_1.png}
@@ -341,13 +342,13 @@ Da 0 leggo \(id\) ed eseguo la relativa transizione verso lo stato 5. Situazione
     stSt &= 0\;5 \\
     symSt &= id
 \end{align*}
-In 5 troviamo la riduzione \(L \to id\), per cui aggiorniamo le nostre strutture secondo le regole che ben conosciamo; ci dovremmo quindi ritrovare di nuovo nello stato 0 e, leggendo \(=\) e compiendo la transizione a 2, ci troviamo finalmente nello stato del conflitto:
+In 5 troviamo la riduzione \(L \to id\), per cui aggiorniamo le nostre strutture secondo le regole che ben conosciamo; ci dovremmo quindi trovare nello stato 2 e, leggendo \(=\), arriviamo finalmente nello stato del conflitto:
 \begin{align*}
     w &= \underline{id}\!=id\$ \\
     stSt &= 0\;\xout{5}\;2\\
     symSt &= \xout{id}\;L 
 \end{align*}
-Come risolviamo quindi questo conflitto s/r? Cosa applico, la reduce \(R \to L\), oppure uno shift verso lo stato 6? Distogliamo un attimo gli occhi dal ragionamento e guardiamo la grammatica da cui siamo partiti (convenientemente riportata in Fig.\ref{fig:pointers-automaton-slr1-conflict}): non ha nessun senso applicare la riduzione, perché durante la procedura non abbiamo mai eseguito produzioni \(R \to L\), per cui in questo caso la mossa giusta è lo shift.
+Come risolviamo quindi questo conflitto s/r? Cosa applichiamo, la reduce \(R \to L\), oppure uno shift verso lo stato 6? Distogliamo un attimo gli occhi dal ragionamento e guardiamo la grammatica da cui siamo partiti (convenientemente riportata in Fig.\ref{fig:pointers-automaton-slr1-conflict}): non ha nessun senso applicare la riduzione, perché durante la procedura non abbiamo mai eseguito produzioni \(R \to L\), per cui in questo caso la mossa giusta è lo shift.
 
 \paragraph{Parsing di \(w = ***id\!=\!id\)}
 Proviamo adesso con un'altra parola, questa volta con tre terminali \(\ast\). L'inizio è il medesimo della parola precedente:
@@ -372,9 +373,9 @@ Non è ancora finita, perché in 8 troviamo un'altra riduzione, in particolare \
 \begin{align*}
     w &= \underline{***id}\!=id\$ \\
     stSt &= 0\;4\;4\;4\;7 \\
-    symSt &= ***L 
+    symSt &= ***R 
 \end{align*}
-La riduzione da operare è \(L \to ^{*}R\), per cui cancelliamo gli ultimi due stati da \(stSt\) e modifichiamo contestualmente la testa di \(symSt\), per ritrovarci infine in questa situazione:
+La riduzione da operare è \(L \to *R\), per cui cancelliamo gli ultimi due stati da \(stSt\) e modifichiamo contestualmente la testa di \(symSt\), per ritrovarci infine in questa situazione:
 \begin{align*}
     w &= \underline{***id}\!=id\$ \\
     stSt &= 0\;4\;4\;8 \\
@@ -388,13 +389,13 @@ Itaque seguiamo il goto \(L\) e dirigiamoci verso le acque burrascose del tormen
     stSt &= 0\;2\\
     symSt &= L 
 \end{align*}
-Che fare? Non possiamo più affidarci a ragionamenti pigri come quello che abbiamo fatto prima, ma magari ci va bene uguale; scegliamo di fare uno shift e andiamo avanti a cazzo duro, diretti verso la gloria o verso il baratro. Arriviamo quindi a 6.
+Questo è lo stato in cui abbiamo l'indeterminaione: dobbiamo scegliere tra shift o reduce. Che fare? Non possiamo più affidarci a ragionamenti pigri come quello che abbiamo fatto prima, ma magari ci va bene uguale; scegliamo di fare uno shift e andiamo avanti impavidi, diretti verso la gloria o verso il baratro. Arriviamo quindi a 6.
 \begin{align*}
     w &= \underline{id\!=}id\$ \\
     stSt &= 0\;2\;6 \\
     symSt &= L\!=
 \end{align*}
-In lettura abbiamo \(id\), per cui facciamo unp shift verso 5; bruciamo la tappa ed eseguiamo subito la riduzione \(L \to id\) che ci fa rimbalzare indietro dallo stato 6 e infine allo stato 8.
+In lettura abbiamo \(id\), per cui facciamo uno shift verso 5; bruciamo la tappa ed eseguiamo subito la riduzione \(L \to id\) che ci fa rimbalzare indietro dallo stato 6 e infine allo stato 8.
 \begin{align*}
     w &= \underline{id\!=id}\$ \\
     stSt &= 0\;2\;6\;\xout{5}\;8 \\
@@ -460,16 +461,16 @@ Supponiamo a questo proposito di fare un'analisi di una stringa del tipo \(w_1 =
 \subparagraph*{}
 Se la stringa che si sta analizzando è del tipo \(id = w_2\), allora ci spostiamo dallo stato 5 per poi effettuare riduzione \(L \to id\) e spostarci allo stato 2. Se invece ci stiamo concentrando su una stringa del tipo \(*w_1' = w_2\), allora ci sposteremo invece allo stato 4, dove continueremo a eseguire un ciclo fino a che non esauriremo gli \(*\); nel momento in cui leggeremo invece \(id\) ci sposteremo allo stato 5, eseguiremo riduzione \(L \to id\) e finiremo con lo spostarci allo stato 8 e \textbf{non} al 2. 
 \paragraph*{}
-Il parsing di tipo SLR(1) non riconosce dunque la differenza fra lo stato 2 e lo stato 8 a differenza del parsing LR(1), che ha un costo maggiore. Quindi, il problema del parsing SLR(1) (in questo caso) è che andiamo a piazzare un'operazione di riduzione per tutti i follow dei driver mentre in quello di tipo LR(1) lo si fa per sottoinsiemi dei follow dei driver.
+Il parsing di tipo SLR(1) non riconosce dunque la differenza fra lo stato 2 e lo stato 8 a differenza del parsing LR(1). Quindi, il problema del parsing SLR(1) (in questo caso) è che andiamo a piazzare un'operazione di riduzione per tutti i follow dei driver mentre in quello di tipo LR(1) lo si fa per sottoinsiemi dei follow dei driver aumentando quindi la precisione della procedura ma pagando il prezzo di una costruzione più costosa.
 
 \section{Il parsing LALR(1)}
 Nonostante il parsing di tipo LR(1) sia il più completo è possibile che l'automa caratteristico risultante contenga delle ridondanze: nell'esempio precedente vi sono infatti delle sottostrutture che sono isomorfe e ciò deriva dal fatto che, visto che le transizioni dipendono sempre dalla prima componente (i.e. item LR(0)), è possibile notare che le ridondanze si verificano nel caso in cui gli stati abbiano la stessa proiezione LR(0).
 \subparagraph*{}
-Per mantenere la precisione el'affidabilità del parsing LR(1) ma senza rinunciare all'efficienza di quello SLR(1) possiamo utilizzare una terza via, il parsing LALR(1): ques'ultimo utilizza gli stati in maniera simile al parsing SLR(1), ma utilizza una funzione di lookahead un filo più raffinata. Andiamo a conoscerla più da vicino
+Per mantenere la precisione e l'affidabilità del parsing LR(1) ma senza rinunciare all'efficienza di quello SLR(1) possiamo utilizzare una terza via, il parsing LALR(1): ques'ultimo utilizza gli stati in maniera simile al parsing SLR(1), ma utilizza una funzione di lookahead un filo più raffinata. Andiamo a conoscerla più da vicino
 
 \subsection{L'Automa caratteristico LRm(1)}
 
-L'automa LRm(1) \(\mathcal{AM}\) è costruito a partire dall'automa LR(1) \(\mathcal{A}\) (la lettera m sta per \emph{merged}).
+L'automa LRm(1) \(\mathcal{AM}\) è costruito a partire dall'automa LR(1) \(\mathcal{A}\) (la lettera \(\mathcal{M}\) sta per \emph{merged}).
 
 Gli \textbf{Stati} del nuovo automa caratteristico sono ottenuti unendo all'interno di un singolo stato di \(\mathcal{AM}\) tutti gli item negli stati \(<P_1, ..., P_n>\) di \(\mathcal{A}\) che hanno le stesse LR(0)-proiezioni (i.e. con lo stesso item LR(0)).
 
@@ -495,7 +496,7 @@ Nel caso in cui non vi sia più di uno stato con la stessa proiezione LR(0) allo
 
 La grammatica \(\G\) è LALR(1) se e solo se la sua tabella di parsing LALR(1) non ha conflitti. 
 
-Il vantaggio della grammatica LALR(1) è di essere più potente (i.e. espressiva) della grammatica SLR(1) pur rimanendo con delle dimensioni contenute rispetto alla LR(1). 
+Il vantaggio della tabella di parsing LALR(1) è di essere più potente (i.e. espressiva) della tabella di parsing SLR(1) pur rimanendo con delle dimensioni contenute rispetto alla LR(1). 
 
 \subsection*{Esercizio parsing LALR(1) - c'è sì ma in realtà no perchè è LR(1)}
 \begin{align*}
@@ -504,7 +505,7 @@ Il vantaggio della grammatica LALR(1) è di essere più potente (i.e. espressiva
     B &\to \varepsilon
 \end{align*}
 
-Il nostro obbiettivo è quello di costruire la parsing table LALR(1) per la grammatica citata: per poter procedere dobbiamo però prima costruire l'automa caratteristico.
+Il nostro obbiettivo è quello di costruire la parsing table LALR(1) per la grammatica di cui sopra: per poter procedere dobbiamo però prima costruire l'automa caratteristico.
 \paragraph{Ricaviamo l'automa}
 \begin{enumerate}
     \item Inizializziamo lo stato 0; il suo kernel è 
@@ -526,7 +527,7 @@ Il nostro obbiettivo è quello di costruire la parsing table LALR(1) per la gram
     \begin{equation*}
         S' \to S \cdot, \{\$\}    
     \end{equation*}
-    Non serve calcolare la chiusura di questo item in quanto è formata solamente da sé stesso, possiamo però evidenziare il fatto che questo è lo stato contenente l'\textbf{Accepting Item}.
+    Non serve calcolare la chiusura di questo item in quanto è formata solamente da sé stesso, possiamo però evidenziare il fatto che questo è lo stato contenente l'accepting item.
     \item Analizziamo dunque lo stato 2, il cui kernel è composto solamente da:
     \begin{equation*}
         S \to  A \cdot aB, \{\$\}
@@ -617,12 +618,12 @@ Visto che non è possibile unire nessuno degli stati dell'automa LR(1), l'automa
 
 \subsection{L'automa simbolico}
 La classe di grammatiche LALR contiene le grammatiche più interessanti per i linguaggi di programmazione.
-Abbiamo visto come la modalità più semplice per ottenere le tabelle di parsing LALR è quella di creare in primis un'automa LR(1) e poi tradurlo in LRm(1).
+Abbiamo visto come la modalità più semplice per ottenere le tabelle di parsing LALR sia quella di creare in primis un'automa LR(1) e poi tradurlo in LRm(1).
 
-Oggi vediamo un altro metodo che prevede di eliminare il passaggio dall'automa LR(1) e di creare fin da subito un automa con la stessa struttura dell'automa LRm(1).
-Quello che andremo a creare è detto automa simbolico, preché utilizza dei simboli (delle variabili) al posto dei lookahead set; una votla terminata la costruzione dell'automa simbolico risolvendo i simboli si va a calcolare quelli che poi saranno i lookahead set dell'automa LRm(1).
+Ora vedremo un altro metodo che prevede di eliminare il passaggio dall'automa LR(1) e di creare fin da subito un automa con la stessa struttura dell'automa LRm(1).
+Quello che andremo a creare è detto automa simbolico, preché utilizza dei simboli (delle variabili) al posto dei lookahead set; una volta terminata la costruzione dell'automa simbolico risolvendo i simboli si va a calcolare quelli che poi saranno i lookahead set dell'automa LRm(1).
 
-Quindi gli item di questo automa simbolico possono essere immaginati cme suddivisi in due componenti:
+Quindi gli item di questo automa simbolico possono essere immaginati come suddivisi in due componenti:
 \begin{itemize}
     \item una componente di tipo LR(0);
     \item una parte composta da un insieme di lookahead simbolico.
@@ -641,10 +642,10 @@ Andiamo a costruire l'automa simbolico per la nostra cara grammatica
 La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'automa LR(1) per rendere più chiare le differenze tra queste due costruzioni.
 
 Il primo passo è installare lo stato 0 dell'automa:
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-stato_0.png}
-    \caption{Stato 0: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \caption{Stato 0: sulla sinistra automa simbolico, sulla destra LR(1)}
     \label{img:ex_automa_simbolico-stato_0}
 \end{figure}
 È subito chiaro cosa intendevamo dicendo "invece di inserire il lookahead set inseriamo una \emph{variabile}", di fatto come lookahead inseriamo un simbolo, che risolveremo solo alla fine della costruzione dell'automa.
@@ -677,7 +678,7 @@ Procedendo un passettino alla volta la chiusura dello stato 0 si fa così:
             L &\to \cdot *R, \; \{=\} \\
             L &\to \cdot id, \; \{=\}
         \end{align*}
-        in questo caso, dato che \(\beta \neq \varepsilon\), vediamo come il lookahead set corrisponda ad un carattere e non una variabile, questo è possibile mentre stiamo calcolando la chiusura di item simbolici;
+        in questo caso, dato che \(\beta \neq \varepsilon\), vediamo come il lookahead set corrisponda ad un carattere e non una variabile, questo è possibile mentre stiamo calcolando la chiusura di item simbolici: la variabile verrà introdotta al posto del carattere quando useremo questi item come kernel per un nuovo stato;
     \end{itemize}
     \item infine, avendo introdotto anche \(R\), dobbiamo calcolare la chiusura indotta dalle produzioni di \(R\):
     \begin{itemize}
@@ -693,16 +694,16 @@ Procedendo un passettino alla volta la chiusura dello stato 0 si fa così:
         L &\to \cdot id, \; \{=, x_0\}
     \end{align*}
 \end{itemize}
-Il consiglio per chi non ha capito questi passaggi è quello di fare qualche esercizio di costruzione di automi LR(1), fidatevi ne vale la pena!
+Il consiglio per chi non ha capito questi passaggi è quello di fare qualche esercizio di costruzione di automi LR(1) e poi riprendere da qui, fidatevi ne vale la pena!
 
 Orbene, passiamo ad analizzare le transazioni uscenti dallo stato 0.
 La prima transizione che troviamo è \(\tau(0,S)\) che ci porta ad un nuovo stato, lo stato 1.
 \\
 Kernel dello stato 1:
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolic-kernel_s1.png}
-    \caption{Kernel stato 1: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \caption{Kernel stato 1: sulla sinistra automa simbolico, sulla destra LR(1)}
 \end{figure}
 notiamo come invece che scrivere il lookahead set come insieme creiamo una nuova variabile per indicarlo. Dobbiamo aggiornare anche il nostro sitema in cui salviamo il valore effettivo della variabile.
 In questo caso il lookahed set del kernel, essendo \(\beta = \varepsilon\) è proprio uguale al lookahead set della produzione da cui arriviamo, quindi \(x_0\), aggiorniamo dunque alacremente il nostro sistema di equazioni.
@@ -716,10 +717,10 @@ Lo stato 1 non ha chiusure da calcolare e nemmeno transizioni, quindi passiamo o
 La prossima transizione che andiamo ad analizzare è \(\tau(0,L)\) che ci porta in un nuovo stato, diciamo 2.
 \\
 Kernel dello stato 2:
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s2.png}
-    \caption{Kernel stato 2: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \caption{Kernel stato 2: sulla sinistra automa simbolico, sulla destra LR(1)}
 \end{figure}
 in questo caso il kernel contiene due item perché nello stato 0 abbiamo due item che presentano la possibilità di una \(L\)-transizione; ognuno di questi item quindi avrà il suo lookahead set simbolico: andiamo ad aggiornare subito il nostro sistema, sapendo che le produzioni che ci portano allo stato due hanno come lookahead set \(x_0\).
 \begin{align*}
@@ -729,15 +730,15 @@ in questo caso il kernel contiene due item perché nello stato 0 abbiamo due ite
             & x_2 = x_0 \\
             & x_3 = x_0 \\
 \end{align*}
-grazie al cielo non si presentano nè chiusure, le transizioni invece le analizzeremo in seguito.
+grazie al cielo non si presentano chiusure, le transizioni invece le analizzeremo in seguito.
 
 Passiamo quindi all'osservazione della transizione \(\tau(0,R)\), che ci porta nello stato 3.
 \\
 Kernel dello stato 3:
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s3.png}
-    \caption{Kernel stato 3: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \caption{Kernel stato 3: sulla sinistra automa simbolico, sulla destra LR(1)}
 \end{figure}
 anche in questo caso abbiamo che \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), riportiamo subito questa informazione all'interno del sistema.
 \begin{align*}
@@ -753,10 +754,10 @@ il kernel dello stato 3 non presenta nè chiusure nè transizioni, quindi proced
 La prossima transizione che dobbiamo analizzare è \(\tau(0,*)\), questa deriva dalla produzione \([L \to \cdot *R, \; \{=, x_0\}]\).
 \\
 Kernel dello stato 4:
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s4.png}
-    \caption{Kernel stato 4: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \caption{Kernel stato 4: sulla sinistra automa simbolico, sulla destra LR(1)}
 \end{figure}
 anche in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
 \begin{align*}
@@ -779,10 +780,10 @@ che spettacolo, eh? passiamo oltre
 Prossima transizione da analizzare: \(\tau(0,id)\) che deriva dall'item \([L \to \cdot id, \; \{=, x_0\}]\) e ci porta nello stato 5.
 \\
 Kernel dello stato 5:
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s5.png}
-    \caption{Kernel stato 5: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \caption{Kernel stato 5: sulla sinistra automa simbolico, sulla destra LR(1)}
 \end{figure}
 anche in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
 \begin{align*}
@@ -797,13 +798,13 @@ anche in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel
 \end{align*}
 Anche qui, pace all'anima nostra, inseriamo il lookahead set come variabile e la valorizziamo nel nostro sistema di equazioni.
 
-Abbiamo finito le transizioni dallo stato 0! prossima trnsizione da analizzare \(\tau(2, =)\), che deriva dall'item \([S \to L \cdot = R, \; \{x_2\}]\), ci porta direttamente allo stato 6.
+Abbiamo finito le transizioni dallo stato 0! prossima transizione da analizzare \(\tau(2, =)\), che deriva dall'item \([S \to L \cdot = R, \; \{x_2\}]\), ci porta direttamente allo stato 6.
 \\
 Kernel dello stato 6:
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s6.png}
-    \caption{Kernel stato 6: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \caption{Kernel stato 6: sulla sinistra automa simbolico, sulla destra LR(1)}
 \end{figure}
 in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
 \begin{align*}
@@ -828,10 +829,10 @@ Grazie alla presenza del marker davanti ad una \(R\) aggiungiamo questi item all
 Passiamo ora ad analizzare la transizione \(\tau(4, R)\), che deriva dall'item \([L \to * \cdot R, \; \{x_5\}]\) e ci spara nello stato 7.
 \\
 Kernel dello stato 7:
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s7.png}
-    \caption{Kernel stato 7: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \caption{Kernel stato 7: sulla sinistra automa simbolico, sulla destra LR(1)}
 \end{figure}
 in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
 \begin{align*}
@@ -851,10 +852,10 @@ a questo punto dovremmo fare la chiusura no? ma è già tutto chiuso, come alle 
 Passiamo quindi ad analizzare la transizione \(\tau(4, L)\) che prende le mosse dall'item \([R \to \cdot L, \; \{x_5\}]\) e ci porta nello stato 8.
 \\
 Kernel dello stato 8:
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s8.png}
-    \caption{Kernel stato 8: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \caption{Kernel stato 8: sulla sinistra automa simbolico, sulla destra LR(1)}
 \end{figure}
 in questo caso il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
 \begin{align*}
@@ -908,10 +909,10 @@ Il lookahead set della transizione \(\tau(4, id)\) è ancora una volta \(x_5\).
 Passiamo oltre, la prossima transizione su cui ci concentriamo è \(\tau(6, R)\), derivante da \([S \to L = \cdot R, \; \{x_7\}]\), che ci porta a scoprire lo stato 9.
 \\
 Kernel dello stato 9:
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s9.png}
-    \caption{Kernel stato 9: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \caption{Kernel stato 9: sulla sinistra automa simbolico, sulla destra LR(1)}
 \end{figure}
 in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), ovvero \(x_{10} = \{x_7\}\), aggiorno quindi il sistema di equazioni.
 \begin{align*}
@@ -945,7 +946,7 @@ La prossima transizione è \(\tau(6, L)\) che deriva da \([R \to \cdot L, \{x_7\
             & x_9 = x_5 \cup \{x_7\} \\
             & x_{10} = x_7 \\
 \end{align*}
-niente chiusure, passiamo oltre.
+Niente chiusure, passiamo oltre.
 
 Prossima transizione \(\tau(6, *)\), derivante dall'item \([L \to \cdot * R, \{x_7\}]\), il target di questa transizione è uno stato con kernel LR(0) \([L \to *\cdot R]\), ovvero lo stato 4. Quindi anche questa volta non creiamo un nuovo stato ma andiamo ad aggionrare il kernel dello stato 4.
 \begin{align*}
@@ -979,13 +980,13 @@ Passiamo alla prossima transizione che è \(\tau(6, id)\), derivante da \([L \to
             & x_{10} = x_7 \\
 \end{align*}
 
-Oh butei, abbiamo finito di analizzare l'automa, quindi andiamo a risolvere lo strascico di equazioni che ci siamo tirati dietro per tutto l'esercizio:
+Oh butei, ghe l'avem fatta. Abbiamo finito di analizzare l'automa, quindi andiamo a risolvere lo strascico di equazioni che ci siamo tirati dietro per tutto l'esercizio:
 \begin{align*}
     x_0, x_1, x_2, x_3, x_4, x_7, x_{10} &= \{\$\} \\
     x_5, x_6, x_8, x_9 &= \{=, \$\}
 \end{align*}
 Questa risoluzione è fatta a occhio, ma esiste un metodo algoritmico per risolvere il sistema in modo molto efficiente.
-L'algoritmo in questione utilizzale classi di equivalenza, inaspettatamente.
+L'algoritmo in questione utilizza le classi di equivalenza, inaspettatamente.
 
 Complessivamente cosa abbiamo ottenuto?
 Un automa con le stesse dimensioni di tipo LR(0), poichè abbiamo creato esattamente gli stessi stati che avremmo cerato costruendo un automa LR(0), ma abbiamo utilizzato delle chiusure di tipo LR(1), ricavando quindi dei lookahead set raffinati.
@@ -1028,7 +1029,7 @@ Kernel dello stato 1:
 \begin{align*}
     S' \to S \cdot, x_1
 \end{align*}
-In questo caso \(\beta = \varepsilon\), quindi il lookahead set del kernel sarà ugualeal lookahead set della produaizone che ci ha portati in 1, ci salviamo questo risultato.
+In questo caso \(\beta = \varepsilon\), quindi il lookahead set del kernel sarà uguale al lookahead set della produzione che ci ha portati in 1, ci salviamo questo risultato.
 \begin{align*}
     Sistema:& \\
             & x_0 = \{\$\}\\
@@ -1101,7 +1102,7 @@ Kernel dello stato 5:
     S &\to a \cdot S b, x_6 \\
     S &\to a \cdot b, x_7
 \end{align*}
-Ma c'è un colpo di scena, perché noi abbiamo già visto questo kernel una volta: è esattamente il kernel dello stato 2!
+Ma c'è un colpo di scena, perché noi abbiamo già visto questo kernel LR(0) una volta: è esattamente il kernel dello stato 2!
 Quindi la procedura ci richiede di aggiornare solo il lookahead set dello stato 2, senza generare un nuovo stato 5.
 \begin{align*}
     Sistema:& \\
