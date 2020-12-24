@@ -169,7 +169,7 @@ Riportiamo \(\G_1\) per praticità
     B &\to \varepsilon
 \end{align*}
 
-Per poter calcolare la tabella di parsing \(LL(1)\) è necessario computare innanzitutto first e follow per ogni driver della grammatica \(\G_1\).
+Per poter calcolare la tabella di parsing \(LL(1)\) è necessario calcolare innanzitutto first e follow per ogni driver della grammatica \(\G_1\).
 
 \begin{table}[H]
     \centering
@@ -206,7 +206,7 @@ Riportiamo \(\G_1\) per praticità
     B &\to \varepsilon
 \end{align*}
 
-Nonostante sia possibile eseguire tutta la costruzione dell'automa caratteristico di tipo \(LR(1)\) e la successiva computazione della tabella, anche in questo caso non è consigliabile procedere in quel modo: la cosa migliore è invece computare solo gli stati dell'automa caratteristico per poter arrivare in \(I[BcBa]\) utilizzando le transizioni corrette. Se il lettore fosse interessato, può trovare lo svolgimento completo dell'esercizio nel capitolo ~\ref{subsec:lalr1-parsing-table} \emph{Costruzione di una tabella di parsing LALR(1)}: per coerenza qui verranno utilizzati gli stessi numeri per gli stati riportati nell'esercizio indicato. 
+Nonostante sia possibile eseguire tutta la costruzione dell'automa caratteristico di tipo \(LR(1)\) e la successiva computazione della tabella, anche in questo caso non è consigliabile procedere in quel modo: la cosa migliore è invece calcolare solo gli stati dell'automa caratteristico per poter arrivare in \(I[BcBa]\) utilizzando le transizioni corrette. Se il lettore fosse interessato, può trovare lo svolgimento completo dell'esercizio nel capitolo ~\ref{subsec:lalr1-parsing-table} \emph{Costruzione di una tabella di parsing LALR(1)}: per coerenza qui verranno utilizzati gli stessi numeri per gli stati riportati nell'esercizio indicato. 
 
 \begin{enumerate}
     \item Inizializziamo lo stato 0; il suo kernel è 
@@ -247,7 +247,7 @@ Nonostante sia possibile eseguire tutta la costruzione dell'automa caratteristic
     \begin{equation*}
         A \to BcBa \cdot A, \{a\} 
     \end{equation*}
-    di cui possiamo computare la chiusura ottenendo
+    di cui possiamo calcolare la chiusura ottenendo
     \begin{align*}
         A &\to \cdot BcBaA, \{a\} \\
         A &\to \cdot, \{a\} \\
@@ -280,7 +280,7 @@ Riportiamo \(\G_1\) per praticità
     B &\to \varepsilon
 \end{align*}
 
-Come nel caso dell'esercizio precedente, adottiamo una tecnica che ci permetta di computare il minimo numero di stati possibili dell'automa caratteristico per poter calcolare quanto richiesto:
+Come nel caso dell'esercizio precedente, adottiamo una tecnica che ci permetta di calcolare il minimo numero di stati possibili dell'automa caratteristico per poter calcolare quanto richiesto:
 
 \begin{enumerate}
     \item Inizializziamo lo stato 0; il suo kernel è 
@@ -429,11 +429,11 @@ Riportiamo \(\mathcal{V}_1\) per praticità
 
 Iniziamo innanzitutto a tradurre l'input in un qualcosa che possa essere riconosciuto dall'analisi sintattica, trasformando la stringa \(2a3b4\) in \(nanbn\$\), operazione effettuata dall'analisi lessicale.
 
-A questo punto dobbiamo capire come si comporta il nostro parser \(LALR(1)\), ovviamente potremmo computare tutto l'automa caratteristico e la relativa tabella di parsing, ma questo porterebbe via molto tempo. Cerchiamo invece di eseguire il lavoro del parsing a mente, notando che:
+A questo punto dobbiamo capire come si comporta il nostro parser \(LALR(1)\), ovviamente potremmo calcolare tutto l'automa caratteristico e la relativa tabella di parsing, ma questo porterebbe via molto tempo. Cerchiamo invece di eseguire il lavoro del parsing a mente, notando che:
 
 \begin{itemize}
     \item ogni volta che leggiamo una \(n\) possiamo eseguire una riduzione del tipo \(E \to n\) ed applicare la regola corrispondente
-    \item i conflitti si verificano in \((P[EaE],a)\), \((P[EaE],b)\), \((P[EbE],a)\) e \((P[EbE],b)\): questo vuol dire che, una volta finito di leggere un'operazione tra due numeri interi, il parser non sa se continuare a leggere oppure effettuare una riduzione e computare il valore; fortunatamente ci viene in aiuto il testo che ci dice di dare priorità all'operazione di \texttt{shift}
+    \item i conflitti si verificano in \((P[EaE],a)\), \((P[EaE],b)\), \((P[EbE],a)\) e \((P[EbE],b)\): questo vuol dire che, una volta finito di leggere un'operazione tra due numeri interi, il parser non sa se continuare a leggere oppure effettuare una riduzione e calcolare il valore; fortunatamente ci viene in aiuto il testo che ci dice di dare priorità all'operazione di \texttt{shift}
 \end{itemize}
 
 Caliamoci dunque nei panni del parser e immaginiamo come dovremmo considerare la nostra stringa \(nanbn\$\)
@@ -463,7 +463,7 @@ Riportiamo \(\mathcal{V}_1\) per praticità
     E &\to E_1 b E_2 &\{E.v = E_1.v + E_2.v\} 
 \end{align*}
 
-Per poter imporre la precedenza di un operatore sull'altro è possibile risolvere manualmente i conflitti all'interno della tabella decidendo che cosa fare: analizzando i conflitti, ci si accorge che sono dovuti a ambiguità non avendo definito associatività e precedenza degli operatori (e.g. nei casi in cui si abbia già letto \(EbE\) e nell'input buffer vi sia una \(a\), è necessario computare il valore - eseguendo una \texttt{reduce} - oppure dare la precedenza all'operazione che ha \(a\) come operatore - eseguendo uno \texttt{shift} - e posticipare l'operazione corrente?). Per poter uscire da tale situazione, garantendo la precedenza di \(a\) rispetto a \(b\), basterebbe accorgersi che:
+Per poter imporre la precedenza di un operatore sull'altro è possibile risolvere manualmente i conflitti all'interno della tabella decidendo che cosa fare: analizzando i conflitti, ci si accorge che sono dovuti a ambiguità non avendo definito associatività e precedenza degli operatori (e.g. nei casi in cui si abbia già letto \(EbE\) e nell'input buffer vi sia una \(a\), è necessario calcolare il valore - eseguendo una \texttt{reduce} - oppure dare la precedenza all'operazione che ha \(a\) come operatore - eseguendo uno \texttt{shift} - e posticipare l'operazione corrente?). Per poter uscire da tale situazione, garantendo la precedenza di \(a\) rispetto a \(b\), basterebbe accorgersi che:
 
 \begin{itemize}
     \item nel caso in cui si abbia letto fino ad ora \(EaE\), si vorrà fare un'operazione di \texttt{reduce} leggendo \(b\) in input e garantendo di conseguenza la precedenza della \(a\)

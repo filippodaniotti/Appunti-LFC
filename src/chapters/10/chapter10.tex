@@ -474,7 +474,7 @@ La prima grammatica su cui ragioneremo è
     Digits &\to d	&\{Digits.v = d.lexval\}
 \end{align*}
 
-La grammatica che abbiamo di fronte è LALR(1) e l'SDD è S-attribuito: l'ultima affermazione è verificabile dal fatto che il valore del padre dei sottolaberi possibili è sempre e solamente dipendente da quello dei figli. In questo caso dunque è possibile eseguire le due elaborazioni in modo congiunto e quindi possiamo computare il tutto durante il parsing. 
+La grammatica che abbiamo di fronte è LALR(1) e l'SDD è S-attribuito: l'ultima affermazione è verificabile dal fatto che il valore del padre dei sottolaberi possibili è sempre e solamente dipendente da quello dei figli. In questo caso dunque è possibile eseguire le due elaborazioni in modo congiunto e quindi possiamo calcolare il tutto durante il parsing. 
 
 Aggiungiamo una variazione dell'esercizio: ora vogliamo tradurre stringhe di digit al loro valore interpretato in decimale oppure in ottale.
 
@@ -488,7 +488,7 @@ Una possibile grammatica che genera il linguaggio descritto è questa:
 
 Quando ci troviamo nel caso di una stringa con il simbolo \(o\) davanti intendiamo che vogliamo ottenere il valore ottale della sequenza di digit. 
 
-La grammatica anche in questo caso è LALR(1) però abbiamo un problema: non è possibile sintetizzare le informazioni nello stesso modo di prima in quanto queste non sono disponibili nel momento in cui ci servono. Ragionando infatti sulla derivazione \(S \Rightarrow Num \Rightarrow o Digits\) ci si rende conto del fatto che il simbolo \(o\) si trova nel sottoalbero sinistro dell'albero mentre i \(Digits\) in quello destro: questo vuol dire che di fatto non siamo in grado di computare il valore fino a quando non raggiungiamo la cima dell'albero e quindi ciò significa che non ci troviamo di fronte a un SDD S-attribuito (il valore del sottoalbero di destra dipende infatti dal valore dei fratelli e non solamente da quello dei figli).
+La grammatica anche in questo caso è LALR(1) però abbiamo un problema: non è possibile sintetizzare le informazioni nello stesso modo di prima in quanto queste non sono disponibili nel momento in cui ci servono. Ragionando infatti sulla derivazione \(S \Rightarrow Num \Rightarrow o Digits\) ci si rende conto del fatto che il simbolo \(o\) si trova nel sottoalbero sinistro dell'albero mentre i \(Digits\) in quello destro: questo vuol dire che di fatto non siamo in grado di calcolare il valore fino a quando non raggiungiamo la cima dell'albero e quindi ciò significa che non ci troviamo di fronte a un SDD S-attribuito (il valore del sottoalbero di destra dipende infatti dal valore dei fratelli e non solamente da quello dei figli).
 
 Per poter raggiungere i nostri obbiettivi a livello di efficienza dobbiamo riprovare modificando la grammatica in modo che ci consenta di svolgere entrambe le operazioni contemporaneamente.
 
@@ -690,7 +690,7 @@ Il problema in questo caso specifico è che non possiamo sintetizzare tutte le i
 
 Utilizzando gli attributi ereditati non si riesce ad eseguire in maniera immediata tutte le operazioni durante il parsing della grammatica: un'opzione, come già citato più volte, potrebbe essere quella di agire sulla grammatica in modo che, durante un'esecuzione del parsing bottom-up, si possa ottenere lo stesso risultato di una grammatica S-attribuita. Senza soffermarci troppo sui dettagli, tale operazione passerebbe per l'aggiunta di marker e \(\varepsilon\)-transizioni in modo che gli attributi vengano sintetizzati e non ereditati.
 
-In questo caso per poter trasportare le informazioni da un ramo dell'albero ad un altro è necessario utilizzare degli attributi ereditati: in modo simile a quanto fatto per computare il valore delle espressioni aritmetiche, in questo caso assegniamo dei riferimenti a dei nodi. 
+In questo caso per poter trasportare le informazioni da un ramo dell'albero ad un altro è necessario utilizzare degli attributi ereditati: in modo simile a quanto fatto per calcolare il valore delle espressioni aritmetiche, in questo caso assegniamo dei riferimenti a dei nodi. 
 
 Per poter capire al meglio che tipo di regole devono essere applicate è necessario partire da un parse tree: prendiamo dunque come esempio particolare la parola \(id - num\), ottenuta dall'analisi lessicale di \(a - 4\); senza troppa fatica dovremmo poterci accorgere che usando una derivazione di tipo leftmost i passi di derivazione sono
 
