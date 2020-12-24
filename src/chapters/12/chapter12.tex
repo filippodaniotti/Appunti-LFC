@@ -8,7 +8,10 @@
 % arara: latexmk: { clean: partial }
 \begin{document}
 \chapter{Sintesi e conclusioni}
-In questo capitolo conclusivo rivedremo velocemente le fasi del processo di compilazione, dando una spiegazione generale e complessiva di tutto quello che abbiamo approfondito nei capitoli precedenti; dove si presenterà l'occasione, andremo anche ad inserire dei commenti interessanti (non menzionati in precedenza per non appesantire eccessivamente la trattazione teorica).
+In questo ultimo capitolo ripercorreremo sommariamente tutte le tappe che abbiamo attraversato nel nostro cammino verso la padronanza della compilazione frontend; l'obiettivo è fornire una visione d'insieme di tutto il nostro percorso, dal momento che quando si approfondisce un argomento è molto facile perdere il senso di come questo si relazioni a tutti gli altri. 
+
+Inoltre approfitteremo di questo per presentare dei piccoli approfondimenti trasversali, curiosità, divagazioni un po' casuali, barzellette e anche qualche battutaccia, il tutto per mantenere vivo l'interesse dello stanchissimo lettore che ha attraversato pianure, mari, monti, la città sotterranea di Agharti, il regno di Prete Gianni, l'ultima Thule e l'isola di Mu, tutto durante queste 300 pagine, il tutto viaggiando in un camioncino della verdura, il tutto per imparare qualcosa su quelle strane bestie che sono i linguaggi formali e i compilatori.
+
 
 Partiamo quindi con il ripetere, per l'ennessima volta, in maniera schematica le fasi della compilazione ed il loro scopo:
 \paragraph{Analisi lessicale} In questa fase si prende la stringa in ingresso e la si trasforma in una sequenza di token, che diamo in pasto all'analizzatore sintattico.
@@ -17,9 +20,9 @@ Partiamo quindi con il ripetere, per l'ennessima volta, in maniera schematica le
 
 \paragraph{Analisi semantica} Qui vengono considerate caratteristiche del linguaggio che non possono essere descritte agilmente dalla grammatica; inoltre, si va a valorizzare e ad assegnare attributi a tutti gli elementi riconosciuti nelle fasi precedenti.
 	
-\paragraph{Generazione del codice intermedio} In questa fase si genera, come suggerito dal nome, una rappresentazione intermedia della stringa data in input e si va a compiere possibili ottimizzazioni (molte delle quali indipendenti dal llinguaggio finale, target code).
+\paragraph{Generazione del codice intermedio} In questa fase si genera, come suggerito dal nome, una rappresentazione intermedia della stringa data in input e si va a compiere possibili ottimizzazioni (molte delle quali indipendenti dal linguaggio finale, target code).
 
-\paragraph{Generazione del codice macchina}	A questo punto si traduce il codice intermedio in linguaggio macchina con l'eventuale aggiunta di ottizzazioni legate all'architettura su cui si sta operando.
+\paragraph{Generazione del codice macchina}	A questo punto si traduce il codice intermedio in linguaggio macchina con l'eventuale aggiunta di ottimizzazioni legate all'architettura su cui si sta operando.
     
 Noi abbiamo visto tutte queste fasi separatamente, ma ricordiamo che spesso e volentieri vengono eseguite in simultanea per ottimizzare i tempi.
 È arrivato il momento di rispettare le tradizioni, quindi ora introdurremo un esempio che ci permetterà di andare a rianalizzare più approfonditamente tutte le fasi della compilazione.
@@ -42,9 +45,9 @@ Riportiamo ora la tabella dei simboli (Tab.\ref{tab:last-ex-symbol-table}).
     \label{tab:last-ex-symbol-table}
 \end{table} 
 
-In questo caso specifico, l'analizzatore lessicale va a riconoscere \(position\), \(initial\) e \(rate\) come identificatori (nota che nella lista di tokens, Eq.\ref{eq:last-ex-tokens}, sono presenti i riferimenti alle entry della symbol table per gli identificatori); allo stesso modo, vengono riconosciuti gli altri terminali come gli operatori utilizzati e, in questo caso particolare, il numero (creando un token che ne specifica il terminale, cioè \emph{num}, e il valore).
+In questo caso specifico, l'analizzatore lessicale va a riconoscere \(position\), \(initial\) e \(rate\) come identificatori (nota che nella lista di token, Eq.\ref{eq:last-ex-tokens}, sono presenti i riferimenti alle entry della symbol table per gli identificatori); allo stesso modo, vengono riconosciuti gli altri terminali come gli operatori utilizzati e, in questo caso particolare, il numero (creando un token che ne specifica il terminale, cioè \emph{num}, e il valore).
 
-La stringa che andremo ad analizzare nell'analisi sintattica si dimenticherà poi dei riferimenti agli identificatori, delle parentesi angolari e dei valori numerici, quindi sostanzialmente sarà assimilabile a:
+La stringa che andremo ad analizzare nell'analisi sintattica si dimenticherà poi dei riferimenti agli identificatori, delle parentesi angolari e dei valori numerici, quindi sostanzialmente avrà questa forma:
 \begin{equation}
     id = id + id * num
 \end{equation}
@@ -54,7 +57,7 @@ Per svolgere il loro compito, gli analizzatori lessicali utilizzano automi a sta
 In qualsiasi caso, i tipi di linguaggi che gli analizzatori lessicali vanno ad approcciare sono tutti linguaggi regolari, derivati quindi da grammatiche regolari.
 
 Di questa fase, durante il nostro percorso, abbiamo visto tutti i passaggi: abbiamo ricavato l'automa per l'analisi lessicale da una determinata grammatica, poi abbiamo visto come minimizzare tale automa ed infine il suo utilizzo per riconoscere un linguaggio regolare.
-Ora possiamo quindi passare in input all'analizzatore sintattico la lista di token che abbiamo ricavato e gustarci il prossimo flashback (*vietnam intensify*). 
+Ora possiamo quindi passare in input all'analizzatore sintattico la lista di token che abbiamo ricavato e gustarci il prossimo flashback (*vietnam intensifies*). 
 
 \section{Analisi sintattica}
 Nella fase di analisi sintattica vogliamo innanzitutto capire se la lista di token in ingresso aderisce alle regole della grammatica; da tale lista si ottiene, nel caso la stringa sia corretta, un albero di derivazione (o un albero di sintassi astratta, se sei proprio uno skillato).
@@ -69,7 +72,7 @@ Relativamente all'analisi sintattica abbiamo studiato ed utilizzato le due famig
 È da sottolineare però, che esistono parser adatti all'analisi di una qualsiasi grammatica libera, tuttavia questi hanno complessità minima \(n^3\) (con \(n\) lungehezza dell'input) e questo li esclude dalla nostra wishlist.
 Non dimentichiamoci però che, concentrandoci principalmente sulle grammatiche regolari, i parser che abbiamo esaminato in questo corso riescono a ricavare un albero di derivazione con complessità \emph{LINEAREH}.
 
-Le, ormai ben note, due tipologie principali di parsing, sono:
+Le due, ormai ben note, tipologie principali di parsing, sono:
 \begin{itemize}
     \item parsing top-down;
     \item parsing bottom-up.
@@ -103,7 +106,7 @@ Mentre eseguiamo l'algoritmo andiamo ad analizzare la lista di token in input: c
 
 Se non vi sono entry multiple defined possiamo terminare l'agloritmo con successo ed ottenere alla fine il parsing tree che tanto desideriamo.
 
-Le 3 grammatiche viste per il parsing bottom-up, si differenziano per la precisione con cui una determinata produzione viene inserita in una casella della tabella di parsing (oon lo scopo di eseguire una mossa si reduce).
+Le 3 grammatiche viste per il parsing bottom-up, si differenziano per la precisione con cui si decide in quali caselle della tabella di parsing va inserita una determinata riduzione.
 
 La differenza tra un tipo di grammatica e l'altro è la seguente: 
 \begin{itemize}
@@ -151,7 +154,7 @@ Si può osservare l'utilizzo di questa strategia applicata al nostro esempio: ri
     t3 &= id2 + t2 \\
     id1 &= t3 \\
 \end{align*}
-Una cosa a cui prestare attenzione è il fatto che gli identificatori \texttt{id1}, \texttt{id2} e \texttt{id3} sono riferimenti alle istanze locali degli identificatori: ciò vuol dire che si entra già nel territorio per cui si necessita di un meccanismo di \emph{scope}, ma di questo parleremo in seguito.
+Una cosa a cui prestare attenzione è il fatto che gli identificatori \texttt{id1}, \texttt{id2} e \texttt{id3} sono riferimenti alle istanze locali degli identificatori: ciò vuol dire che si entra già nel territorio in cui si necessita di un meccanismo di \emph{scope}, ma di questo parleremo in seguito.
 
 A questo punto si passa all'ottimizzazione del codice intermedio, fase che ha le sue basi teoriche in solidissime e sofisticate prove matematiche.
 
@@ -174,16 +177,16 @@ Nota anche che nelle fasi successive tutte le variabili dovranno essere inserite
 A valle dell'ottimizzatore del codice intermedio abbiamo la generazione del codice target.
 
 \section{Generazione del codice target}
-A questo punto possiamo finalmente tradurre il codice intermedio in codice target. Riportimo in seguito quello che otteniamo a seguito di questa fase dal nostro esempio.
+A questo punto possiamo finalmente tradurre il codice intermedio in codice target. Riportiamo in seguito quello che otteniamo a seguito di questa fase dal nostro esempio.
 \begin{figure}[H]
     \centering
     \includegraphics[width=.6\textwidth]{final-example-target-code.png}
     \caption{Generazione codice target da codice intermedio ottimizzato}
     \label{fig:final-example-target-code}
 \end{figure}
-Spiegamo qualche dettaglio: il suffisso \texttt{F} sta per \texttt{float} per sottolineare che tutte le operazioni coinvolgono dei float e, per questo motivo, è necessario ad esempio trattarli in maniera distinta dagli int. Possiamo osservare che nella prima riga viene caricato il contenuto di \texttt{id3} come float nel registro \texttt{R2}, poi avviene una moltiplicazione tra float che coinvolge \texttt{R2} e \(60\); segue un'operazione di \texttt{load} di un altro float e così via.
+Spiegamo qualche dettaglio: il suffisso \texttt{F} sta per float per sottolineare che tutte le operazioni coinvolgono dei float e, per questo motivo, è necessario ad esempio trattarli in maniera distinta dagli int. Possiamo osservare che nella prima riga viene caricato il contenuto di \texttt{id3} come float nel registro \texttt{R2}, poi avviene una moltiplicazione tra float che coinvolge \texttt{R2} e \(60\); segue un'operazione di \texttt{load} di un altro float e così via.
 
-L'ultima nota che aggiungiamo riguardo a questa fase è che, come già accennato precedentemente, anche qui intevengono meccanismi di ottimizzazione, in questo caso strettamente legati al codice macchina (e quindi alla macchina target).
+L'ultima nota che aggiungiamo riguardo a questa fase è che, come già accennato precedentemente, anche qui intervengono meccanismi di ottimizzazione, in questo caso strettamente legati al codice macchina (e quindi alla macchina target).
 
 \section{Approfondimento sulla tabella dei simboli}
 Le tabelle dei simboli vengono utilizzate fin dell'analisi lessicale e vengono mantenute per l'intera durata del processo; si capisce bene che sono le strutture principali in un compilatore, seconde solo agli alberi di parsing.
@@ -201,7 +204,7 @@ I dizionari possono essere ottenuti sia con l'utilizzo di liste che con alberi d
 In questo caso si ha il canonico array bucket, da cui è possibile accedere ad una lista di elementi che contengono tutte le entry (gli elementi della tabella dei simboli) per cui la funzione di hash restituisce lo stesso risultato.
 
 \paragraph{Funzione di hash} Com'è strutturata solitamente una funzione di hash per la tabella dei simboli di un compilatore?
-Questa si occupa di trasformare ogni carattere in un intero non negativo, tipicamente sfruttando funzioni built-in, a cui applica ulteriori operazioni per poi arrivare all'hash.
+Questa funzione si occupa di trasformare ogni carattere in un intero non negativo, tipicamente sfruttando funzioni built-in, a cui applica ulteriori operazioni per poi arrivare all'hash.
 
 Come si può definire una funzione di hash adeguata?
 Conoscendo il dominio di applicazione. Ad esempio, nel nostro caso si può notare che spesso nella scrittura dei programmi, il programmatore va a dare nomi molto similli alle variabili: questo significa che utilizzare il suffiso degli identificatori non è una buona idea perchè porterebbe a diverse collisioni.
@@ -217,14 +220,14 @@ Utilizzando funzioni hash di questo tipo si possono evitare con buona probabilil
 Le dichiarazioni di fatto possono essere di due tipi: locali o globali.
 Va quindi capito, nel caso vi siano più dichiarazioni di una variabile, a quale scope si riferiscano le sue occorrenze nel codice.
 Può essere utile immaginare un AST che rappresenta un certo programma in cui lo stesso nome è utilizzato sia per una variabile globale che per una variabile locale di una subroutine.
-In questo ast la variabile locale sarà in un sottoalbero dell'albero in cui è dichiarata la variabile globale; le dichiarazioni locali sono comprese in sottoalberi dell'AST.
+In questo AST la variabile locale sarà in un sottoalbero dell'albero in cui è dichiarata la variabile globale; le dichiarazioni locali sono comprese in sottoalberi dell'AST.
 
 Come si va a gestire la tabella dei simboli per rispettare lo scope delle dichiarazioni?
 \noindent
 Esistono due principali soluzioni per gestire queste dichiarazioni annidate:
 \begin{itemize}
     \item si usa un'unica symbol table e, nella lista a cui si accede dal bucket, si va a prendere il primo elemento con lo stesso nome di quello della variabile. In questo modo si è sicuri di ottenere la variabile con scope più vicino all'occorrenza che si sta analizzando, perché la entry che è stata inserita per ultima sarà la prima della lista del bucket; adottando questa strategia però si deve anche implementare un meccanismo di rimozione delle variabili di uno scope quando si esce da quest'ultimo;
-    \item creiamo una tabella dei simboli diverse per scope, in questo modo quando usciamo da uno scope ci basta cancellare il puntatore alla tabella dei simboli associata.
+    \item creiamo una tabella dei simboli diversa per ogni scope, in questo modo quando usciamo da uno scope ci basta cancellare il puntatore alla tabella dei simboli associata.
 \end{itemize}
 
 \section{Note finali per progetti futuri}
@@ -242,8 +245,22 @@ In alcuni casi i tool di cui sopra accettano come input anche delle funzioni di 
 \\\\
 Cosa significa tutto questo?
 
-Se abbiamo un generatore di analizzatore sintattico ed un'implementazione di symbol table riusciamo a generare il nostro front-end del compilatore, poi siccome l'intermediate code può essere un qualsiasi linguaggio (spesso anche C) possiamo ottenere un compilatore in pochi semplici passi.
+Mettiamo caso che ci inventiamo un linguaggio tutto nostro: se abbiamo un generatore di analizzatore sintattico ed un'implementazione di symbol table riusciamo a generare il nostro front-end del compilatore; poi siccome l'intermediate code può essere un qualsiasi linguaggio, possiamo scegliere il C come intermediate code e sfruttare il tool gcc come back-end del compilatore.
+Ecco spiegato come ottenere un compilatore tutto per noi in pochi semplici passi.
 
-Alla fine quello che serve sono un generatore di analizzatori sintattici, una symbol table e due pezzi di pane del giorno prima.
+Alla fine quello che serve sono un generatore di analizzatori sintattici, una symbol table e \dots
+
+
+\dots
+
+
+\dots
+
+
+bzz zzz
+
+\dots
+
+scusate, ci sono interferenze con zoom, ci sentiamo domani, 4rriz00m4rci 
 
 \end{document}
