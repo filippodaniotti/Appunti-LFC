@@ -1,0 +1,25 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+
+\newcommand{\equal}{=} % the = is a protected symbol in forest
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{forest}
+        [\(\equal\),delay={for tree={content=\texttt{#1}}}
+            [\(x\)]
+            [\(\ast\)
+                [\(+\)
+                    [\(a\)]
+                    [\(b\)]
+                ]
+                [\(c\)]
+            ]
+        ]
+    \end{forest}
+\end{document}
