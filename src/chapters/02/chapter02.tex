@@ -248,7 +248,7 @@ Ora abbiamo visto questo processo, sappi che la prof.ssa Quaglia preferisce 14 a
 \subsubsection*{Dangling Else}
 Introduciamo una nuova forma di grammatica
 \begin{equation}
-    S \to \; if \; b \; then \; S |\; if\; B\; then\; S\; else\; S |\; other
+    S \to \; if \; b \; then \; S \mid if\; B\; then\; S\; else\; S \mid other
 \end{equation}
 La domanda che ci poniamo a questo punto è: si tratta di una grammatica ambigua? Prendiamo ad esempio questa parola:
 \begin{equation}
@@ -256,27 +256,17 @@ La domanda che ci poniamo a questo punto è: si tratta di una grammatica ambigua
     w =\; if\; b\; then\; if\; b\; then\; other\; else\; other
 \end{equation}
 Con quale \(then\) è accoppiato l’\(else\)? Non si può sapere! Di fatto possiamo ricostruire \(w\) con questi due diversi alberi:
-% \begin{figure}
-% 	\centering
-%     \includegraphics[width=.7\textwidth,keepaspectratio]{dangling_else_1.jpg}
-%     \caption{Primo albero di derivazione per Eq. \ref{dangling_else}}
-%     \label{fig:dangling_else_1}
-% \end{figure}
-% \begin{figure}
-% 	\centering
-%     \includegraphics[width=.7\textwidth,keepaspectratio]{dangling_else_2.jpg}
-%     \caption{Secondo albero di derivazione per Eq. \ref{dangling_else}}
-%     \label{fig:dangling_else_2}
-% \end{figure}
 \begin{figure}[H]
     \begin{minipage}{.5\textwidth}
         \centering
-		\subimport{assets/figures/}{dangling_else_1.tex}
+        \includegraphics[width=.9\textwidth,keepaspectratio]{dangling_else_1.jpg}
+		% \subimport{assets/figures/}{dangling_else_1.tex}
 	\end{minipage}
 	% \hfill
 	\begin{minipage}{.5\textwidth}
         \centering
-		\subimport{assets/figures/}{dangling_else_2.tex}
+        \includegraphics[width=.9\textwidth,keepaspectratio]{dangling_else_2.jpg}
+		% \subimport{assets/figures/}{dangling_else_2.tex}
     \end{minipage}
     \caption{Due possibili alberi di derivazione per \(w\), entrambi corretti}
     \label{fig:dangling_else}
