@@ -257,8 +257,8 @@ Festa! Festa! non ci sono più conflitti!
 \section{Costruzione di una tabella di parsing LR(1)}
 Chi avesse seguito con sufficiente costanza e attenzione a questo punto dovrebbe sapere che non ci sarà alcuna nuova informazione in questa sezione, perché la procedura di costruzione della tabella di parsing è la medesima per tutte le tipologie di parsing bottom-up. Di conseguenza, se qualcuno avesse bisogno di una rinfrescata, suggeriamo di tornare al capitolo precedente prima di proseguire; per tutti gli altri, rimbocchiamoci le maniche e andiamo a mettere le mani in pasta su queste tabelle di parsing.  
 
-\subsection*{Esercizio 1}
-La prima grammatica che andiamo ad analizzare è la seguente:
+\subsection{La grammatica dei puntatori}
+La grammatica che scegliamo come esempio è questa:
 \begin{align}
     \label{gr:pointers-grammar}
     S &\to L = R \mid R \\
@@ -267,20 +267,191 @@ La prima grammatica che andiamo ad analizzare è la seguente:
 \end{align}
 Questa è una grammatica che ci parla di puntatori, ma capiremo in seguito cosa significa ciò, per ora concentriamoci sulla sua risoluzione. 
 
-\paragraph{Definizione stati e costruzione dell'automa}
-Il primo passo, naturalmente, è la costruzione dell'automa caratteristico. Per fare questo è necessario prima definire come sono fatti gli stati del nostro automa, ossia quali LR(1)-items comprenderanno; per fare questo, sappiamo che abbiamo la nostra fida \(closure_1()\).
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.8\textwidth]{send_help_1.png}
-    \caption{help}
-\end{figure}
-% Descrizione degli stati? Lo stato 7: Il kernel dello stato 7 non presenta possibilità di chiusura, ma conterrà riduzione, passiamo oltre.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.8\textwidth]{send_help_2.png}
-    \caption{help}
-\end{figure}
+\subsubsection{Definizione stati e costruzione dell'automa}
+Il primo passo, naturalmente, è la costruzione dell'automa caratteristico. Per fare questo è necessario prima definire come sono fatti gli stati del nostro automa, ossia quali LR(1)-items comprenderanno; per fare questo, sappiamo che abbiamo la nostra fida \(closure_1()\). Aggiungiamo la produzione canonica \(S' \to S\) e cominciamo.
+
+\paragraph{Stato 0}
+Il kernel dello stato è \(S' \to \cdot S\), a cui andiamo subito ad aggiungere il risultato del calcolo di \(closure_1(S)\). Ricordiamo che il lookahead set \(\Gamma\) si calcola come first(\(\beta\Delta\)); nel caso di \(closure_1(S)\) abbiamo \(\beta = \varepsilon\) e \(\Delta = \{\$\}\).
+\begin{align*}
+    &&Kernel: &&S' &\to \cdot S, \{\$\}& \\
+    &&closure_1(S): &&S &\to \cdot L = R, \{\$\} &\\
+    && &&S &\to \cdot R, \{\$\} &
+\end{align*}
+Abbiamo calcolato la chiusura per \(S\), ma adesso  dobbiamo calcolarla anche per \(L\) e \(R\), dal momento figurano in un qualche item con il marker \(\cdot\) davanti. Per quanto riguarda il calcolo di \(\Gamma\):
+\begin{itemize}
+    \item in \(closure_1(L)\) abbiamo che \(\beta = \{=R\}\) e \(\Delta = \{\$\}\);
+    \item in \(closure_1(R)\) abbiamo che \(\beta = \varepsilon\) e \(\Delta = \{\$\}\);
+\end{itemize}
+\begin{align*}
+    &&closure_1(L): &&L &\to \cdot \ast R, \{=\} &\\
+    && &&L &\to \cdot id, \{=\} &\\
+    &&closure_1(R): &&R &\to \cdot L, \{\$\}&
+\end{align*}
+Non è ancora finita purtroppo, perché trovato un altro item con il marker \(\cdot\) davanti alla \(L\); che facciamo, dobbiamo ricalcolarla? Sì, dobbiamo farlo assolutamente! Nel caso precedente la produzione \(S \to \cdot L = R\) aveva \(\beta = \{=R\}\), mentre in questo caso la produzione è \(R \to L\) e ha \(\beta = \varepsilon\), per cui il lookahead set delle produzioni di \(L\) potrebbe essere diverso in questo secondo caso, e difatti è proprio questo che succede, perché il calcolo della chiusura ci dice questo:
+\begin{align*}
+    L &\to \cdot \ast R, \{\$\} \\
+    L &\to \cdot id, \{\$\}
+\end{align*}
+Quindi lo stato 0 contiene i seguenti items, e presenta queste transizioni:
+\begin{align*}
+    &\textrm{items:} & &\textrm{transizioni:} \\
+    &S' \to \cdot S, \{\$\}  & &\tau(0, S) = 1 \\
+    &S \to \cdot L = R, \{\$\}  & &\tau(0, L) = 2 \\
+    &S \to \cdot R, \{\$\}  & &\tau(0, R) = 3 \\
+    &L \to \cdot \ast R, \{=, \$\}  & &\tau(0, \ast) = 4 \\
+    &L \to \cdot id, \{=, \$\}  & &\tau(0, id) = 5 \\
+    &R \to \cdot L, \{\$\}  & &
+\end{align*}
+
+\paragraph{Stato 1}
+Andiamo adesso ad analizzare lo stato 1, che ha kernel 
+\begin{equation*}
+    S' \to S\cdot, \{\$\}    
+\end{equation*}
+È l'accepting item, non c'è nulla da dire oltre a questo (e soprattutto nulla da calcolare).
+
+\paragraph{Stato 2}
+Lo stato 2 ha questo kernel:
+\begin{align*}
+    S &\to L \cdot = R, \{\$\} \\
+    S &\to L \cdot, \{\$\}
+\end{align*}
+Questo stato è già chiuso, perché nel primo item il marker \(\cdot\) si trova davanti al terminale \(=\), mentre invece il secondo item ci propone la riduzione \([R \to L, \{\$\}]\); inoltre, il primo item ci propone la transizione \(\tau(2, =)\). Notiamo anche che in questo stato abbiamo sia uno shift che una riduzione, teniamolo a mente per dopo.
+
+\paragraph{Stato 3}
+Passiamo allo stato 3, e il kernel ci porta delle belle notizie:
+\begin{equation*}
+    S \to R\cdot, \{\$\}    
+\end{equation*}
+Questo stato è già chiuso e l'unica cosa che ci regala è la mossa di reduce \([S \to R\cdot, \{\$\}]\).
+
+\paragraph{Stato 4}
+Il kernel di questo stato, purtroppo, non è altrettanto lungimirante:
+\begin{equation*}
+    L \to \ast \cdot R, \{=, \$\}
+\end{equation*}
+Siamo infatti costretti a calcolare la chiusura \(closure_1(R)\), che ci porta a inserire l'item \(R \to \cdot L, \{=, \$\}\) allo stato; quest'ultimo, dal canto suo, ci impone di inserire allo stato la chiusura \(closure_1(L)\), dal momento che abbiamo il marker \(\cdot\)davanti al non-terminale \(L\). A fine del processo lo stato appare così:
+\begin{align*}
+    L &\to \ast \cdot R, \{=, \$\} \\
+    R &\to \cdot R, \{=, \$\} \\
+    L &\to \cdot \ast R, \{=, \$\} \\
+    L &\to \cdot id, \{=, \$\} 
+\end{align*}
+Le mosse di shift che troviamo sono invece:
+\begin{gather*}
+    \tau(4, R) \\
+    \tau(4, L) \\
+    \tau(4, \ast) \\
+    \tau(4, id)
+\end{gather*}
+
+\paragraph{Stato 5}
+Abbiamo nuovamente uno stato tranquillo. Il kernel è:
+\begin{equation*}
+    L \to id \cdot, \{=, \$\}
+\end{equation*}
+Questo ci offre la rispettiva riduzione (\([L \to id \cdot, \{=, \$\}]\)), senza alcuna mossa di shift.
+
+\paragraph{Stato 6}
+Questo stato viene calcolato seguendo la transizione \(\tau(2, =)\). Dal momentoche abbiamo il marker \(\cdot\) davanti al non-terminale \(R\), dobbiamo calcolare \(closure_1(R)\), che in omaggio ci porta anche il calcolo di \(closure_1(L)\).
+\begin{align*}
+    &&Kernel: &&S &\to L = \cdot R, \{\$\}& \\
+    &&closure_1(R): &&R &\to \cdot L, \{\$\} &\\
+    &&closure_1(L): &&L &\to \cdot \ast R, \{\$\}&\\
+    && &&L &\to \cdot id,  \{\$\}&
+\end{align*}
+Troviamo anche le seguenti mosse di shift:
+\begin{gather*}
+    \tau(6, R) \\
+    \tau(6, L) \\
+    \tau(6, \ast) \\
+    \tau(6, id)
+\end{gather*}
+
+\paragraph{Stato 7}
+Calcoliamo questo stato grazie allo shift \(\tau(4, R)\). Il kernel:
+\begin{equation*}
+    L \to \ast R \cdot, \{=, \$\}
+\end{equation*}
+Un altro stato tranquillo insomma, che ci offre solamente una riduzione (\([L \to \ast R \cdot, \{=, \$\}]\)) e nulla di più. 
+
+\paragraph{Stato 8}
+Il copione è esattamente lo stesso di quanto visto sopra: calcoliamo questo stato grazie allo shift \(\tau(4, L)\). Il kernel:
+\begin{equation*}
+    R \to L \cdot, \{=, \$\}
+\end{equation*}
+Andiamo avanti lisci, abbiamo la nostra riduzione \([L \to \ast R \cdot, \{=, \$\}]\) e nulla di più.
+
+\paragraph{Stato 9}
+Anche in questo stato abbiammo del lavoro da fare. Ci arriviamo tramite \(\tau(4, \ast)\), e il kernel si presenta così:
+\begin{equation*}
+    L \to \ast \cdot R, \{=, \$\}
+\end{equation*}
+Ma fermi... è esattamente il kernel dello stato 4! Questo vuol dire che troviamo subito una transizione \(\tau(4, \ast) = 4\), il che significa che lo stato 4 ha un self loop per \(\ast\).
+
+\subparagraph*{}
+Proviamo allora a ricavare uno stato 9 dalla transizione \(\tau(4, id)\). Il kernel è questo:
+\begin{equation*}
+    L \to id \cdot, \{=, \$\}
+\end{equation*}
+E niente, è di nuovo un altro kernel che abbiamo già visto nello stato 5, per cui concludiamo che \(\tau(4, id) = 5\).
+
+\subparagraph*{}
+Facciamo un altro tentativo, questa volta con \(\tau(6, R)\). Il kernel è:
+\begin{equation*}
+    S \to L = R \cdot, \{\$\}
+\end{equation*}
+Fatto, finalmente siamo riusciti a creare un nuovo stato con questa transizione \(\tau(6, R) = 9\). Non abbiamo altre chiusure da calcolare, e torniamo a casa con la riduzione \([S \to L = R \cdot, \{\$\}]\).
+
+\paragraph{Stato 10}
+Adesso seguiamo la transizione \(\tau(6, L)\). Il kernel è:
+\begin{equation*}
+    R \to L \cdot, \{\$\}
+\end{equation*}
+È vero, abbiamo già uno stato con questo kernel (lo stato 8), ma in quel caso il lookahead set è diverso, per cui creiamo ugualmente un nuovo stato. Abbiamo una mossa di shift \(\tau(6, L) = 10\) e la riduzione data dal kernel \([R \to L \cdot, \{\$\}]\).
+
+\paragraph{Stato 11}
+La situazione è molto simile a quella descritta sopra. Seguendo la transizione \(\tau(6, \ast)\) troviamo:
+\begin{equation*}
+    L \to \ast \cdot R, \{\$\}
+\end{equation*}
+Questo è lo stesso kernel dello stato 9, ma per via del differente lookahead set creiamo comunque un nuovo stato (\(\tau(6, \ast) = 11\)). Dobbiamo anche calcolare \(closure_1(R)\) che, anche quessta volta, forza il calcolo di \(closure_1(L)\); lo stato sarà infine composto di questi items:
+\begin{align*}
+    &&Kernel: &&L &\to \ast \cdot R, \{\$\}& \\
+    &&closure_1(R): &&R &\to \cdot L, \{\$\} &\\
+    &&closure_1(L): &&L &\to \cdot \ast R, \{\$\}&\\
+    && &&L &\to \cdot id,  \{\$\}&
+\end{align*}
+Notiamo che, con l'eccezione dell'ultimo, tutti gli item sono stati già visitati, e già sappiamo dove portano (\(R \to \cdot L, \{\$\}\) a \(\tau(11, 2) = 10\) e \(L \to \cdot \ast R, \{\$\}\) a \(\tau(11, \ast) = 11\), self loop), per cui ci risparmiamo di analizzare in futuro quelle mosse di shift. Ci sentiamo anche di anticipare che pure l'ultima transizione, \(\tau(11, id)\), non porterà a un nuovo stato, poiché risulterà essere un collegamento allo stato 12 (\(\tau(11, id) = 12\)).
+
+\paragraph{Stato 12}
+Uh, per fortuna questo stato è tranquillo. Stiamo infatti analizzando la transizione \(\tau 11, R\) e il kernel è:
+\begin{equation*}
+    L \to id \cdot, \{\$\}
+\end{equation*}
+E, come ormai sappiamo, ci propone solamente la rispettiva mossa di riduzione.
+
+\paragraph{Stato 13}
+Dulcis in fundo, analizziamo la transizione \(\tau(11, R)\). Il kernel è:
+\begin{equation*}
+    L \to \ast R \cdot , \{\$\}
+\end{equation*}
+Lo stato 7 ha lo stesso kernel LR(0), ma ancora, il lookahead set è diverso, per cui creiamo comunque un nuovo stato \(\tau(11, R) = 13\). Nessuna nuova transizione, solamente la riduzione proposta dal kernel.
+
+Rimarrebbe da analizzare \(\tau(11, id)\) ma, come già anticipato, conduce allo stato 12, per cui non c'è bisogno di aggiungere un quattordicesimo stato al nostro automa.
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.8\textwidth]{send_help_1.png}
+%     \caption{help}
+% \end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.8\textwidth]{send_help_2.png}
+%     \caption{help}
+% \end{figure}
 % Per tutti gli stati 8,9 e 10 non ci sono chiusure ma si presentano riduzioni. Nello stato 11 il kernel permette di cercare una chiusura per R, la chiusura per R ci porta a R -> .L, {\$} che ci permette un'ulteriore chiusura, con conseguente inserimento di L->.*R,{\$} e L->.id,{\$}. Passiamo allo stato 12 ha un kernel che potrebbe sembrare uguale allo stato 5, ma il lookahead set è diverso… quindi lo stato 12 è diverso dal 5 Aggiungiamo anche lo stato 13 per rappresentare la transizione \(\tau(11,R)\) ecc. ecc. Nota che la Quaglia non ha riportato tutti gli stati ed i relativi items. Questo è l'automa che ricaviamo:
+\paragraph{Costruzione dell'automa}
 Ora che abbiamo gli stati non c'è più nulla di diverso rispetto a quello che facevamo prima, per cui possiamo terminare con la costruzione dell'automa caratteristico. Quest'ultimo (Fig.\ref{fig:pointers-automaton}) è alquanto complicato e pare una strana mappa del tesoro, ma ce l'aspettavamo: abbiamo già sottolineato come e perché gli automi LR(1) sono più complessi di un corrispondente SLR(1).
 \begin{figure}[H]
     \centering
