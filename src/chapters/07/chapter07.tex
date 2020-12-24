@@ -704,7 +704,7 @@ Ne abbiamo un ulteriore conferma se andiamo a calcolare i first/follow per \(E\)
 \paragraph{Conclusione}
 Nota bene: non dobbiamo cadere nell'errore di supporre che, magari, la nostra procedura funzioni a meno che non sia lanciata su grammatiche ambigue, perché non ne abbiamo fornito alcuna prova. Da questo  esempio possiamo solamente concludere, a malincuore, che la procedura di eliminazione della ricorsione sinistra \emph{non garantisce} di ottenere delle grammatiche \(LL(1)\).
 
-\subsection{Eliminare della ricorsione sinistra elimina l'ambiguità?}
+\subsection{Eliminare la ricorsione sinistra elimina l'ambiguità?}
 Possiamo però chiederci: la grammatica \(\mathcal{G'}\) che abbiamo ottenuto è ancora ambigua, oppure applicando la nostra procedura ne abbiamo eliminato l'ambiguità? Ricordiamo che l'ambiguità della grammatica di partenza risiedeva nell'impossibilità di esprimere l'associatività degli operatori e la precedenza dell'uno sull'altro \footnote{Si riveda a ~\ref{sec:ambguity} in caso servisse un ripasso.}. 
 
 Sfortunatamente, riusciamo a trovare senza troppi problemi due derivazioni rightmost che ci portano a ottenere la medesima stringa \(id + id * id\):
