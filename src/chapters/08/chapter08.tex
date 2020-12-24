@@ -606,12 +606,12 @@ Quindi, partendo dalla grammatica Eq.\ref{eq:ex2-sh/re-grammar} siamo riusciti a
     2: E &\to id & 5: E &\to E + E \cdot & 6: E &\to E * E \cdot
 \end{align*}
 Tutto questo è fantastico, ma purtroppo c'è un grosso elefante nella nostra stanza. L'intrinseca ambiguità di Eq.\ref{eq:ex2-sh/re-grammar} ha un effetto collaterale piuttosto sgradevole: la sua tabella di parsing SLR(1) avrà dei conflitti, come possiamo ben vedere in Tab.\ref{tab:ex2-sh/re-table}.
-\begin{figure}[H]
-    \center
-    \includegraphics[width=.6\textwidth]{ex2-sh_re-table.png}
-    \caption{tabella di parsing SLR(1) per la grammatica \ref{eq:ex2-sh/re-grammar}}
-    % \label{tab:ex2-sh/re-table}
-\end{figure}
+% \begin{figure}[H]
+%     \center
+%     \includegraphics[width=.6\textwidth]{ex2-sh_re-table.png}
+%     \caption{tabella di parsing SLR(1) per la grammatica \ref{eq:ex2-sh/re-grammar}}
+%     % \label{tab:ex2-sh/re-table}
+% \end{figure}
 \begin{table}[H]
     \centering
     \subimport{assets/tables/}{ex2-sh/re-table.tex}

@@ -256,17 +256,30 @@ La domanda che ci poniamo a questo punto è: si tratta di una grammatica ambigua
     w =\; if\; b\; then\; if\; b\; then\; other\; else\; other
 \end{equation}
 Con quale \(then\) è accoppiato l’\(else\)? Non si può sapere! Di fatto possiamo ricostruire \(w\) con questi due diversi alberi:
-\begin{figure}
-	\centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{dangling_else_1.jpg}
-    \caption{Primo albero di derivazione per Eq. \ref{dangling_else}}
-    \label{dangling_else_1}
-\end{figure}
-\begin{figure}
-	\centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{dangling_else_2.jpg}
-    \caption{Secondo albero di derivazione per Eq. \ref{dangling_else}}
-    \label{dangling_else_2}
+% \begin{figure}
+% 	\centering
+%     \includegraphics[width=.7\textwidth,keepaspectratio]{dangling_else_1.jpg}
+%     \caption{Primo albero di derivazione per Eq. \ref{dangling_else}}
+%     \label{fig:dangling_else_1}
+% \end{figure}
+% \begin{figure}
+% 	\centering
+%     \includegraphics[width=.7\textwidth,keepaspectratio]{dangling_else_2.jpg}
+%     \caption{Secondo albero di derivazione per Eq. \ref{dangling_else}}
+%     \label{fig:dangling_else_2}
+% \end{figure}
+\begin{figure}[H]
+    \begin{minipage}{.5\textwidth}
+        \centering
+		\subimport{assets/figures/}{dangling_else_1.tex}
+	\end{minipage}
+	% \hfill
+	\begin{minipage}{.5\textwidth}
+        \centering
+		\subimport{assets/figures/}{dangling_else_2.tex}
+    \end{minipage}
+    \caption{Due possibili alberi di derivazione per \(w\), entrambi corretti}
+    \label{fig:dangling_else}
 \end{figure}
 Questo ci introduce il problema di come trattare la gestione del comando \(if \; then \; else\) in un linguaggio di programmazione.
 Per questo nei vari linguaggi troviamo sempre qualche forma di strategia per risolvere questo problema:

@@ -1,0 +1,29 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+\usepackage{../../../../style_tree}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{forest}
+        % derivation tree
+        [S
+            [if]
+            [b]
+            [then]
+            [S
+                [if]
+                [b]
+                [then]
+                [other]
+            ]
+            [else]
+            [other]
+        ]
+    \end{forest}
+\end{document}
+

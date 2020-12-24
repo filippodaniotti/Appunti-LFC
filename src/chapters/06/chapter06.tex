@@ -124,8 +124,8 @@ Quindi questi lessemi, essendo descritti da delle espressioni regolari, possono 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{lec-14-1}
-    \caption{}
-    % \label{dfa-b_odd-and-a_even}
+    \caption{Automa chericonosce la classe \texttt{relop}}
+    \label{automaton-relop}
 \end{figure}
 È molto semplice intuire graficamente che ciascun percorso che termini in uno stato finale ritorna un token, sotto forma di coppia, in cui il \texttt{token-name} è appunto quello della classe \texttt{relop}, mentre il \texttt{token-value} indica qual è l'elemento della classe da ritornare.
 
@@ -141,7 +141,7 @@ Sappiamo anche che, avendo delle espressioni regolari, per ciascuna di queste po
 Da notare che nel caso d'uso del compilatore ci sono delle azioni associate agli stati finali (se l'analizzatore legge un assegnamento compie, appunto, le azioni per registrare l'assegnamento).
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.4\textwidth,keepaspectratio]{lec-14-2}
+    \includegraphics[width=.4\textwidth,keepaspectratio]{lec-14-2.png}
     \caption{}
     \label{nfa_for_grammar_regular_expressions}
 \end{figure}
