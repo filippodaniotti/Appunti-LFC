@@ -134,14 +134,14 @@ Ecco un esempio esplicativo:
 Ecco presentati in veloce sequenza una serie di semplici esercizi sulle operazioni con grammatiche regolari. 
 
 \begin{itemize}
-    \item \(\mathcal{L}(a \mid b) = \{a, b\}\)
-    \item \(\mathcal{L}((a \mid b) (a \mid b)) = \{aa, ab, ba, bb\}\)
-    \item \(\mathcal{L}(a^*) = \{a^n \mid n \ge 0\}\)
-    \item \(\mathcal{L}(a \mid a^\ast b) = \{a\} \cup \{a^n b \mid n \ge 0\}\)
-    \item \( (a \mid b \mid \ldots \mid z)(a \mid b \mid \ldots \mid z)^\ast \) denota l’insieme di tutte le parole dell’alfabeto
-    \item \( (0 \mid 1)^\ast 0\) denota l’insieme di tutti i numeri binari pari
-    \item \( b^\ast (abb^\ast )^\ast ( a \mid \varepsilon ) \) denota l’insieme delle parole su \(\{a,b\} \), senza alcuna occorenza consecutiva di \(a\)
-    \item \( (a \mid b)^\ast aa(a \mid b)^\ast \) denota l’insieme delle parole su \( \{a,b\} \) in cui ci sono sicuramente delle occorrenze consecutive di \(a\) (date da \(aa\) in posizione centrale)
+    \item \(\mathcal{L}(a \mid b) = \{a, b\}\);
+    \item \(\mathcal{L}((a \mid b) (a \mid b)) = \{aa, ab, ba, bb\}\);
+    \item \(\mathcal{L}(a^*) = \{a^n \mid n \ge 0\}\);
+    \item \(\mathcal{L}(a \mid a^\ast b) = \{a\} \cup \{a^n b \mid n \ge 0\}\);
+    \item \( (a \mid b \mid \ldots \mid z)(a \mid b \mid \ldots \mid z)^\ast \) denota l’insieme di tutte le parole generabili con l'alfabeto;
+    \item \( (0 \mid 1)^\ast 0\) denota l’insieme di tutti i numeri binari pari;
+    \item \( b^\ast (abb^\ast )^\ast ( a \mid \varepsilon ) \) denota l’insieme delle parole su \(\{a,b\} \), senza alcuna occorenza consecutiva di \(a\);
+    \item \( (a \mid b)^\ast aa(a \mid b)^\ast \) denota l’insieme delle parole su \( \{a,b\} \) in cui ci sono sicuramente delle occorrenze consecutive di \(a\) (date da \(aa\) in posizione centrale).
 \end{itemize}
 
 \section{Automa a stati finiti}
@@ -162,7 +162,7 @@ in cui:
     \item \(\mathcal{A}\) è un alfabeto con \(\varepsilon \notin \mathcal{A}\);
     \item \(s_0 \in S\) è lo stato iniziale;
     \item \(F \subseteq S\) è l’insieme degli stati finali o accettati;
-    \item \(\textrm{move}_n : S \times (\mathcal{A} \cup \{\varepsilon\}) \to 2^S\) è la funzione di transizione: da un certo stato e con un certo simbolo (che può essere anche \(\varepsilon\)), mi muovo in un certo stato compreso nei sottoinsiemi di \(S\).
+    \item \(\textrm{move}_n : S \times (\mathcal{A} \cup \{\varepsilon\}) \to 2^S\) è la funzione di transizione: da un certo stato e con un certo simbolo (che può essere anche \(\varepsilon\)), mi muovo in un certo sottoinsieme di stati compreso nei sottoinsiemi di \(S\).
 \end{itemize}
 
 \subsection{Rappresentazione grafica}
@@ -214,7 +214,7 @@ Ricorda queste regole di scrittura:
 \end{itemize}
 
 Il linguaggio accettato dall’automa è l’insieme di tutte le parole accettate dall’automa.
-Risolviamo, ad esempio, il linguaggio generato dall’automa descritto in figura \ref{nfa_grafo_2}:
+Ricaviamo, ad esempio, il linguaggio generato dall’automa descritto in figura \ref{nfa_grafo_2}:
 \begin{itemize}
     \item \(a\) non appartiene al linguaggio, non esiste un percorso che mi porti ad uno stato finale attraversando un solo arco \(a\);
     \item allo stesso modo non posso trovare la parola \(b\) nel linguaggio;
@@ -239,7 +239,6 @@ La costruzione di Thompson è una procedura algoritmica che permette di costruir
 
 \subsection{Definizione}
 Anche questa costruzione è espressa in modo induttivo.
-
 \begin{labeling}{Step}
     \item[Base] L'espressione regolare \(r\) è o \(\varepsilon\), oppure un simbolo dell’alfabeto \(a \in \mathcal{A}\); assumiamo di avere sempre un NFA che riconosce \(\mathcal{L}(\varepsilon)\) e uno che riconosce \(\mathcal{L}(a) \; \forall a \in \mathcal{A}\).
     \item[Step] L'espressione regolare \(r\) è una tra le seguenti opzioni: 
@@ -249,11 +248,9 @@ Anche questa costruzione è espressa in modo induttivo.
         \item \( r_1\) \(^\ast \);
         \item \((r_1)\);
     \end{itemize}
-    e, dati gli NFA \(\mathcal{N}_1\) e \(\mathcal{N}_2\) tali che \(\mathcal{L}(\mathcal{N}_1)=\mathcal{L}(r_1)\) e \(\mathcal{L}(\mathcal{N}_2) = \mathcal{L}(r_2)\), dobbiamo definire i vari NFA per le quattro operazioni \(r_1 \mid r_2\), \(r_1 r_2\), \(r_1\) \(^\ast\) ed \(r_1\). Le regole per definire questi nuovi NFA sono elencate successivamente.
+    Dati gli NFA \(\mathcal{N}_1\) e \(\mathcal{N}_2\) tali che \(\mathcal{L}(\mathcal{N}_1)=\mathcal{L}(r_1)\) e \(\mathcal{L}(\mathcal{N}_2) = \mathcal{L}(r_2)\), dobbiamo definire i vari NFA per le quattro operazioni \(r_1 \mid r_2\), \(r_1 r_2\), \(r_1\) \(^\ast\) ed \(r_1\). Le regole per definire questi nuovi NFA sono elencate successivamente.
 \end{labeling}
-
 \noindent A questo punto possiamo fare due osservazioni sulla costruzione di Thompson.
-
 \begin{enumerate}
     \item Ogni passo della costruzione introduce al massimo due nuovi stati, vale a dire che l’NFA generato contiene al massimo \(2k\) stati, dove \(k\) è il numero di simboli e operatori nell’espressione regolare.
     \item In ogni stato intermedio dell’NFA c’è esattamente uno stato finale, e inoltre lo stato iniziale non ha nessun arco entrante e lo stato finale non ha alcun arco uscente. 
@@ -282,11 +279,11 @@ Supponiamo di avere \(\mathcal{N}(r_1)\) e \(\mathcal{N}(r_2)\) descritti come i
 \subsubsection{Alternanza}
 Guardiamo il primo caso, l'operazione di addizione \(r = r_1 \mid r_2\).\\
 Vogliamo creare un automa che accetta parole di \(\mathcal{L}(r_1)\) o anche parole di \(\mathcal{L}(r_2)\).
-Abbiamo i due \(\mathcal{N}\), che rappresentano gli stati intermedi; li posizioniamo uno sopra all’altro. Ora possiamo creare uno stato vuoto e usarlo come stato iniziale per entrambi gli \(\mathcal{N}\), e quindi collegarlo a questi ultimi tramite una \(\varepsilon\)-trasformazione; allo stesso modo possiamo creare uno stato finale raggiungibile dai due \(\mathcal{N}\) tramite una \(\varepsilon\)-trasformazione.
+Abbiamo i due \(\mathcal{N}\), che rappresentano gli stati intermedi; li posizioniamo uno sopra all’altro. Ora possiamo creare uno stato vuoto e usarlo come stato iniziale per entrambi gli \(\mathcal{N}\), e quindi collegarlo a questi ultimi tramite una \(\varepsilon\)-transizione; allo stesso modo possiamo creare uno stato finale raggiungibile dai due \(\mathcal{N}\) tramite una \(\varepsilon\)-transizione.
 
 \subsubsection{Concatenazione}
 Guardiamo ora l’operazione di concatenazione \(r = r_1 r_2\).\\
-Per la nostra ipotesi induttiva, sappiamo di poter far affidamento sui due automi \(\mathcal{N}(r_1)\) ed \(\mathcal{N}(r_2)\); in questo momento ci viene in aiuto quella proprietà della costruzione che dice che i passi intermedi (i due \(\mathcal{N}\)) hanno esattamente uno stato finale ed uno stato iniziale, senza alcun arco entranto nello stato iniziale e nessun arco uscente dagli stati finali. 
+Per la nostra ipotesi induttiva, sappiamo di poter far affidamento sui due automi \(\mathcal{N}(r_1)\) ed \(\mathcal{N}(r_2)\); in questo momento ci viene in aiuto quella proprietà della costruzione che dice che i passi intermedi (i due \(\mathcal{N}\)) hanno esattamente uno stato finale ed uno stato iniziale, senza alcun arco entrante nello stato iniziale e nessun arco uscente dagli stati finali. 
 In questo modo possiamo far coincidere lo stato iniziale di \(\mathcal{N}(r_2)\) con lo stato finale di \(\mathcal{N}(r_1)\). 
 Di conseguenza, una parola riesce ad arrivare allo stato terminale blu solo se riesce a passare sia da \(\mathcal{N}(r_1)\) che da \(\mathcal{N}(r_2)\).
 
@@ -416,20 +413,16 @@ Definiamo \(\varepsilon\)-chiusura\((T)\) nel seguente modo:
 
 \subsubsection{Calcolo della \(\varepsilon\)-chiusura}
 Per calcolare la \(\varepsilon\)-chiusura di un nodo di un automa useremo queste strutture:
-
 \begin{enumerate}
-    \item Uno stack;
-    \item Un array booleano \texttt{alreadyOn} che ci serve per segnalare se uno stato \(t\) è già sulla pila o meno (la sua dimensione è \(|S|\));
-    \item Un array bidimensionale per ricordare \(\textrm{move}_n\). Ogni entry \((t,x)\) è una lista linkata contenente tutti gli stati che sono raggiungibili con un \(x\)-transizione da \(t\).
+    \item uno stack;
+    \item un array booleano \texttt{alreadyOn} che ci serve per segnalare se uno stato \(t\) è già sulla pila o meno (la sua dimensione è \(|S|\));
+    \item un array bidimensionale per ricordare \(\textrm{move}_n\). Ogni entry \((t,x)\) è una lista linkata contenente tutti gli stati che sono raggiungibili con un \(x\)-transizione da \(t\).
 \end{enumerate}
-
 Ora che sappiamo quali sono le strutture dati che andremo ad utilizzare, studiamo la fase di inizializzazione: 
-
 \begin{itemize}
     \item all’inizio dei tempi non c’è niente sulla pila, poi inseriamo \(t\) e lo segnaliamo su \texttt{alreadyOn};
     \item a questo punto estraiamo dalla cima dello stack, prendiamo il nodo estratto \(e\) e cerchiamo tutti i nodi che da \(e\) si raggiugono tramite un \(\varepsilon\)-arco; inseriamo tutti questi nello stack (se non sono già presenti) e ne segnaliamo l'inserimento settando il loro flag su \texttt{alreadyOn}.
 \end{itemize}
-
 Continuiamo così finché lo stack non si svuota. L'algoritmo appena descritto si può trovare in Alg.\ref{alg:ec-computation}.
 
 % \begin{algorithm}[H]
@@ -438,11 +431,9 @@ Continuiamo così finché lo stack non si svuota. L'algoritmo appena descritto s
 	\subimport{assets/pseudocode/}{ec-computation.tex}
 	% \caption{Esempio di parse tree}
 % \end{algorithm}
-
 Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'algoritmo per la verifica dell'appartenenza di una parola \(w\) al linguaggio riconosciuto da un automa, ovvero l'algoritmo di simulazione (Alg.\ref{alg:nfa-simulation}).
 
 \subimport{assets/pseudocode/}{nfa-simulation.tex}
-
 Dove \texttt{\$} è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \texttt{\$}).
 Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(S_0\) e la aggiungiamo all'insieme \texttt{states}; prendiamo il primo simbolo nella parola tramite \(nextChar()\) e poi entriamo nel ciclo che compone il corpo della procedura.
 
@@ -455,7 +446,7 @@ Se \(\textrm{\texttt{states}} \; \cap \; F \neq \emptyset\), allora significa ch
 Se invece la condizione precedente non è verificata, allora si è avverato uno dei seguenti casi (o anche entrambi): o non esistono percorsi che riconoscono \(w\), o non esistono percorsi che riconoscono \(w\) e terminano in uno stato finale.
 
 \subsection{Esempi di simulazione}
-Applichiamo ora, come esempio, l'algoritmo di simulazione di un NFA dato, verificando se accetta la parola \(w  = ababb\). Lo svolgimento è rappresentato nella tabella \ref{es-sim-1-tbl}.
+Applichiamo ora, come esempio, l'algoritmo di simulazione di un NFA dato (Fig.\ref{es-sim-1}), verificando se accetta la parola \(w  = ababb\). Lo svolgimento è rappresentato in Tab.\ref{es-sim-1-tbl}.
 
 \begin{figure}
     \centering
@@ -518,7 +509,7 @@ Sia \(f: 2^D \to 2^D\) per qualche insieme finito \(D\) e sia inoltre \( f \) mo
 \begin{equation*}
     X \subseteq Y \implies f(X) \subseteq f(Y)
 \end{equation*}
-allora esiste una precisa tecnica, basata su approssimanti successivi, per risolvere l'equazione \(X = f(X)\). Adesso vediamo meglio il teorema cui fa riferimento.
+allora esiste una precisa tecnica, basata su approssimazioni successive, per risolvere l'equazione \(X = f(X)\). Adesso vediamo meglio il teorema cui fa riferimento.
 
 \begin{theorem}
     Sia \(S\) un insieme finito e sia \(f: 2^S \to 2^S\) una funzione monotona; allora \(\exists m \in \mathbb{N}\) tale che esiste un'unica soluzione minima all'equazione \(X = f(X)\), e questa soluzione è \(f^m(\varnothing)\).
@@ -568,7 +559,7 @@ Prima di analizzare il costo della simulazione, dobbiamo analizzare il costo del
 \begin{itemize}
     \item uno stack per contenere gli elementi non ancora incontrati;
     \item un vettore booleano per tenere traccia dei visitati;
-    \item \(\textrm{move}_n\), al solito un vettore bidimensionale di puntatori a liste linkate, ciascuna contenente tutti gli stati raggiungibile a partire da uno stato \(t\) e un simbolo \(x\).
+    \item \(\textrm{move}_n\), al solito un vettore bidimensionale di puntatori a liste linkate, ciascuna contenente tutti gli stati raggiungibili a partire da uno stato \(t\) tramite un simbolo \(x\).
 \end{itemize} 
 In sunto, la procedura si compone dei seguenti quattro passi:
 
@@ -610,16 +601,14 @@ All'interno di ogni \texttt{while}, quindi, abbiamo uno swap degli stack, che co
 Il costo è sicuramente più basso di quello che avrei facendo del backtrack, dal momento che si parla comunque di un modello non deterministico. 
 
 \section{Automa a stati finiti deterministico}
-Possiamo pensare di utilizzare queste strutture per decidere se accettare delle parole e determinare se appartiene a un linguaggio denotate da un'espressione regolare.
-
-Introdunciamoli per differenza rispetto agli NFA. Si tenga a mente la definizione di NFA:
+Non c'è modo migliore di introdurre questi automi se non per differenza rispetto agli NFA. Si tenga a mente la definizione di NFA:
 
 \begin{gather*}
     \mathcal{N} := (S, \mathcal{A}, \textrm{move}_n, S_0, F), \textrm{ dove } \\
     \textrm{move}_n : S \times (\mathcal{A} \cup \{\varepsilon\}) \to 2^S
 \end{gather*}
 
-Si noti la funzione di transizione, che opera con uno stato e un simbolo dell'alfabeto, unito a \(\varepsilon\), e proprio quest'ultima apporta l'elemento di indeterminazione; inoltre, un qualunque nodo di un grafo ha tendenzialmente più archi uscenti identificati dal medesimo simbolo.
+Si noti la funzione di transizione, che prende come input uno stato e un simbolo da \(\mathcal{A} \cup \varepsilon\), dove è la presenza stessa di \(\varepsilon\) a causare indeterminatezza; inoltre, un qualunque nodo di un grafo ha tendenzialmente più archi uscenti identificati dal medesimo simbolo.
 
 Un automa a stati finiti deterministici è invece definito come segue:
 
@@ -658,26 +647,26 @@ Prendiamoci un certo DFA \(\mathcal{D} = (S, \mathcal{A}, \textrm{move}_d, S_0, 
 
 \begin{itemize}
     \item o esiste un cammino, che chiamiamo qui \(w = a_1, \ldots, a_k\), con \(k \ge 1\), che vada dallo stato iniziale \(S_0\) a un qualche stato finale in \(F\);
-    \item oppure vale che \(S_0 \in F \land w = \varepsilon\); per l'appunto, quello in cui lo stato di partenza è uno stato finale è l'unico caso in cui un DFA possiede la parola vuota.
+    \item oppure vale che \(S_0 \in F \cap w = \varepsilon\); per l'appunto, quello in cui lo stato di partenza è uno stato finale è l'unico caso in cui un DFA riconosce la parola vuota.
 \end{itemize}
 
 \subsection{Simulazione di un DFA con transizione totale}
-In questo caso abbiamo la certezza che, per ogni  simbolo che leggiamo, ci sia un qualche arco che lo colleghi a uno stato successivo nel grafo, e questo semplifica di molto la procedura per determinare se una certa parola \(w\) appartenza o meno al linguaggio del nostro DFA.
+In questo caso abbiamo la certezza che, per ogni  simbolo che leggiamo, ci sia un qualche arco che lo colleghi a uno stato nel grafo, e questo semplifica di molto la procedura per determinare se una certa parola \(w\) appartenga o meno al linguaggio del nostro DFA.
 
 Per l'appunto, è sufficiente partire dallo stato iniziale \(S_0\) e seguire il cammino dato dagli elementi di \(w\); se terminiamo in un qualche stato finale in \(F\), allora \(w\) appartiene al linguaggio, altrimenti no; la complessità, pertanto, è \(\mathcal{O}(|w|)\).
 
 \subsection{Simulazione di un DFA con transizione parziale}
 Poiché qui abbiamo una funzione di transizione parziale, dobbiamo considerare la possibilità di arrivare a uno stato in cui non non possiamo più proseguire. 
 
-Iniziamo comunque dallo stato iniziale e, di nuovo, seguiamo il cammino dato dallo spelling della parola \(w = a_1, a_2, \ldots, a_k\); se sto leggendo un qualche simbolo per cui non c'è una transizione "etichettata" da quel simbolo, allora posso direttamente ritornare una risposta negativa; se invece riesco a leggere tutta la parola e a raggiungere uno stato finale, posso rispondere affermativamente.
+Iniziamo comunque dallo stato iniziale e, di nuovo, seguiamo il cammino dato dallo spelling della parola \(w = a_1, a_2, \ldots, a_k\); se stiamo leggendo un qualche simbolo per cui non c'è una transizione "etichettata" da quel simbolo, allora possiamo direttamente ritornare una risposta negativa; se invece riusciamo a leggere tutta la parola e a raggiungere uno stato finale, possiamo dire che \(w\) appartiene al linguaggio.
 
 \subsection{Funzioni di transizioni a confronto}
 Dato un DFA \(\mathcal{D}\) con funzione di transizione parziale, ho un modo per definire un DFA \(\mathcal{D}'\) che abbia funzione di transizione totale e che riconosca esattamente lo stesso linguaggio (\(\mathcal{L(D) = \mathcal{L}(\mathcal{D}')}\))?
 
-Posso farlo con l'uso di un \emph{sink} (anche detto dead state, o in italiano stato trappola). In sostanza vado a creare un nuovo stato che aggiungo subito agli altri stati di \(\mathcal{D}\), e questo stato sarà la destinazione di tutte le transizioni non definite dalla funzione di transizione; infine, per ogni simbolo dell'alfabeto, aggiungo al sink un \emph{self loop} su quel simbolo.
+Sì, posso farlo con l'uso di un \emph{sink} (anche detto dead state, o in italiano stato trappola). In sostanza vado a creare un nuovo stato non finale che aggiungo agli altri stati di \(\mathcal{D}\), e questo stato sarà la destinazione di tutte le transizioni non definite dalla funzione di transizione; infine, per ogni simbolo dell'alfabeto, aggiungo al sink un \emph{self loop} su quel simbolo.
 
 In questo modo, quando vado a trovarmi in quelle situazioni in cui non potevo più proseguire, posso invece proseguire e andare nel sink; in questo modo potrò comunque continuare, esaurire la parola in uno stato non terminale e quindi tornare un risultato coerente al linguaggio considerato.
 
-In generale si preferisce lavorare con DFA con funzione di transizione parziale, e ancora più in generale con automi che abbiamo il minor numero di stati (nodi e archi) possibile; tuttavia, l'algoritmo di minimizzazione (vedremo più avanti), che usiamo per "ridurre al minimo" il suo numero di archi e nodi, non funziona con DFA dotati di funzione di transizione parziale. Il motivo sta nel fatto che questa procedura lavora sulla funzione inversa di \(\textrm{move}_d\), che chiaramente non è definita se la funzione non è totale.
+In generale si preferisce lavorare con DFA con funzione di transizione parziale, e ancora più in generale con automi che abbiano il minor numero di stati (nodi e archi) possibile; tuttavia, l'algoritmo di minimizzazione (vedremo più avanti), che usiamo per "ridurre al minimo" il numero di archi e nodi, non funziona con DFA dotati di funzione di transizione parziale. Il motivo sta nel fatto che questa procedura lavora sulla funzione inversa di \(\textrm{move}_d\), che chiaramente non è definita se la funzione non è totale.
 
 \end{document}

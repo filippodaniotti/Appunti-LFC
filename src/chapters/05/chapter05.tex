@@ -11,7 +11,7 @@
 \chapter[Automi: teoria, esercizi, algoritmi e amenità]{Automi a stati finiti: teoria, esercizi, algoritmi e simili amenità}
 
 \section{Traduzione da NFA a DFA}
-Abbiamo già discusso in passato di come la simulazione su DFA sia più efficiente che su NFA, quindi ora siamo interessati a risolvere questo problema: dato un qualunque NFA some si può ricavare un DFA che riconosca lo stesso linguaggio?
+Abbiamo già discusso in passato di come la simulazione su DFA sia più efficiente che su NFA, quindi ora siamo interessati a risolvere questo problema: dato un qualunque NFA come si può ricavare un DFA che riconosca lo stesso linguaggio?
 
 Un mezzo per raggiungere questo scopo è l’utilizzo di una sorta di meccanismo di \(\varepsilon\)-chiusura permanente (che elimini in modo permanente le \(\varepsilon\)-transizioni), questo meccanismo si chiama Subset Construction.
 
@@ -40,14 +40,18 @@ L'algoritmo ritorna come output un DFA specificato dalla tupla \(\mathcal{D} := 
 Per prima cosa si calcola quello che sarà lo stato iniziale del DFA, ovvero \(T_0\); esso coinciderà, come già detto in precedenza, con la \(\varepsilon\)-chiusura dello stato iniziale dell'NFA \(S_0\). Una volta calcolato questo \(T_0\),  lo si inserisce nell'insieme \(R\) e lo si segna come \texttt{unmarked}.
 
 \paragraph*{Ciclo while}
-Qui inizia il corpo centrale dell'algoritmo: questo ciclo serve per iterare su tutti gli stati che si stanno inserendo mano a mano nell'insieme \(R\) degli stati del DFA. 
+Qui inizia il corpo centrale dell'algoritmo: si va ad iterare su tutti gli stati che si stanno inserendo mano a mano nell'insieme \(R\) degli stati del DFA. 
 
 Di fatto, dentro al ciclo si scorrono tutti gli stati in \(R\) e ci si sofferma sugli stati \(T \in R\) segnati come \texttt{unmarked}. Di volta in volta, quando se ne identifica uno, lo si marca, dimodoché non venga più elaborato in seguito, quindi si procede con le successive istruzioni.
 
 \paragraph*{Foreach interno al ciclo while}
 In questa fase si scorrono tutti gli elementi \(a\) dell'alfabeto \(\mathcal{A}\) e si prosegue quindi in questo modo:
 \begin{itemize}
-    \item si prendono tutti gli stati (snd) raggiungibili dallo stato (sd) \(T\) che soddisfino la seguente condizione \(\cup_{t \in T} \textrm{move}_n(t,a)\), ovvero tutti gli stati in \(S\) raggiungibili tramite una \(a\)-transizione da uno degli stati in \(T\), se ne calcola la \(\varepsilon\)-chiusura e la si salva nella variabile \(T'\);
+    \item si prendono tutti gli stati (snd) raggiungibili dallo stato (sd) \(T\) che soddisfino la seguente condizione:
+    \begin{equation*}
+        \cup_{t \in T} \textrm{move}_n(t,a)
+    \end{equation*}
+    ovvero tutti gli stati in \(S\) raggiungibili tramite una \(a\)-transizione da uno degli stati in \(T\), se ne calcola la \(\varepsilon\)-chiusura e la si salva nella variabile \(T'\);
     \item una volta calcolato \(T'\) si verifica se questo è vuoto, e se lo è si passa alla prossima iterazione del \texttt{foreach};
     \item altrimenti, si aggiunge all'insieme delle transizioni ("deterministiche") \(\textrm{move}_d\) la transizione \(\textrm{move}_d(T, a) = T'\);
     \item infine, se \(T'\) non è già presente in \(R\) allora ve lo si aggiunge e si segna come \texttt{unmarked}.
@@ -77,7 +81,7 @@ Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_1}, calcola
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{subset_constr_1_NFA.tex}
-    \caption{Esercizio 1: NFA}
+    \caption{NFA dato}
     \label{es_sc_1}
 \end{figure}
 
@@ -94,18 +98,18 @@ Poi entro nel vivo del \texttt{while}: estraggo \(T0\) e devo trovare tutti gli 
 
 Adesso devo trovare tutti gli stati raggiungibili da \(T0\) attraverso una \(b\)-transizione. In questo caso ottengo solo lo stato \(5\), e di questo insieme (\(\{5\}\)) calcolo la \(\varepsilon\)-chiusura; questa risulta essere \(\{5\}\). Ho appena trovato \(T2\), lo segno come \texttt{unmarked} e aggiungo la transizione \(\textrm{move}_d(T0, b)=\{T2\}\).
 
-Passo infine ad analizzare lo stato \(T1\). Estraggo \(T1\) da \(R\) e vado a cercare la \(\varepsilon\)-chiusura dei punti di arrivo delle \(a\)-transizioni che partono da \(T1\); trovo che l'unica \(a\)-transizione che, partendo da \(T1\), mi porta allo stato \(3\), e la \(\varepsilon\)-chiusura di \(\{3\}\) mi ritorna esattamente \(T1\). Quindi, quello che sto facendo altro non è che aggiungere la transizione \(\textrm{move}_d(T1, a)=\{T1\}\) al nostro DFA, ma dato che \(T1\) è già marked non lo riaggiungo ad \(R\) e termino qui la mia analisi.
+Passo infine ad analizzare lo stato \(T1\). Estraggo \(T1\) da \(R\) e vado a cercare la \(\varepsilon\)-chiusura dei punti di arrivo delle \(a\)-transizioni che partono da \(T1\); trovo che l'unica \(a\)-transizione che, partendo da \(T1\), mi porta allo stato \(3\), e la \(\varepsilon\)-chiusura di \(\{3\}\) mi ritorna esattamente \(T1\). Quindi, quello che sto facendo altro non è che aggiungere la transizione \(\textrm{move}_d(T1, a)=\{T1\}\) al nostro DFA, ma dato che \(T1\) è già \texttt{marked} non lo riaggiungo ad \(R\) e termino qui la mia analisi.
 
 Passo ora alla \(\varepsilon\)-chiusura dei punti di arrivo delle \(b\)-transizioni. Da \(T1\) non parte nessuna \(b\)-transizione, quindi termino qui l'analisi di \(T1\) e passo a \(T2\).
 Per \(T2\) compio banalmente le stesse azioni che ho svolto per \(T1\), che quindi non sono qui riportate.
 
 Alla fine della fiera, devo trovare quali sono gli stati finali del nostro automa deterministico, quindi faccio le varie intersezioni (come descritto dall'algoritmo) e segno come stati (deterministici) finali tutti quegli stati (deterministici) che contengono almeno uno stato (non deterministico) che sia esso stesso finale nell'NFA.
 
-Una volta terminata questa operazione abbiamo trovato quindi l’automa a stati finiti deterministico che riconosce lo stesso linguaggio dell’NFA di partenza; possiamo vederne una raffigurazione in figura \ref{sol_sc_1}.
+Una volta terminata questa operazione abbiamo trovato quindi l’automa a stati finiti deterministico che riconosce lo stesso linguaggio dell’NFA di partenza; possiamo vederne una rappresentazione in figura \ref{sol_sc_1}.
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{subset_constr_1_DFA.tex}
-    \caption{Esercizio 1: DFA}
+    \caption{DFA ricavato tramite subset construction}
     \label{sol_sc_1}
 \end{figure}
 
@@ -115,7 +119,7 @@ Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_2}, calcola
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{subset_constr_2_NFA.tex}
-    \caption{Esercizio 2: NFA}
+    \caption{NFA dato}
     \label{es_sc_2}
 \end{figure}
 È riportata in seguito la tabella risolutiva per questo esercizio.\\
@@ -133,7 +137,7 @@ A questo punto abbiamo considerato tutti gli stati in \(R\) quindi ora è il mom
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{subset_constr_2_DFA.tex}
-    \caption{Esercizio 2: DFA}
+    \caption{DFA ottenuto tramite}
     \label{sol_sc_2}
 \end{figure}
 
@@ -142,7 +146,7 @@ Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_3}, calcola
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{thompson4_conc.tex}
-    \caption{Esercizio 3: NFA}
+    \caption{NFA dato}
     \label{es_sc_3}
 \end{figure}
 Come per l'esercizio precedente, è riportata in seguito la tabella risolutiva.\\
@@ -175,16 +179,14 @@ Questo va detto per sottolineare come l'algoritmo di Subset Construction sia un 
     \label{sol_sc_3_v2}
 \end{figure}
 
-Da notare che l'automa a stati finiti riportato in figura non è deterministico, ma solo per la presenza di una \(\varepsilon\)-transizione e di due transizioni da \(S_{0}\) col simbolo \(a\)
+Da notare che l'automa a stati finiti riportato in figura non è deterministico, ma solo per la presenza di una \(\varepsilon\)-transizione e di due transizioni da \(S_{0}\) col simbolo \(a\).
 
 \section{Minimizzazione di DFA}
 Spesso e volentieri non siamo interessati ad un generico DFA \(\mathcal{D}\) che generi un altrettanto generico linguaggio \(\mathcal{L(D)}\), ma desideriamo invece il DFA \(\mathcal{D}'\) minimo, ovvero quello con numero minimo di stati tale che \(\mathcal{L(D)} = \mathcal{L(D')}\). 
 
-
 Prima di procedere, dobbiamo definire la nozione di \emph{State Equivalence}.
 
 \subsection{Definizione di State Equivalence}
-
 \begin{definition}
     Sia \(\mathcal{D} = (S,\mathcal{A},\textrm{move}_{d},s_{0},F)\) un DFA con funzione di transizione totale. Allora due stati \(s,t \in S\) si dicono equivalenti se e solo se la seguente condizione è verificata:
 
@@ -208,7 +210,7 @@ Grazie a questa procedura arriveremo a partizionare gli stati in \(2\) blocchi, 
 \begin{itemize}
     \item Iniziamo con \(2\) blocchi generici, \(B_{1}=F\) e \(B_{2}=S\setminus F\). Questa scelta fa sì che i due blocchi non abbiano stati equivalenti, poiché se consideriamo due stati \(s, t\) tali che \(s\in B_{1}\) e \(t\in B_{2}\), allora vale che \(\textrm{move}_{d}\!^{*}(s,\varepsilon)\in F\) e \(\textrm{move}_{d}\!^{*}(t,\varepsilon)\notin F\).
     \item Proseguiamo controllando se un blocco ha stati non equivalenti; se sì, li dividiamo in blocchi distinti, separando tra di loro gli stati non equivalenti; se no, analizziamo altri blocchi. Ripetiamo quest'operazione fino a quando non vi sono più blocchi con stati non equivalenti.
-    \item In maniera formale, se tutti gli stati \(B_{i}=\{s_{1}, \ldots, s_{k}\}\) di un blocco sono equivalenti, per ogni transizione \(a \in \mathcal{A}\) il target di tale transazione appartiene allo stesso blocco.
+    \item In maniera formale, se tutti gli stati \(B_{i}=\{s_{1}, \ldots, s_{k}\}\) di un blocco sono equivalenti, per ogni transizione \(a \in \mathcal{A}\) il target di tale transazione appartiene allo stesso blocco \(B_j\).
     \item Il blocco \(B_{i}\) può essere spezzato in due se per qualche \(s,t \in B_{i}\) vale \(\textrm{move}_{d}(s,a)\in B_{j}\) e \(\textrm{move}_{d}(t,a)\notin B_{j}\), ossia se ci sono due stati non equivalenti.
     \item Nel concreto, dividere un certo blocco \(B_{i}\) rispetto a (\(a,B_{j}\)) consiste nel sostituire \(B_{i}\) con due nuovi blocchi:
     \begin{itemize}
@@ -227,7 +229,7 @@ Di seguito lo pseudocodice per la procedura appena descritta.
 % \end{figure}
 \subimport{assets/pseudocode/}{partition-refinement.tex}
 
-La divisione consiste di \(B_{i}\) considerando (\(a,B_{j}\)) consiste nel sostituire \(B_{i}\) con due blocchi, \( B_{i1} = \{s \in B_{i} \mid move_{d}(s,a)\in B\}\) e \( B_{i2} = \{s \in B_{i} \mid move_{d}(s,a)\notin B\}\)
+La divisione di \(B_{i}\) considerando (\(a,B_{j}\)) consiste nel sostituire \(B_{i}\) con due blocchi, \( B_{i1} = \{s \in B_{i} \mid move_{d}(s,a)\in B\}\) e \( B_{i2} = \{s \in B_{i} \mid move_{d}(s,a)\notin B\}\)
 
 \subsection{Esercizi sulla minimizzazione DFA}
 \subsubsection{Esercizio 1}
@@ -236,7 +238,7 @@ Passiamo ad applicare la procedura di minimizzazione ad uno degli esempi già vi
 \begin{figure}[H]
 	\centering
     \subimport{assets/figures/}{es1_DFA_minimization.tex}
-	\caption{Esercizio 1}
+	\caption{DFA da minimizzare dato}
 	\label{mindfa-es-1}
 \end{figure}
 
@@ -251,25 +253,20 @@ Iniziamo con due blocchi iniziali: \(B_{1}=\{T4\}\), dato dallo stato finale, e 
 
 \subsubsection{Esercizio 2}
 \label{subsec:dfa-minimization}
-
 Proviamo con questo altro esercizio:
-
 \begin{figure}[H]
 	\centering
     \subimport{assets/figures/}{es2_DFA_minimization.tex}
-	\caption{DFA dell'esercizio 2}
+	\caption{DFA dato}
   \label{mindfa-es-2}
 \end{figure}
-
 In questo caso la funzione di transizione non è totale; dobbiamo quindi renderla tale aggiungendo un nodo \(sink\) a cui facciamo arrivare ogni coppia \(stato, simbolo\) mancante dall'equivalente funzione di transizione parziale.
-
 \begin{figure}[H]
 	\centering
     \subimport{assets/figures/}{es2_DFA_minimization_total_transition.tex}
-	\caption{DFA dell'esercizio 2 con transizione totale}
+	\caption{DFA con transizione totale}
   \label{minndfa-es-2-tot}
 \end{figure}
-
 Dopo aver realizzato questo, iniziamo con gli insiemi \(B_{1}=\{D\}\) e \(B_{2}=\{A,B,D,sink\}\). Possiamo fare uno \emph{split} di \(B_{2}\), in quanto \(\textrm{move}_{d}(A,a) \in B_{2} \) e \(\textrm{move}_{d}(B,a) \notin B_{2} \); da questo split otteniamo i nuovi blocchi \(B_{21}=\{A,sink\}\) e \(B_{22}=\{B,C\}\).
 
 Possiamo fare un ulteriore \emph{split} di \(B_{22}\), poiché \(\textrm{move}_{d}(B,b) \in B_{22} \) e \(\textrm{move}_{d}(C,b) \notin B_{22} \); da questo otteniamo i blocchi \(B_{221}=\{B\}\) e \(B_{222}=\{C\}\).
@@ -353,7 +350,7 @@ A questo punto ho raggiunto una partizione in cui tutti i blocchi contengono un 
 In questo caso ho terminato lo svolgimento dell'algoritmo di partition refinement; questo significa che il DFA da cui sono partito (ottenuto da subset construction) era esattamente minimo.
 
 \subsubsection[Tutta da risistemare]{Discussione: “Qual è la scelta ottimale per lo split?”}
-Domanda interessante. La discussione, essendo un trivia, verrà trascritta in un secondo momento.
+Domanda interessante. La discussione, essendo un trivia, verrà trascritta in un \sout{secondo} terzo momento\footnote{Ragazzi, chiediamo venia, abbiammo scoperto di questo todo a poche ore dalla release, non c'era modo di riprendere in mano il discorso.}.
 % L’idea alla base dell’algoritmo più efficiente è andare a splittare i blocchi che sono splittabili per archi entranti nei blocchi più piccoli.
 % Un algoritmo non efficientissimo ma davvero semplice da scrivere è il seguente
 % Algoritmo di Brzozowski
@@ -387,7 +384,7 @@ Domanda interessante. La discussione, essendo un trivia, verrà trascritta in un
         \item compongono rispettivamente le parole \(w_1\) e \(w_2\), con \(w_1 \neq w_2\);
         \item condividono almeno un arco.
     \end{itemize}
-    Se non esistessero, allora i nodi sarebbero proprio \(2^n\); di conseguenza per qualche \(x_1\), \(x_2\) e \(x\) vale una delle due opzioni seguenti:
+    Se non esistessero, allora i nodi sarebbero come minimo \(2^n\); di conseguenza per qualche \(x_1\), \(x_2\) e \(x\) vale una delle due opzioni seguenti:
     \begin{itemize}
         \item \(w_1 = x_1 a x \quad \textrm{e} \quad w_2 = x_2 b x\) \textbf{oppure}
         \item \(w_1 = x_1 b x \quad \textrm{e} \quad w_2 = x_2 a x\)
@@ -418,7 +415,7 @@ Questo lemma quindi ci offre una stima per il numero minimo di stati di un DFA c
     Sia \(\mathcal{L}\) un linguaggio regolare; allora vale che:
     \begin{itemize}
         \item \(\exists p \in \mathbb{N}^+\) tale che 
-        \item \(\forall z \in \mathcal{L}\) tali che \(|z|>p\)
+        \item \(\forall z \in \mathcal{L}\) tale che \(|z|>p\)
         \item \(\exists \;u, v, w\) tale che
         \begin{itemize}
             \item \(z = uvw\)  e
@@ -428,11 +425,11 @@ Questo lemma quindi ci offre una stima per il numero minimo di stati di un DFA c
         \end{itemize}
     \end{itemize}
 \end{lemma}
-\noindent Ovvero, come il lettore avrà ben notato, questo è il corrispettivo del pumping lemma per i linguaggi regolari. Illustriamo ora la dimostrazione di questo lemma.
+\noindent Ovvero, come il lettore avrà ben notato, questo è il corrispettivo del pumping lemma che già avevamo conosciuto parlando di linguaggi liberi. Illustriamo ora la dimostrazione di questo lemma.
 \begin{proof}
     Dato che \(\mathcal{L}\) è un linguaggio regolare, sappiamo che esiste un DFA \(\mathcal{D} = (S,\mathcal{A},\textrm{move}_d ,S_0, F)\) tale per cui \(\mathcal{L} = \mathcal{L}(\mathcal{D})\).
 
-    Fissiamo quindi \(p=|S|-1\); ciò significa che tutti i cammini che partono da \(S_0\) ed arrivano ad uno stato finale, passando per ogni stato al massimo una volta, hanno lunghezza limitata da \(p\).
+    Fissiamo quindi \(p=|S|-1\); vorremmo far notare che tutti i cammini che partono da \(S_0\) ed arrivano ad uno stato finale, passando per ogni stato al massimo una volta, hanno lunghezza limitata da \(p\).
 
     Quindi, se per una parola \(z\) vale \(|z|>p\), allora possiamo scomporre \(z\) in \(z = a_1 \dots a_p z'\) e abbiamo la certezza che almeno uno stato, diciamo \(s^\ast\), sia attraversato più di una volta lungo il cammino \(a_1 \dots a_p\).
 
@@ -476,14 +473,14 @@ Prima di proseguire con la dimostrazione formale, proviamo a spiegare che intuiz
 Se \(\mathcal{L}\) fosse un linguaggio regolare dovrebbe essere possbile rappresentarlo con un NFA o un DFA. Proviamo quindi a immaginare il DFA che riconosce questo linguaggio, come dovrebbe essere? Per bilanciare il numero di \(b\) e di \(a\) dovrebbe in qualche modo obbligare l’inserimento di una \(b\) per ogni \(a\) inserita in precedenza, ma questo non si può fare a meno di inserire infiniti stati, il che è impossibile.
 
 Procediamo quindi con la dimostrazione tramite pumping lemma. Supponiamo \(\mathcal{L}\) regolare e prendiamo \(p\) intero positivo arbitrario (il negato della tesi deve valere per ogni \(p\)). Ora, costruiamo la parola \(z=a^p b^p\); abbiamo che \(|z|>p\).
-Osserviamo che:
+Osserviamo che, per ogni decomposizione di \(z\) in \(u,v,w\) che rispetta i vincoli qui sotto riportati:
 \begin{equation*}
     \forall \; u,v,w \ \textrm{se} \ (z = uvw \quad \textrm{e} \quad |uv| \le p \quad \textrm{e} \quad |v| > 0)
 \end{equation*}
-Sappiamo inoltre che:
+Possiamo quindi affermare che:
 \begin{itemize}
     \item la componente \(v\) contiene almeno una \(a\) (da \(|v| > 0\));
-    \item la componente \(v\) può contenere solamente \(a\) (altrimenti violerebbe \(|uv| \le p\)).
+    \item la componente \(v\) deve contenere solamente \(a\) (altrimenti violerebbe \(|uv| \le p\)).
 \end{itemize}
 Se noi ora definiamo \(j > 0\) tale per cui 
 \begin{equation*}
@@ -495,22 +492,19 @@ Abbiamo quindi dimostrato per contraddizione del pumping lemma per linguaggi reg
 
 \subsection{Esercizi sul riconoscimento di linguaggi regolari}
 \subsubsection{Esercizio 1}
-Sia \(\mathcal{L}_1\) il linguaggio delle parole su \(\{a, b\}\) con un numero dispari di occorrenze di \(b\). \(\mathcal{L}_1\) è regolare?
+Sia \(\mathcal{L}_1\) il linguaggio delle parole su \(\{a, b\}\) con un numero dispari di occorrenze di \(b\). \(\mathcal{L}_1\) è regolare? E se lo è, riusciamo a trovare un'espressione regolare per questo linguaggio e un DFA che la riconosca? \\
+Proponiamo di seguito delle espressioni regolari e dei DFA che sono stati selezionati durante la lezione con una breve spiegazione a riguardo 
+\begin{itemize}
+    \item l'espressione regolare \((a^*(bb)^*)^* b(a^*(bb)^*)^*\) non può denotare il linguaggio descritto poiché non riconosce \(ababab\).
+    \item definiamo un automa con due stati \(A\) iniziale e \(B\) finale. \(A\) presenta una \(a\)-transizione in \(A\) ed una \(b\)-transizione in \(B\) mentre \(B\) ha una \(a\)-transizione in \(B\) e una \(b\)-transizione in \(A\). Notare che lo stato \(A\) rappresenta il caso in cui sono state lette un numero pari di \(b\) mentre \(B\) quello in cui sono state lette un numero dispari di \(b\): nel caso iniziale, infatti, si è obbligati ad aggiungere almeno una \(b\) per raggiungere lo stato finale ma, nel caso in cui si voglia aggiungere un'altra \(b\), è necessario ritornare nello stato \(A\) e rifare il procedimento descritto. Considerando che in entrambi gli stati è possibile mettere un numero arbitrario di \(a\), possiamo dichiarare questa soluzione come corretta (Fig.\ref{fig:b_dispari}).
+    \item l'espressione regolare \((a^*(b)a^*)(a^*(b)a^*(b)a^*)^*\) sembrerebbe essere corretta in quanto sicuramente accetterò parole composte da almeno una \(b\) e un numero arbitrario di \(a\) prima e dopo; nel caso in cui volessi aumentare il numero di \(b\), sono obbligato a farlo a coppie con la possibilità di interporre un numero arbitrario di \(a\) prima, in mezzo o alla fine. 
+\end{itemize}
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{regual_recognition_es1.tex}
     \caption{DFA che riconosce un numero dispari di occorrenze di \(b\) in un linguaggio su \(\{a,b\}\)}
-    \label{b_dispari}
+    \label{fig:b_dispari}
 \end{figure}
-
-Proponiamo di seguito delle espressioni regolari e dei DFA che sono stati selezionati durante la lezione con una breve spiegazione a riguardo 
-
-\begin{itemize}
-    \item l'espressione regolare \((a^*(bb)^*)^* b(a^*(bb)^*)^*\) non può denotare il linguaggio descritto poiché \(ababab \notin \mathcal{L}_1\).
-    \item definiamo un automa con due stati \(A\) iniziale e \(B\) finale. \(A\) presenta una \(a\)-transizione in \(A\) ed una \(b\)-transizione in \(B\) mentre \(B\) ha una \(a\)-transizione in \(B\) e una \(b\)-transizione in \(A\). Notare che lo stato \(A\) rappresenta il caso in cui sono state lette un numero pari di \(b\) mentre \(B\) quello in cui sono state lette un numero dispari di \(b\): nel caso iniziale, infatti, si è obbligati ad aggiungere almeno una \(b\) per raggiungere lo stato finale ma, nel caso in cui si voglia aggiungere un'altra \(b\), è necessario ritornare nello stato \(A\) e rifare il procedimento descritto. Considerando che in entrambi gli stati è possibile mettere un numero arbitrario di \(a\), possiamo dichiarare questa soluzione come corretta.
-    \item l'espressione regolare \((a^*(b)a^*)(a^*(b)a^*(b)a^*)^*\) sembrerebbe essere corretta in quanto sicuramente accetterò parole composte da almeno una \(b\) e un numero arbitrario di \(a\) prima e dopo; nel caso in cui volessi aumentare il numero di \(b\), sono obbligato a farlo a coppie con la possibilità di interporre un numero arbitrario di \(a\) prima, in mezzo o alla fine. 
-\end{itemize}
-
 In questo caso, visto che siamo stati in grado di trovare un DFA con un numero finito di stati, possiamo affermare che \(\mathcal{L}_1\) è un linguaggio regolare. Come possiamo però essere certi del fatto che, ad esempio, l'espressione regolare \((a^*(b)a^*)(a^*(b)a^*(b)a^*)^*\) denoti il linguaggio \(\mathcal{L}_1\) e che quindi sia anch'essa soluzione al quesito? Il modo corretto di procedere è il seguente:
 
 \begin{enumerate}
@@ -536,7 +530,8 @@ Per rispondere a tale quesito si potrebbe pensare di costruire un DFA con lo ste
 Poiché \(0\) è considerato pari, in questo caso lo stato iniziale coincide con quello finale. Le transizioni devono essere opportunamente costruite, per cui se voglio aggiungere una \(a\) alla mia parola sono costretto a seguire una \(a\)-transizione in uno stato non finale per poi tornare in quello finale con un'ulteriore \(a\)-transizione, in modo da assicurare che le condizioni siano rispettate. Ovviamente, deve esservi sempre la possibilità di inserire un numero arbitrario di \(b\) tra le varie occorrenze di \(a\), per cui in entrambi gli stati si ha una \(b\)-transizione sullo stesso stato. Analogamente all'esercizio precedente si ha che \(\mathcal{L}_2\) è un linguaggio regolare. In questo caso l'espressione regolare proposta è stata \((b^*ab^*ab^*)^*\) .
 % (P.S. ho provato a fare l'isomorfismo di questo grafo e non viene mai nella vita identico a quello precedente, potrei avere tranquillamente sbagliato ma l'abbiamo fatto in 3 e non risulta quindi o c'è qualcosa che mi sfugge o IDK)
 
-\subsubsection{Esercizio 3}  
+\subsubsection{Esercizio 3}
+\label{subsubsec:ex3}
 Sia \(\mathcal{L}_3\) il linguaggio delle parole su \(\{a, b\}\) con un numero dispari di occorrenze di \(b\) \textbf{oppure} un numero pari di occorrenze di \(a\). \(\mathcal{L}_3\) è regolare?
 
 Una soluzione tanto banale quanto efficace consiste nel utilizzare la Thompson's Construction per poter concatenare gli automi descritti negli esercizi precedenti con l'operazione di \emph{alternanza}. A livello formale questo si traduce come:
@@ -630,7 +625,7 @@ I linguaggi regolari sono chiusi rispetto alle seguenti operazioni:
 Andiamo a vedere più da vicino le motivazioni per ciascuna di queste.
 
 \paragraph{Unione}
-Se prendiamo due linguaggi regolari e ne operiamo l'unione, il risultato di questa è ancora un linguaggio regolare. Come nel caso precedente, essendo che i linguaggi sono regolari, allora è possibile costruire un DFA sia per il primo che per il secondo; se a questo punto si prendono i due automi così costruiti e li si lega tramite una \(\varepsilon\)-transizione, per l'operazione di \emph{alternanza} si ottiene nuovamente 
+Se prendiamo due linguaggi regolari e ne operiamo l'unione, il risultato di questa è ancora un linguaggio regolare. Come in esercizio~\ref{subsubsec:ex3}, essendo che i linguaggi sono regolari, allora è possibile costruire un DFA sia per il primo che per il secondo; se a questo punto si prendono i due automi così costruiti e li si lega tramite una \(\varepsilon\)-transizione, per l'operazione di \emph{alternanza} si ottiene nuovamente 
 un linguaggio regolare.
 
 \paragraph{Concatenazione}
@@ -641,12 +636,13 @@ Se \(\mathcal{L}\) è un linguaggio regolare su un certo alfabeto \(\mathcal{A}\
 
 In precedenza abbiamo visto l'automa che riconosce \(\mathcal{L}_2\), ovvero che accetta tutte quelle parole dove \(a\) occorre un numero pari di volte. Il complementare di tale automa corrisponde a quello per cui si hanno parole con un numero dispari di occorrenze. Utilizzando l'automa che denota \(\mathcal{L}_2\), vi è la possibilità di applicare una particolare operazione per trasformarlo nel suo complementare? Sì, è possibile: basta semplicemente rendere finali tutti quegli stati che prima non lo erano e, simmetricamente, non finali tutti quelli che prima lo erano.
 
-Relativamente questo procedimento è però necessario fare una precisazione: tale metodo funziona solamente se il DFA presenta una funzione di transizione \textbf{totale}: intuitivamente, è necessario riconoscere tutte quelle parole che non appartengono al linguaggio regolare in quanto queste apparterranno al linguaggio del DFA complementare; se per assurdo si avesse la mancanza di una \(a\)-transizione (non fondamentale nel primo DFA) non si avrebbe la possibilità di costruire il set completo delle parole.
+Relativamente a questo procedimento è però necessario fare una precisazione: tale metodo funziona solamente se il DFA presenta una funzione di transizione \textbf{totale}: intuitivamente, è necessario riconoscere tutte quelle parole che non appartengono al linguaggio regolare in quanto queste apparterranno al linguaggio del DFA complementare; se per assurdo si avesse la mancanza di una \(a\)-transizione (non fondamentale nel primo DFA) non si avrebbe la possibilità di costruire il set completo delle parole.
 
 \paragraph{Intersezione}
 È derivabile dall'unione utilizzando le regole di \emph{De Morgan}: 
 \begin{equation*}
     \mathcal{L}_1 \cap \mathcal{L}_2 = \lnot (\lnot (L1 \cap L2)) = \lnot (\lnot \mathcal{L}_1 \cup \lnot \mathcal{L}_2)
 \end{equation*}
+Si noti come abbiamo già discusso in precedenza come unione e negato mantengano la regolarità del codice, quindi grazie alla chiusura per unione e complementazione vale anche la chiusura per intersezione.
 
 \end{document}
