@@ -333,7 +333,7 @@ Il kernel di questo stato, purtroppo, non è altrettanto lungimirante:
 Siamo infatti costretti a calcolare la chiusura \(closure_1(R)\), che ci porta a inserire l'item \(R \to \cdot L, \{=, \$\}\) allo stato; quest'ultimo, dal canto suo, ci impone di inserire allo stato la chiusura \(closure_1(L)\), dal momento che abbiamo il marker \(\cdot\)davanti al non-terminale \(L\). A fine del processo lo stato appare così:
 \begin{align*}
     L &\to \ast \cdot R, \{=, \$\} \\
-    R &\to \cdot R, \{=, \$\} \\
+    R &\to \cdot L, \{=, \$\} \\
     L &\to \cdot \ast R, \{=, \$\} \\
     L &\to \cdot id, \{=, \$\} 
 \end{align*}
