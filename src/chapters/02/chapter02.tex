@@ -134,7 +134,7 @@ La spiegazione è lasciata al lettore.
 \begin{itemize}
     \item Prima di tutto partiamo da \(S\), l'unica produzione possibile ci porta a \(CD\); ora possiamo dimenticarci di \(S\);
     \item vediamo subito che sia \(C\) che \(D\) possono essere trasformate in \(\varepsilon\) a piacimento, quindi possiamo interrompere le derivazioni da loro in ogni momento;
-    \item ora, \(C\) ci permette di utilizzare le due produzioni \(C \to aCA\) e \(C \to bCB\) (il simbolo \(\mid\) ci dice che da \(C\) posso produrre \(sCA\) \emph{or} \(bCB\));
+    \item ora, \(C\) ci permette di utilizzare le due produzioni \(C \to aCA\) e \(C \to bCB\) (il simbolo \(\mid\) ci dice che da \(C\) posso produrre \(aCA\) \emph{or} \(bCB\));
     \item notiamo che se siamo in una forma del tipo \(aCAD\) possiamo proseguire con le produzioni di \(C\) oppure possiamo utilizzare \(AD \to aD\) ed osservando bene notiamo che questo è l'unico modo in cui potremo eliminare il non terminale \(A\), il che è speculare per quanto riguarda il caso \(bCBD\);
     \item notiamo inoltre che per ogni nuovo non terminale che aggiungiamo sulla destra dovremo farlo scorrere fino al limite estremo destro della parola (dove si trova \(D\)) per trasformarlo in terminale; a questo aggiungiamo che per ogni \(a\) sulla sinistra aggiungo \(A\) sulla destra ed in egual modo funziona per \(b\);
     \item ora dovrebbe essere chiaro che, al termine delle derivazioni, il numero di \(a\) sulla sinistra  sarà uguale al numero di \(a\) sulla destra e lo stesso per \(b\); inoltre al non terminale appena a sinistra dell'ultimo \(C\) corrisponderà un terminale uguale in posizione estrema destra (appena prima di \(D\)).
