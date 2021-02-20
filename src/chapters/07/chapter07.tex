@@ -25,7 +25,7 @@ Sia \(w\) = \(bd\) e sia \(\G\):
     B &\rightarrow b
 \end{align*}
 
-Per verificare se \(w \in \mathcal{L(G)}\) con un approccio top-down dobbiamo ottenere una derivazione leftmost a partire dallo start symbol. Ovviamente, si noterà subito che non è possibile scegliere \(Ad\) come derivazione iniziale dello start symbol, perché a quel punto l'unica parola ottenibile sarebbe parola \(ad\); dobbiamo invece optare per la seconda derivazione. La derivazione completa ci porta a
+Per verificare se \(w \in \mathcal{L(G)}\) con un approccio top-down dobbiamo ottenere una derivazione leftmost a partire dallo start symbol. Ovviamente, si noterà subito che non è possibile scegliere \(Ad\) come derivazione iniziale dello start symbol, perché a quel punto l'unica parola ottenibile sarebbe la parola \(ad\); dobbiamo invece optare per la seconda derivazione. La derivazione completa ci porta a
 \begin{align*}
     S \Rightarrow Bd \Rightarrow bd
 \end{align*}
@@ -288,7 +288,7 @@ I \emph{first} evidenziano quali sono i terminali per cui iniziano le stringhe d
 \subimport{assets/pseudocode/}{follow.tex}
 L'algoritmo comincia inizializzando \(follow(S) = \$\): dal momento che dallo start symbol si possono generare tutte le possibili parole appartenenti al linguaggio della grammatica, allora possiamo aspettarci di trovare il terminatore di stringa \$ dopo una qualsiasi parola. Negli altri casi, invece, \(\forall A\) tale che \(A\) è un non-terminale, inizializziamo \(follow(A) = \emptyset\).
 
-A questo punto, è necessario sottolineare che, visto che siamo interessati a quei terminali che seguono un particolare non terminale, ci interessano solamente le produzioni della grammatica per cui il generico non terminale \(A\) non compare nel driver della produzione, bensì nel body. Per ogni \(B \rightarrow \alpha A \beta\), si eseguono le sequenti operazioni: 
+A questo punto, è necessario sottolineare che, visto che siamo interessati a quei terminali che seguono un particolare non terminale, ci interessano solamente le produzioni della grammatica per cui il generico non terminale \(A\) non compare nel driver della produzione, bensì nel body. Per ogni \(B \rightarrow \alpha A \beta\), si eseguono le seguenti operazioni: 
 
 \begin{itemize}
     \item se \(\beta \neq \varepsilon\), allora aggiungiamo \(first(\beta) \setminus \{\varepsilon\}\) a \(follow(A)\);
@@ -377,7 +377,7 @@ Per comodità notazionale, dato che nelle produzioni dell'esercizio compare il n
     \end{enumerate}
     \item Ho concluso quindi l’analisi delle produzioni di \(S\) e passo quindi ad analizzare la produzione di \(A\):
     \begin{enumerate}
-        \item parto da \(A \to Ac\): in questo caso non ho altra scelta che considerare \(X = A\), quindi \(\beta = c\): ricadentdo nel primo \texttt{if} dell'algoritmo, aggiungo \(first(c) \setminus \{\varepsilon\}\) (ovvero \(\{c\}\)) ai \(follow(A)\);
+        \item parto da \(A \to Ac\): in questo caso non ho altra scelta che considerare \(X = A\), quindi \(\beta = c\): ricadendo nel primo \texttt{if} dell'algoritmo, aggiungo \(first(c) \setminus \{\varepsilon\}\) (ovvero \(\{c\}\)) ai \(follow(A)\);
         \item chiudo quindi il branch dato che il secondo \texttt{if} non si applica;
         \item considero ora la seconda produzione di \(A\), ovvero \(A \to d\); tuttavia, questa non è nella forma \(\alpha X \beta\) e quindi non ci dà informazioni, per cui posso passare oltre; ho terminato le produzioni di \(A\).
     \end{enumerate}
@@ -614,7 +614,7 @@ dove \(\alpha_j \ne \varepsilon \;\; \forall j: 1 \le j \le n\) e anche \(\beta_
 \end{align}
 dove \(A' \notin \A \setminus T\), cioè è un non-terminale \emph{fresh}.
 
-Andiamo adesso a vedere come (e se) è possibile elminare la ricorsione sinistra anche quando non è immediata.
+Andiamo adesso a vedere come (e se) è possibile eliminare la ricorsione sinistra anche quando non è immediata.
 
 \subsection{Eliminazione della ricorsione sinistra}
 Qui il problema si fa più spinoso: possiamo già anticipare che non sarà un'operazione possibile in tutte le grammatiche e per cui c'è addirittura il rischio che, l'eliminazione della ricorsione sinistra per un certo non-terminale, causi la sua comparsa per un altro non-terminale.
@@ -764,7 +764,7 @@ Ma, allo stesso identico modo, potremmo completare lo stesso albero parziale e o
 \end{figure}
 
 \paragraph{Conclusione}
-Anche qui, non possiamo fare altro che concludere che applicare la procedura di eliminazione della ricorsione sinistra su una grammatica ambigua \emph{non} ne elimina l'ambguità.
+Anche qui, non possiamo fare altro che concludere che applicare la procedura di eliminazione della ricorsione sinistra su una grammatica ambigua \emph{non} ne elimina l'ambiguità.
 
 \section{Fattorizzabilità Sinistra}
 Consideriamo ora la grammatica \(\G: S \rightarrow aSb \mid ab\), che ormai ben conosciamo: questa grammatica ci permette di denotare, ad esempio, un linguaggio composto da parentesi annidate. Quello che non sapevamo è che non è una grammatica \(LL(1)\): ce ne possiamo accorgere calcolandone i \(first(S)\). Dal momento che l'unico elemento appartenente a questo insieme, nel caso delle due produzioni, risulta infatti essere il non-terminale \(a\), questo vuol dire che, applicando l'algoritmo per la generazione della tabella di parsing predittivo, ci troveremo con due produzioni nella posizione \(M[S, a]\).
@@ -774,7 +774,7 @@ Il punto è che \(\G\) può essere \textbf{fattorizzata a sinistra}; in generale
     \item ci sono almeno due produzioni che hanno lo stesso non-terminale come driver;
     \item possiedono un prefisso comune nel body.
 \end{itemize}
-Nel caso precedente, ad esempio, vi sono due produzioni che hanno \(S\) come driver e \(a\) come prefisso. Rispetto a tutto ciò, analogmente alle grammatiche con ricorsione a sinsitra, abbiamo un lemma.
+Nel caso precedente, ad esempio, vi sono due produzioni che hanno \(S\) come driver e \(a\) come prefisso. Rispetto a tutto ciò, analogamente alle grammatiche con ricorsione a sinistra, abbiamo un lemma.
 
 \begin{lemma}
     Se la grammatica \(\G\) può essere fattorizzata a sinistra, allora sicuramente \(\G\) non è \(LL(1)\).    
