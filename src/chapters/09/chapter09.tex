@@ -113,7 +113,7 @@ Come già detto prima, la prima parte di questi item è esattamente corrisponden
     \end{align*}
     Come succedeva nell'esempio con il parsing LR(0), nello stato 2 possiamo osservare la presenza di tre transizioni e quindi di tre possibili nuovi stati che sono \(\tau(2,A)=4 \textrm{, } \tau(2,B)=5 \textrm{ e } \tau(2,c)=6\).
     \item[...]
-    \item[6.] Ovviamente la parte interessante dell'esercizio è verificare se siamo riusciti a risolvere il conflitto che occorreva nel parsing SLR(0). In modo pressoché analogo a quanto accadeva, abbiamo che il kernel per lo stato 6 è :
+    \item[6.] Ovviamente la parte interessante dell'esercizio è verificare se siamo riusciti a risolvere il conflitto che occorreva nel parsing SLR(1). In modo pressoché analogo a quanto accadeva, abbiamo che il kernel per lo stato 6 è :
     \begin{align*}
         [A &\to c \cdot, \{d\}] \\
         [B &\to c \cdot, \{e\}]
@@ -121,7 +121,7 @@ Come già detto prima, la prima parte di questi item è esattamente corrisponden
     Anche questa volta nello stato sono presenti due item di riduzione, ma non troviamo più il conflitto che avevamo con il parsing LR(0), perché in questo caso la riduzione \(A \to c\) si applica solo se nell'input buffer si sta leggendo \(d\), mentre la riduzione \(B \to c\) si applica solo nel caso in cui nell'input \emph{buffer} si sta leggendo \(e\). Questo implica che nello stato 6, grazie al parsing LR(1), è stata eliminata l'ambiguità del conflitto r/r.
 \end{enumerate}
 
-\subsubsection{Facciamone un altro, dai}
+\subsubsection{Un secondo esempio}
 \label{ex:closure-lr1}
 Sia data la seguente grammatica:
 \begin{align}
@@ -235,8 +235,8 @@ Negli stati 6 e 9, che ci avrebbero causato problemi con la costruzione di tipo 
 \begin{itemize}
     \item Stato 6
     \begin{align*}
-        A &\to c \cdot , {d} \\
-        B &\to c \cdot , {e}    
+        A &\to c \cdot , \{d\} \\
+        B &\to c \cdot , \{e\}    
     \end{align*}
     \item Stato 9
     \begin{align*}
@@ -330,7 +330,7 @@ Il kernel di questo stato, purtroppo, non è altrettanto lungimirante:
 \begin{equation*}
     L \to \ast \cdot R, \{=, \$\}
 \end{equation*}
-Siamo infatti costretti a calcolare la chiusura \(closure_1(R)\), che ci porta a inserire l'item \(R \to \cdot L, \{=, \$\}\) allo stato; quest'ultimo, dal canto suo, ci impone di inserire allo stato la chiusura \(closure_1(L)\), dal momento che abbiamo il marker \(\cdot\)davanti al non-terminale \(L\). A fine del processo lo stato appare così:
+Siamo infatti costretti a calcolare la chiusura \(closure_1(R)\), che ci porta a inserire l'item \(R \to \cdot L, \{=, \$\}\) allo stato; quest'ultimo, dal canto suo, ci impone di inserire allo stato la chiusura \(closure_1(L)\), dal momento che abbiamo il marker \(\cdot\) davanti al non-terminale \(L\). A fine del processo lo stato appare così:
 \begin{align*}
     L &\to \ast \cdot R, \{=, \$\} \\
     R &\to \cdot L, \{=, \$\} \\
@@ -353,7 +353,7 @@ Abbiamo nuovamente uno stato tranquillo. Il kernel è:
 Questo ci offre la rispettiva riduzione (\([L \to id \cdot, \{=, \$\}]\)), senza alcuna mossa di shift.
 
 \paragraph{Stato 6}
-Questo stato viene calcolato seguendo la transizione \(\tau(2, =)\). Dal momentoche abbiamo il marker \(\cdot\) davanti al non-terminale \(R\), dobbiamo calcolare \(closure_1(R)\), che in omaggio ci porta anche il calcolo di \(closure_1(L)\).
+Questo stato viene calcolato seguendo la transizione \(\tau(2, =)\). Dal momento che abbiamo il marker \(\cdot\) davanti al non-terminale \(R\), dobbiamo calcolare \(closure_1(R)\), che in omaggio ci porta anche il calcolo di \(closure_1(L)\).
 \begin{align*}
     &&Kernel: &&S &\to L = \cdot R, \{\$\}& \\
     &&closure_1(R): &&R &\to \cdot L, \{\$\} &\\
@@ -380,7 +380,7 @@ Il copione è esattamente lo stesso di quanto visto sopra: calcoliamo questo sta
 \begin{equation*}
     R \to L \cdot, \{=, \$\}
 \end{equation*}
-Andiamo avanti lisci, abbiamo la nostra riduzione \([L \to \ast R \cdot, \{=, \$\}]\) e nulla di più.
+Andiamo avanti lisci, abbiamo la nostra riduzione \([R \to L \cdot, \{=, \$\}]\) e nulla di più.
 
 \paragraph{Stato 9}
 Anche in questo stato abbiammo del lavoro da fare. Ci arriviamo tramite \(\tau(4, \ast)\), e il kernel si presenta così:
@@ -422,7 +422,7 @@ Questo è lo stesso kernel dello stato 9, ma per via del differente lookahead se
     &&closure_1(L): &&L &\to \cdot \ast R, \{\$\}&\\
     && &&L &\to \cdot id,  \{\$\}&
 \end{align*}
-Notiamo che, con l'eccezione dell'ultimo, tutti gli item sono stati già visitati, e già sappiamo dove portano (\(R \to \cdot L, \{\$\}\) a \(\tau(11, 2) = 10\) e \(L \to \cdot \ast R, \{\$\}\) a \(\tau(11, \ast) = 11\), self loop), per cui ci risparmiamo di analizzare in futuro quelle mosse di shift. Ci sentiamo anche di anticipare che pure l'ultima transizione, \(\tau(11, id)\), non porterà a un nuovo stato, poiché risulterà essere un collegamento allo stato 12 (\(\tau(11, id) = 12\)).
+Notiamo che, con l'eccezione dell'ultimo, tutti gli item sono stati già visitati, e già sappiamo dove portano (\(R \to \cdot L, \{\$\}\) a \(\tau(11, L) = 10\) e \(L \to \cdot \ast R, \{\$\}\) a \(\tau(11, \ast) = 11\), self loop), per cui ci risparmiamo di analizzare in futuro quelle mosse di shift. Ci sentiamo anche di anticipare che pure l'ultima transizione, \(\tau(11, id)\), non porterà a un nuovo stato, poiché risulterà essere un collegamento allo stato 12 (\(\tau(11, id) = 12\)).
 
 \paragraph{Stato 12}
 Uh, per fortuna questo stato è tranquillo. Stiamo infatti analizzando la transizione \(\tau 11, R\) e il kernel è:
@@ -483,7 +483,8 @@ Per rispondere a questa domanda è comunque conveniente costruirne il relativo a
 E purtroppo vediamo subito il problema: dal momento che la nostra lookahead function è follow(B), lo stato 2 presenta sia una mossa di shift verso =, sia una mostra di reduce. Pertanto, nella tabella avremo un conflitto nella cella [2, =], e tanto basta per permetterci di dire che la grammatica Eq.\ref{gr:pointers-grammar} non è SLR(1).
 
 \paragraph{La grammatica dei puntatori}
-Questo paragrafo al momento è vuoto perché a lezione il discorso è stato lasciato cadere magistralmente, ma forse poi ci torniamo sopra perché pare interessante.
+Approfondiamo il discorso su questa grammatica.
+% Questo paragrafo al momento è vuoto perché a lezione il discorso è stato lasciato cadere magistralmente, ma forse poi ci torniamo sopra perché pare interessante.
 % Abbiamo già detto in passato come questa sia una grammatica che ci parla di puntatori, andiamo ora ad indagare più a fondo tale affermazione:
 
 % L sta per left
@@ -668,14 +669,14 @@ La grammatica \(\G\) è LALR(1) se e solo se la sua tabella di parsing LALR(1) n
 
 Il vantaggio della grammatica LALR(1) è di essere più potente (i.e. espressiva) della grammatica SLR(1) pur rimanendo con delle dimensioni contenute rispetto alla LR(1). 
 
-\subsection*{Esercizio parsing LALR(1) - c'è sì ma in realtà no perchè è LR(1)}
+\subsection*{Esercizio parsing LALR(1)}
 \begin{align*}
     S &\to AaB \mid b \\
     A &\to BcBaA \mid \varepsilon \\
     B &\to \varepsilon
 \end{align*}
 
-Il nostro obbiettivo è quello di costruire la parsing table LALR(1) per la grammatica citata: per poter procedere dobbiamo però prima costruire l'automa caratteristico.
+Il nostro obiettivo è quello di costruire la parsing table LALR(1) per la grammatica citata: per poter procedere dobbiamo però prima costruire l'automa caratteristico.
 \paragraph{Ricaviamo l'automa}
 \begin{enumerate}
     \item Inizializziamo lo stato 0; il suo kernel è 
@@ -768,7 +769,7 @@ L'automa caratteristico LR(1) risulta dunque così costruito
     \label{fig:lalr-automata}
 \end{figure}
 
-Visto che non è possibile unire nessuno degli stati dell'automa LR(1), l'automa disegnato poc'anzi corrisponderà anche a quello LRm(1). Di seguito dunque possiamo costruire la tabella di parsing
+Visto che non è possibile unire nessuno degli stati dell'automa LR(1), l'automa disegnato poc'anzi corrisponderà anche a quello LRm(1). Di seguito dunque possiamo costruire la tabella di parsing:
 
 \begin{enumerate}
     \item \(S \to AaB\) 
@@ -791,7 +792,7 @@ La classe di grammatiche LALR contiene le grammatiche più interessanti per i li
 Abbiamo visto come la modalità più semplice per ottenere le tabelle di parsing LALR è quella di creare in primis un'automa LR(1) e poi tradurlo in LRm(1).
 
 Oggi vediamo un altro metodo che prevede di eliminare il passaggio dall'automa LR(1) e di creare fin da subito un automa con la stessa struttura dell'automa LRm(1).
-Quello che andremo a creare è detto automa simbolico, preché utilizza dei simboli (delle variabili) al posto dei lookahead set; una votla terminata la costruzione dell'automa simbolico risolvendo i simboli si va a calcolare quelli che poi saranno i lookahead set dell'automa LRm(1).
+Quello che andremo a creare è detto automa simbolico, preché utilizza dei simboli (delle variabili) al posto dei lookahead set; una volta terminata la costruzione dell'automa simbolico risolvendo i simboli si va a calcolare quelli che poi saranno i lookahead set dell'automa LRm(1).
 
 Quindi gli item di questo automa simbolico possono essere immaginati cme suddivisi in due componenti:
 \begin{itemize}
@@ -800,7 +801,7 @@ Quindi gli item di questo automa simbolico possono essere immaginati cme suddivi
 \end{itemize}
 Sostanzialmente questi item sono del tutto assimilabili agli item LR(1), con l'unica differenza che il \(\Delta\) set è simbolico e presto al lettore sarà ben chiaro questo concetto.
 
-Mentre creaimo l'automa simbolico ci memorizziamo in una tabella delle equazioni che ci serviranno alla fine per tradurre i lookahead set simbolici in lookahead effettivi. Come è ormai consuetudine il modo più semplice per spiegare questo procedimento è applicarlo direttamente ad un esempio.
+Mentre creiamo l'automa simbolico ci memorizziamo in una tabella delle equazioni che ci serviranno alla fine per tradurre i lookahead set simbolici in lookahead effettivi. Come è ormai consuetudine il modo più semplice per spiegare questo procedimento è applicarlo direttamente ad un esempio.
 
 \subsection*{Esempio di costruzione dell'automa simbolico}
 Andiamo a costruire l'automa simbolico per la nostra cara grammatica
@@ -834,7 +835,7 @@ Procedendo un passettino alla volta la chiusura dello stato 0 si fa così:
 \begin{itemize}
     \item in primis dobbiamo includere la chiusura per le produzioni di S:
     \begin{itemize}
-        \item dalle due prduzioni di \(S\) della nostra grammatica otteniamo i due item:
+        \item dalle due produzioni di \(S\) della nostra grammatica otteniamo i due item:
         \begin{align*}
             S &\to \cdot L = R,  \; \{x_0\} \\
             S &\to \cdot R,  \; \{x_0\}
@@ -900,7 +901,7 @@ in questo caso il kernel contiene due item perché nello stato 0 abbiamo due ite
             & x_2 = x_0 \\
             & x_3 = x_0 \\
 \end{align*}
-grazie al cielo non si presentano nè chiusure, le transizioni invece le analizzeremo in seguito.
+grazie al cielo non si presentano chiusure; analizzeremo le transizioni in seguito.
 
 Passiamo quindi all'osservazione della transizione \(\tau(0,R)\), che ci porta nello stato 3.
 \\
@@ -1315,7 +1316,7 @@ Andiamo quindi, per curiosità, ad analizzare gli stati in cui sono presenti le 
     \item in 4 abbiamo \(S \to a b \cdot, \; \{\$, b\}\);
     \item in 5 abbiamo \(S \to aSb \cdot, \; \{b\}\).
 \end{itemize}
-Notimao quindi che non si presentano conflitti, quindi la grammatica è di tipo LALR.
+Notiamo quindi che non si presentano conflitti, quindi la grammatica è di tipo LALR.
 
 % \section{Un primo esempio di applicazione}
 % \subsection{Mosse di shift e reduce}

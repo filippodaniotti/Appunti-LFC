@@ -7,8 +7,8 @@
 % arara: pdflatex: { synctex: yes, shell: yes }
 % arara: latexmk: { clean: partial }
 \begin{document}
-\chapter{Proprietà dei linguaggi liberi}
-È il momento di fare una gita domenicale di famiglia presso il supermercato MondoMatematica\textregistered e perderci tra i gli scaffali invitanti e variopinti, stregati dalla capitalistica attrazione che tutte quelle proprietà, quei lemmi e quei teoremi esercitano su di noi.
+\chapter{Proprietà dei linguaggi liberi}  
+È il momento di fare una gita domenicale di famiglia presso il supermercato MondoMatematica \textregistered e perderci tra i gli scaffali invitanti e variopinti, stregati dalla capitalistica attrazione che tutte quelle proprietà, quei lemmi e quei teoremi esercitano su di noi.
   
 \section{Proprietà di chiusura}
 \subsection*{Chiusura rispetto all'unione}
@@ -193,17 +193,17 @@ Esiste un teorema che ci permette di fare pulizia etnica sui linguaggi.
   \end{itemize}
 \end{theorem}
 
-Le grammatiche che possiedono queste caratteristiche sono più sintetiche e generano linguaggi equivalenti a livello espressivo, ma più puliti; ad esempio, non c'è alcun bisogno di avere non-terminali che abbiano una produzione in \(\varepsilon\) e, qualora richiesto, la produzione \(S \rightarrow \varepsilon\) sarebbe sufficiente allo scopo, spiegheremo in seguitoquesta affermazione.
+Le grammatiche che possiedono queste caratteristiche sono più sintetiche e generano linguaggi equivalenti a livello espressivo, ma più puliti; ad esempio, non c'è alcun bisogno di avere non-terminali che abbiano una produzione in \(\varepsilon\) e, qualora richiesto, la produzione \(S \rightarrow \varepsilon\) sarebbe sufficiente allo scopo, spiegheremo in seguito questa affermazione.
 
 Non è nostro interesse entrare nel dettaglio degli algoritmi per effettuare questa pulizia, poiché dimostrarne la correttezza richiederebbe un considerevole impegno. Andremo però ad analizzare come possiamo, se non altro,  eliminare le \(\varepsilon\)-produzioni.
 
 \subsection{Come eliminare le produzioni di parole vuote}
-Per eliminare le \(\varepsilon\)-produzioni bisogna procedere ad individuare i non-terminali \emph{annullabili} (\emph{nullable}), ovvero quei non-terminali che, con qualche derivazione, producono la parola vuota (\(A : A \rightarrow^\ast \varepsilon\)). Si può procedere ricorsivamente:
+Per eliminare le \(\varepsilon\)-produzioni bisogna procedere ad individuare i non-terminali \emph{annullabili} (\emph{nullable}), ovvero quei non-terminali che, con qualche derivazione, producono la parola vuota (\(A : A \Rightarrow^\ast \varepsilon\)). Si può procedere ricorsivamente:
 \begin{description}
   \item[Base] se la grammatica comprende una produzione della forma \(A \rightarrow \varepsilon\), allora quel non-terminale \(A\) è annullabile;
   \item[Step] se la grammatica comprende una produzione della forma \(A \rightarrow Y_1Y_2 \ldots Y_n\) e i non terminali \(Y_1, Y_2, \ldots, Y_3\) sono tutti annullabili, allora anche \(A\) è annullabile. 
 \end{description}
-A questo punto, andiamo a sostituire ogni produzione della forma \(A \rightarrow Y_1Y_2 \ldots Y_n\) con una famiglia di produzioni dove ogni combinazione di \(Y_i\) annullabili è rimossa dal body della produzione. Se tutti gli \(Y_i\) sono annullabili, la stessa produzione \(A \rightarrow Y_1Y_2 \ldots Y_n\) diventa di questa forma \(A \rightarrow \varepsilon\) e non viene quindi inclusa nelle produzioni finali. Quindi, si elimina ogni produzione \(A \rightarrow \varepsilon\).
+A questo punto, andiamo a sostituire ogni produzione della forma \(A \rightarrow Y_1Y_2 \ldots Y_n\) con una famiglia di produzioni dove ogni combinazione di \(Y_i\) annullabili è rimossa dal body della produzione. Se tutti gli \(Y_i\) sono annullabili, la stessa produzione \(A \rightarrow Y_1Y_2 \ldots Y_n\) diventa di forma \(A \rightarrow \varepsilon\) e non viene quindi inclusa nelle produzioni finali. Quindi, si elimina ogni produzione \(A \rightarrow \varepsilon\).
 
 \paragraph{Esempio di applicazione}
 Andiamo a vedere un esempio considerando la seguente grammatica:
@@ -296,7 +296,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
   Ulteriori considerazioni:
    \begin{itemize}
      \item per come abbiamo scelto le occorrenze di \(A\), la profondità del sottoalbero radicato in \(A_2\) è minore del numero di non-terminali presenti nella grammatica considerata, da cui, per definizione stessa del valore \(p\), \(|vwx| < p\);
-     \item la grammatica \(\mathcal{G}\) che genera il linguaggio che stiamo considerando è ripulita, per cui nelle derivazioni di forma \(A \implies^* \alpha A \beta\), almeno uno dei due simboli \(\alpha, \beta\) deve fornire uno ulteriore; questo ci permette di affermare che \(|vx| > 0\).
+     \item la grammatica \(\mathcal{G}\) che genera il linguaggio che stiamo considerando è ripulita, per cui nelle derivazioni di forma \(A \implies^* \alpha A \beta\), almeno uno dei due simboli \(\alpha, \beta\) deve fornirne uno ulteriore; questo ci permette di affermare che \(|vx| > 0\).
    \end{itemize}
 
    \paragraph{Dimostrazione se \(\varepsilon \in \mathcal{L}\)}
@@ -368,7 +368,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
   \end{align}
   Che tutto questo possa non risultare proprio chiarissimo a tutti è una cosa che francamente non ci stupisce; a tal proposito, proponiamo una descrizione discorsiva di questo negato della tesi del pumping lemma:
   \begin{displayquote}
-    Per un qualsiasi numero naturale \(p\) \textbf{arbitrariamente} scelto e scegliendo una parola \(z\) appartenente al linguaggio e la cui lunghezza è maggiore di \(p\), dobbiamo mostrare che qualsiasi decomposizione di \(z\) in sottostringhe di forma \(uvwxy\), in cui la lunghezza delle sottostringhe \(vwx\) è minore di \(p\) e la lunghezza di \(vx\) è non nulla, possiamo sempre trovare un indice \(i\) per cui la parola \(z\), le cui sottostringhe sono state alterate secondo \(uv^iwx^iy\), non appartiene al linguaggio considerato.
+    Per un qualsiasi numero naturale \(p\) \textbf{arbitrariamente} scelto e scegliendo una parola \(z\) appartenente al linguaggio e la cui lunghezza è maggiore di \(p\), allora dobbiamo mostrare che qualsiasi decomposizione di \(z\) in sottostringhe di forma \(uvwxy\), in cui la lunghezza delle sottostringhe \(vwx\) è minore di \(p\) e la lunghezza di \(vx\) è non nulla, possiamo sempre trovare un indice \(i\) per cui la parola \(z\), le cui sottostringhe sono state alterate secondo \(uv^iwx^iy\), non appartiene al linguaggio considerato.
   \end{displayquote}
   Bene, questo blocco infinito di logica e insiemistica è finito; per chi avesse sentito una paura folle montare dentro, niente paura, adesso passeremo a degli esempi pratici, che sapranno spiegare la teoria su cui essi stessi sono basati meglio di qualsiasi spiegazione a parole.
 
@@ -380,11 +380,11 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
     \quad cB &\to Bc\\
     \quad bB &\to bb
   \end{align*}
-  L'abbiamo già incontrata, è una grammatica contestuale che genera un linguaggio di questo tipo: \(\L(\G) = \{a^nb^nc^n \mid n > 0\}\). A questo punti ci chiediamo se \(\L(\G)\) è libero oppure no, il che significa, lo ripetiamo, riuscire a trovare una seconda grammatica \(\G'\). che generi lo stesso linguaggio (\(\L(\G') = \L(\G)\)) ma che sia anche libera. La risposta è negativa, quello non è un linguaggio libero, ed è il momento di tirare fuori il nostro pumping lemma e rendere ragione di ciò.
+  L'abbiamo già incontrata, è una grammatica contestuale che genera un linguaggio di questo tipo: \(\L(\G) = \{a^nb^nc^n \mid n > 0\}\). A questo punto ci chiediamo se \(\L(\G)\) è libero oppure no, il che significa, lo ripetiamo, riuscire a trovare una seconda grammatica \(\G'\) che generi lo stesso linguaggio (\(\L(\G') = \L(\G)\)) ma che sia anche libera. La risposta è negativa, quello non è un linguaggio libero, ed è il momento di tirare fuori il nostro pumping lemma e rendere ragione di ciò.
   \begin{proof}
-    La dimostrazione è ovviamente per contraddizione, perché la nostra supposizione è che \(\L\) sia libero e stiamo per tentare di verificare la validità del negato della tesi del pumping lemma e questo contraddirrebbe la nostra supposizione (Eq.\ref{eq:pl-neg-abstract}). Diamo il via alle danze:
+    La dimostrazione è ovviamente per contraddizione, perché la nostra supposizione è che \(\L\) sia libero e stiamo per tentare di verificare la validità del negato della tesi del pumping lemma e questo contraddirebbe la nostra supposizione (Eq.\ref{eq:pl-neg-abstract}). Diamo il via alle danze:
     \begin{itemize}
-      \item prendiamoci un intero \(P \in \mathbb{N}^+\) scelto arbitrariamente (Eq.\ref{eq:pl-neg_1});
+      \item prendiamoci un intero \(p \in \mathbb{N}^+\) scelto arbitrariamente (Eq.\ref{eq:pl-neg_1});
       \item scegliamoci una parola \(z\) che appartenga a \(\L\) e abbia una lunghezza maggiore di \(p\); noi scegliamo la parola \(z = a^pb^pc^p\), che ha lunghezza \(|z| = 3p > p\) e certamente appartiene al linguaggio:
       \begin{equation*}
         \underbrace{aa...a}_\text{\emph{p}}\underbrace{bb...b}_\text{\emph{p}}\underbrace{cc...c}_\text{\emph{p}}
@@ -565,7 +565,7 @@ Intuitivamente, è facile convincersene: supponiamo infatti di produrre, a parti
 
 \begin{itemize}
   \item se applichiamo \(B\; \to\; 1\) andiamo a chiudere la derivazione con una stringa "bilanciata" (si passi sopra all'abuso di terminologia);
-  \item se invece abblichiamo la seconda produzione possibile \(B\; \to\; 1S\) non stiamo facendo altro che tornare al caso base del ragionamento, mantenendo comunque una stringa bilanciata;
+  \item se invece abblichiamo la seconda produzione possibile (\(B\; \to\; 1S\)) non stiamo facendo altro che tornare al caso base del ragionamento, mantenendo comunque una stringa bilanciata;
   \item l'unico modo che abbiamo per introdurre un altro \(0\) è applicare la terza produzione \(S\; \to\; 0BB\), ma quei due \(B\), a questo punto, non hanno altro modo di terminare se non diventando degli \(1\).
 \end{itemize}
 
@@ -592,14 +592,14 @@ La soluzione quindi avrà la seguente forma:
 \end{align*}
 
 \paragraph{Soluzione 4.2}
-Nonostante l'esercizio, in apparenza, sia solo leggermente diverso dal precedente, ci dobbiamo porre il problema di come aggiungere la generazione della parola vuota \(\varepsilon\) al linguaggio. Questo può essere risolto in maniera molto elegante con una grammatica context-free e non ambigua, come ad esempio quella seguente:
+Nonostante l'esercizio, in apparenza, sia solo leggermente diverso dal precedente, ci dobbiamo porre il problema di come aggiungere la generazione della parola vuota \(\varepsilon\) al linguaggio. Questo può essere risolto in maniera molto elegante con una grammatica libere e non ambigua, come ad esempio quella seguente:
 
 \begin{align*}
   S\; &\to\; aScc\; \mid T \\
   T\; &\to\; bT\; \mid \varepsilon
 \end{align*}
 
-\subsection*{Esercizio 5 - Grammatiche context dependent}
+\subsection*{Esercizio 5 - Grammatiche contestuali}
 Considerata la seguente gramatica \(\mathcal{G}\), è vero che \(\mathcal{L(G)} = \varnothing\)?
 
 \begin{align*}

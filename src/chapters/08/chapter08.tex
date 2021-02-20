@@ -80,7 +80,7 @@ Nel nostro esempio precedente abbiamo cercato di capire intuitivamente quali ite
     \end{equation}
 \end{definition}
 
-La chiusura consiste sostanzialmente nell'aggiungere, per tutti quegli items che hanno un punto davanti ad un non-terminale, tutte le derivazioni possibili di quel non-terminale; questo va applicato ricorsivamente fino a che non sono presenti tutte le chiusure delle produizioni con un punto davanti ad un non-terminale. Più facile a farsi che a dirsi, credetemi, come del resto qualsiasi altro procedimento che vedremo in questo capitolo.
+La chiusura consiste sostanzialmente nell'aggiungere, per tutti quegli items che hanno un punto davanti ad un non-terminale, tutte le produzioni possibili di quel non-terminale; questo va applicato ricorsivamente fino a che non sono presenti tutte le chiusure delle produizioni con un punto davanti ad un non-terminale. Più facile a farsi che a dirsi, credetemi, come del resto qualsiasi altro procedimento che vedremo in questo capitolo.
 
 \subsubsection{Esempio di calcolo della chiusura}
 Prendiamo ora ad esempio la seguente grammatica:
@@ -129,14 +129,14 @@ Abbiamo visto cosa sono gli stati che compongono gli automi caratteristici; a qu
 In primis, definiamo il kernel dello stato iniziale come \(P_0 = \{S' \to \cdot S\}\), dove \(S'\) è un carattere inserito da noi, mentre \(S\) è lo start symbol della nostra grammatica.
 
 \paragraph{Svolgimento}
-Fino a che non esauriamo gli stati ancora da visitare andiamo a prenderli uno alla volta e li analizziamo nel segiente modo:
+Fino a che non esauriamo gli stati ancora da visitare andiamo a prenderli uno alla volta e li analizziamo nel seguente modo:
 \begin{enumerate}
     \item calcoliamo la chiusura del kernel dello stato, questo insieme rappresenta tutte le produzioni che si possono compiere da un certo stato per transitare verso altri stati;
     \item una volta calcolata la chiusura del kernel, le produzioni (gli item) che abbiamo già collezionato avranno forma \(A \to \alpha \cdot x \beta\), il che significa che nello stato in cui mi trovo, diciamo \(P\), ho già visto \(\alpha\) e posso fare una transizione tramite \(x\);
-    \item esiste quindi una transizione da \(P\) a uno stato \(P'\) attraverso l'item \(A \to \alpha x \cdot \beta\); se \(x\) è un terminale, tale transizione rappresenta un'operazione di shift (come abbiamo visto nell'esercizio della sezione scorsa). Questo significa che avrò una transizione etichettata con \(x\) che mi porta da \(P\) a \(P'\);
+    \item esiste quindi una transizione da \(P\) a uno stato \(P'\) attraverso l'item \(A \to \alpha x \cdot \beta\); se \(x\) è un terminale, tale transizione rappresenta un'operazione di shift. Questo significa che avrò una transizione etichettata con \(x\) che mi porta da \(P\) a \(P'\);
     \item a questo punto genero il nuovo stato \(P'\) che contiene come kernel l'item \(A \to \alpha x \cdot \beta\), ricordando che poi andrò a includere tra gli item di \(P'\) anche gli item che appartengono a \(closure_0 (\{ A \to \alpha x \cdot \beta \})\), poiché se \(\beta\) è un non-terminale allora mi aspetto di poter trovare in \(P'\) anche tutto ciò che deriva da \(\beta\).
 \end{enumerate}
-C'è però una nota da aggiungere a questo procedimento: può accadere che quando generiamo un nuovo stato \(P'\) per transizione da uno stato \(P\) ci rendiamo conto che il kernel di questo stato corrisponde al kernel di un altro stato che abbiamo già vistisato, diciamo \(Q\); in questo caso invece che creare un nuovo stato \(P'\), quello che facciamo è collegare (tramite una \(x\)-transizione) \(P\) a \(Q\).
+C'è però una nota da aggiungere a questo procedimento: può accadere che quando generiamo un nuovo stato \(P'\) per transizione da uno stato \(P\) ci rendiamo conto che il kernel di questo stato corrisponde al kernel di un altro stato che abbiamo già visisato, diciamo \(Q\); in questo caso invece che creare un nuovo stato \(P'\), quello che facciamo è collegare tramite una \(x\)-transizione \(P\) a \(Q\).
 
 \subsubsection{Esempio di costruzione di automa LR(0)}
 \label{subsubsec:esercizio_costruzione_automa_lr0}
@@ -152,7 +152,7 @@ Partiamo creando lo stato iniziale, lo stato \(0\):
 \begin{equation*}
     S' \to \cdot S
 \end{equation*}
-Ma c'è di più: nello stato iniziale va inserita anche la \(closure_0(\{ S' \to \cdot S \})\), quindi aggiungo le produzioni di \(S\): \(S \to \cdot aABe\). Dato che non sono presenti altre produzioni con marker prima di caratteri non-terminali, la chiusura dello stato \(0\) è completa.
+nello stato iniziale va inserita anche la \(closure_0(\{ S' \to \cdot S \})\), quindi aggiungo le produzioni di \(S\): \(S \to \cdot aABe\). Dato che non sono presenti altre produzioni con marker prima di caratteri non-terminali, la chiusura dello stato \(0\) è completa.
 
 \paragraph{Svolgimento}
 A questo punto ci troviamo nello stato \(0\) ed abbiamo due produzioni, una con il marker prima di \(S\) ed una con il marker prima di \(a\), per cui dobbiamo aggiungere le seguenti transizioni:
@@ -225,7 +225,7 @@ Questi stati però potrebbero essere già presenti! Non è questo il caso dato c
     \begin{equation*}
         B \to d \cdot 
     \end{equation*}
-    Tale kernel è chiuso e non presnta transizioni uscenti.
+    Tale kernel è chiuso e non presenta transizioni uscenti.
     \item Non ci rimane che analizzare gli stati \(8\) e \(9\) che presentano rispettivamente i seguenti kernel:
     \begin{align*}
         S &\to aABe \cdot \\
@@ -262,7 +262,7 @@ Ci stiamo avvicinando, fra poco parleremo dell'algoritmo shift/reduce, vero e pr
 La tabella ha tante righe quanti gli stati dell'automa caratteristico, ed una colonna per ogni simbolo in \(V \cup \{ \$ \}\). La tabella dipende dall'automa caratteristico: automi diversi portano a tabelle diverse che portano a tipi di parsing diversi. 
 
 \paragraph{Le riduzioni}
-Le mosse di shift dipendono direttamente dalla funzione di transizione dell'automa, mentre le mosse di reduce sono più articolate: vanno effettuate solo quando raggiungiamo degli stati con etichette particolari, ed implicano che dobbiamo cancellare degli elementi dalla pila degli stati e dalla pila dei simboli, per poi inserire altri caratteri in quest'ultima pila. Inoltre, le mosse di reduce dipendono dal contenuto degli stati dell'automa: in un certo stato della tabella di parsing andiamo ad inserire una mossa di riduzione se la produzione \(A \to \beta\) è effettuata in uno stato contenente un reducing item per \(A \to \beta\). A questo punto però ci chiediamo: cosa sono i reducing item?
+Le mosse di shift dipendono direttamente dalla funzione di transizione dell'automa, mentre le mosse di reduce sono più articolate: vanno effettuate solo quando raggiungiamo degli stati con etichette particolari, ed implicano che dobbiamo cancellare degli elementi dalla pila degli stati e dalla pila dei simboli, per poi inserire altri caratteri in quest'ultima pila. Inoltre, le mosse di reduce dipendono dal contenuto degli stati dell'automa: in un certo stato della tabella di parsing andiamo ad inserire una mossa di riduzione se la produzione \(A \to \beta\) è effettuata in uno stato contenente un reducing item per \(A \to \beta\). A questo punto però ci chiediamo: cosa sono i reducing items?
 \begin{itemize}
     \item nel caso di LR(0)-items avranno forma \(A \to \beta \cdot\), e indicano che siamo arrivati alla fine della derivazione di \(\beta\), per cui il marker \(\cdot\) si trova in fondo alla derivazione;
     \item nel caso LR(1)-items avranno forma \(A \to \beta \cdot, \; \Delta\), e succede quando ho terminato l'analisi della produzione di \(\beta\),  ma con una condizione in più specificata da quel \(\Delta\).
@@ -303,7 +303,7 @@ La prossima domanda sorge spontanea: cosa accade quando abbiamo un conflitto? La
 Entriamo nel merito di come costruire una tabella di parsing SLR(1), ovvero parsing Simple Left (l'input viene letto da sinistra) Rightmost (utilizza derivazione rightmost); questo è un parsing poco raffinato e le tabelle contengono informazioni grossolane, e questo è dovuto a due motivi:
 \begin{enumerate}
     \item la loro costruzione ha come base di partenza un automa caratteristico con LR(0)-item;
-    \item la funzione di lookahead è pari a \(\mathcal{LA}(P, A \rightarrow \beta) = follow(A)\) per ogni \(A \rightarrow \beta \cdot \in P\).
+    \item la funzione di lookahead è \(\mathcal{LA}(P, A \rightarrow \beta) = follow(A)\) per ogni \(A \rightarrow \beta \cdot \in P\).
 \end{enumerate}
 Poiché repetita iuvant, ribadiamo che una grammatica \(\G\) è SLR(1) se e solo se la parsing table ottenuta secondo quelle prescrizioni non ha conflitti.
 
@@ -314,7 +314,7 @@ Proviamo a costruire la tabella di parsing \(SLR(1)\) per la seguente grammatica
     A &\rightarrow Abc \mid b \\
     B &\rightarrow d
 \end{align*}
-Riconoscerete di certo questa grammatica, l'abbiamo già vista nella costruzione dell'automa caratteristico (si osservi Fig.\ref{fig:charateristic-automata-complete}). Tuttavia, il nostro obiettivo qui è costruire la tabella di parsing, e per farlo utilizzeremo i risultati ottenuti in precedenza: sappiamo infatti che lo stato \(1\) (anche indicato dal colore verde) è quello che contiene l'\textbf{accepting item}\footnote{Ovvero uno stato etichettato come \(Accept\) e che, se raggiunto, implicherà una conclusione con successo dell'algoritmo.}, mentre invece gli stati contenenti i \textbf{reducing item} (segnalati come stati finali) sono invece 4, 7, 8, 9. 
+Riconoscerete di certo questa grammatica, l'abbiamo già vista nella costruzione dell'automa caratteristico (si osservi Fig.\ref{fig:charateristic-automata-complete}). Adesso il nostro obiettivo qui è costruire la tabella di parsing, e per farlo utilizzeremo i risultati ottenuti in precedenza: sappiamo infatti che lo stato \(1\) (anche indicato dal colore verde) è quello che contiene l'\textbf{accepting item}\footnote{Ovvero uno stato etichettato come \(Accept\) e che, se raggiunto, implicherà una conclusione con successo dell'algoritmo.}, mentre invece gli stati contenenti i \textbf{reducing item} (segnalati come stati finali) sono invece 4, 7, 8, 9. 
 \begin{figure}[H]
     \centering
 	\subimport{assets/figures/}{automa_bottom_up_8-3-4.tex}
@@ -328,7 +328,8 @@ In particolare, possiamo dire che i reducing item sono:
     \item \(\{S \rightarrow aABe \cdot\}\) per lo stato 8;
     \item \(\{A \rightarrow Abc \cdot\}\) per lo stato 9;
 \end{enumerate}
-Avendo a disposizione l'automa caratteristico e i dati sopra citati è dunque possibile costruire la tabella di parsing seguendo l'algoritmo per la costruzione di una tabella di parsing per il bottom-up parsing (ricordiamo all'utente distratto che siamo nell'ambito del parsing; parsing e chiudoing). Procediamo quindi in questo modo:
+Con l'ausilio dell'automa appena trovato, seguiamo l'algoritmo e costruiamo la tabella di parsing in questo:
+% Avendo a disposizione l'automa caratteristico e i dati sopra citati è dunque possibile costruire la tabella di parsing seguendo l'algoritmo per la costruzione di una tabella di parsing per il bottom-up parsing (ricordiamo all'utente distratto che siamo nell'ambito del parsing; parsing e chiudoing). Procediamo quindi in questo modo:
 \begin{enumerate}
     \item creiamo una tabella con tante righe quanti sono gli stati nel nostro automa caratteristico (in questo caso da 0 a 9) e con tante colonne quanti sono i terminali (a cui va aggiunto il \$) e i non-terminali presenti all'interno della nostra grammatica (in questo caso abbiamo di conseguenza \emph{a b c d e \$ A B S});
     \item facendo riferimento all'automa caratteristico, se \(Y\) è un terminale e c'è una transizione \(\tau (P, Y) = Q\) (ovvero una transizione che va dallo stato \(P\) allo stato \(Q\) attraversando un arco con etichetta \(Y\)), allora inseriamo un'operazione di \texttt{shift} \(Q\) nella cella \(M[P, Y]\); ad esempio, nel nostro caso inseriremo \(M[0, a] = 2\);
@@ -491,7 +492,7 @@ Con 8 come stato e \$ come carattere in lettura ci assicuriamo una bella reduce 
 \end{align*}
 Il prossimo passo è descritto dalla casella [1,\$], che ci dice Accept; questo significa che abbiamo terminato la verifica e possiamo dire, con somma pace interiore, che \(w \in \L(\G)\).
 
-Non abbiamo solo trovato una soluzione al quesito iniziale, ma abbiamo anche ricavato i passi di derivazione che ci portano ad ottenere la parola \(w\) stessa; questi. infatti, consistono nelle riduzioni che abbiamo incontrato nel nostro cammino elencate in senso contrario:
+Non abbiamo solo trovato una soluzione al quesito iniziale, ma abbiamo anche ricavato i passi di derivazione che ci portano ad ottenere la parola \(w\) stessa; questi, infatti, consistono nelle riduzioni che abbiamo incontrato nel nostro cammino elencate in senso contrario:
 \begin{align*}
     S &\to aABe &(aABe)\\
     B &\to d &(aAde)\\
@@ -630,7 +631,7 @@ I nostri conflitti sono localizzati solo in quattro situazioni, possiamo quando 
 \end{table}
 
 \paragraph{La situazione}
-Proviamo a capire bene qual è il punto di tutta questa situazione. Se il nostro parser si trova nello stato 5, questo vuol dire che, in testa alla nostra pila dei simboli \(symSt\), avremo necessariamente \(E + E\); possiamo vederlo facilmente, è sufficiente buttare un occhio al nostro automa caratteristico (Fig.\ref{fig:ex2-sh/re-automata}) per renderci conto che lo stato 5 è raggiungibile solo dallo stato \(3\), il quale a sua volta può essere raggiunto o dalla sequenza di stati \((0, 1)\), \((4, 6)\) o \((3, 5)\), in tutti questi casi sulla testa di \(symSt\) si troverà \(E + E\). Il discorso è del tutto analogo se passiamo allo stato 6, dove avremo la testa di \(symSt\) popolata di \(E * E\), poiché 6 è raggiungibile tramite \(\dots \to 0 \to 1 \to 4 \to 6\), \(\dots \to 4 \to 6 \to 4 \to 6\) oppure \(\dots \to 3 \to 5 \to 4 \to 6\).
+Proviamo a capire bene qual è il punto di tutta questa situazione. Se il nostro parser si trova nello stato 5, questo vuol dire che, in testa alla nostra pila dei simboli \(symSt\), avremo necessariamente \(E + E\); possiamo vederlo facilmente, è sufficiente buttare un occhio al nostro automa caratteristico (Fig.\ref{fig:ex2-sh-re-automata}) per renderci conto che lo stato 5 è raggiungibile solo dallo stato \(3\), il quale a sua volta può essere raggiunto o dalla sequenza di stati \((0, 1)\), \((4, 6)\) o \((3, 5)\), in tutti questi casi sulla testa di \(symSt\) si troverà \(E + E\). Il discorso è del tutto analogo se passiamo allo stato 6, dove avremo la testa di \(symSt\) popolata di \(E * E\), poiché 6 è raggiungibile tramite \(\dots \to 0 \to 1 \to 4 \to 6\), \(\dots \to 4 \to 6 \to 4 \to 6\) oppure \(\dots \to 3 \to 5 \to 4 \to 6\).
 
 È chiaro che abbiamo dei conflitti quando siamo nella situazione in cui due simboli legati da un operatore sono stati già letti (\(E + E\) o \(E * E\)) e, subito dopo, leggiamo un terzo simbolo. Questo è dovuto proprio al fatto che la grammatica, nella sua ambiguità, non riesce a esprimere opportunamente né associatività, né precedenza per i due operatori.
 
@@ -639,7 +640,7 @@ E insomma, qual è il segreto per risolvere questi dannati conflitti? Quello che
 \paragraph{L'utilità dei parse trees}
 Possiamo aiutarci se pensiamo ai parse tree della nostra grammatica: gli alberi, infatti, per loro stessa costruzione, veicolano informazioni sull'annidamento dei loro elementi in maniera molto efficace, e l'annidamento può tranquillamente avere una corrispondenza diretta con la parentesizzazione (quindi con le regole di precedenza tra espressioni). Di fatto assumendo, come facciamo noi, che i sottoalberi vengano risolti prima degli alberi padri, stabiliamo delle regole di precedenza del tutto simili a quelle che si possono ottenere con una parentesizzazione.
 
-Nello specifico, noi siamo interessati a esprimire l'associatività sinistra degli operatori \(+\) e \(*\), nonché la precedenza di \(*\) rispetto a \(+\). Diciamolo in maniera ancora più pragmatica: se guardiamo gli esempi in Fig.\ref{fig:ex2-sh_re-ptree}, vogliamo sempre avere l'albero Fig.\ref{fig:ex2-sh_re-ptree_1} al posto di Fig.\ref{fig:ex2-sh_re-ptree_2} quando stiamo valutando una stessa espressione (\(E + E + E\), ad esempio), e vogliamo che la precedenza tra i due operatori sia tale da generare sempre parse tree come Fig.\ref{fig:ex2-sh_re-ptree_3} e Fig.\ref{fig:ex2-sh_re-ptree_4}: \(E*E\) è più "in basso", ergo verrà eseguita prima, ergo avrà precedenza su \(E+E\).
+Nello specifico, noi siamo interessati a esprimire l'associatività sinistra degli operatori \(+\) e \(*\), nonché la precedenza di \(*\) rispetto a \(+\). Diciamolo in maniera ancora più pragmatica: se guardiamo gli esempi in Fig.\ref{fig:ex2-sh_re-ptree}, vogliamo sempre avere l'albero Fig.\ref{fig:ex2-sh_re-ptree_1} al posto di Fig.\ref{fig:ex2-sh_re-ptree_2} quando stiamo valutando una stessa espressione (\(E + E + E\), ad esempio), e vogliamo che la precedenza tra i due operatori sia tale da generare sempre alberi di derivazione come Fig.\ref{fig:ex2-sh_re-ptree_3} e Fig.\ref{fig:ex2-sh_re-ptree_4}: \(E*E\) è più "in basso", ergo verrà eseguita prima, ergo avrà precedenza su \(E+E\).
 \begin{figure}[H]
     \begin{minipage}[b]{.4\textwidth}
         \centering
@@ -747,7 +748,7 @@ Il nostro obiettivo è costruire una tabella di parsing SLR(1) per la grammatica
     \begin{equation*}
         S' \to S \cdot    
     \end{equation*}
-    Non serve calcolare la chiusura di questo item, in quanto è formata solamente da sé stesso; dobbiamo però evidenziare il fatto che questo è lo stato contenente l'accepting item.
+    Non serve calcolare la chiusura di questo item, in quanto è formata solamente da sé stesso; evidenziamo che questo è lo stato contenente l'accepting item.
     \item Analizziamo dunque lo stato 2, il cui kernel è popolato da questi item:
     \begin{align*}
         S &\to a \cdot Ad \\

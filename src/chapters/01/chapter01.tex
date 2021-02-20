@@ -88,7 +88,7 @@ Ora è la fase dell’analisi semantica. Un esempio di operazione di analisi sem
 \end{figure}
 
 \subsubsection{Generazione del codice intermedio}
-È il momento della generazione del codice intermedio: in questa fase viene creato un codice testuale creato traducendo il parse tree. Queste istruzioni sono leggibili dall’uomo ma non è né assembly né codice effettivo, d’altronde si chiama intermedio, no? Nell'esempio in \ref{codice_intermedio} abbiamo sulla sinistra il parse tree e sulla destra abbiamo un esempio del codice intermedio generato.
+È il momento della generazione del codice intermedio: in questa fase viene generato un codice testuale traducendo il parse tree. Queste istruzioni sono leggibili dall’uomo ma non è né assembly né codice effettivo, d’altronde si chiama intermedio, no? Nell'esempio in \ref{codice_intermedio} abbiamo sulla sinistra il parse tree e sulla destra abbiamo un esempio del codice intermedio generato.
 \begin{figure}[H]
     \begin{minipage}{.5\textwidth}
 		\raggedleft
@@ -121,8 +121,8 @@ Riassumendo i passaggi necessari per la compilazione sono:
 \end{enumerate}
 Possiamo dividere questi passaggi in due gruppi:
 \begin{itemize}[]
-    \item \emph{Front-end} Dall’analisi lessicale fino al codice intermedio.
-    \item \emph{Back-end} Tutto il resto.
+    \item \emph{Front-end}: dall’analisi lessicale fino al codice intermedio.
+    \item \emph{Back-end}: tutto il resto.
 \end{itemize}
 Ma perché passiamo dalla fase del codice intermedio? Per ragioni di modularità:
 Se abbiamo \(N\) linguaggi, abbiamo \(N\) front-end e se abbiamo \(K\) macchine, abbiamo \(K\) back-end ciò implica che senza un codice intermedio dovremo creare \(N*K\) differenti compilatori, usiamo il codice intermedio come livello di astrazione per semplificare il tutto. 

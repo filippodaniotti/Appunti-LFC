@@ -13,7 +13,7 @@
 \section{Traduzione da NFA a DFA}
 Abbiamo già discusso in passato di come la simulazione su DFA sia più efficiente che su NFA, quindi ora siamo interessati a risolvere questo problema: dato un qualunque NFA come si può ricavare un DFA che riconosca lo stesso linguaggio?
 
-Un mezzo per raggiungere questo scopo è l’utilizzo di una sorta di meccanismo di \(\varepsilon\)-chiusura permanente (che elimini in modo permanente le \(\varepsilon\)-transizioni), questo meccanismo si chiama Subset Construction.
+Un mezzo per raggiungere questo scopo è l’utilizzo di una sorta di meccanismo di \(\varepsilon\)-chiusura permanente (che elimini in modo permanente le \(\varepsilon\)-transizioni); questo meccanismo si chiama \emph{subset construction}.
 
 
 \subsection{Algoritmo di Subset Costruction}
@@ -21,6 +21,7 @@ L’algoritmo di Subset Construction serve per ricavare un DFA dato un certo NFA
 
 L'idea di base è quella di utilizzare la \(\varepsilon\)-chiusura per mappare sottoinsiemi degli stati del dato NFA (che in seguito chiameremo rozzamente \emph{stati non deterministici}, o \emph{snd}) in stati per il nuovo DFA (che in seguito chiameremo ancor più rozzamente \emph{stati deterministici} o \emph{sd}).
 
+\paragraph{}
 Per dare un'idea di come lavora questo algoritmo descriviamone i primi passi.\\
 Si individua qual è lo stato iniziale dell'NFA, diciamo \(S_0\), lo si prende come punto di partenza e se ne calcola la \(\varepsilon\)-chiusura \(T\); sarà proprio \(T\) ad essere lo stato iniziale del DFA. Ora dovrebbe essere più chiaro quello che si fa in questo algoritmo: si eliminano tutte le \(\varepsilon\)-transizioni per ottenere un set di transizioni \(\textrm{move}_d\) che contiene solo transizioni "deterministiche".
 
@@ -60,17 +61,15 @@ In questa fase si scorrono tutti gli elementi \(a\) dell'alfabeto \(\mathcal{A}\
 \paragraph*{Foreach finale}
 Questa fase serve per definire quali sono gli stati (sd) finali del nuovo insieme di stati \(R\), ovvero quali sono gli stati finali del DFA \(\mathcal{D}\). Questi stati (ribadiamo, sd) si identificano perché contengono \emph{almeno uno} stato (snd) finale, ovvero uno stato \(T \in R\) è uno stato finale per \(\mathcal{D}\) se \(T \cap F \neq \emptyset\).
 
+\subsubsection{Complessità}
 Arriva però il momento di porsi un'importante domanda: qual è la complessità di questo algoritmo?
 Poniamo le basi per affrontare una risposta: supponiamo che l’NFA abbia \(n\) stati ed \(m\) archi, mentre supponiamo che il DFA abbia \(n_d\) stati.
 \begin{itemize}
-    \item Osserviamo che il ciclo dominante naturalmente è il primo \texttt{while}; quest'ultimo  è ritpetuto \(n_d\) volte, ma quanto vale \(n_d\)? Questo è un aspetto che affronteremo nel prossimo futuro.
+    \item Osserviamo che il ciclo dominante naturalmente è il primo \texttt{while}; quest'ultimo  è ritpetuto \(n_d\) volte.
     \item All'interno del \texttt{while} troviamo il nostro caro \texttt{foreach} \(a \in \mathcal{A}\), che viene ripetuto \(|A|\) volte.
     \item L'ultimo fattore di peso rilevante è la chiamata alla funzione di calcolo della \(\varepsilon\)-chiusura, la quale ha costo \(\mathcal{O}(n+m)\).
 \end{itemize}
-La complessità globale è quindi \( \mathcal{O}(n_d \cdot |A| \cdot (n+m))\).
-
-Ora la domanda si fa più pressante: quanto vale effettivamente \(n_d\)?
-Fin massa... possiamo già anticipare che esso è un \(\mathcal{O}(2^n)\). Nonostante questo possa essere oltremodo sconfortante, è opportuno specificare che quella appena vista è la complessità per \emph{creare} il DFA, un'operazione che viene effettuata una tantum solamente in sede di creazione del compilatore; è vero, è una grossa spesa iniziale, ma permette di avere grandi vantaggi in tutti gli utilizzi successivi.
+La complessità globale è quindi \( \mathcal{O}(n_d \cdot |A| \cdot (n+m))\), ed è dominata da quel \(n_d\), che vale \(\mathcal{O}(2^n)\). Nonostante questo possa essere oltremodo sconfortante, è opportuno specificare che quella appena vista è la complessità per \emph{creare} il DFA, un'operazione che viene effettuata una tantum solamente in sede di creazione del compilatore; è vero, è una grossa spesa iniziale, ma permette di avere grandi vantaggi in tutti gli utilizzi successivi.
 
 Tuttavia per applicazioni con tempo di vita più limitato spesso non ha senso creare il DFA, poiché non si avrebbe il tempo di compensare la spesa iniziale; è questa la ragione per cui ad esempio \href{https://it.wikipedia.org/wiki/Grep}{grep} utilizza NFA.
 
@@ -228,8 +227,6 @@ Di seguito lo pseudocodice per la procedura appena descritta.
 % 	\caption{Pseudocodice}
 % \end{figure}
 \subimport{assets/pseudocode/}{partition-refinement.tex}
-
-La divisione di \(B_{i}\) considerando (\(a,B_{j}\)) consiste nel sostituire \(B_{i}\) con due blocchi, \( B_{i1} = \{s \in B_{i} \mid move_{d}(s,a)\in B\}\) e \( B_{i2} = \{s \in B_{i} \mid move_{d}(s,a)\notin B\}\)
 
 \subsection{Esercizi sulla minimizzazione DFA}
 \subsubsection{Esercizio 1}
@@ -470,7 +467,7 @@ Vediamo subito come possiamo applicare il lemma per dimostrare la seguente affer
 \end{equation}
 Prima di proseguire con la dimostrazione formale, proviamo a spiegare che intuizione potrebbe dirci che ci troviamo davanti ad un linguaggio non regolare.
 
-Se \(\mathcal{L}\) fosse un linguaggio regolare dovrebbe essere possbile rappresentarlo con un NFA o un DFA. Proviamo quindi a immaginare il DFA che riconosce questo linguaggio, come dovrebbe essere? Per bilanciare il numero di \(b\) e di \(a\) dovrebbe in qualche modo obbligare l’inserimento di una \(b\) per ogni \(a\) inserita in precedenza, ma questo non si può fare a meno di inserire infiniti stati, il che è impossibile.
+Se \(\mathcal{L}\) fosse un linguaggio regolare dovrebbe essere possibile rappresentarlo con un NFA o un DFA. Proviamo quindi a immaginare il DFA che riconosce questo linguaggio, come dovrebbe essere? Per bilanciare il numero di \(b\) e di \(a\) dovrebbe in qualche modo obbligare l’inserimento di una \(b\) per ogni \(a\) inserita in precedenza, ma questo non si può fare a meno di inserire infiniti stati, il che è impossibile.
 
 Procediamo quindi con la dimostrazione tramite pumping lemma. Supponiamo \(\mathcal{L}\) regolare e prendiamo \(p\) intero positivo arbitrario (il negato della tesi deve valere per ogni \(p\)). Ora, costruiamo la parola \(z=a^p b^p\); abbiamo che \(|z|>p\).
 Osserviamo che, per ogni decomposizione di \(z\) in \(u,v,w\) che rispetta i vincoli qui sotto riportati:

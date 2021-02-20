@@ -51,7 +51,7 @@ Notiamo subito alcune differenze rispetto alla notazione che abbiamo impiegato f
     \item la freccia ( \(\to\) ) è rappresentata da un altro simbolo, i due punti ( \(:\) );
     \item il pipe ( \(\mid\) ), invece, possiede l'abituale significato;
     \item i terminali possono essere indicati precisamente se inseriti tra singoli apici '\emph{terminale}';
-    \item inoltre, la convenzione rispetto alla capitalizzazione è invertita: qui osserviamo che gli elementi in maiuscolo indicano i terminali, mentre invece quelli in minuscolo rappresentano non terminali; ad esempio, in figura sopra possiamo notare che il non-letterale \texttt{primary\_expression} ha una produzione per cui può risultare o in una serie di letterali (\texttt{IDENTIFIER}, \texttt{CONSTANT}), oppure in una forma \texttt{'(' expression ')'}, dove \texttt{expression} è un altro non-letterale, che a sua volta avrà altre produzioni.
+    \item inoltre, la convenzione rispetto alla capitalizzazione è invertita: qui osserviamo che gli elementi in maiuscolo indicano i terminali, mentre invece quelli in minuscolo rappresentano non terminali; ad esempio, in figura sopra possiamo notare che il non-terminale \texttt{primary\_expression} ha una produzione per cui può risultare o in una serie di terminali (\texttt{IDENTIFIER}, \texttt{CONSTANT}), oppure in una forma \texttt{'(' expression ')'}, dove \texttt{expression} è un altro non-terminale, che a sua volta avrà altre produzioni.
 \end{itemize}
 
 Questo file, inoltre, è pensato per essere utilizzato in tandem con un analizzatore sintattico; per questo motivo, nell'intestazione dello stesso possiamo trovare le dichiarazione di quelli che sono i token (vale a dire, lo ripetiamo, i terminali della grammatica descritta). La forma con cui saranno espressi è rappresentata dal listato di codice sottostante:
@@ -88,10 +88,10 @@ Un'altra cosa che possiamo osservare è la dichiarazione di quello che è lo sta
 }{%
 \inputminted[firstline = 14, lastline = 14, linenos, breaklines, tabsize = 2]{c}{assets/resources/c99.y}%
 }
-Questa dichiarazione in realtà potrebbe non essere presente su alcuni file contenenti grammatiche, dal momento che, in sua assenza, non otteniamo degli errori, bensì viene preso il non-letterale della prima produzione listata a seguito come starting symbol.
+Questa dichiarazione in realtà potrebbe non essere presente su alcuni file contenenti grammatiche, dal momento che, in sua assenza, non otteniamo degli errori, bensì viene preso il non-terminale della prima produzione listata a seguito come starting symbol.
 
 
-Il ruolo dell’analizzatore lessicale è quindi analizzare il sorgente e decidere, di volta in volta, quale derivazione può essere applicata a ciascuna delle righe del sorgente analizzato. Una volta completato l'albero di derivazione e quindi arrivato presso un terminale (ad esempio \texttt{IDENTIFIER}), l'analizzatore lessicale andrà anche ad associargli informazioni come valore e tipo, dal momento che è necessario distinguere quell'\texttt{IDENTIFIER} da un altro. Nel programma potremmo appunto avere due \texttt{IDENTIFIER} di diverso tipo, ma in ogni caso dovremo conservare delle informazioni aggiuntive di qualche tipo (nome, tipo, scope e altro ancora). Tutte queste informazioni vengono conservate in una \emph{symbol table}.
+Il ruolo dell’analizzatore lessicale è quindi analizzare il sorgente e decidere, di volta in volta, quale derivazione può essere applicata a ciascuna delle righe del sorgente analizzato. Una volta completato l'albero di derivazione e quindi arrivato presso un terminale (ad esempio \texttt{IDENTIFIER}), l'analizzatore lessicale andrà anche ad associargli informazioni come valore e tipo, dal momento che è necessario distinguere quell'\texttt{IDENTIFIER} da un altro. Nel programma potremmo appunto avere due \texttt{IDENTIFIER} di diverso tipo, ma in ogni caso dovremo conservare delle informazioni aggiuntive di qualche sorta (nome, tipo, scope e altro ancora). Tutte queste informazioni vengono conservate in una \emph{symbol table}.
 
 Infine, le ultime righe del file contengono informazioni utili al particolare analizzatore sintattico utilizzato; avremo modo di parlarne nel dettaglio in futuro.
 
@@ -105,7 +105,7 @@ Si potrebbe a ragione considerare superfluo specificare che ogni diversa grammat
 \end{itemize}
 
 \subsection{Il compito dell'analizzatore lessicale}
-L'obiettivo dell'analalizzatore lessicale è quindi riconoscere i cosiddetti \emph{lessemi}, ossia quelle parti del programma che corrispondono ai token, e ritornarli. Ciascuno di questi, di solito, viene ritornato sotto forma di coppia \texttt{<token-name>: <token-value>}, dove:
+L'obiettivo dell'analizzatore lessicale è quindi riconoscere i cosiddetti \emph{lessemi}, ossia quelle parti del programma che corrispondono ai token, e ritornarli. Ciascuno di questi, di solito, viene ritornato sotto forma di coppia \texttt{<token-name>: <token-value>}, dove:
 \begin{itemize}
     \item \texttt{<token-name>} è il nome scelto per denotare quel preciso token; seguendo l'esempio della grammatica precedente, \texttt{IDENTIFIER} è un \texttt{<token-name>};
     \item \texttt{<token-value>} è tipicamente un puntatore a una entry della symbol table, in cui si va a salvare tutte le informazioni relative a quel preciso token di tipo\footnote{In questo caso la parola "tipo" è chiaramente impropria, ma è molto utile per rendere la natura astratta di classe di token.} \texttt{<token-name>}.
@@ -124,7 +124,7 @@ Quindi questi lessemi, essendo descritti da delle espressioni regolari, possono 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{lec-14-1}
-    \caption{Automa chericonosce la classe \texttt{relop}}
+    \caption{Automa che riconosce la classe \texttt{relop}}
     \label{automaton-relop}
 \end{figure}
 È molto semplice intuire graficamente che ciascun percorso che termini in uno stato finale ritorna un token, sotto forma di coppia, in cui il \texttt{token-name} è appunto quello della classe \texttt{relop}, mentre il \texttt{token-value} indica qual è l'elemento della classe da ritornare.
@@ -154,7 +154,7 @@ Il procedimento che seguiamo è il seguente:
     \item innanzitutto simuliamo l'NFA creato come sopra descritto;
     \item nel caso di ambiguità, ossia di situazioni come quella descritta sopra tra \mintinline{c}{if} e \mintinline{c}{iffoff}, la convenzione è di preoseguire la simulazione finché nessun’altra transizione è possibile, solitamente quando incontriamo uno spazio o un \texttt{\(\backslash\)n}, privilegiando quindi il match più lungo (si parla di cercare il \emph{longest match});
     \item se nell'insieme di stati che abbiamo raggiunto ci sono delle azioni disponibili, allora andremo ad eseguire quella appartenente al longest match, in caso di pareggio ciascuna azione avrà una priorità, e noi eseguiremo quella con più alta priorità;
-    \item se nessun'azione è disponibile, dobbiamo invece tornare indietro nella sequenza di stati percorsi, fermarci nel primo insieme di stati che presenta almeno uno stato finale e delle azioni associate e cercare di nuovo quella prioritaria; per ognuno di questi passi all'indietro, dobbiamo ricordari di aggiornare il puntatore all'input buffer.
+    \item se nessun'azione è disponibile, dobbiamo invece tornare indietro nella sequenza di stati percorsi, fermarci nel primo insieme di stati che presenta almeno uno stato finale e delle azioni associate e cercare di nuovo quella prioritaria; per ognuno di questi passi all'indietro, dobbiamo ricordarci di aggiornare il puntatore all'input buffer.
 \end{enumerate}
 
 Tutto questo funzionerebbe in maniera analoga se utilizzassimo un DFA: dovremmo semplicemente costruire il DFA a partire dal NFA, dimodoché l'insieme degli stati del DFA sia un sottoinsieme di quello dell'NFA corrispondente.
@@ -162,7 +162,7 @@ Tutto questo funzionerebbe in maniera analoga se utilizzassimo un DFA: dovremmo 
 \subsection{Generatori di analizzatori lessicali: Flex}
 Andiamo a parlare quindi di questi generatori. L'idea di creare un generatore di analizzatori lessicali è nata in concomitanza con la prima definizione e implementazione del compilatore del C, e l'idea era di evitare di dover scrivere ogni volta, per ogni programma, un analizzatore lessicale e uno sintattico a mano.
 
-\emph{Flex} è il primo della sua specie\footnote{o meglio, una sua versione più moderna: il primo vero e proprio si chiamava \emph{lex} e quella \emph{f}, aggiunta successivamente, sta per fast.} ed è solitamente compreso nelle distribuzioni di C; l'idea è risultata talmente valida che oggigiorno ogni linguaggio possiede un proprio generatore di analizzatore lessiale e sintattico.
+\emph{Flex} è il primo della sua specie\footnote{o meglio, una sua versione più moderna: il primo vero e proprio si chiamava \emph{lex} e quella \emph{f}, aggiunta successivamente, sta per fast.} ed è solitamente compreso nelle distribuzioni di C; l'idea è risultata talmente valida che oggigiorno ogni linguaggio possiede un proprio generatore di analizzatore lessicale e sintattico.
 
 Il funzionamento di Flex (ma anche di tutti i generatori di questo tipo) è il seguente: 
 \begin{itemize}
@@ -196,7 +196,7 @@ user routines
 \end{minted}
 Il contenuto di queste tre macrosezioni è ben determinato, andiamo a vederlo più da vicino:
 \begin{labeling}{Parte centrale}
-    \item[Preambolo] qui ci andrà del codice C,in particolare le inizializzazioni di variabili, o delle abbreviazioni per indicare dei particolari pattern nelle espressioni regolari che andremo a utilizzare sotto;
+    \item[Preambolo] qui ci andrà del codice C, in particolare le inizializzazioni di variabili, o delle abbreviazioni per indicare dei particolari pattern nelle espressioni regolari che andremo a utilizzare sotto;
     \item[Parte centrale] è il cuore del file, e si tratta di una lista pattern-azione, dove pattern è un'espressione regolare, e l'azione sarà ciò che dobbiamo compiere qualora dovessimo riconoscere il pattern corrispondente;
     \item[Epilogo] questa sezione è in realtà facoltativa, il lexer funziona anche senza che vi sia scritto alcunché; tuttavia, quello che potremmo eventualmente trovare e/o scrivere qui dentro sono delle routine definite dall'utente, le quali verranno copiate e incollate dentro al genituro \texttt{lex.yy.c}.
 \end{labeling}
