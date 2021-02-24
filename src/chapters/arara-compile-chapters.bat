@@ -1,48 +1,23 @@
-cd 01
-arara -v chapter01
-cd ..
+@echo off
 
-cd 02
-arara -v chapter02
-cd ..
+for /f "delims=" %%G in ('dir /b /s "chapter**.tex"') do (
+    cd %%~pG
 
-cd 03
-arara -v chapter03
-cd ..
+    @REM file dell'ultima compilazione
+    if exist "_minted-%%~nG" rmdir /s /q "_minted-%%~nG"
+    if exist "%%~nG.synctex.gz" del "%%~nG.synctex.gz"
+    if exist "%%~nG.pdf" del "%%~nG.pdf"
+    
+    @REM file di metà compilazione
+    if exist "%%~nG.log" del "%%~nG.log"
+    if exist "%%~nG.out" del "%%~nG.out"
+    if exist "%%~nG.synctex(busy)" del "%%~nG.synctex(busy)"
 
-cd 04
-arara -v chapter04
-cd ..
+    @REM file di output
+    if exist "%%~nG.pdf" del "%%~nG.pdf"
 
-cd 05
-arara -v chapter05
-cd ..
-
-cd 06
-arara -v chapter06
-cd ..
-
-cd 07
-arara -v chapter07
-cd ..
-
-cd 08
-arara -v chapter08
-cd ..
-
-cd 09
-arara -v chapter08
-cd ..
-
-cd 12
-arara -v chapter08
-cd ..
-
-cd 11
-arara -v chapter08
-cd ..
-
-cd 12
-arara -v chapter08
-cd ..
-pause
+    @REM compilazione documento
+    arara "%%~nG"
+    
+    cd ..
+)

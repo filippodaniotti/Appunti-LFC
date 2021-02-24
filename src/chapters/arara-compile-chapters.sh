@@ -1,47 +1,25 @@
-cd 01
-arara -v chapter01
-cd ..
+#!/bin/bash
 
-cd 02
-arara -v chapter02
-cd ..
+for D in *; do
+    if [[ ${D} =~ [0-9][0-9] ]]; then
+        cd ${D}
+        
+        # file dell'ultima compilazione
+        [ -d "_minted-chapter${D}" ] && rm -rf "_minted-chapter${D}"
+        [ -f "chapter${D}.aux" ] && rm "chapter${D}.aux"
+        [ -f "chapter${D}.synctex.gz" ] && rm "chapter${D}.synctex.gz"
 
-cd 03
-arara -v chapter03
-cd ..
+        # file di metà compilazione
+        [ -f "chapter${D}.log" ] && rm "chapter${D}.log"
+        [ -f "chapter${D}.out" ] && rm "chapter${D}.out"
+        [ -f "chapter${D}.synctex(busy)" ] && rm "chapter${D}.synctex(busy)"
+        
+        # file di output
+        [ -f "chapter${D}.pdf" ] && rm "chapter${D}.pdf"
 
-cd 04
-arara -v chapter04
-cd ..
-
-cd 05
-arara -v chapter05
-cd ..
-
-cd 06
-arara -v chapter06
-cd ..
-
-cd 07
-arara -v chapter07
-cd ..
-
-cd 08
-arara -v chapter08
-cd ..
-
-cd 09
-arara -v chapter08
-cd ..
-
-cd 12
-arara -v chapter08
-cd ..
-
-cd 11
-arara -v chapter08
-cd ..
-
-cd 12
-arara -v chapter08
-cd ..
+        # compilazione documento
+        arara "chapter${D}.tex"
+        
+        cd ..
+    fi
+done
