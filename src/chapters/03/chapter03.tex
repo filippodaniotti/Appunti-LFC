@@ -8,7 +8,7 @@
 % arara: latexmk: { clean: partial }
 \begin{document}
 \chapter{Proprietà dei linguaggi liberi}  
-È il momento di fare una gita domenicale di famiglia presso il supermercato MondoMatematica \textregistered e perderci tra i gli scaffali invitanti e variopinti, stregati dalla capitalistica attrazione che tutte quelle proprietà, quei lemmi e quei teoremi esercitano su di noi.
+% È il momento di fare una gita domenicale di famiglia presso il supermercato MondoMatematica\textregistered~e perderci tra i gli scaffali invitanti e variopinti, stregati dalla capitalistica attrazione che tutte quelle proprietà, quei lemmi e quei teoremi esercitano su di noi.
   
 \section{Proprietà di chiusura}
 \subsection*{Chiusura rispetto all'unione}
@@ -36,7 +36,7 @@
 
   \begin{itemize}
     \item \(V'_1\) e \(V'_2\) si ottengo effettuando un'operazione di \emph{refresh} sui non terminali, in modo da evitare collisioni di nomi (vedremo più avanti come mai quest'operazione è importante), inoltre questo vocabolario è completato con l'introduzione di un nuovo start symbol;
-    \item l'insieme dei terminali è l'unione dei sue insiemi di terminali di \(\mathcal{G}_1\) e \(\mathcal{G}_2\);
+    \item l'insieme dei terminali è l'unione dei due insiemi di terminali di \(\mathcal{G}_1\) e \(\mathcal{G}_2\);
     \item \(S\) è il nuovo start symbol, non presente in \(V'_1 \cup V'_2\), e \(S'_1\) e \(S'_2\) sono di nuovo il refresh degli start symbol rispettivamente di \(\mathcal{G}_2\) e \(\mathcal{G}_2\);
     \item infine, l'insieme delle produzioni è dato dall'unione tra i refresh delle produzioni delle due grammatiche di partenza  \(\mathcal{G}_1\) e \(\mathcal{G}_2\), unito a una nuova produzione che, dal nuovo start symbol, produce il resfresh dello start symbol di una delle due grammatiche di partenza.
   \end{itemize}
@@ -189,7 +189,7 @@ Esiste un teorema che ci permette di fare pulizia etnica sui linguaggi.
   \begin{itemize}
     \item non avere alcuna \(\varepsilon\)-produzione, ovvero produzioni di forma \(A \rightarrow \varepsilon\);
     \item non avere alcuna produzione d'unità (\emph{unit production}), ovvero produzione di forma \(A \rightarrow B\);
-    \item non avere alcun non-terminale non utile, ovvero non-terminali che non appaiono mai in alcuna derivazione di qualche stringa di terminale.
+    \item non avere alcun non-terminale non utile, ovvero non-terminali che non appaiono mai in alcuna derivazione di qualche stringa di terminali.
   \end{itemize}
 \end{theorem}
 
@@ -407,7 +407,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
       quindi \(vwx\) o non conterrà alcuna occorrenza di \(c\) (nei primi tre casi), o non conterrà alcuna occorrenza di \(a\) (negli ultimi tre);
       \item l'implicazione di ques'ultima affermazione è che è possibile costruire una sottoparola \(vwx\) non bilanciata, e quindi non appartenente al linguaggio \(\L\), semplicemente considerando \(uv^0wx^0y\) (Eq.\ref{eq:pl-neg_4}).
     \end{itemize}
-    Abbiamo quindi verificato che il negato del pumping lemma, per il nostro linguaggio \(\L\), non è valido: questo contraddice la nostra supposizione e implica che \(\L\) non è libero.
+    Abbiamo quindi verificato che il negato del pumping lemma, per il nostro linguaggio \(\L\), è valido: questo contraddice la nostra supposizione e implica che \(\L\) non è libero.
   \end{proof}
   \subsubsection{Esercizio 2}
   \begin{align*}
@@ -608,7 +608,7 @@ Considerata la seguente gramatica \(\mathcal{G}\), è vero che \(\mathcal{L(G)} 
   bA\; &\to\; S \mid Ba
 \end{align*}
 
-\noindent Il modo miglior per procedere alla soluzione di questo esercizio è applicare le produzioni della grammatica e vedere se riusciamo a ottenere almeno una parola che non sia \(\varepsilon\); in questo caso, per compattezza, noi usiamo una rappresentazione ad albero dei vari step di derivazione, ma si tenga ben presente che il seguente non è un albero di derivazione.
+\noindent Il modo migliore per procedere alla soluzione di questo esercizio è applicare le produzioni della grammatica e vedere se riusciamo a ottenere almeno una parola che non sia \(\varepsilon\); in questo caso, per compattezza, noi usiamo una rappresentazione ad albero dei vari step di derivazione, ma si tenga ben presente che il seguente non è un albero di derivazione.
 
 \begin{figure}[H]
 	\centering

@@ -13,7 +13,7 @@
 
 Ora che abbiamo acquisito dei mezzi più potenti per affrontare questo corso, ribadiamo il concetto di analisi lessicale: dato il programma in ingresso, l'analisi lessicale restituisce una lista di stringhe che corrisponde alle parti del linguaggio identificate; questa lista di stringhe è nota come \emph{flusso dei token}.
 
-Lo studio del capitolo precedente di consente di sapere come vengono generati linguaggi come il seguente:
+Lo studio del capitolo precedente ci consente di sapere come vengono generati linguaggi come il seguente:
 
 \begin{equation}
     \label{a^nb^n}
@@ -40,7 +40,7 @@ La precedente strategia sicuramente è ottima quando il linguaggio ha una forma 
     S \to a \mid b \mid … \mid z \mid aS \mid bS \mid … \mid zS
 \end{equation}
 
-Per riconoscere parole generate da una tale grammatica il metodo di analisi naturale è una automa a stati finiti come quella in figura \ref{macchina_a_stati_finiti}.
+Per riconoscere parole generate da una tale grammatica il metodo di analisi naturale è una automa a stati finiti come quello in figura \ref{macchina_a_stati_finiti}.
 
 \begin{figure}[H]
 	\centering
@@ -69,7 +69,7 @@ Queste grammatiche possono generare espressioni regolari, che introdurremo a bre
 Queste due osservazioni sono la base fondante dell'utilizzo delle grammatiche regolari per l’analisi lessicale.
 
 \subsection{Espressioni regolari}
-Prima di tutto partiamo con il definire una espressione regolare.\\
+Prima di tutto partiamo con il definire un'espressione regolare.\\
 Sia fissato un alfabeto \(\mathcal{A}\) da cui estrarre tutte le basi e sia fissato un certo numero di operatori.
 
 Le espressioni regolari sono esprimibili tramite il meccanismo dell'induzione in questo modo.
@@ -188,7 +188,7 @@ Proponiamo ora al lettore il seguente esempio (figura \ref{nfa_grafo_2}):
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{nfa2.tex}
-    \caption{Secondo esempio di NFA}
+    \caption{Altro esempio di NFA}
     \label{nfa_grafo_2}
 \end{figure}
 L’elemento non deterministico è rappresentato dalle due frecce \(a\) uscenti da \(S_0\), che potrebbero portarmi sia in \(S_1\) che in \(S_0\) di nuovo; inoltre, la \(\varepsilon\) introduce sempre indeterminismo, poiché permette di passare a uno stato successivo senza consumare un carattere del terminale (o produrre un carattere nella stringa, che dir si voglia), e quindi inserisce incertezza riguardo al percorso di derivazione compiuto.
@@ -204,7 +204,7 @@ Si può anche dare una descrizione tabellare delle funzioni di transizione (\(\t
 \end{table} 
 
 Qual è quindi il linguaggio accettato da un automa di questo tipo?\label{linguaggio_definito_da_un_automa} 
-Un NFA \(\mathcal{N}\) accetta (o riconosce) una parola \(w\) se e solo se esiste almeno un cammino che parte dallo stato iniziale di \(\mathcal{N}\) ed arriva a \(w\).
+Un NFA \(\mathcal{N}\) accetta (o riconosce) una parola \(w\) se e solo se esiste almeno un cammino che parte dallo stato iniziale di \(\mathcal{N}\) e, seguendo le transizioni dettate da \(w\), termina in uno stato finale per \(\mathcal{N}\).
 
 % Ricorda queste regole di scrittura:
 % \begin{itemize}
@@ -225,7 +225,7 @@ Ricaviamo, ad esempio, il linguaggio generato dall’automa descritto in Fig.\re
 \paragraph{Esempio 2}
 Proviamo a determinare il linguaggio dell'NFA descritto in Fig.\ref{nfa_grafo_3}:
 
-\begin{figure}[htb]
+\begin{figure}[H]
     \centering
     \subimport{assets/figures/}{nfa3_regex-copy.tex}
     \caption{}
@@ -240,7 +240,7 @@ La costruzione di Thompson è una procedura algoritmica che permette di costruir
 \subsection{Definizione}
 Anche questa costruzione è espressa in modo induttivo.
 \begin{labeling}{Step}
-    \item[Base] L'espressione regolare \(r\) è o \(\varepsilon\), oppure un simbolo dell’alfabeto \(a \in \mathcal{A}\); assumiamo di avere sempre un NFA che riconosce \(\mathcal{L}(\varepsilon)\) e uno che riconosce \(\mathcal{L}(a) \; \forall a \in \mathcal{A}\).
+    \item[Base] Ogni simbolo di un qualche alfabeto alfabeto \(a \in \mathcal{A}\), così come anche la parola vuota \(\varepsilon\), sono un'espressione regolare\(r\); assumiamo di avere sempre un NFA che riconosce \(\mathcal{L}(\varepsilon)\) e uno che riconosce \(\mathcal{L}(a) \; \forall a \in \mathcal{A}\).
     \item[Step] L'espressione regolare \(r\) è una tra le seguenti opzioni: 
     \begin{itemize}[noitemsep]
         \item \(r_1 \mid  r_2 \);
@@ -308,7 +308,7 @@ Presentiamo ora un esempio particolare per assimilare meglio questa costruzione.
 \noindent Ci sono quindi due espressioni che compaiono in questo esempio: \(a = r_1\) e \(b = r_2\).
 In primis applichiamo la regola di base (\ref{Thompson_base}).
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{esempio_Thompson_0}
     \caption{Applicazione del passo base della costruzione di Thompson}
@@ -317,7 +317,7 @@ In primis applichiamo la regola di base (\ref{Thompson_base}).
 
 Concentriamoci ora sulla prima espressione, \( a \mid b = r_1 \mid r_2 = r_3\); applichiamo la costruzione di Thompson per l’alternanza ai due automi per \(r_1\) e \(r_2\), otteniamo quindi l’automa per \(r_3\).
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \subimport{assets/figures/}{thompson1_alternanza.tex}
     \caption{Applicazione della costruzione per l'alternanza}
@@ -576,7 +576,7 @@ In sunto, la procedura si compone dei seguenti quattro passi:
 
 Osserviamo che le prime due operazioni vengono ripetute a ogni chiamata della procedura, e mai più di una volta per ogni nodo, dal momento che il vettore \texttt{alreadyOn} non ci permetterà di richiamare la funzione se lanciato su un nodo già settato a \texttt{true}, e non capita mai che qualche bit venga reinizializzato a \texttt{false}. Per cui, il costo delle prime due operazioni è \(\mathcal{O}(n)\).
 
-La terza e la quarta oeprazione vengono eseguite per ogni nodo raggiungibile con una \(\varepsilon\)-transizione, per cui possiamo immaginare un caso pessimo in cui ogni stato possiede almeno una \(\varepsilon\)-transizione; nel caso peggiore, quindi, andremo a visitare ogni arco del grafo (\(\mathcal{O}(m)\)).
+La terza e la quarta operazione vengono eseguite per ogni nodo raggiungibile con una \(\varepsilon\)-transizione, per cui possiamo immaginare un caso pessimo in cui ogni stato possiede almeno una \(\varepsilon\)-transizione; nel caso peggiore, quindi, andremo a visitare ogni arco del grafo (\(\mathcal{O}(m)\)).
 
 Complessivamente, il costo della procedura è \(\mathcal{O}(n + m)\).
 
@@ -615,7 +615,7 @@ Un automa a stati finiti deterministici è invece definito come segue:
     \textrm{move}_d : S \times \mathcal{A} \to S \notag
 \end{gather}
 
-Balza subito la differente formulazione della funzione di transizione \(move_d\), il cui dominio esclude la possibilità di compiere \(\varepsilon\)-transizioni. Inoltre, quest'ultima ha due modi di presentarsi: totale o parziale, e il possesso dell'una o dell'altra qualificazione inficerà la scelta delle procedure da applicare.
+Balza subito all'occhio la differente formulazione della funzione di transizione \(move_d\), il cui dominio esclude la possibilità di compiere \(\varepsilon\)-transizioni. Inoltre, quest'ultima ha due modi di presentarsi: totale o parziale, e il possesso dell'una o dell'altra qualificazione inficerà la scelta delle procedure da applicare.
 
 Evidenziamo le caratteristiche dei DFA:
 

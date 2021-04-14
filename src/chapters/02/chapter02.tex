@@ -21,7 +21,7 @@ Altra cosa da fissare in una grammatica è il set delle produzioni (productions)
     \{S \to aSb, S \to ab\}
     \label{produzioni_esempio_0}
 \end{equation}
-Dove \(S\) è lo starting point mentre \(a\) e \(b\) sono caratteri terminali (a volte detti anche parole).\\
+Dove \(S\) è lo starting symbol mentre \(a\) e \(b\) sono caratteri terminali.
 Per quanto abbiamo visto fin ora una grammatica generativa è composta da:
 \begin{itemize}
     \item Un vocabolario, ovvero l'insieme dei simboli
@@ -184,7 +184,7 @@ Si parla di \emph{context-free grammars}, o free grammars (grammatiche libere), 
 Si dice di un linguaggio che è context-free se esiste una grammatica libera che genera quello stesso linguaggio: \(\mathcal{L}\) è un linguaggio libero se e solo se esiste una grammatica libera \(\mathcal{G}\) tale che \(\mathcal{L}=\mathcal{L}(\mathcal{G})\).
 
 \paragraph{}
-L’operazione di analizzare una stringa e verificare se appartiene ad una determinata grammatica dipende naturalmente dal metodo con cui si decide di applicare la derivazione dallo starting point della grammatica stessa. Se una stringa si può derivare da una certa grammatica, si dice che la prima appartiene al linguaggio di quest'ultima.
+L’operazione di analizzare una stringa e verificare se appartiene ad una determinata grammatica dipende naturalmente dal metodo con cui si decide di applicare la derivazione dallo starting symbol della grammatica stessa. Se una stringa si può derivare da una certa grammatica, si dice che la prima appartiene al linguaggio di quest'ultima.
 Esistono due tipi di derivazione canonica:
 \begin{itemize}
     \item rightmost (si rimpiazzano sempre prima i non terminali più a destra)
@@ -193,8 +193,8 @@ Esistono due tipi di derivazione canonica:
 Se utilizziamo come strategia una di queste due tutti i passi analitici di una derivazione sono deterministici, perché ad ogni passo o si procede con l’elemento più a destra o si procede con quello più a sinistra. Per questo motivo queste sono le due modalità di derivazione canonica.
 
 \paragraph{Gli alberi di derivazione}
-Le grammatiche libere si prestano in modo naturale ad essere processate tramite il cosiddetto albero di derivazione. Questo albero ha come radice lo starting point, poi, per ogni passo di derivazione secondo una produzione in forma \(A \to X_1 \mid X_2 \mid\dots\mid X_n \), si generano \(n\) figli del nodo con la derivazione di \(A\) messa in atto.
-Le foglie dell’albero saranno composte da \(\varepsilon\) oppure da caratteri terminali. In figura \ref{albero_di_derivazione} è riportato come esempio l'albero di derivazione della grammatica:
+Le grammatiche libere si prestano in modo naturale ad essere processate tramite il cosiddetto albero di derivazione. Questo albero ha come radice lo starting symbol, poi, per ogni passo di derivazione secondo una produzione in forma \(A \to X_1 \mid X_2 \mid\dots\mid X_n \), si generano \(n\) figli del nodo con la derivazione di \(A\) messa in atto.
+Le foglie dell’albero saranno composte da \(\varepsilon\) oppure da caratteri terminali. In Fig.\ref{albero_di_derivazione} è riportato come esempio un albero di derivazione della grammatica:
 \begin{equation}
     S \to aSb \mid \varepsilon
     \label{grammatica_allbero}
@@ -216,7 +216,7 @@ Prendiamo ad esempio la grammatica delle espressioni aritmetiche:
 \begin{equation}
     E \to E+E \mid E*E \mid  n
 \end{equation}
-dove il simbolo \(\mid\) è una modo compatto per scrivere diverse produzioni con lo stesso driver. Intuitivamente si può leggere come \(exp \to exp+exp\)  o  \(exp*exp\)  o  \(numero\), il che significat che questa grammatica genera il linguaggio delle operazioni aritmetiche di somma e mooltiplicazione. La domanda che ci poniamo adesso è: questa grammatica è ambigua o meno? Per verificarlo proviamo a derivare questo \(w = n+n*n\) utilizzando la tecnica leftmost e generando due derivazioni distinte.
+dove il simbolo \(\mid\) è una modo compatto per scrivere diverse produzioni con lo stesso driver. Intuitivamente si può leggere come \(exp \to exp+exp\)  o  \(exp*exp\)  o  \(numero\), il che significa che questa grammatica genera il linguaggio delle operazioni aritmetiche di somma e moltiplicazione. La domanda che ci poniamo adesso è se questa grammatica sia ambigua o meno. Per verificarlo proviamo a derivare la parola \(w = n+n*n\) utilizzando la tecnica leftmost e generando due derivazioni distinte.
 \begin{figure}[H]
 	\centering
 	\subimport{assets/figures/}{derivazione-leftmost.tex}
@@ -241,7 +241,7 @@ La grammatica di partenza è quindi ambigua: nonostante il significato (l'interp
 Ora abbiamo visto questo processo, sappi che la prof.ssa Quaglia preferisce 14 a 1 la derivazione con albero a quella con stringa perché è più chiara.
 
 \subsubsection*{Dangling Else}
-Introduciamo una nuova forma di grammatica
+Parliamo adesso di una grammatica che rappresenta gli statement \texttt{if-else}:
 \begin{equation}
     S \to \; if \; b \; then \; S \mid if\; B\; then\; S\; else\; S \mid other
 \end{equation}
@@ -266,7 +266,7 @@ Con quale \(then\) è accoppiato l’\(else\)? Non si può sapere! Di fatto poss
     \caption{Due possibili alberi di derivazione per \(w\), entrambi corretti}
     \label{fig:dangling_else}
 \end{figure}
-Questo ci introduce il problema di come trattare la gestione del comando \(if \; then \; else\) in un linguaggio di programmazione.
+Questo ci introduce il problema di come trattare la gestione di un contesto \texttt{if-then-else} in un linguaggio di programmazione.
 Per questo nei vari linguaggi troviamo sempre qualche forma di strategia per risolvere questo problema:
 \begin{itemize}
     \item Mettere le parentesi
@@ -276,9 +276,9 @@ Per questo nei vari linguaggi troviamo sempre qualche forma di strategia per ris
 L’else è intrinsecamente ambiguo.
 
 \paragraph{Un'osservazione}
-L’ambiguità in alcuni casi può essere indecidibile, in quanto non sempre esiste un algoritmo che ci dice se la grammatica è ambigua o no.
+L’ambiguità in alcuni casi può essere indecidibile, in quanto non sempre esiste un algoritmo che ci dice se la grammatica è ambigua o no; al momento, tutto ciò che sappiamo fare per determinare l'ambiguità di una grammatica è applicare la definizione, ossia cercare di derivare una stessa parola mediante due diverse derivazioni, entrambe o rightmost o leftmost.
 
 \subsection{Piccola parentesi sui linguaggi naturali (tutto da ripensare)}
-I linguaggi naturali spesso nascondono molte più ambiguità delle grammatiche che affronteremo in questo corso. D'altro canto le grammatiche per linguaggi di programmazione sono molto difficili da scrivere anche perché sono pensate e studiate per ottenere una certa velocità di verifica dei programmi. Il linguaggio naturale è ben più complesso: immagina quanto dev’essere difficile descrivere una grammatica per il linguaggio naturale ed immagina poi quale complessità può avere un algoritmo di verifica di tale grammatica, ammesso che questo possa esistere. Pensa solo al fatto che spesso e volentieri il linguaggio naturale dipende dal contesto! Questa cosa nei linguaggi di programmazione non s’è mai vista per fortuna. I parser per linguaggi di programmazione hanno complessità lineare di norma, se si va a vedere i parser del linguaggio naturale\dots  sayonara!
+I linguaggi naturali spesso nascondono molte più ambiguità delle grammatiche che affronteremo in questo corso. D'altro canto le grammatiche per linguaggi di programmazione sono molto difficili da scrivere anche perché sono pensate e studiate per ottenere una certa velocità di analisi del codice. Il linguaggio naturale è ben più complesso: immagina quanto dev’essere difficile descrivere una grammatica per il linguaggio naturale ed immagina poi quale complessità può avere un algoritmo di verifica di tale grammatica, ammesso che questo possa esistere. Pensa solo al fatto che spesso e volentieri il linguaggio naturale dipende dal contesto! Questa cosa nei linguaggi di programmazione non s’è mai vista per fortuna. I parser per linguaggi di programmazione hanno complessità lineare di norma, se si va a vedere i parser del linguaggio naturale\dots  sayonara!
 
 \end{document}
