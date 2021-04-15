@@ -637,17 +637,17 @@ Il parsing di tipo SLR(1) non riconosce dunque la differenza fra lo stato 2 e lo
 \section{Il parsing LALR(1)}
 Nonostante il parsing di tipo LR(1) sia il più completo è possibile che l'automa caratteristico risultante contenga delle ridondanze: nell'esempio precedente vi sono infatti delle sottostrutture che sono isomorfe e ciò deriva dal fatto che, visto che le transizioni dipendono sempre dalla prima componente (i.e. item LR(0)), è possibile notare che le ridondanze si verificano nel caso in cui gli stati abbiano la stessa proiezione LR(0).
 \subparagraph*{}
-Per mantenere la precisione e l'affidabilità del parsing LR(1) ma senza rinunciare all'efficienza di quello SLR(1) possiamo utilizzare una terza via, il parsing LALR(1): ques'ultimo utilizza gli stati in maniera simile al parsing SLR(1), ma utilizza una funzione di lookahead un filo più raffinata. Andiamo a conoscerla più da vicino
+Per mantenere la precisione e l'affidabilità del parsing LR(1) ma senza rinunciare all'efficienza di quello SLR(1) possiamo utilizzare una terza via, il parsing LALR(1): ques'ultimo utilizza gli stati in maniera simile al parsing SLR(1), ma utilizza una funzione di lookahead un filo più raffinata. Andiamo a conoscerla più da vicino.
 
 \subsection{L'Automa caratteristico LRm(1)}
 
-L'automa LRm(1) \(\mathcal{AM}\) è costruito a partire dall'automa LR(1) \(\mathcal{A}\) (la lettera m sta per \emph{merged}).
+Un passaggio intermedio obbligatorio è l'automa LRm(1) \(\mathcal{AM}\), costruito a partire dall'automa LR(1) tramite raffinazione \(\mathcal{A}\) (la lettera m sta per \emph{merged}).
 
 Gli \textbf{Stati} del nuovo automa caratteristico sono ottenuti unendo all'interno di un singolo stato di \(\mathcal{AM}\) tutti gli item negli stati \(<P_1, ..., P_n>\) di \(\mathcal{A}\) che hanno le stesse LR(0)-proiezioni (i.e. con i medesimi item LR(0)).
 
 \textbf{Transizioni}: Se lo stato \(P\) di \(\mathcal{A}\) ha la stessa \(Y\)-transizione a \(Q\) e se \(P\) è stato unito in \(<P_1, ..., P_n>\) e \(Q\) in \(<Q_1, ..., Q_m>\), allora c'è una \(Y\)-transizione in \(\mathcal{AM}\) da \(<P_1, ..., P_n>\) a \(<Q_1, ..., Q_m>\).
 
-Se prendiamo in considerazione l'automa LR(1) definito precedente, possiamo osservare che gli stati 4 e 11 hanno la medesima prima proiezione e quindi possiamo unirli all'interno di un nuovo stato.
+Se prendiamo in considerazione l'automa LR(1) definito precedentemente, possiamo osservare che gli stati 4 e 11 hanno la medesima prima proiezione e quindi possiamo unirli all'interno di un nuovo stato, che chiamiamo 4\&11 e corrisponde ad uno stato merged.
 
 Cosa facciamo per le transizioni? Nell'automa LR(1) abbiamo un'unica transizione etichettata \(id\) che va dallo stato 4 allo stato 5 (e allo stesso modo un'altra etichettata \(id\) dallo stato 11 al 12). Visto che gli stati 4 e 11 sono stati uniti in un unico stato (4\&11) e lo stesso vale per 5 e 12 (5\&12), per la definizione precedente possiamo inserire in \(\mathcal{AM}\) una transizione da 4\&11 a 5\&12 etichettata \(id\).
 
@@ -656,7 +656,7 @@ Eseguendo l'operazione descritta la dimensione (i.e. il numero di stati) dell'au
 \subsection{Costruzione di una tabella di parsing LALR(1)}
 \label{subsec:lalr1-parsing-table}
 
-Le parsing table LALR(1) sono ottenute prendendo:
+Il prossimo passo per la costruzione dell'automa LALR(1) è ottenerne la tabella di parsing, per questo compito necessitiamo di:
 
 \begin{itemize}
     \item l'automa caratteristico LRm(1)
@@ -667,7 +667,7 @@ Nel caso in cui non vi sia più di uno stato con la stessa proiezione LR(0) allo
 
 La grammatica \(\G\) è LALR(1) se e solo se la sua tabella di parsing LALR(1) non ha conflitti. 
 
-Il vantaggio della grammatica LALR(1) è di essere più potente (i.e. espressiva) della grammatica SLR(1) pur rimanendo con delle dimensioni contenute rispetto alla LR(1). 
+Il vantaggio della grammatica LALR(1) è di essere più potente (i.e. espressiva) della grammatica SLR(1) pur presentando una tabella di dimensioni contenute rispetto alla rispettiva controparte LR(1). 
 
 \subsection*{Esercizio parsing LALR(1)}
 \begin{align*}
@@ -1176,8 +1176,7 @@ La grammatica di cui vogliamo ricavare l'automa simbolico questa volta è la nos
 \begin{equation}
     S \to aSb \mid ab
 \end{equation}
-Empezamos con lo stato 0.
-\\
+\subsubsection*{Stato 0}
 Kernel dello stato 0:
 \begin{align*}
     S' \to \cdot S, x_0
@@ -1195,7 +1194,7 @@ Passiamo alla chiusura del kernel:
 Lo stato 0 non ci regala altre chiusure, ma ci regala due belle transizioni, una per \(a\) ed una per \(S\).
 \\\\
 Analizziamo quindi la transizione \(\tau(0,S)\), che ci porta nel nuovo stato 1.
-\\
+\subsubsection*{Stato 1}
 Kernel dello stato 1:
 \begin{align*}
     S' \to S \cdot, x_1
@@ -1209,8 +1208,8 @@ In questo caso \(\beta = \varepsilon\), quindi il lookahead set del kernel sarà
 Questo stato non ci offre altri divertimenti, passiamo oltre.
 \\\\
 Analizziamo la transizione \(\tau(0,a)\), che ci porta nel nuovo stato 2.
-\\
-Kernel dello stato 2:
+\subsubsection*{Stato 2}
+Da \(\tau(0, a)\) che viene da \([S \to \cdot aSb, x_0], [S \to \cdot ab, x_0]\) abbiamo un kernel non ancora visitato, il nuovo stato presenta quindi questo kernel:
 \begin{align*}
     S &\to  a \cdot S b, x_2 \\
     S &\to  a \cdot b, x_3
@@ -1229,92 +1228,90 @@ In questo caso il primo item del kernel richiede che venga calcolata una chiusur
     S &\to  \cdot a b, \{b\}
 \end{align*}
 Ma questa volta dobbiamo prestare attenzione perché la chiusura per \(S\) ha come \(\beta\) il carattere \(b\), quindi il lookahead set dei due item appena  ottenuti è \(\{b\}\).
-Ora che abbiamo calcolato la chiusura del kernel possiamo passare alla prossima transizione.
+Ora che abbiamo calcolato la chiusura del kernel possiamo passare all'analisi delle transizioni che ci regala, ovvero \(\tau(2, S)\), \(\tau(2, a)\) e \(\tau(2, b)\).
 \\\\
 Analizziamo quindi \(\tau(2,S)\), che ci porta allo stato 3 tramite l'item \([S \to a \cdot S b, x_2]\).
-\\
-Kernel dello stato 3:
+\subsubsection*{Stato 3}
+Da \(\tau(2, S)\) che viene da \([S \to a \cdot Sb, x_2]\) abbiamo un kernel non ancora visitato:
 \begin{align*}
     S &\to  a S \cdot b, x_4
 \end{align*}
-Orbene, aggiorniamo il nostro sistema equatoriale sapendo che \(\beta = b\) mentre \(\Delta = x_2\).
+Orbene, generiamo un nuovo stato per questo indomito kernel, questo non ci offre nessuna chiusura, aggiorniamo quindi pacificamente il nostro sistema.
 \begin{align*}
     Sistema:& \\
             & x_0 = \{\$\}\\
             & x_1 = x_0 \\
             & x_2 = x_0 \\
             & x_3 = x_0 \\
-            & x_4 = \{b\}
+            & x_4 = x_2
 \end{align*}
-Lo stato 3 non ci offre ulteriori motivi di svago.
-\\\\
+Lo stato 3 non ci offre ulteriori motivi di svago se non una veloce transizione \(\tau(3,b)\).
+\subsubsection*{Aggiornamento lookahead set stato 2}
+Da \(\tau(2,a)\) avremmo un kernel con questa forma:
+\begin{align*}
+    [S &\to a \cdot S b, x_5], x_5=\{b\} \\
+    [S &\to a \cdot b, x_6], x_6=\{b\}
+\end{align*}
+Ma la componente LR(0) (cioè il primo elemento della coppia) del kernel è uguale a quella dello stato 2 che abbiamo già incontrato, quindi la procedura ci dice di non creare un nuovo stato ma aggiornare i \(\Delta\)-set dello stato 2.
+\begin{align*}
+    Sistema:& \\
+            & x_0 = \{\$\}\\
+            & x_1 = x_0 \\
+            & x_2 = x_0 \cup \{b\} \\
+            & x_3 = x_0 \cup \{b\} \\
+            & x_4 = x_2 \\
+\end{align*}
+\subsubsection*{Stato 4}
 La prossima produzione che analizziamo è  \(\tau(2,b)\), che ci capitombola nel nuovo stato 4 tramite l'item \([S \to a \cdot b, \{x_3\}]\).
 \\
 Kernel dello stato 4:
 \begin{align*}
     S \to  a b \cdot, x_5
 \end{align*}
-A questo punto devo aggiornare il sistema, tenendo conto che in questo caso non si applica la famosa forma \([A \to \alpha \cdot B \beta]\), quindi il lookahead set del kenrel di 4 sarà esattamente il lookahead set della produzione che ci ha portati in 4.
+Questo è un reducing item.
+Aggiorniamo il sistema:
 \begin{align*}
     Sistema:& \\
             & x_0 = \{\$\}\\
             & x_1 = x_0 \\
             & x_2 = x_0 \\
             & x_3 = x_0 \\
-            & x_4 = \{b\} \\
+            & x_4 = x_2 \\
             & x_5 = x_3 
 \end{align*}
 Lo stato è chiuso.
-\\\\
-Passiamo ora ad analizzare la transizione \(\tau(2,a)\) che, tramite gli item \([S \to  \cdot a S b, \{b\}]\) e \([S \to  \cdot a b, \{b\}]\), ci porta in un nuovo stato, lo stato 5.
-\\
-Kernel dello stato 5:
-\begin{align*}
-    S &\to a \cdot S b, x_6 \\
-    S &\to a \cdot b, x_7
-\end{align*}
-Ma c'è un colpo di scena, perché noi abbiamo già visto questo kernel una volta: è esattamente il kernel dello stato 2!
-Quindi la procedura ci richiede di aggiornare solo il lookahead set dello stato 2, senza generare un nuovo stato 5.
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\}\\
-            & x_1 = x_0 \\
-            & x_2 = x_0 \cup \{b\} \\
-            & x_3 = x_0 \cup \{b\} \\
-            & x_4 = \{b\} \\
-            & x_5 = x_3
-\end{align*}
-\\\\
-Ci resta da analizzare la transizione \(\tau(3,b)\) che tramite l'item \([S \to a S \cdot b, \{x_4\}]\) ci porta al nuovo (per davvero questa volta) stato 5.
+\subsubsection*{Stato 5}
+Ci resta da analizzare la transizione \(\tau(3,b)\) che tramite l'item \([S \to a S \cdot b, \{x_4\}]\) ci porta al nuovo stato 5.
 \\
 Kernel dello stato 5:
 \begin{align*}
     S &\to a S b \cdot, x_6
 \end{align*}
-In questo caso il lookahead set del kernel rimane uguale a quello della transizione che ci ha portato in 5.
+Anche questo giro incontriamo un reducing item, aggiorniamo il sistema:
 \begin{align*}
     Sistema:& \\
             & x_0 = \{\$\}\\
             & x_1 = x_0 \\
             & x_2 = x_0 \cup \{b\} \\
             & x_3 = x_0 \cup \{b\} \\
-            & x_4 = \{b\} \\
+            & x_4 = x_2 \\
             & x_5 = x_3 \\
             & x_6 = x_4
 \end{align*}
 Questo stato è chiuso, quindi terminiamo la sua analisi.
 
-Avendo analizzato le transizioni non ci rimane altro da fare se non risolvere il sistema di equazioni per valorizzare le nostre \(x\).
+Avendo analizzato tutte le transizioni non ci rimane altro da fare se non risolvere il sistema di equazioni per valorizzare le nostre incognite \(x\), ovvero i \(\Delta\)-set effettivi.
 \begin{align*}
     x_0 = x_1 &= \{\$\} \\
-    x_2 = x_3 = x_5 &= \{\$, b\} \\
-    x_4 = x_6 &= \{b\} 
+    x_2 = x_3 = x_4 = x_5 = x_6 &= \{\$, b\}
 \end{align*}
+A questo punto sarà sufficiente sostituire i \(\Delta\)-set ai simboli \(x_i\) per vedere gli stati che compongono l'automa merged nella loro forma effettiva.
+
 Andiamo quindi, per curiosità, ad analizzare gli stati in cui sono presenti le riduzioni ed a piazzarvi i lookahead set:
 \begin{itemize}
     \item in 1 abbiamo la riduzione \(S' \to S \cdot, \; \{\$\}\);
     \item in 4 abbiamo \(S \to a b \cdot, \; \{\$, b\}\);
-    \item in 5 abbiamo \(S \to aSb \cdot, \; \{b\}\).
+    \item in 5 abbiamo \(S \to aSb \cdot, \; \{\$, b\}\).
 \end{itemize}
 Notiamo quindi che non si presentano conflitti, quindi la grammatica è di tipo LALR.
 
