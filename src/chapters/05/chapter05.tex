@@ -19,7 +19,7 @@ Un mezzo per raggiungere questo scopo è l’utilizzo di una sorta di meccanismo
 \subsection{Algoritmo di Subset Costruction}
 L’algoritmo di Subset Construction serve per ricavare un DFA dato un certo NFA.
 
-L'idea di base è quella di utilizzare la \(\varepsilon\)-chiusura per mappare sottoinsiemi degli stati del dato NFA (che in seguito chiameremo rozzamente \emph{stati non deterministici}, o \emph{snd}) in stati per il nuovo DFA (che in seguito chiameremo ancor più rozzamente \emph{stati deterministici} o \emph{sd}).
+L'idea di base è quella di utilizzare la \(\varepsilon\)-chiusura per mappare insiemi di stati del dato NFA (che in seguito chiameremo rozzamente \emph{stati non deterministici}) in stati per il nuovo DFA (che in seguito chiameremo ancor più rozzamente \emph{stati deterministici}).
 
 \paragraph{}
 Per dare un'idea di come lavora questo algoritmo descriviamone i primi passi.\\
@@ -48,9 +48,9 @@ Di fatto, dentro al ciclo si scorrono tutti gli stati in \(R\) e ci si sofferma 
 \paragraph*{Foreach interno al ciclo while}
 In questa fase si scorrono tutti gli elementi \(a\) dell'alfabeto \(\mathcal{A}\) e si prosegue quindi in questo modo:
 \begin{itemize}
-    \item si prendono tutti gli stati (snd) raggiungibili dallo stato (sd) \(T\) che soddisfino la seguente condizione:
+    \item si prendono tutti gli stati non deterministici raggiungibili dallo stato deterministico \(T\) e che soddisfino la seguente condizione:
     \begin{equation*}
-        \cup_{t \in T} \textrm{move}_n(t,a)
+        \bigcup_{t \in T} \textrm{move}_n(t,a)
     \end{equation*}
     ovvero tutti gli stati in \(S\) raggiungibili tramite una \(a\)-transizione da uno degli stati in \(T\), se ne calcola la \(\varepsilon\)-chiusura e la si salva nella variabile \(T'\);
     \item una volta calcolato \(T'\) si verifica se questo è vuoto, e se lo è si passa alla prossima iterazione del \texttt{foreach};
@@ -71,7 +71,7 @@ Poniamo le basi per affrontare una risposta: supponiamo che l’NFA abbia \(n\) 
 \end{itemize}
 La complessità globale è quindi \( \mathcal{O}(n_d \cdot |A| \cdot (n+m))\), ed è dominata da quel \(n_d\), che vale \(\mathcal{O}(2^n)\). Nonostante questo possa essere oltremodo sconfortante, è opportuno specificare che quella appena vista è la complessità per \emph{creare} il DFA, un'operazione che viene effettuata una tantum solamente in sede di creazione del compilatore; è vero, è una grossa spesa iniziale, ma permette di avere grandi vantaggi in tutti gli utilizzi successivi.
 
-Tuttavia per applicazioni con tempo di vita più limitato spesso non ha senso creare il DFA, poiché non si avrebbe il tempo di compensare la spesa iniziale; è questa la ragione per cui ad esempio \href{https://it.wikipedia.org/wiki/Grep}{grep} utilizza NFA.
+Tuttavia per applicazioni con tempo di vita più limitato spesso non ha senso creare il DFA, poiché non si avrebbe il tempo di compensare la spesa iniziale; è questa la ragione per cui ad esempio \texttt{\href{https://it.wikipedia.org/wiki/Grep}{grep}} utilizza NFA.
 
 
 \subsection{Esercizi di applicazione della Subset Construction}
@@ -227,6 +227,8 @@ Di seguito lo pseudocodice per la procedura appena descritta.
 % 	\caption{Pseudocodice}
 % \end{figure}
 \subimport{assets/pseudocode/}{partition-refinement.tex}
+
+Una considerazione molto importante: l'algoritmo di partition refinement ci permette di individuare il DFA minimo di un certo DFA su cui lo lanciamo, ma questo \emph{non implica in alcun modo} che il DFA ottenuto sia il minimo assoluto che riconosca l'espressione regolare del nostro DFA di partenza!
 
 \subsection{Esercizi sulla minimizzazione DFA}
 \subsubsection{Esercizio 1}
