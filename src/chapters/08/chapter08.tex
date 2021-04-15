@@ -55,7 +55,7 @@ Andiamo per prima cosa a indagare quale forma avranno gli stati del nostro autom
 \end{labeling}
 Dalla definizione possiamo intuire cosa intendevamo quando prima abbiamo detto che gli LR(1)-items sono più ricchi dei loro corrispondenti LR(0), e ci permettono quindi di riconoscere grammatiche in modo più efficace: quell'insieme \(L\), come vedremo in seguito, contiene delle informazioni rispetto a quello che ci aspettiamo di leggere in futuro; nessuna informazine simile è presente negli LR(0)-items.
 
-\paragraph{Esempio}
+\paragraph{}
 Andiamo a fare subito un esempio per aiutarci a capire di cosa stiamo parlando. Consideriamo la nostra fida grammatica:
 \begin{equation}
     \label{eq:balanced}
@@ -122,7 +122,7 @@ Ora che ne abbiamo visto un'applicazione, formalizziamo questa proceduracon dell
 \subimport{assets/pseudocode/}{lr0-closure.tex}
 
 \subsection{Costruzione di un automa caratteristico LR(0)}
-Abbiamo visto cosa sono gli stati che compongono gli automi caratteristici; a questo punto siamo pronti per costruire il nostro primo automa caratteristico,  in questo caso per il parsing. La tecnica di costruzione è incrementale: andiamo a popolare un set di stati definendo mano a mano la funzione di transizione, fino a saturazione; il lettore si accorgerà che tale tecnica è poi utilizzata per costruire anche altri automi LR.
+Abbiamo visto cosa sono gli stati che compongono gli automi caratteristici; a questo punto siamo pronti per costruire il nostro primo automa caratteristico, in questo caso per il parsing SLR. La tecnica di costruzione è incrementale: andiamo a popolare un set di stati definendo mano a mano la funzione di transizione, fino a saturazione; il lettore si accorgerà che tale tecnica è poi utilizzata per costruire anche altri automi LR.
 
 \subsubsection{Procedura}
 \paragraph{Inizio}
@@ -267,7 +267,7 @@ Le mosse di shift dipendono direttamente dalla funzione di transizione dell'auto
     \item nel caso di LR(0)-items avranno forma \(A \to \beta \cdot\), e indicano che siamo arrivati alla fine della derivazione di \(\beta\), per cui il marker \(\cdot\) si trova in fondo alla derivazione;
     \item nel caso LR(1)-items avranno forma \(A \to \beta \cdot, \; \Delta\), e succede quando ho terminato l'analisi della produzione di \(\beta\),  ma con una condizione in più specificata da quel \(\Delta\).
 \end{itemize}
-Le riduzioni vengono applicate in base alla \emph{lookahead function} \(\mathcal{LA}\), la quale è definita per tutte le coppie \((P,\; A \to \beta)\) tali che \(P\) contiene un reducing item per \(A \to \beta\).
+Le riduzioni vengono applicate in base alla \emph{lookahead function} \(\mathcal{LA}\), la quale è definita per tutte le coppie \((P,\; A \to \beta)\) tali che \(P\) èuno stato che contiene un reducing item per \(A \to \beta\).
 
 Da menzionare il fatto che la scelta dell'automa e della lookahead function per la costruzione della parsing table sono le caratteristiche che distinguono le varie tecniche di bottom-up parsing: la procedura di compilazione della tabella di parsing e l'esecuzione dell'algoritmo shift/reduce sono uguali per ogni classe considerata.
 
@@ -314,7 +314,7 @@ Proviamo a costruire la tabella di parsing \(SLR(1)\) per la seguente grammatica
     A &\rightarrow Abc \mid b \\
     B &\rightarrow d
 \end{align*}
-Riconoscerete di certo questa grammatica, l'abbiamo già vista nella costruzione dell'automa caratteristico (si osservi Fig.\ref{fig:charateristic-automata-complete}). Adesso il nostro obiettivo qui è costruire la tabella di parsing, e per farlo utilizzeremo i risultati ottenuti in precedenza: sappiamo infatti che lo stato \(1\) (anche indicato dal colore verde) è quello che contiene l'\textbf{accepting item}\footnote{Ovvero uno stato etichettato come \(Accept\) e che, se raggiunto, implicherà una conclusione con successo dell'algoritmo.}, mentre invece gli stati contenenti i \textbf{reducing item} (segnalati come stati finali) sono invece 4, 7, 8, 9. 
+Riconoscerete di certo questa grammatica, l'abbiamo già vista nella costruzione dell'automa caratteristico (si osservi Fig.\ref{fig:charateristic-automata-complete}). Adesso il nostro obiettivo qui è costruire la tabella di parsing, e per farlo utilizzeremo i risultati ottenuti in precedenza: sappiamo infatti che lo stato \(1\) (indicato dal colore verde) è quello che contiene l'\textbf{accepting item}\footnote{Ovvero uno stato etichettato come \(Accept\) e che, se raggiunto, implicherà una conclusione con successo dell'algoritmo.}, mentre invece gli stati contenenti i \textbf{reducing item} (segnalati come stati finali) sono invece 4, 7, 8, 9. 
 \begin{figure}[H]
     \centering
 	\subimport{assets/figures/}{automa_bottom_up_8-3-4.tex}
@@ -337,7 +337,7 @@ Con l'ausilio dell'automa appena trovato, seguiamo l'algoritmo e costruiamo la t
     \begin{table}[H]
         \centering
         \subimport{assets/tables/}{ptbu-follow.tex}
-        \caption{SLR(1) parsing table - calcolo follow per lookahead}
+        \caption{Calcolo dei follow per la lookahead function}
         \label{tab:first-follow-SLR(1)parsing}
     \end{table}
     \item una volta calcolati i follow procediamo così: per tutti gli stati \(P\) che contengono un reducing item \(A \to \beta\) (ad esempio, \(M[4, b] = A \rightarrow b\cdot\)), andiamo a inserire la mossa di reduce nella casella \(M[P, Y]\), dove \(Y\) è calcolato con la lookahead function come \(Y = \mathcal{LA}(P, A \to \beta)\), nel nostro caso \(Y = follow(A)\); 
@@ -366,8 +366,9 @@ Specifichiamo quindi il significato dei vari \(rK\):
     \item \(r3 = A \to b\)
     \item \(r4 = B \to d\)
 \end{itemize}
-Dal momento che \(\G\) dà origine a una tabella di parsing senza creare alcun conflitto, possiamo concludere che \(\G\) è SLR(1).
+Dal momento che \(\G\) dà origine a una tabella di parsing senza alcun conflitto, possiamo concludere che \(\G\) è SLR(1).
 
+\subparagraph*{}
 Prima di passare alla prossima sezione è necessario precisare che \emph{solamente} le celle vuote che hanno per colonna un terminale o \$ sarebbero valorizzate a \texttt{error}: infatti, le celle vuote che hanno per colonna un non-terminale rimangono semplicemente vuote, in quanto sono dei casi che non è possibile che si verifichino. 
 
 \section{Algoritmo Shift/Reduce}

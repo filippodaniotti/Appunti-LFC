@@ -64,7 +64,7 @@ Nel caso del predictive top-down parsing non è mai necessario applicare la tecn
 \begin{itemize}
     \item guardiamo le parole da sinistra a destra;
     \item eseguiamo una produzione leftmost;
-    \item guardiamo un solo simbolo (non-terminale).
+    \item guardiamo un solo non-terminale per decidere quale produzione utilizzare .
 \end{itemize}
 Tali grammatiche prevedono una tipologia di parsing per cui non è necessario backtrack, e per di più è \textbf{completamente deterministica}.
 
@@ -138,6 +138,7 @@ Infine, come ultima operazione \(X\) viene assegnato all'elemento in cima alla p
     \caption{Tabella delle strutture a ogni passo}
     \label{tab:ptdp-ex1}
 \end{table} 
+Questo algoritmo ha complessità lineare.
 % \begin{figure}[H]
 %     \centering
 %     \includegraphics[width=.7\textwidth,keepaspectratio]{TopDownExercise.png}
@@ -146,8 +147,7 @@ Infine, come ultima operazione \(X\) viene assegnato all'elemento in cima alla p
 % \end{figure}
 
 \subsection{Tabella di parsing}
-
-L'algoritmo di Parsing predittivo ha una complessità lineare. Ci chiediamo quindi: come costruiamo le Parsing Table? In quale posizione dobbiamo mettere le produzioni della grammatica per fare sì che l'algoritmo funzioni?
+Qual è quindi la procedura che dobbiamo seguire per costruire codesta tabella di parsing? In quale posizione dobbiamo mettere le produzioni della grammatica per fare sì che l'algoritmo funzioni?
 
 Ricordiamo che la cella \(M[A, b]\) della parsing table viene consultata per espandere il non-terminale \(A\) sapendo che il prossimo terminale nell'input buffer è \(b\). Andiamo dunque a valorizzare la cella \(M[A, b]\) = \(A \rightarrow \alpha\) se:
 
@@ -497,10 +497,10 @@ Quindi, in Tab.\ref{first-follow-ex-3_step-3}, ammiriamo la soluzione finale del
 Ora che ci siamo esercitati con i meccanismi necessari, possiamo tornare ad occuparci della nostra preoccupazione principale, ovvero come costruire una tabella di parsing.
 
 \subsection{Algoritmo per la costruzione di una parsing table}
-Rappresentato in Alg. \ref{alg:parsing-table-comp} si può osservare l'algoritmo che, data in input una grammatica \(\G\), ritorna la parsing table propria di quella grammatica. 
+Rappresentato in Alg. \ref{alg:parsing-table-comp} si può osservare l'algoritmo che, data in input una grammatica \(\G\), ritorna la tabella di aprsing top down propria di quella grammatica. 
 
 \subimport{assets/pseudocode/}{parsing-table-comp.tex}
-Ricordiamo brevemente che le tabelle di parsing top-down ci servono per verificare se, data una certa parola, questa può essere derivata tramite derivazione leftmost da una data grammatica.
+Ricordiamo brevemente che le tabelle di parsing top-down ci servono per verificare se, data una certa parola, questa può essere derivata tramite derivazione leftmost da una certa grammatica.
 
 L'algoritmo prevede di scorrere tutte le produzioni \(A \to \alpha\) presenti nella grammatica e, per ognuna di queste:
 \begin{enumerate}
@@ -616,7 +616,7 @@ dove \(A' \notin \A \setminus T\), cioè è un non-terminale \emph{fresh}.
 
 Andiamo adesso a vedere come (e se) è possibile eliminare la ricorsione sinistra anche quando non è immediata.
 
-\subsection{Eliminazione della ricorsione sinistra}
+\subsection{Eliminazione di una ricorsione sinistra qualsiasi}
 Qui il problema si fa più spinoso: possiamo già anticipare che non sarà un'operazione possibile in tutte le grammatiche e per cui c'è addirittura il rischio che, l'eliminazione della ricorsione sinistra per un certo non-terminale, causi la sua comparsa per un altro non-terminale.
 
 In ogni caso, l'idea è di ridurre gli steps della derivazione \(A \Rightarrow^* A \alpha\), in modo da ottenere una produzione che presenta ricorsione sinistra immediata ed applicare la tecnica vista in \ref{subsec:left-recursive-to-ll1}.

@@ -90,6 +90,12 @@ Abbiamo quindi visto delle caratteristiche che vogliamo evitare per assicurarci 
     \item Le grammatiche \emph{ambigue} \textbf{non} sono \(LL(1)\), perché esiste almeno una stringa nel linguaggio che può essere derivata in 2 modi diversi (entrambi leftmost).
 \end{itemize}
 
+Per concludere, si tenga presente che una grammatica \emph{è} LL(1) se, \(\forall\) produzione di forma \(A \to \alpha \mid \beta\):
+\begin{enumerate}
+    \item \(first(\alpha) \cap first(\beta) = \emptyset\);
+    \item se \(\varepsilon \cap first(\alpha)\) allora \(follow(A) \cap first(\beta) = \emptyset\).
+\end{enumerate}
+
 \subsection{Parsing bottom-up\\ \small{Quello tosto}}
 L'altra grossa famigliola di grammatiche che abbiamo visto contiene quelle grammatiche che possono essere analizzate tramite il parsing bottom-up, di questa famiglia siamo andati ad indagare queste tipologie di grammatiche:
 \begin{itemize}
@@ -115,7 +121,7 @@ La differenza tra un tipo di grammatica e l'altro è la seguente:
 	\item tra \(SLR\) e \(LR(1)\) troviamo grammatiche \(LALR\), che ci offrono una tabella di parsing delle dimensioni di una tabella \(SLR\), ma hanno una complessità di calcolo leggermente superiore alle grammatiche \(SLR\) permettendoci di avere gli stessi lookahead set (quindi la stessa precisione) del parsing \(LR(1)\).
 \end{itemize}
 
-In realtà le possibilità non terminano qui, infatti si potrebbero ottenere delle grammatiche molto più semplici da parsare aumentantdo il numero di informazioni che si usano prima delle riduzioni, sostanzialmente incrementando il lookahead set: tali grammatiche potrebbero ad esempio essere \(LL(2)\) ed \(LR(2)\), ma la complessità per l'analisi della lista di token aumenterebbe parecchio in tal caso. La scelta privilegiata è quindi sforzarsi di trovare una grammatica \(LL(1)\) o \(LR(1)\) prima, per avere poi performance migliori.
+In realtà le possibilità non terminano qui, infatti si potrebbero ottenere delle grammatiche molto più semplici da parsare aumentando il numero di informazioni che si usano prima delle riduzioni, sostanzialmente incrementando il lookahead set: tali grammatiche potrebbero ad esempio essere \(LL(2)\) ed \(LR(2)\), ma la complessità per l'analisi della lista di token aumenterebbe parecchio in tal caso. La scelta privilegiata è quindi sforzarsi di trovare una grammatica \(LL(1)\) o \(LR(1)\) prima, per avere poi performance migliori.
 
 \subsection{Quando finisce il parsing}
 Se l'analisi sintattica dimostra che la stringa non è riconosciuta dal linguaggio, vi è la possibilità, nei compilatori moderni, di prevedere dei meccanismi di riconoscimento degli errori: spesso sono i compilatori stessi che suggeriscono all'utente dove si potrerebbero trovare gli errori sintattici all'interno del codice.

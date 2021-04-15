@@ -301,7 +301,7 @@ Ora che abbiamo studiato i due punti critici dell'SDD per questa grammatica ripo
 
 Il nostro obiettivo è considerare la traduzione direttamente durante la fase di parsing per poter ottimizzare le attività della compilazione. Questo ci permette di evitare una prima elaborazione sintattica per ottenere il parse tree e la seconda, semantica, per valutare gli attributi.
 
-Il caso più semplice in cui queste due elaborazioni possono essere eseguite in modo congiunto lo si ha considerando una grammatica adatta al parsing bottom-up a cui possiamo applicare l'algoritmo di shift/reduce (i.e. SLR(1), LR(1), LALR(1)) e l'SDD è S-attribuito (i.e. gli unici attributi presenti sono sintetizzati). Come mai?
+Il caso più semplice in cui queste due elaborazioni possono essere eseguite in modo congiunto lo si ha considerando una grammatica adatta al parsing bottom-up a cui possiamo applicare l'algoritmo di shift/reduce (i.e. SLR(1), LR(1), LALR(1)) e l'SDD è S-attribuito.
 
 L'algoritmo di shift/reduce si può eseguire con complessità lineare e necessita di due pile AA: una per mantenere gli stati (stSt) mentre l'altra per la catena dei simboli per poter conservare la derivazione parziale (sySt). L'idea è quella che insieme a queste due pile possiamo mantenerne una terza, che chiameremo \textbf{semSt}, dove conserveremo gli attributi (e.g. nel caso di una grammatica di espressioni aritmetiche degli interi).
 
@@ -488,7 +488,7 @@ Una possibile grammatica che genera il linguaggio descritto è questa:
 
 Quando ci troviamo nel caso di una stringa con il simbolo \(o\) davanti intendiamo che vogliamo ottenere il valore ottale della sequenza di digit. 
 
-La grammatica è LALR(1) anche in questo caso, però abbiamo un problema: non è possibile sintetizzare le informazioni nello stesso modo di prima in quanto queste non sono disponibili nel momento in cui ci servono. Ragionando infatti sulla derivazione \(S \Rightarrow Num \Rightarrow o Digits\) ci si rende conto del fatto che il simbolo \(o\) si trova nel sottoalbero sinistro dell'albero mentre i \(Digits\) in quello destro: questo vuol dire che di fatto non siamo in grado di calcolare il valore fino a quando non raggiungiamo la cima dell'albero e quindi ciò significa che non ci troviamo di fronte a un SDD S-attribuito (il valore del sottoalbero di destra dipende infatti dal valore dei fratelli e non solamente da quello dei figli).
+La grammatica è LALR(1) anche in questo caso, però abbiamo un problema: non è possibile sintetizzare le informazioni nello stesso modo di prima in quanto queste non sono disponibili nel momento in cui ci servono. Ragionando infatti sulla derivazione \(S \Rightarrow Num \Rightarrow o Digits\) ci si rende conto del fatto che il simbolo \(o\) si trova nel sottoalbero sinistro dell'albero mentre i \(Digits\) in quello destro: questo vuol dire che di fatto non siamo in grado di calcolare il valore fino a quando non raggiungiamo la cima dell'albero e quindi ciò significa che non ci troviamo di fronte a un SDD l-attribuito (il valore del sottoalbero di destra dipende infatti dal valore dei fratelli e non solamente da quello dei figli).
 
 Per poter raggiungere i nostri obiettivi a livello di efficienza dobbiamo riprovare modificando la grammatica in modo che ci consenta di svolgere entrambe le operazioni contemporaneamente.
 
@@ -547,7 +547,7 @@ L'AST si può creare semplicemente dopo aver ottenuto l'albero di derivazione tr
 Per fare questo dobbiamo immaginare di avere a disposizione due funzioni:
 \begin{itemize}
     \item \texttt{newLeaf(label, val)} che va a salvare un nodo foglia con due campi: l'etichetta ed il valore;
-    \item \texttt{newNode(label, c1, ..., ck)} che crea un nodo con \(k\) figli, l'etichetta (che indica l'operazione rappresentata dal nodo) è \texttt{label} mentre \texttt{c1, ..., ck} sono i riferimenti ai nodi figli;
+    \item \texttt{newNode(label, c1, ..., ck)} che crea un nodo con \(k\) figli, l'etichetta (che indica l'operazione rappresentata dal nodo) è \texttt{label} mentre \texttt{c1, ..., ck} sono i riferimenti ai nodi figli (ossia gli operatori);
 \end{itemize}
 Applicando queste due funzioni all'esempio precedente (Fig.\ref{fig:ast-first-example}) avremo l'operazione \(+\) rappresentata da un nodo che avrà come etichetta \(+\) e come figli i due nodi \(digit\).
 I nodi \(digit\) saranno nodi foglia con identificatore e valore relativo (il valore sarà quello che ci viene ritornato dall'analisi lessicale, quindi lo possiamo ricavare con \(digit.lexval\)).\\
@@ -688,7 +688,7 @@ Lo stesso avviene per la grammatica che stiamo considerando ora, quella per gli 
 
 Il problema in questo caso specifico è che non possiamo sintetizzare tutte le informazioni che ci servono perchè, uno degli elementi necessari per ricavare il valore dell'espressione e per la formazione dell'abstract syntax tree, non è presente nello stesso sottoalbero nel quale troviamo l'operatore aritmetico e l'altro operando coinvolto nell'operazione. 
 
-Utilizzando gli attributi ereditati non si riesce ad eseguire in maniera immediata tutte le operazioni durante il parsing della grammatica: un'opzione, come già citato più volte, potrebbe essere quella di agire sulla grammatica in modo che, durante un'esecuzione del parsing bottom-up, si possa ottenere lo stesso risultato di una grammatica S-attribuita. Senza soffermarci troppo sui dettagli, tale operazione passerebbe per l'aggiunta di marker e \(\varepsilon\)-transizioni in modo che gli attributi vengano sintetizzati e non ereditati.
+Utilizzando gli attributi ereditati non si riesce ad eseguire in maniera immediata tutte le operazioni di assegnamento per reare l'AST durante il parsing della grammatica: un'opzione, come già citato più volte, potrebbe essere quella di agire sulla grammatica in modo che, durante un'esecuzione del parsing bottom-up, si possa ottenere lo stesso risultato di una grammatica S-attribuita. Senza soffermarci troppo sui dettagli, tale operazione passerebbe per l'aggiunta di marker e \(\varepsilon\)-transizioni in modo che gli attributi vengano sintetizzati e non ereditati.
 
 In questo caso per poter trasportare le informazioni da un ramo dell'albero ad un altro è necessario utilizzare degli attributi ereditati: in modo simile a quanto fatto per calcolare il valore delle espressioni aritmetiche, in questo caso assegniamo dei riferimenti a dei nodi. 
 

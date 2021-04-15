@@ -268,7 +268,7 @@ La grammatica che scegliamo come esempio è questa:
 Questa è una grammatica che ci parla di puntatori, ma capiremo in seguito cosa significa ciò, per ora concentriamoci sulla sua risoluzione. 
 
 \subsubsection{Definizione stati e costruzione dell'automa}
-Il primo passo, naturalmente, è la costruzione dell'automa caratteristico. Per fare questo è necessario prima definire come sono fatti gli stati del nostro automa, ossia quali LR(1)-items comprenderanno; per fare questo, sappiamo che abbiamo la nostra fida \(closure_1()\). Aggiungiamo la produzione canonica \(S' \to S\) e cominciamo.
+Il primo passo, naturalmente, è la costruzione dell'automa caratteristico. Per fare questo è necessario prima definire come sono fatti gli stati del nostro automa, ossia quali LR(1)-items comprenderanno; per fare questo, sappiamo che abbiamo la nostra fida \(closure_1\). Aggiungiamo la produzione canonica \(S' \to S\) e cominciamo.
 
 \paragraph{Stato 0}
 Il kernel dello stato è \(S' \to \cdot S\), a cui andiamo subito ad aggiungere il risultato del calcolo di \(closure_1(S)\). Ricordiamo che il lookahead set \(\Gamma\) si calcola come first(\(\beta\Delta\)); nel caso di \(closure_1(S)\) abbiamo \(\beta = \varepsilon\) e \(\Delta = \{\$\}\).
@@ -287,7 +287,7 @@ Abbiamo calcolato la chiusura per \(S\), ma adesso  dobbiamo calcolarla anche pe
     && &&L &\to \cdot id, \{=\} &\\
     &&closure_1(R): &&R &\to \cdot L, \{\$\}&
 \end{align*}
-Non è ancora finita purtroppo, perché trovato un altro item con il marker \(\cdot\) davanti alla \(L\); che facciamo, dobbiamo ricalcolarla? Sì, dobbiamo farlo assolutamente! Nel caso precedente la produzione \(S \to \cdot L = R\) aveva \(\beta = \{=R\}\), mentre in questo caso la produzione è \(R \to L\) e ha \(\beta = \varepsilon\), per cui il lookahead set delle produzioni di \(L\) potrebbe essere diverso in questo secondo caso, e difatti è proprio questo che succede, perché il calcolo della chiusura ci dice questo:
+Non è ancora finita purtroppo, perché trovato un altro item con il marker \(\cdot\) davanti alla \(L\); che facciamo, dobbiamo ricalcolarla? Sì, dobbiamo farlo assolutamente! Nel caso precedente la produzione \(S \to \cdot L = R\) aveva \(\beta = \{=R\}\), mentre in questo caso la produzione è \(R \to L\) e ha \(\beta = \varepsilon\), per cui il lookahead set delle produzioni di \(L\) potrebbe essere diverso in questo secondo caso, e difatti è proprio questo che succede, perché il calcolo della chiusura ci ritorna questo:
 \begin{align*}
     L &\to \cdot \ast R, \{\$\} \\
     L &\to \cdot id, \{\$\}
@@ -480,7 +480,7 @@ Per rispondere a questa domanda è comunque conveniente costruirne il relativo a
     \caption{Automa caratteristico SLR(1) per Eq.\ref{gr:pointers-grammar}}
     \label{fig:pointers-automaton-slr1}
 \end{figure}
-E purtroppo vediamo subito il problema: dal momento che la nostra lookahead function è follow(B), lo stato 2 presenta sia una mossa di shift verso =, sia una mostra di reduce. Pertanto, nella tabella avremo un conflitto nella cella [2, =], e tanto basta per permetterci di dire che la grammatica Eq.\ref{gr:pointers-grammar} non è SLR(1).
+E purtroppo vediamo subito il problema: dal momento che la nostra lookahead function è follow(B), lo stato 2 presenta sia una mossa di shift verso =, sia una mossa di reduce. Pertanto, nella tabella avremo un conflitto nella cella [2, =], e tanto basta per permetterci di dire che la grammatica Eq.\ref{gr:pointers-grammar} non è SLR(1).
 
 \paragraph{La grammatica dei puntatori}
 Approfondiamo il discorso su questa grammatica.
@@ -546,13 +546,13 @@ Non è ancora finita, perché in 8 troviamo un'altra riduzione, in particolare \
     stSt &= 0\;4\;4\;4\;7 \\
     symSt &= ***L 
 \end{align*}
-La riduzione da operare è \(L \to ^{*}R\), per cui cancelliamo gli ultimi due stati da \(stSt\) e modifichiamo contestualmente la testa di \(symSt\), per ritrovarci infine in questa situazione:
+La riduzione da operare è \(L \rightarrow\; ^{*}R\), per cui cancelliamo gli ultimi due stati da \(stSt\) e modifichiamo contestualmente la testa di \(symSt\), per ritrovarci infine in questa situazione:
 \begin{align*}
     w &= \underline{***id}\!=id\$ \\
     stSt &= 0\;4\;4\;8 \\
     symSt &= **L 
 \end{align*}
-Siamo di nuovo nello stato 4 con L in lettura: la medesima situazione in cui ci eravamo ritrovati poco sopra! Questo vuol dire che andremo a ripetere di nuovo le stesse operazioni: transizione verso 8, riduzione \(R \to L\), transizione verso 7, riduzione \(L \to ^{*}R\); questo ciclo andrà iterato finché tutti gli \(\ast\) non saranno spariti, e descrive molto bene quello che succede a livello macchina quando andiamo a risolvere un puntatore. Infatti, quando avremo risolto tutti gli \(\ast\), saremo di nuovo nello stato 0 e avremo un goto \(L\), punto di boa a cui eravamo arrivati anche nella precedente parola analizzata. Adesso completiamo il ragionamento e andiamo fino in fondo.
+Siamo di nuovo nello stato 4 con L in lettura: la medesima situazione in cui ci eravamo ritrovati poco sopra! Questo vuol dire che andremo a ripetere di nuovo le stesse operazioni: transizione verso 8, riduzione \(R \to L\), transizione verso 7, riduzione \(L \to\; ^{*}R\); questo ciclo andrà iterato finché tutti gli \(\ast\) non saranno spariti, e descrive molto bene quello che succede a livello macchina quando andiamo a risolvere un puntatore. Infatti, quando avremo risolto tutti gli \(\ast\), saremo di nuovo nello stato 0 e avremo un goto \(L\), punto di boa a cui eravamo arrivati anche nella precedente parola analizzata. Adesso completiamo il ragionamento e andiamo fino in fondo.
 \subparagraph*{}
 Itaque seguiamo il goto \(L\) e dirigiamoci verso le acque burrascose del tormentato stato 2. 
 \begin{align*}
@@ -566,7 +566,7 @@ Che fare? Non possiamo più affidarci a ragionamenti pigri come quello che abbia
     stSt &= 0\;2\;6 \\
     symSt &= L\!=
 \end{align*}
-In lettura abbiamo \(id\), per cui facciamo unp shift verso 5; bruciamo la tappa ed eseguiamo subito la riduzione \(L \to id\) che ci fa rimbalzare indietro dallo stato 6 e infine allo stato 8.
+In lettura abbiamo \(id\), per cui facciamo uno shift verso 5; bruciamo la tappa ed eseguiamo subito la riduzione \(L \to id\) che ci fa rimbalzare indietro dallo stato 6 e infine allo stato 8.
 \begin{align*}
     w &= \underline{id\!=id}\$ \\
     stSt &= 0\;2\;6\;\xout{5}\;8 \\
@@ -637,13 +637,13 @@ Il parsing di tipo SLR(1) non riconosce dunque la differenza fra lo stato 2 e lo
 \section{Il parsing LALR(1)}
 Nonostante il parsing di tipo LR(1) sia il più completo è possibile che l'automa caratteristico risultante contenga delle ridondanze: nell'esempio precedente vi sono infatti delle sottostrutture che sono isomorfe e ciò deriva dal fatto che, visto che le transizioni dipendono sempre dalla prima componente (i.e. item LR(0)), è possibile notare che le ridondanze si verificano nel caso in cui gli stati abbiano la stessa proiezione LR(0).
 \subparagraph*{}
-Per mantenere la precisione el'affidabilità del parsing LR(1) ma senza rinunciare all'efficienza di quello SLR(1) possiamo utilizzare una terza via, il parsing LALR(1): ques'ultimo utilizza gli stati in maniera simile al parsing SLR(1), ma utilizza una funzione di lookahead un filo più raffinata. Andiamo a conoscerla più da vicino
+Per mantenere la precisione e l'affidabilità del parsing LR(1) ma senza rinunciare all'efficienza di quello SLR(1) possiamo utilizzare una terza via, il parsing LALR(1): ques'ultimo utilizza gli stati in maniera simile al parsing SLR(1), ma utilizza una funzione di lookahead un filo più raffinata. Andiamo a conoscerla più da vicino
 
 \subsection{L'Automa caratteristico LRm(1)}
 
 L'automa LRm(1) \(\mathcal{AM}\) è costruito a partire dall'automa LR(1) \(\mathcal{A}\) (la lettera m sta per \emph{merged}).
 
-Gli \textbf{Stati} del nuovo automa caratteristico sono ottenuti unendo all'interno di un singolo stato di \(\mathcal{AM}\) tutti gli item negli stati \(<P_1, ..., P_n>\) di \(\mathcal{A}\) che hanno le stesse LR(0)-proiezioni (i.e. con lo stesso item LR(0)).
+Gli \textbf{Stati} del nuovo automa caratteristico sono ottenuti unendo all'interno di un singolo stato di \(\mathcal{AM}\) tutti gli item negli stati \(<P_1, ..., P_n>\) di \(\mathcal{A}\) che hanno le stesse LR(0)-proiezioni (i.e. con i medesimi item LR(0)).
 
 \textbf{Transizioni}: Se lo stato \(P\) di \(\mathcal{A}\) ha la stessa \(Y\)-transizione a \(Q\) e se \(P\) è stato unito in \(<P_1, ..., P_n>\) e \(Q\) in \(<Q_1, ..., Q_m>\), allora c'è una \(Y\)-transizione in \(\mathcal{AM}\) da \(<P_1, ..., P_n>\) a \(<Q_1, ..., Q_m>\).
 

@@ -26,7 +26,7 @@ Detto questo, cominciamo.
 
 Se \(\{ww \mid w \in \L((a \mid b)^*)\}\) è un linguaggio regolare rispondere “SI”, altrimenti rispondere “NO”.
 
-Analizziamo il tutto a mente fredda: la domanda è se il linguaggio proposto è regolare, una sottoclasse dei linguaggi liberi. In questo caso non ha senso perdersi sulla definizione in quanto il linguaggio di partenza (i.e. quello a cui appartiene w) è sicuramente regolare in quanto è denotato da un'espressione regolare. A questo sembrerebbe che la risposta sia a portata di mano: “Visto che i linguaggi regolari sono chiusi rispetto alla concatenazione allora il linguaggio fornito è regolare”, giusto? NO! 
+Analizziamo il tutto a mente fredda: la domanda è se il linguaggio proposto è regolare, una sottoclasse dei linguaggi liberi. In questo caso non ha senso perdersi sulla definizione in quanto il linguaggio di partenza (i.e. quello a cui appartiene w) è sicuramente regolare in quanto è denotato da un'espressione regolare. A questo punto potremmo pensare che la risposta sia banala, un mero richiamo della proprietà di chiusura rispetto alla concatenazione: “isto che i linguaggi regolari sono chiusi rispetto alla concatenazione allora il linguaggio fornito è regolare”. Giusto? MA NEANCHE PER SBAGLIO! 
 
 Osserviamo meglio il tutto: se veramente valesse la proprietà di concatenazione potremmo scrivere il tutto come 
 
@@ -38,7 +38,7 @@ dove \(L_1\) e \(L_2\) sono due linguaggi regolari.
 
 Se questo fosse vero vorrebbe dire che \(\L_1 = \L_2 = \L((a \mid b)^*)\) e quindi che \(w' = ab \in \{w_1 w_2 \mid w_1 \in \L((a \mid b)^*) \land w_2 \in \L((a \mid b)^*)\}\), tuttavia \(w' \notin \{ww \mid w \in \L((a \mid b)^*)\}\): non possiamo dunque sfruttare tale proprietà a nostro vantaggio.
 
-L'ultima spiaggia è dunque utilizzare il \emph{Pumpin Lemma} per poter arrivare ad una conclusione:
+L'ultima spiaggia è dunque utilizzare il \emph{Pumping Lemma} per poter arrivare ad una conclusione:
 
 \begin{itemize}
     \item Supponiamo che \(\L = \{ww \mid w \in L((a \mid b)^*)\}\) sia un linguaggio regolare
@@ -76,7 +76,7 @@ Partiamo dal primo caso: vogliamo avere la possibilità di generare 0 o più rip
 \begin{figure}[H]
 	\centering
     \subimport{assets/figures/}{es3-a.tex}
-    \caption{Es 1: DFA Parziale \(b^*\)}
+    \caption{DFA Parziale \(b^*\)}
     \label{fig:dfa-pt1-ex3}
 \end{figure}
 
@@ -86,7 +86,7 @@ Passiamo ora al secondo insieme di parole riconosciute: essendo che la prima par
 \begin{figure}[H]
 	\centering
     \subimport{assets/figures/}{es3-b.tex}
-    \caption{Es 1: DFA Parziale \(b^* a (\varepsilon \mid a \mid b)^*\)}
+    \caption{DFA Parziale \(b^* a (\varepsilon \mid a \mid b)^*\)}
     \label{fig:dfa-pt2-ex3}
 \end{figure}
 
@@ -95,7 +95,7 @@ A questo punto abbiamo quasi concluso, la cosa che ci manca è unificare questi 
 \begin{figure}[H]
 	\centering
     \subimport{assets/figures/}{es3-c.tex}
-    \caption{Es 1: DFA Parziale \(b^* \mid b^* a (\varepsilon \mid a \mid b)^*\)}
+    \caption{DFA Parziale \(b^* \mid b^* a (\varepsilon \mid a \mid b)^*\)}
     \label{fig:dfa-pt3-ex3}
 \end{figure}
 
