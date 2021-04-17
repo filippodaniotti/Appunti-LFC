@@ -637,21 +637,21 @@ Il parsing di tipo SLR(1) non riconosce dunque la differenza fra lo stato 2 e lo
 \section{Il parsing LALR(1)}
 Nonostante il parsing di tipo LR(1) sia il più completo è possibile che l'automa caratteristico risultante contenga delle ridondanze: nell'esempio precedente vi sono infatti delle sottostrutture che sono isomorfe e ciò deriva dal fatto che, visto che le transizioni dipendono sempre dalla prima componente (i.e. item LR(0)), è possibile notare che le ridondanze si verificano nel caso in cui gli stati abbiano la stessa proiezione LR(0).
 \subparagraph*{}
-Per mantenere la precisione e l'affidabilità del parsing LR(1) ma senza rinunciare all'efficienza di quello SLR(1) possiamo utilizzare una terza via, il parsing LALR(1): ques'ultimo utilizza gli stati in maniera simile al parsing SLR(1), ma utilizza una funzione di lookahead un filo più raffinata. Andiamo a conoscerla più da vicino.
+Per mantenere la precisione e l'affidabilità del parsing LR(1) ma senza rinunciare all'efficienza di quello SLR(1) possiamo utilizzare una terza via, il parsing LALR(1): quest'ultimo utilizza gli stati in maniera simile al parsing SLR(1), ma utilizza una funzione di lookahead un filo più raffinata. Andiamo a conoscerla più da vicino.
 
 \subsection{L'Automa caratteristico LRm(1)}
 
-Un passaggio intermedio obbligatorio è l'automa LRm(1) \(\mathcal{AM}\), costruito a partire dall'automa LR(1) tramite raffinazione \(\mathcal{A}\) (la lettera m sta per \emph{merged}).
+Un passaggio intermedio obbligatorio è l'automa LRm(1) \(\mathcal{AM}\), costruito a partire dall'automa LR(1) \(\mathcal{A}\) tramite raffinazione unendo più stati diversi in un singolo stato \emph{merged} (la lettera \(\mathcal{M}\) sta proprio per \emph{merged}).
 
 Gli \textbf{Stati} del nuovo automa caratteristico sono ottenuti unendo all'interno di un singolo stato di \(\mathcal{AM}\) tutti gli item negli stati \(<P_1, ..., P_n>\) di \(\mathcal{A}\) che hanno le stesse LR(0)-proiezioni (i.e. con i medesimi item LR(0)).
 
-\textbf{Transizioni}: Se lo stato \(P\) di \(\mathcal{A}\) ha la stessa \(Y\)-transizione a \(Q\) e se \(P\) è stato unito in \(<P_1, ..., P_n>\) e \(Q\) in \(<Q_1, ..., Q_m>\), allora c'è una \(Y\)-transizione in \(\mathcal{AM}\) da \(<P_1, ..., P_n>\) a \(<Q_1, ..., Q_m>\).
+\textbf{Transizioni}: Se lo stato \(P_1\) di \(\mathcal{A}\) presenta una \(Y\)-transizione a \(Q_1\) (stato di \(\mathcal{A}\)) e se \(P_1\) è stato inserito in uno stato merged \(<P_1, ..., P_n>\) di \(\mathcal{AM}\) e \(Q_1\) in \(<Q_1, ..., Q_m>\), allora c'è una \(Y\)-transizione in \(\mathcal{AM}\) da \(<P_1, ..., P_n>\) a \(<Q_1, ..., Q_m>\).
 
 Se prendiamo in considerazione l'automa LR(1) definito precedentemente, possiamo osservare che gli stati 4 e 11 hanno la medesima prima proiezione e quindi possiamo unirli all'interno di un nuovo stato, che chiamiamo 4\&11 e corrisponde ad uno stato merged.
 
 Cosa facciamo per le transizioni? Nell'automa LR(1) abbiamo un'unica transizione etichettata \(id\) che va dallo stato 4 allo stato 5 (e allo stesso modo un'altra etichettata \(id\) dallo stato 11 al 12). Visto che gli stati 4 e 11 sono stati uniti in un unico stato (4\&11) e lo stesso vale per 5 e 12 (5\&12), per la definizione precedente possiamo inserire in \(\mathcal{AM}\) una transizione da 4\&11 a 5\&12 etichettata \(id\).
 
-Eseguendo l'operazione descritta la dimensione (i.e. il numero di stati) dell'automa LRm(1) così generato è sicuramente uguale a quella dell'automa LR(0): andando a combinare stati con con gli stessi item LR(0) ci ritroveremo con lo stesso numero di stati dell'automa LR(0) e con lo stesse transizioni. 
+Eseguendo l'operazione descritta la dimensione (i.e. il numero di stati) dell'automa LRm(1) così generato è sicuramente uguale a quella dell'automa LR(0): andando a combinare stati con con gli stessi item LR(0) ci ritroveremo con lo stesso numero di stati dell'automa LR(0) e con le stesse transizioni. 
 
 \subsection{Costruzione di una tabella di parsing LALR(1)}
 \label{subsec:lalr1-parsing-table}
@@ -797,9 +797,9 @@ Quello che andremo a creare è detto automa simbolico, preché utilizza dei simb
 Quindi gli item di questo automa simbolico possono essere immaginati cme suddivisi in due componenti:
 \begin{itemize}
     \item una componente di tipo LR(0);
-    \item una parte composta da un insieme di lookahead simbolico.
+    \item una parte composta da un insieme di \emph{lookahead simbolico}.
 \end{itemize}
-Sostanzialmente questi item sono del tutto assimilabili agli item LR(1), con l'unica differenza che il \(\Delta\) set è simbolico e presto al lettore sarà ben chiaro questo concetto.
+Sostanzialmente questi item sono del tutto assimilabili agli item LR(1), con l'unica differenza che il \(\Delta\) set è simbolico, ovvero è una variabile che viene calcolata solo al termine dell'analisi degli stati. Presto al lettore sarà ben chiaro questo concetto.
 
 Mentre creiamo l'automa simbolico ci memorizziamo in una tabella delle equazioni che ci serviranno alla fine per tradurre i lookahead set simbolici in lookahead effettivi. Come è ormai consuetudine il modo più semplice per spiegare questo procedimento è applicarlo direttamente ad un esempio.
 
@@ -813,7 +813,7 @@ Andiamo a costruire l'automa simbolico per la nostra cara grammatica
 La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'automa LR(1) per rendere più chiare le differenze tra queste due costruzioni.
 
 Il primo passo è installare lo stato 0 dell'automa:
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-stato_0.png}
     \caption{Stato 0: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -866,17 +866,18 @@ Procedendo un passettino alla volta la chiusura dello stato 0 si fa così:
     \end{align*}
 \end{itemize}
 Il consiglio per chi non ha capito questi passaggi è quello di fare qualche esercizio di costruzione di automi LR(1), fidatevi ne vale la pena!
+Per tutti gli altri invece si apre ora una strada tortuosa verso una valle di lacrime, ma non indugiamo oltre, l'esame è vicino e non c'è tempo da perdere.
 
 Orbene, passiamo ad analizzare le transazioni uscenti dallo stato 0.
 La prima transizione che troviamo è \(\tau(0,S)\) che ci porta ad un nuovo stato, lo stato 1.
 \\
 Kernel dello stato 1:
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolic-kernel_s1.png}
     \caption{Kernel stato 1: sulla sinistra automa simbolico, sulla destra automa LR(1)}
 \end{figure}
-notiamo come invece che scrivere il lookahead set come insieme creiamo una nuova variabile per indicarlo. Dobbiamo aggiornare anche il nostro sitema in cui salviamo il valore effettivo della variabile.
+notiamo come invece che scrivere il lookahead set come insieme creiamo una nuova variabile \(x_1\) per indicarlo: questo stratagemma ci serve per aggiornare il valore del lookahead set nel caso dovessimo tornare in questo stato con un nuovo \(\Delta\), sarà chiaro in seguito. Dobbiamo aggiornare anche il nostro sistema in cui salviamo il valore effettivo della variabile.
 In questo caso il lookahed set del kernel, essendo \(\beta = \varepsilon\) è proprio uguale al lookahead set della produzione da cui arriviamo, quindi \(x_0\), aggiorniamo dunque alacremente il nostro sistema di equazioni.
 \begin{align*}
     Sistema:& \\
@@ -888,7 +889,7 @@ Lo stato 1 non ha chiusure da calcolare e nemmeno transizioni, quindi passiamo o
 La prossima transizione che andiamo ad analizzare è \(\tau(0,L)\) che ci porta in un nuovo stato, diciamo 2.
 \\
 Kernel dello stato 2:
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s2.png}
     \caption{Kernel stato 2: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -906,7 +907,7 @@ grazie al cielo non si presentano chiusure; analizzeremo le transizioni in segui
 Passiamo quindi all'osservazione della transizione \(\tau(0,R)\), che ci porta nello stato 3.
 \\
 Kernel dello stato 3:
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s3.png}
     \caption{Kernel stato 3: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -925,7 +926,7 @@ il kernel dello stato 3 non presenta nè chiusure nè transizioni, quindi proced
 La prossima transizione che dobbiamo analizzare è \(\tau(0,*)\), questa deriva dalla produzione \([L \to \cdot *R, \; \{=, x_0\}]\).
 \\
 Kernel dello stato 4:
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s4.png}
     \caption{Kernel stato 4: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -946,12 +947,12 @@ finalmente uno stato che ci dia la \emph{soddisfazione} di calcolare delle chius
     L &\to \cdot *R, \; \{x_5\} \\
     L &\to \cdot id, \; \{x_5\}
 \end{align*}
-che spettacolo, eh? passiamo oltre
+che spettacolo, eh? passiamo oltre.
 
 Prossima transizione da analizzare: \(\tau(0,id)\) che deriva dall'item \([L \to \cdot id, \; \{=, x_0\}]\) e ci porta nello stato 5.
 \\
 Kernel dello stato 5:
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s5.png}
     \caption{Kernel stato 5: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -972,7 +973,7 @@ Anche qui, pace all'anima nostra, inseriamo il lookahead set come variabile e la
 Abbiamo finito le transizioni dallo stato 0! prossima trnsizione da analizzare \(\tau(2, =)\), che deriva dall'item \([S \to L \cdot = R, \; \{x_2\}]\), ci porta direttamente allo stato 6.
 \\
 Kernel dello stato 6:
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s6.png}
     \caption{Kernel stato 6: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -1000,7 +1001,7 @@ Grazie alla presenza del marker davanti ad una \(R\) aggiungiamo questi item all
 Passiamo ora ad analizzare la transizione \(\tau(4, R)\), che deriva dall'item \([L \to * \cdot R, \; \{x_5\}]\) e ci spara nello stato 7.
 \\
 Kernel dello stato 7:
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s7.png}
     \caption{Kernel stato 7: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -1023,7 +1024,7 @@ a questo punto dovremmo fare la chiusura no? ma è già tutto chiuso, come alle 
 Passiamo quindi ad analizzare la transizione \(\tau(4, L)\) che prende le mosse dall'item \([R \to \cdot L, \; \{x_5\}]\) e ci porta nello stato 8.
 \\
 Kernel dello stato 8:
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s8.png}
     \caption{Kernel stato 8: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -1080,7 +1081,7 @@ Il lookahead set della transizione \(\tau(4, id)\) è ancora una volta \(x_5\).
 Passiamo oltre, la prossima transizione su cui ci concentriamo è \(\tau(6, R)\), derivante da \([S \to L = \cdot R, \; \{x_7\}]\), che ci porta a scoprire lo stato 9.
 \\
 Kernel dello stato 9:
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s9.png}
     \caption{Kernel stato 9: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -1165,7 +1166,7 @@ Un automa con le stesse dimensioni di tipo LR(0), poichè abbiamo creato esattam
 Per concludere questo esempio ricordiamo brevemente quali sarebbero i passi da seguire a questo punto per ottenere l'automa merged:
 \begin{enumerate}
     \item inseriamo tutti gli stati;
-    \item le mosse di shift (le transizioni) sono sesattamente quelle identificate e corrispondono alle transizioni dell'automa caratteristico LR(0) per questa grammatica;
+    \item le mosse di shift (le transizioni) sono esattamente quelle identificate e corrispondono alle transizioni dell'automa caratteristico LR(0) per questa grammatica;
     \item gli stati con riduzioni sono tutti quelli che presentatno una produzione con il marker in fondo al body;
     \item le lookahead function (le etichette per le riduizioni) corrispondono ai lookahead set calcolati nella risoluzione del sistema.
 \end{enumerate}
