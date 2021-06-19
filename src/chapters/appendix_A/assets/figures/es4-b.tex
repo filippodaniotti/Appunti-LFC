@@ -19,6 +19,7 @@
         (t2) edge[below] node{a} (t3)
         (t3) edge[below, bend left=30] node{b} (t1)
         (t2) edge[above, bend right] node{b} (t1)
-        (t1) edge[loop above] node{b} (t1);
+        (t1) edge[loop above] node{b} (t1)
+        (t3) edge[loop above] node{a} (t3);
     \end{tikzpicture}
 \end{document}
