@@ -241,7 +241,7 @@ Passiamo ad applicare la procedura di minimizzazione ad uno degli esempi già vi
 	\label{mindfa-es-1}
 \end{figure}
 
-Iniziamo con due blocchi iniziali: \(B_{1}=\{T4\}\), dato dallo stato finale, e \(B_{2}=\{T0,T1,T2,T3\}\). Notiamo che \((b,B_{1})\) spezza \(B_{2}\), per cui abbiamo due blocchi \(B_{21}=\{T3\}\) e \(B_{22}=\{T0,T1,T2\}\). Notiamo ancora che è possibile spezzare \(B_{22}\) in \(B_{221}=\{T1\}\) e \(B_{222}=\{T0,T2\}\). Otteniamo quindi il DFA minimo illustrato in figura \ref{mindfa-es1-sol}. 
+Iniziamo con due blocchi iniziali: \(B_{1}=\{T4\}\), dato dallo stato finale, e \(B_{2}=\{T0,T1,T2,T3\}\). Notiamo che \((b,B_{1})\) spezza \(B_{2}\), per cui abbiamo due blocchi \(B_{21}=\{T3\}\) e \(B_{22}=\{T0,T1,T2\}\). Notiamo ancora che è possibile spezzare \(B_{22}\) in \(B_{221}=\{T1\}\) e \(B_{222}=\{T0,T2\}\) con \((b,B_{21})\). Otteniamo quindi il DFA minimo illustrato in figura \ref{mindfa-es1-sol}. 
 
 \begin{figure}[H]
 	\centering

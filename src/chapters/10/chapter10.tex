@@ -224,7 +224,7 @@ Gli SDD S-attribuiti sono ideali per il parsing bottom-up, perché si può crear
 
 \subsection{Un altro esempio di utilizzo dell'SDD}
 Grammatiche differenti pongono sfide differenti nella definizione degli SDD.
-Nel primo esercizio di applicazione dell'SDD abbiamo studiato una grammatica con ricorsione sinistra, osserviamo ora un caso di grammatica LL(1), consideriamo il caso della grammatica per le espressioni aritmetiche \(+\) e \(*\).
+Nel primo esercizio di applicazione dell'SDD abbiamo studiato una grammatica con ricorsione sinistra, osserviamo ora il caso di una grammatica LL(1), considerando la grammatica per le espressioni aritmetiche \(+\) e \(*\).
 \begin{align*}
     V &\to E \\
     E &\to TE' \\
@@ -334,7 +334,6 @@ Come abbiamo potuto osservare nei capitoli precedenti, l'algoritmo shift/reduce 
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{lalr-automata.jpg}
-    \label{fig:lalr-automata}
 \end{figure}
 
 \begin{table}[H]
@@ -421,7 +420,7 @@ Dallo stato 7 possiamo eseguire \texttt{shift} 6 leggendo dall'input buffer \(di
     semSt &= 3\; 0\; 4 &\texttt{push}\;digit.lexval\\
 \end{align*}
 
-Il processo a questo risulta essere analogo a quello fatto precedentemente per il primo \(digit\) quindi ci riserviamo la libertà di non spiegare così nel dettaglio i prossimi passaggi 
+Il processo a questo punto risulta essere analogo a quello fatto precedentemente per il primo \(digit\) quindi ci riserviamo la libertà di non spiegare così nel dettaglio i prossimi passaggi 
 
 \begin{align*}
     w &= \underline{digit + digit}\$ \\
@@ -552,7 +551,7 @@ Per fare questo dobbiamo immaginare di avere a disposizione due funzioni:
 Applicando queste due funzioni all'esempio precedente (Fig.\ref{fig:ast-first-example}) avremo l'operazione \(+\) rappresentata da un nodo che avrà come etichetta \(+\) e come figli i due nodi \(digit\).
 I nodi \(digit\) saranno nodi foglia con identificatore e valore relativo (il valore sarà quello che ci viene ritornato dall'analisi lessicale, quindi lo possiamo ricavare con \(digit.lexval\)).\\
 
-\paragraph{Funzioni di attribuzione} Per creare l'albero di sintssi astratta durante la fase di parsing dobbiamo definire delle regole semantiche (dette anche funzioni di attribuzione o azioni semantiche) che, ogni volta che incontriamo una riduzione, ci indichino quando e come istanziare un nodo per l'AST durante il parsing.
+\paragraph{Funzioni di attribuzione} Per creare l'albero di sintassi astratta durante la fase di parsing dobbiamo definire delle regole semantiche (dette anche funzioni di attribuzione o azioni semantiche) che, ogni volta che incontriamo una riduzione, ci indichino quando e come istanziare un nodo per l'AST durante il parsing.
 
 \noindent Vediamo un esempio: data la grammatica LALR per operazioni algebriche di somma e sottrazione 
 \begin{align}
@@ -686,7 +685,8 @@ Lo stesso avviene per la grammatica che stiamo considerando ora, quella per gli 
 %TODO bisogna mergiare queste due parti solo che non so che cosa è meglio tenere come introduzione
 % Ti dirò che a me sembrano carini così
 
-Il problema in questo caso specifico è che non possiamo sintetizzare tutte le informazioni che ci servono perchè, uno degli elementi necessari per ricavare il valore dell'espressione e per la formazione dell'abstract syntax tree, non è presente nello stesso sottoalbero nel quale troviamo l'operatore aritmetico e l'altro operando coinvolto nell'operazione. 
+Il problema in questo caso specifico è che non possiamo sintetizzare tutte le informazioni che ci servono;
+questo perché uno degli elementi necessari per ricavare il valore dell'espressione e per la formazione dell'abstract syntax tree, non è presente nello stesso sottoalbero nel quale troviamo l'operatore aritmetico e l'altro operando coinvolto nell'operazione. 
 
 Utilizzando gli attributi ereditati non si riesce ad eseguire in maniera immediata tutte le operazioni di assegnamento per reare l'AST durante il parsing della grammatica: un'opzione, come già citato più volte, potrebbe essere quella di agire sulla grammatica in modo che, durante un'esecuzione del parsing bottom-up, si possa ottenere lo stesso risultato di una grammatica S-attribuita. Senza soffermarci troppo sui dettagli, tale operazione passerebbe per l'aggiunta di marker e \(\varepsilon\)-transizioni in modo che gli attributi vengano sintetizzati e non ereditati.
 
@@ -722,7 +722,7 @@ Può sembrare difficile ottenere questa struttura dal nostro parse tree, tuttavi
 
 Per rendere più chiaro il grafo utilizziamo un esempio: il sottoalbero sinistro possiede un arco da \(id\) a \(T\) (coincidente con quello del parse tree) perché sottolineiamo che, una volta effettuata l'operazione di riduzione \(T \to id\), \(T\) mantenga un riferimento a \(id\); visto che \(id\) è contenuto nel sottoalbero di \(T\) (i.e. è uno dei suoi figli) tale attributo è sintetizzato. 
 
-La situazione cambia se vogliamo esaminare l'arco esattamente successivo: l'arco da \(T\) ad \(E'\) infatti non coincide con nessun altro arco del parse tree e il suo scopo è quello di trasmettere i riferimenti di \(T\) al fratello \(E'\). Questa operazione viene fatta perchè, per poter calcolare in questo caso la differenza, è necessario che \(E'\) riceva le informazioni del fratello \(T\): dovremo dunque servirci di un attributo ereditato.
+La situazione cambia se vogliamo esaminare l'arco esattamente successivo: l'arco da \(T\) ad \(E'\) infatti non coincide con nessun altro arco del parse tree e il suo scopo è quello di trasmettere i riferimenti di \(T\) al fratello \(E'\). Questa operazione viene fatta perché, per poter calcolare in questo caso la differenza, è necessario che \(E'\) riceva le informazioni del fratello \(T\): dovremo dunque servirci di un attributo ereditato.
 
 A questo punto dobbiamo definire le \textbf{funzioni di attribuzione} associate alle produzioni: tale operazione come sempre non è facile da eseguire ma vedremo di analizzarla passo per passo. 
 

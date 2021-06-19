@@ -10,7 +10,7 @@
 \begin{document}
 \chapter{Prototipo di test di LFC, 2021}
 
-%dovremmo in qualche modo inserire di bruttanza il testo della prova perchè non ho la minima voglia di ricopiare le parti iniziali quando possiamo rubarle
+%dovremmo in qualche modo inserire di bruttanza il testo della prova perché non ho la minima voglia di ricopiare le parti iniziali quando possiamo rubarle
 
 Benvenuti in questa meravigliosa sezione dove avremo modo di affrontare assieme l'esame fornito dalla Prof.ssa Quaglia per potersi preparare al meglio alla prova vera e propria. Cominciamo col dire che per affrontare tale esame è necessario:
 
@@ -49,7 +49,7 @@ L'ultima spiaggia è dunque utilizzare il \emph{Pumping Lemma} per poter arrivar
 
 Dovrebbe essere infatti abbastanza facile osservare che in questo caso, per non sbilanciare la stringa, dovrebbe essere necessario poter modificare contemporaneamente due porzioni che si trovano a distanza maggiore di \(p\). 
 
-Dunque tale linguaggio non è regolare e la risposta corretta è \textbf{“NO”}. Visto che non è richiesta alcuna dimostrazione un modo per potersi accorgere di ciò è immaginare un NFA o DFA che rappresenti il linguaggio: ciò è impossibile perchè dovrebbe memorizzare il valore di \(w\) per poi ripeterlo. Questo vorrebbe dire creare infiniti stati per cui, letta una parola, l'automa obblighi a crearne una identica di seguito. 
+Dunque tale linguaggio non è regolare e la risposta corretta è \textbf{“NO”}. Visto che non è richiesta alcuna dimostrazione un modo per potersi accorgere di ciò è immaginare un NFA o DFA che rappresenti il linguaggio: ciò è impossibile perché dovrebbe memorizzare il valore di \(w\) per poi ripeterlo. Questo vorrebbe dire creare infiniti stati per cui, letta una parola, l'automa obblighi a crearne una identica di seguito. 
 
 \section*{Esercizio 2}
 
@@ -99,7 +99,8 @@ A questo punto abbiamo quasi concluso, la cosa che ci manca è unificare questi 
     \label{fig:dfa-pt3-ex3}
 \end{figure}
 
-A questo punto possiamo applicare la minimizzazione del DFA:
+Una volta assicuratici che il DFA ottenuto abbia una funzione di transizione totale -eventualmente aggiungendo un sink-,
+possiamo applicare la procedura di minimizzazione del DFA:
 
 \begin{itemize}
     \item Separiamo gli stati terminali da quelli non terminali ottenendo \(B_1 = \emptyset\) e  \(B_2 = \{1, 2\}\)
@@ -377,7 +378,7 @@ Prima di procedere alla risoluzione dell'esercizio è necessario fare una precis
     \end{align*}
     Che avevamo asserito contenere due reducing item e possedere due transizioni: \(\tau(9, A)=10\) e \(\tau(9, B)=4\). Inutile dire che è necessario memorizzare da qualche parte il fatto che \(x_4 = x_3\).
     
-    Per il momento di fatto non è cambiato nulla, se non la presenza dei lookahead set tipici del parsing \(LALR(1)\); tuttavia è da questo momento che bisogna prestare attenzione: infatti, possiamo notare che il prossimo stato a cui dovremmo dirigerci è in realtà uno stato che abbiamo già incontrato in precedenza, cioè lo stato 4 (questo perchè possiede la stessa componente LR(0) dell'item LR(1)). Tornando in uno stato già visitato, dobbiamo andare a segnarci che \(x_1 = \{a\} \cup x_4\).
+    Per il momento di fatto non è cambiato nulla, se non la presenza dei lookahead set tipici del parsing \(LALR(1)\); tuttavia è da questo momento che bisogna prestare attenzione: infatti, possiamo notare che il prossimo stato a cui dovremmo dirigerci è in realtà uno stato che abbiamo già incontrato in precedenza, cioè lo stato 4 (questo perché possiede la stessa componente LR(0) dell'item LR(1)). Tornando in uno stato già visitato, dobbiamo andare a segnarci che \(x_1 = \{a\} \cup x_4\).
     \item Percorriamo proprio l'arco all'indietro etichettato \(B\) e torniamo in 4: di fatto non è necessario ricalcolare tutto, l'unica cosa che ci interessa è la presenza di una transizione \(\tau(4,c) = 6\) per poter giungere a destinazione. 
     \item Seguendo infine l'arco già noto possiamo raggiungere lo stato 6, target di questo esercizio
 \end{enumerate}
@@ -393,7 +394,7 @@ A questo punto è il momento di tirare le dovute somme, iniziando dal riportare 
     \end{equation*}
 \end{itemize}
 
-Come è possibile osservare, lo stato presenta una transizione \(\tau(6, B)=8\) e un reducing item: ciò si traduce nella presenza di un'operazione di \texttt{goto} 8 in corrispondenza del non-terminale \(B\) e di \texttt{reduce} \(B \to \varepsilon\) in corrispondenza di \(a\). Apparentemente non sembrerebbero esserci conflitti in questo stato ma siamo sicuri di non dimenticarci nulla? La risposta banalmente è sì, questo perchè:
+Come è possibile osservare, lo stato presenta una transizione \(\tau(6, B)=8\) e un reducing item: ciò si traduce nella presenza di un'operazione di \texttt{goto} 8 in corrispondenza del non-terminale \(B\) e di \texttt{reduce} \(B \to \varepsilon\) in corrispondenza di \(a\). Apparentemente non sembrerebbero esserci conflitti in questo stato ma siamo sicuri di non dimenticarci nulla? La risposta banalmente è sì, questo perché:
 
 \begin{enumerate}
     \item abbiamo solo un reducing item, per cui non è possibile un conflitto r/r
@@ -439,7 +440,7 @@ A questo punto dobbiamo capire come si comporta il nostro parser \(LALR(1)\), ov
 Caliamoci dunque nei panni del parser e immaginiamo come dovremmo considerare la nostra stringa \(nanbn\$\)
 
 \begin{enumerate}
-    \item Come detto precedentemente, i terminali \(n\) comportano \texttt{reduce} \(E \to n\) e ciò accade indipendentemente dal carattere letto dall'input buffer, questo perchè nel nostro linguaggio abbiamo la possibilità di fare parole del tipo \(n,\; n+n,\; n*n,\; n+n*n,\; n*n+n\)
+    \item Come detto precedentemente, i terminali \(n\) comportano \texttt{reduce} \(E \to n\) e ciò accade indipendentemente dal carattere letto dall'input buffer, questo perché nel nostro linguaggio abbiamo la possibilità di fare parole del tipo \(n,\; n+n,\; n*n,\; n+n*n,\; n*n+n\)
     \item Per questo motivo non dovrebbero esserci problemi ad arrivare al punto in cui \(sySt = EaE\); essendo che abbimo eseguito implicitamente delle reduce ricordiamoci che le \(E.v = n.lexval\)
     \item A questo punto avremmo un conflitto di shift/reduce citato in precedenza, tuttavia ci viene detto di dare priorità all'operazione di \texttt{shift}
     \item Eseguendo tale operazione ci ritroviamo nella situazione analoga dove non si dovrebbero avere troppi problemi nell'arrivare al punto in cui \(sySt = EaEbE\)
@@ -478,7 +479,7 @@ Se il lettore fosse interessato, può trovare una spiegazione più dettagliata s
 
 \section*{Esercizio 13}
 
-%TODO Merita un'occhiata in più perchè davvero non ho molte idee su come approcciarlo
+%TODO Merita un'occhiata in più perché davvero non ho molte idee su come approcciarlo
 
 Sia \(\G\) la seguente grammatica:
 \begin{align*}
@@ -486,7 +487,7 @@ Sia \(\G\) la seguente grammatica:
     A &\to aAb \mid ab \\
     B &\to aBbb \mid abb
 \end{align*}
-Evitando  di  ricorrere  alla  computazione  della  tabella  di  parsing,  spiegare  perchè \(\G\) certamente  non è \(LR(1)\).
+Evitando  di  ricorrere  alla  computazione  della  tabella  di  parsing,  spiegare  perché \(\G\) certamente  non è \(LR(1)\).
 
 Pur non essendo ambigua la grammatica presenta il problema che, nel momento in cui finisce di leggere la sequenza di \(a\), non si ha idea se sia necessario eseguire un'operazione \texttt{reduce} \(A \to ab\) oppure di \texttt{shift} in modo da poter eseguire successivamente \texttt{reduce} \(B \to abb\). Per poter sapere che cosa compiere si dovrebbe conoscere l'ultimo non terminale della stringa: nel caso in cui fosse una \(a\) si saprebbe di dover applicare il primo caso descritto, se fosse una \(b\) il secondo.
 

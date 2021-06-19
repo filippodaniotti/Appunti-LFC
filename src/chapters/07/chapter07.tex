@@ -261,7 +261,7 @@ Insomma, l'idea generale è quella di partire da quelle produzioni che necessita
 
 Per calcolare i \(first\) della grammatica proposta ci conviene partire da \(first(F)\): per il passo induttivo dobbiamo calcolare \(\bigcup_{F \to \alpha} first(\alpha)\), cioè \(first((E)) \cup first(id)\). Separiamo dunque il calcolo nelle due componenti:
 \begin{itemize}
-    \item nel primo caso analizziamo \(first((E))\), per cui dobbiamo procedere al calcolo di una parola composta da tre elementi (\(Y_1 = '(', Y_2 = E, Y_3 = ')'\), il lettore perdoni l'abuso di notazione nell'utilizzo degli apici) e dunque per prima cosa dobbiamo considerare \(first(Y_1)\); tuttavia, \(Y_1 = '('\) è un terminale, per cui avremo che \(first(Y_1) = \{Y_1\}\): questo significa che \(\{Y_1\} \neq \varepsilon\) e che possiamo aggiungerlo a \(first(F)\) e interrompere subito l'algoritmo;
+    \item nel primo caso analizziamo \(first((E))\), per cui dobbiamo procedere al calcolo di una parola composta da tre elementi (\(Y_1 = '(', Y_2 = E, Y_3 = ')'\), il lettore perdoni l'abuso di notazione nell'utilizzo degli apici) e dunque per prima cosa dobbiamo considerare \(first(Y_1)\); tuttavia, \(Y_1 = '('\) è un terminale, per cui avremo che \(first(Y_1) = \{Y_1\}\): questo significa che \(\varepsilon \notin \{Y_1\}\) e che possiamo aggiungere \(\{Y_1\}\) a \(first(F)\) e interrompere subito l'analisi dei \(first((E))\);
     \item nel secondo caso, invece, ci troviamo di fronte al caso base \(first(id) = \{id\}\) e dunque possiamo subito aggiungerlo a \(first(F)\).
 \end{itemize}
 In questo caso il risultato finale è dunque \(first(F) = \{(\} \cup \{id\} = \{(, id\}\); in modo analogo è possibile arrivare alla soluzione per \(first(T')\) e \(first(E')\).
@@ -274,7 +274,7 @@ A questo punto, il miglior modo per procedere con l'algoritmo è, in mancanza di
     \caption{Esercizio sui first}
     \label{computing-first}
 \end{table}
-Cosa succede se invece, al posto della produzione \(T \to FT'\), diventa \(T \to T’F\)? Lasciando il resto dell'esercizio invariato, proviamo a calcolare \(first(T)\). In questo caso avremmo dovuto analizzare prima i \(first(T’) = \{\varepsilon, \ast\}\) e aggiungere \(first(T’) \setminus \{\varepsilon\} = \{\ast\}\) a \(first(T)\); tuttavia, dal momento che \(\varepsilon \in first(T')\), l’algoritmo non può arrestarsi (perchè potrebbe darsi che \(T'\) sia nullo), ma è necessario considerare anche i \(first(F)\). Come svolto precedenetemente aggiungiamo \(first(F) \setminus \{\varepsilon\} = \{id, (\}\) a \(first(T)\); essendo che \(\varepsilon \notin first(F)\) posso interrompere l'algoritmo e segnare che \(first(T) = \{\ast, id, (\}\)
+Cosa succede se invece, al posto della produzione \(T \to FT'\), diventa \(T \to T’F\)? Lasciando il resto dell'esercizio invariato, proviamo a calcolare \(first(T)\). In questo caso avremmo dovuto analizzare prima i \(first(T’) = \{\varepsilon, \ast\}\) e aggiungere \(first(T’) \setminus \{\varepsilon\} = \{\ast\}\) a \(first(T)\); tuttavia, dal momento che \(\varepsilon \in first(T')\), l’algoritmo non può arrestarsi (perché potrebbe darsi che \(T'\) sia nullo), ma è necessario considerare anche i \(first(F)\). Come svolto precedenetemente aggiungiamo \(first(F) \setminus \{\varepsilon\} = \{id, (\}\) a \(first(T)\); essendo che \(\varepsilon \notin first(F)\) posso interrompere l'algoritmo e segnare che \(first(T) = \{\ast, id, (\}\)
 
 \section{Follow(\(A\))}
 \subsection{Definizione}
@@ -294,7 +294,7 @@ A questo punto, è necessario sottolineare che, visto che siamo interessati a qu
     \item se \(\beta \neq \varepsilon\), allora aggiungiamo \(first(\beta) \setminus \{\varepsilon\}\) a \(follow(A)\);
     \item se \(\beta = \varepsilon\) or \(\varepsilon \in first(\beta)\), allora aggiungiamo \(follow(B)\) a \(follow(A)\); questo perché ciò che segue \(B\) potrà seguire anche \(A\) (si tenga presente che se \(\beta = \varepsilon\), allora \(A\) è la radice dell'ultimo sottoalbero generato da \(B\).
 \end{itemize}   
-% se si immagina un albero di derivazione qusto è formato da un sottoalbero per alpha, poi abbiamo un sottoalbero di A e poi quello di beta che contiene tutto quello che derivad a beta: tutti i terminali che sono diversi da epsilon e derivano da beta allora li mettiamo in A. Se invece beta è uguale a epsilon oppure epsilon appartiene ai first di beta allora dobbiamo aggiungere i follow di B ai follow di A perchè ciò che segue B potrà anche seguire A perchè se noi andiamo a considerare i sottoalberi che vengono generati andiamo a scoprire che A è la radice dell'utlimo sottoalbero della B e quindi quello che può seguire questa particolare occorrenza di B ... Si procede aggiungendo degli elementi ogni volta che andiamo a considerare delle partciolari istanze nella nostra grammatica e ci fermiamo fino a quando non possiamo inserire altro. 
+% se si immagina un albero di derivazione qusto è formato da un sottoalbero per alpha, poi abbiamo un sottoalbero di A e poi quello di beta che contiene tutto quello che derivad a beta: tutti i terminali che sono diversi da epsilon e derivano da beta allora li mettiamo in A. Se invece beta è uguale a epsilon oppure epsilon appartiene ai first di beta allora dobbiamo aggiungere i follow di B ai follow di A perché ciò che segue B potrà anche seguire A perché se noi andiamo a considerare i sottoalberi che vengono generati andiamo a scoprire che A è la radice dell'utlimo sottoalbero della B e quindi quello che può seguire questa particolare occorrenza di B ... Si procede aggiungendo degli elementi ogni volta che andiamo a considerare delle partciolari istanze nella nostra grammatica e ci fermiamo fino a quando non possiamo inserire altro. 
 \subsection{Esercizi su first/follow}
 \subsubsection{Esercizio first/follow 1}
 \label{first-follow-ex-1}
@@ -649,7 +649,6 @@ Fermiamoci un attimo e facciamo il punto della situazione. Prima di questa ampia
 
 Consideriamo la grammatica delle espressioni aritmetiche, visto che siamo partiti da quella; proviamo ad applicare le nostre regole di eliminazione e vediamo cosa succede.
 \begin{align*}
-    \label{non-ll1_grammar}
     \G: E &\to E+T \mid T \\
     T &\to T*F \mid F \nonumber \\
     F &\to (E) \mid id \nonumber 
@@ -706,7 +705,7 @@ Ne abbiamo un ulteriore conferma se andiamo a calcolare i first/follow per \(E\)
 Nota bene: non dobbiamo cadere nell'errore di supporre che, magari, la nostra procedura funzioni a meno che non sia lanciata su grammatiche ambigue, perché non ne abbiamo fornito alcuna prova. Da questo  esempio possiamo solamente concludere, a malincuore, che la procedura di eliminazione della ricorsione sinistra \emph{non garantisce} di ottenere delle grammatiche \(LL(1)\).
 
 \subsection{Eliminare la ricorsione sinistra elimina l'ambiguità?}
-Possiamo però chiederci: la grammatica \(\mathcal{G'}\) che abbiamo ottenuto è ancora ambigua, oppure applicando la nostra procedura ne abbiamo eliminato l'ambiguità? Ricordiamo che l'ambiguità della grammatica di partenza risiedeva nell'impossibilità di esprimere l'associatività degli operatori e la precedenza dell'uno sull'altro \footnote{Si riveda a ~\ref{sec:ambguity} in caso servisse un ripasso.}. 
+Possiamo però chiederci: la grammatica \(\mathcal{G'}\) che abbiamo ottenuto è ancora ambigua, oppure applicando la nostra procedura ne abbiamo eliminato l'ambiguità? Ricordiamo che l'ambiguità della grammatica di partenza risiedeva nell'impossibilità di esprimere l'associatività degli operatori e la precedenza dell'uno sull'altro \footnote{Si riveda a \ref{sec:ambiguity} in caso servisse un ripasso.}. 
 
 Sfortunatamente, riusciamo a trovare senza troppi problemi due derivazioni rightmost che ci portano a ottenere la medesima stringa \(id + id * id\):
 \begin{align*}

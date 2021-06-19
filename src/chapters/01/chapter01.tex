@@ -38,7 +38,7 @@ Avendo chiarito il punto di partenza, possiamo procedere con una descrizione del
 \subsubsection{Analisi lessicale}
 Il primo passaggio che compie il compilatore è l’analisi lessicale: questa traduce un flusso di caratteri in un flusso di \emph{tokens}, vale a dire che risolve ogni statement, riconoscendo il ruolo degli elementi che lo compongono e ritornandone una nuova stringa processata. Per esempio, traduce questa linea:
 \begin{equation*}
-	\textrm{\texttt{pippo = 2*3}}
+	\textrm{\texttt{pippo = 2*3;}}
 \end{equation*}
 In una nuova linea che descrive la funzione dei vari elementi, qualcosa di simile a:
 \begin{equation*}
@@ -63,7 +63,7 @@ Più la struttura del parse tree è minimale più le fasi successive sono effici
 	\centering
 	\subimport{assets/figures/}{abstract-syntax-tree.tex}
 	\caption{Esempio di abstract syntax tree}
-	\label{esempio_AST}
+	\label{esempioAST}
 \end{figure}
 Il guadagno in complessità in questo caso è poco (abbiamo risparmiato tipo 3 nodi), ma in casi più complessi il risparmio è molto più rilevante.
 \paragraph*{}
@@ -76,11 +76,10 @@ il nodo pippo sarebbe collegato sia alla radice che all’operatore \texttt{ASS}
 	\centering
 	\subimport{assets/figures/}{pippo-tree.tex}
 	\caption{Abstract syntax tree che diventa un grafo quando la variabile a cui si assegna il valore fa parte dell'espressione alla destra dell'assegnamento.}
-	\label{esempio_pippo}
 \end{figure}
 
 \subsubsection{Analisi semantica}
-Ora è la fase dell’analisi semantica. Un esempio di operazione di analisi semantica è quello di capire se stiamo utilizzando il giusto operatore di moltiplicazione per l’operazione che vogliamo effettuare. Stiamo chiaramente riferendoci a quei linguaggi in cui esistono diversi significati per uno stesso operatore, come nel caso in cui l'operatore \texttt{MUL} può significare moltiplicazione sia tra interi sia tra float. Quindi si può dire che in questo caso l’analisi semantica chiarisce quale significato ha l’operatore \texttt{MUL}: nell’esempio riportato in \ref{esempio_AST} \texttt{MUL} = moltiplicazione tra due variabili di tipo \texttt{NUM}.
+Ora è la fase dell’analisi semantica. Un esempio di operazione di analisi semantica è quello di capire se stiamo utilizzando il giusto operatore di moltiplicazione per l’operazione che vogliamo effettuare. Stiamo chiaramente riferendoci a quei linguaggi in cui esistono diversi significati per uno stesso operatore, come nel caso in cui l'operatore \texttt{MUL} può significare moltiplicazione sia tra interi sia tra float. Quindi si può dire che in questo caso l’analisi semantica chiarisce quale significato ha l’operatore \texttt{MUL}: nell’esempio riportato in \ref{esempioAST} \texttt{MUL} = moltiplicazione tra due variabili di tipo \texttt{NUM}.
 \begin{figure}[H]
 	\centering
 	\subimport{assets/figures/}{semantica-mul.tex}

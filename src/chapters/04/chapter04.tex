@@ -79,7 +79,7 @@ Le espressioni regolari sono esprimibili tramite il meccanismo dell'induzione in
     \begin{itemize}
         \item \(r_1 \mid r_2\) è un’espressione regolare, detta \emph{alternanza};
         \item \(r_1 \cdot r_2\) è un’espressione regolare, scritta anche come \(r_1 r_2\) e detta \emph{concatenazione};
-        \item \(r_1\)\(^\ast\) è un’espressione regolare che significa ripetizione di \(r\) per un certo numero \(k\) di volte, detta \emph{Kleene star};
+        \item \(r_1\)\(^\ast\) è un’espressione regolare che significa ripetizione di \(r\) 0 o più volte, detta \emph{Kleene star};
         \item \((r_1)\) è un’espressione regolare; è usata per definire l’ordine di svolgimento delle operazioni ed è detta \emph{parentesi}.
     \end{itemize} 
 \end{labeling}
@@ -235,7 +235,7 @@ Proviamo a determinare il linguaggio dell'NFA descritto in Fig.\ref{nfa_grafo_3}
 \noindent Il linguaggio accettato da questo NFA è \(\mathcal{L}((a a^* ) \mid ( b b^\ast ))\).
 
 \section{La costruzione di Thompson}
-La costruzione di Thompson è una procedura algoritmica che permette di costruire l’automa \(\mathcal{N}\) che genera lo stesso linguaggio denotato da una certa espressione regolare \(r\), ovvero \(\mathcal{L}(\mathcal{N}) = \mathcal{L}(r)\).
+La costruzione di Thompson è una procedura algoritmica che permette di costruire un automa \(\mathcal{N}\) che genera lo stesso linguaggio denotato da una certa espressione regolare \(r\), ovvero \(\mathcal{L}(\mathcal{N}) = \mathcal{L}(r)\).
 
 \subsection{Definizione}
 Anche questa costruzione è espressa in modo induttivo.

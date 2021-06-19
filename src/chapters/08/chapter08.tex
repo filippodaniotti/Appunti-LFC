@@ -489,7 +489,7 @@ Con 8 come stato e \$ come carattere in lettura ci assicuriamo una bella reduce 
 \begin{align*}
     w &= \underline{abbcde}\$ \\
     stSt &= 0\;1\\
-    symSt &= 
+    symSt &= S
 \end{align*}
 Il prossimo passo è descritto dalla casella [1,\$], che ci dice Accept; questo significa che abbiamo terminato la verifica e possiamo dire, con somma pace interiore, che \(w \in \L(\G)\).
 
@@ -603,7 +603,7 @@ Per concludere la parte di costruzione dell'automa caratteristico per la nostra 
 
 \subsection{Gestione dei conflitti}
 \label{subsec:precedence-conflicts}
-Quindi, partendo dalla grammatica Eq.\ref{eq:ex2-sh/re-grammar} siamo riusciti a ricavarne e l'automa caratteristico SLR(1) in Fig.\ref{fig:ex2-sh/re-automata} e i reducing items, che ricordiamo essere:
+Quindi, partendo dalla grammatica Eq.\ref{eq:ex2-sh/re-grammar} siamo riusciti a ricavarne e l'automa caratteristico SLR(1) in Fig.\ref{fig:ex2-sh-re-automata} e i reducing items, che ricordiamo essere:
 \begin{align*}
     2: E &\to id & 5: E &\to E + E \cdot & 6: E &\to E * E \cdot
 \end{align*}
@@ -725,7 +725,7 @@ Inoltre, se ad esempio avessimo scritto \(T \to id * T\), avremmo perso la left-
 \subsubsection{Esercizio sulla risoluzione dei conflitti}
 Sia data la seguente grammatica:
 \begin{align}
-    \label{eq:ex3-slr1-grammarr}
+    \label{eq:ex3-slr1-grammar}
     \G: S &\to aAd \mid bBd \mid aBe \mid bAe \\
     A &\to c \nonumber \\ \notag
     B &\to c \notag
@@ -791,14 +791,15 @@ Il nostro obiettivo è costruire una tabella di parsing SLR(1) per la grammatica
 \end{enumerate}
 
 \subsection{I limiti del parsing SLR(1)}
-Potremmo continuare senza fare ulteriori elucubrazioni, ma non possiamo non porre l'attenzione sullo stato appena analizzato: il fatto che vi possano essere due reducing items all'interno di un singolo stato non è necessariamente motivo di conflitti, in quanto la presenza di conflitti dipende dalla funzione di lookahead che stiamo utilizzando. Nel caso del parsing di tipo SLR(1) sappiamo che è possibile inserire un'operazione di \texttt{reduce} \(A \rightarrow \beta\) in \(M[P, Y]\) nel caso in cui \(P\) sia un stato contenente un reducing item e per tutti quei terminali \(Y \in \mathcal{LA}(P, A \rightarrow \beta) = follow(A)\): in questo caso \(follow(A) = follow(B) = \{d, e\}\)\footnote{Suvvia, un po' di fiducia, questi calcoli li abbiamo fatti davvero.}, il che significa che avremo almeno due celle dove sono presenti dei conflitti nella nostra parsing table finale.
+Potremmo continuare senza fare ulteriori elucubrazioni, ma non possiamo non porre l'attenzione sullo stato appena analizzato: il fatto che vi possano essere due reducing items all'interno di un singolo stato non è necessariamente motivo di conflitti, in quanto la presenza di conflitti dipende dalla funzione di lookahead che stiamo utilizzando. Nel caso del parsing di tipo SLR(1) sappiamo che è possibile inserire un'operazione di \texttt{reduce} \(A \rightarrow \beta\) in \(M[P, Y]\) nel caso in cui \(P\) sia un stato contenente un reducing item e per tutti quei terminali \(Y \in \mathcal{LA}(P, A \rightarrow \beta) = follow(A)\): in questo caso \(follow(A) = follow(B) = \{d, e\}\)\footnote{Suvvia, un po' di fiducia, questi calcoli li abbiamo fatti davvero.}.
+Questo significa che avremo almeno due celle dove sono presenti dei conflitti nella nostra parsing table finale: \([6, d]\) e \([6, e]\).
 
 La situazione è ben rappresentata dalla figura \ref{fig:lr0-automata_conflict} che riporta un pezzo dell'automa caratteristico che deriva da questa analisi.
 
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{automa_conflict_LR.tex}
-    \caption{Dettaglio dell'automa di tipo LR(0) per la grammatica \ref{eq:ex3-slr1-grammarr}, si noti come con una \(c\)-transizione si possa arrivare in 6 sia da 3 che da 2}
+    \caption{Dettaglio dell'automa di tipo LR(0) per la grammatica \ref{eq:ex3-slr1-grammar}, si noti come con una \(c\)-transizione si possa arrivare in 6 sia da 3 che da 2}
     \label{fig:lr0-automata_conflict}
 \end{figure}
 

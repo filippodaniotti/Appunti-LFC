@@ -257,7 +257,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 
   Osserviamo che, per ogni possibile albero di derivazione, ogni cammino dalla radice a un terminale attraversa tanti non-terminali quanto il valore della lunghezza del cammino stesso. Ad esempio, la lunghezza del cammino \(\langle S, B_1, B_2, \ldots, B_{k-1}, a \rangle\) è \(k\), così come il numero di non-terminali attraversati.
 
-  Adesso definimo \(p\) come la lunghezza della più lunga parola derivabile con degli alberi di derivazione, e che inoltre sia tale che i suoi camini, a partire dalla radice, siano lunghi al più come il numero di non-terminali di \(\mathcal{G}\). Consideriamo quindi anche una parola \(z \in \mathcal{L}\), più lunga di \(p\) (\(|z| > p\)). Possiamo quindi essere sicuri che esiste un albero di derivazione per \(z\) che possiede almeno un cammino la cui lunghezza è strettamente maggiore del numero di non-terminali, poiché \(|z| >p\).
+  Adesso definiamo \(p\) come la lunghezza della più lunga parola derivabile con degli alberi di derivazione, e che inoltre sia tale che i suoi cammini, a partire dalla radice, siano lunghi al più come il numero di non-terminali di \(\mathcal{G}\). Consideriamo quindi anche una parola \(z \in \mathcal{L}\), più lunga di \(p\) (\(|z| > p\)). Possiamo quindi essere sicuri che esiste un albero di derivazione per \(z\) che possiede almeno un cammino la cui lunghezza è strettamente maggiore del numero di non-terminali, poiché \(|z| >p\).
 
   Adesso, per un qualche albero di derivazione, andiamo a considerare la più profonda coppia di occorrenze dello stesso non-terminale lungo un qualche cammino; con più profonda coppia di occerrenze intendiamo la coppia composta dalla più lontana e dalla seconda più lontana occorrenza dalla radice di uno stesso non terminale.
 
@@ -407,7 +407,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
       quindi \(vwx\) o non conterrà alcuna occorrenza di \(c\) (nei primi tre casi), o non conterrà alcuna occorrenza di \(a\) (negli ultimi tre);
       \item l'implicazione di ques'ultima affermazione è che è possibile costruire una sottoparola \(vwx\) non bilanciata, e quindi non appartenente al linguaggio \(\L\), semplicemente considerando \(uv^0wx^0y\) (Eq.\ref{eq:pl-neg_4}).
     \end{itemize}
-    Abbiamo quindi verificato che il negato del pumping lemma, per il nostro linguaggio \(\L\), è valido: questo contraddice la nostra supposizione e implica che \(\L\) non è libero.
+    Abbiamo quindi verificato che il negato del pumping lemma, per il nostro linguaggio \(\L\), è valido: questo contraddice la nostra supposizione -che L fosse libero e quindi valesse il pumping lemma- e implica che \(\L\) non è libero.
   \end{proof}
   \subsubsection{Esercizio 2}
   \begin{align*}

@@ -199,12 +199,12 @@ Indovinate un po' con quale grammatica stiamo per andare a osservare cosa si ott
     A &\to c \nonumber \\ \notag
     B &\to c \notag
 \end{align}
-Ora chiederemo al lettore di fare uno sforzo mnemonico poderoso e di ricordare che in passato, quando abbiamo provato a costruire l'automa caratteristico SLR(1) per questa grammatica ci siamo trovati ad avere la situazione rappresentata in figura \ref{fig:lr0-automata_conflict}, che riprtiamo qui sotto per comodità.
+Ora chiederemo al lettore di fare uno sforzo mnemonico poderoso e di ricordare che in passato, quando abbiamo provato a costruire l'automa caratteristico SLR(1) per questa grammatica ci siamo trovati ad avere la situazione rappresentata in figura \ref{fig:lr0-automata_conflict_2}, che riprtiamo qui sotto per comodità.
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{automa_conflict_LR.tex}
     \caption{Automa di tipo LR(0), si noti il conflitto sullo stato 6}
-    \label{fig:lr0-automata_conflict}
+    \label{fig:lr0-automata_conflict_2}
 \end{figure}
 Abbiamo già calcolato quali sono gli stati LR(1) per la grammatica in questione in un esercizio precedente (vedi \ref{ex:closure-lr1}), ed applicando l'algoritmo per la costruzione degli automi LR(1) arriviamo ad ottenere il seguente automa (parziale):
 \begin{figure}[H]
@@ -792,7 +792,7 @@ La classe di grammatiche LALR contiene le grammatiche più interessanti per i li
 Abbiamo visto come la modalità più semplice per ottenere le tabelle di parsing LALR è quella di creare in primis un'automa LR(1) e poi tradurlo in LRm(1).
 
 Oggi vediamo un altro metodo che prevede di eliminare il passaggio dall'automa LR(1) e di creare fin da subito un automa con la stessa struttura dell'automa LRm(1).
-Quello che andremo a creare è detto automa simbolico, preché utilizza dei simboli (delle variabili) al posto dei lookahead set; una volta terminata la costruzione dell'automa simbolico risolvendo i simboli si va a calcolare quelli che poi saranno i lookahead set dell'automa LRm(1).
+Quello che andremo a creare è detto automa simbolico, perché utilizza dei simboli (delle variabili) al posto dei lookahead set; una volta terminata la costruzione dell'automa simbolico risolvendo i simboli si va a calcolare quelli che poi saranno i lookahead set dell'automa LRm(1).
 
 Quindi gli item di questo automa simbolico possono essere immaginati cme suddivisi in due componenti:
 \begin{itemize}
@@ -840,7 +840,8 @@ Procedendo un passettino alla volta la chiusura dello stato 0 si fa così:
             S &\to \cdot L = R,  \; \{x_0\} \\
             S &\to \cdot R,  \; \{x_0\}
         \end{align*}
-        in questo caso il lookahead set è facile da calcolare perché \(\beta = \varepsilon\) mentre \(\Delta = x_0\);
+        in questo caso il lookahead set è facile da calcolare perché \(\beta\) di
+        \(S' \to \cdot S\) è \(\varepsilon\) mentre \(\Delta = x_0\);
     \end{itemize}
     \item ora abbiamo introdotto anche un marker davanti alla \(L\), quindi dobbiamo chiudere anche per \(L\):
     \begin{itemize}
@@ -968,9 +969,9 @@ anche in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel
             & x_5 = \{=, \$\} \\
             & x_6 = \{=, \$\} \\
 \end{align*}
-Anche qui, pace all'anima nostra, inseriamo il lookahead set come variabile e la valorizziamo nel nostro sistema di equazioni.
+Anche qui, pace all'anima nostra, inseriamo il lookahead set come variabile aggiuntiva e la valorizziamo nel nostro sistema di equazioni.
 
-Abbiamo finito le transizioni dallo stato 0! prossima trnsizione da analizzare \(\tau(2, =)\), che deriva dall'item \([S \to L \cdot = R, \; \{x_2\}]\), ci porta direttamente allo stato 6.
+Abbiamo finito le transizioni dallo stato 0! Prossima transizione da analizzare \(\tau(2, =)\), che deriva dall'item \([S \to L \cdot = R, \; \{x_2\}]\), ci porta direttamente allo stato 6.
 \\
 Kernel dello stato 6:
 \begin{figure}[h!]
@@ -1047,7 +1048,7 @@ anche qui niente chiusure.
 
 Passiamo ad analizzare la transizione \(\tau(4,*)\), che deriva dall'item \([L \to \cdot * R, \{x_5\}]\); ora, se osserviamo bene il kernel dello stato in cui arriveremmo tramite questa transizione ci rediamo conto che è un kernel che abbiamo già incontrato, nello specifico proprio nello stato 4 da cui stiamo partendo, cosa significa tutto ciò?
 
-Significa semplicemente che c'è un arco uscente da 4 che ci riporta in 4 (self loop in gergo) tramite una \(*\)-transizione. È qui che vediamo finalmente la grande differenza di costruzione tra automi LR(1) ed automi simbolici: in un automa LR(1) avremmo costruito un nuovo stato (perché il lookahead set in questo caso è diverso dal lookahead set dello stato 4), invece ora andiamo semplicemente ad aggiornare il lookahead set dello stato 4 con il lookahead set della transizione  \(\tau(4,*)\) (che fatalità corrisponde propiro a \(x_5\)).
+Significa semplicemente che c'è un arco uscente da 4 che ci riporta in 4 (self loop in gergo) tramite una \(*\)-transizione. È qui che vediamo finalmente la grande differenza di costruzione tra automi LR(1) ed automi simbolici: in un automa LR(1) avremmo costruito un nuovo stato (perché il lookahead set in questo caso è diverso dal lookahead set dello stato 4), invece ora andiamo semplicemente ad aggiornare il lookahead set dello stato 4 aggiungendo il lookahead set della transizione  \(\tau(4,*)\) (che fatalità corrisponde proprio a \(x_5\)).
 \begin{align*}
     Sistema:& \\
             & x_0 = \{\$\} \\
@@ -1120,7 +1121,7 @@ La prossima transizione è \(\tau(6, L)\) che deriva da \([R \to \cdot L, \{x_7\
 \end{align*}
 niente chiusure, passiamo oltre.
 
-Prossima transizione \(\tau(6, *)\), derivante dall'item \([L \to \cdot * R, \{x_7\}]\), il target di questa transizione è uno stato con kernel LR(0) \([L \to *\cdot R]\), ovvero lo stato 4. Quindi anche questa volta non creiamo un nuovo stato ma andiamo ad aggionrare il kernel dello stato 4.
+Prossima transizione \(\tau(6, *)\), derivante dall'item \([L \to \cdot * R, \{x_7\}]\), il target di questa transizione è uno stato con kernel LR(0) \([L \to *\cdot R]\), ovvero lo stato 4. Quindi anche questa volta non creiamo un nuovo stato ma andiamo ad aggiornare il kernel dello stato 4.
 \begin{align*}
     Sistema:& \\
             & x_0 = \{\$\} \\
@@ -1158,7 +1159,7 @@ Oh butei, abbiamo finito di analizzare l'automa, quindi andiamo a risolvere lo s
     x_5, x_6, x_8, x_9 &= \{=, \$\}
 \end{align*}
 Questa risoluzione è fatta a occhio, ma esiste un metodo algoritmico per risolvere il sistema in modo molto efficiente.
-L'algoritmo in questione utilizzale classi di equivalenza, inaspettatamente.
+L'algoritmo in questione utilizza le classi di equivalenza, inaspettatamente.
 
 Complessivamente cosa abbiamo ottenuto?
 Un automa con le stesse dimensioni di tipo LR(0), poichè abbiamo creato esattamente gli stessi stati che avremmo cerato costruendo un automa LR(0), ma abbiamo utilizzato delle chiusure di tipo LR(1), ricavando quindi dei lookahead set raffinati.
@@ -1167,7 +1168,7 @@ Per concludere questo esempio ricordiamo brevemente quali sarebbero i passi da s
 \begin{enumerate}
     \item inseriamo tutti gli stati;
     \item le mosse di shift (le transizioni) sono esattamente quelle identificate e corrispondono alle transizioni dell'automa caratteristico LR(0) per questa grammatica;
-    \item gli stati con riduzioni sono tutti quelli che presentatno una produzione con il marker in fondo al body;
+    \item gli stati con riduzioni sono tutti quelli che presentano una produzione con il marker in fondo al body;
     \item le lookahead function (le etichette per le riduizioni) corrispondono ai lookahead set calcolati nella risoluzione del sistema.
 \end{enumerate}
 Carino questo esempio, eh? per festeggiare il suo completamento ci concediamo la risoluzione di un altro esercizio dello stesso tipo.
@@ -1200,7 +1201,7 @@ Kernel dello stato 1:
 \begin{align*}
     S' \to S \cdot, x_1
 \end{align*}
-In questo caso \(\beta = \varepsilon\), quindi il lookahead set del kernel sarà ugualeal lookahead set della produaizone che ci ha portati in 1, ci salviamo questo risultato.
+In questo caso \(\beta = \varepsilon\), quindi il lookahead set del kernel sarà uguale al lookahead set della produaizone che ci ha portati in 1, ci salviamo questo risultato.
 \begin{align*}
     Sistema:& \\
             & x_0 = \{\$\}\\
