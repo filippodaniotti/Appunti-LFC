@@ -152,7 +152,7 @@ Adesso dobbiamo pensare come ottimizzare l'uso di una struttura simile per l'ana
 Il procedimento che seguiamo è il seguente:
 \begin{enumerate}
     \item innanzitutto simuliamo l'NFA creato come sopra descritto;
-    \item nel caso di ambiguità, ossia di situazioni come quella descritta sopra tra \mintinline{c}{if} e \mintinline{c}{iffoff}, la convenzione è di preoseguire la simulazione finché nessun’altra transizione è possibile, solitamente quando incontriamo uno spazio o un \texttt{\(\backslash\)n}, privilegiando quindi il match più lungo (si parla di cercare il \emph{longest match});
+    \item nel caso di ambiguità, ossia di situazioni come quella descritta sopra tra \mintinline{c}{if} e \mintinline{c}{iffoff}, la convenzione è di proseguire la simulazione finché nessun’altra transizione è possibile, solitamente quando incontriamo uno spazio o un \texttt{\(\backslash\)n}, privilegiando quindi il match più lungo (si parla di cercare il \emph{longest match});
     \item se nell'insieme di stati che abbiamo raggiunto ci sono delle azioni disponibili, allora andremo ad eseguire quella appartenente al longest match, in caso di pareggio ciascuna azione avrà una priorità, e noi eseguiremo quella con più alta priorità;
     \item se nessun'azione è disponibile, dobbiamo invece tornare indietro nella sequenza di stati percorsi, fermarci nel primo insieme di stati che presenta almeno uno stato finale e delle azioni associate e cercare di nuovo quella prioritaria; per ognuno di questi passi all'indietro, dobbiamo ricordarci di aggiornare il puntatore all'input buffer.
 \end{enumerate}
