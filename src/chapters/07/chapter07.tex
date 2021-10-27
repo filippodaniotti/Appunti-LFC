@@ -318,7 +318,7 @@ Utilizziamo sempre la grammatica dell'esempio precedente, che qui riportiamo per
 
 Un caso che potrebbe risultare interessante riguarda la produzione \(F \rightarrow (E)\). Poniamo come fatto precedentemente \(A = E\): essendo che \(\beta = \textrm{ } ) \neq \varepsilon\), è necessario aggiungere \(first(\beta) \setminus \{\varepsilon\} = \{)\}\) a \(follow(E)\); visto che la seconda condizione non è vera, possiamo fermarci ed affermare che \(follow(E) = \{\$, )\}\).
 
-Inoltre, nei punti in cui si deovno aggiungere ai follow di un non-terminale i follow di un altro si lasciano delle annotazioni che si andranno a risolvere una volta terminata l'analisi di tutte le produzioni. Il risultato finale verrà rappresentato come segue:
+Inoltre, nei punti in cui si devono aggiungere ai follow di un non-terminale i follow di un altro si lasciano delle annotazioni che si andranno a risolvere una volta terminata l'analisi di tutte le produzioni. Il risultato finale verrà rappresentato come segue:
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{computing-follow.tex}
