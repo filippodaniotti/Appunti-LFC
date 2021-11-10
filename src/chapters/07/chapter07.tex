@@ -766,7 +766,7 @@ Ma, allo stesso identico modo, potremmo completare lo stesso albero parziale e o
 Anche qui, non possiamo fare altro che concludere che applicare la procedura di eliminazione della ricorsione sinistra su una grammatica ambigua \emph{non} ne elimina l'ambiguità.
 
 \section{Fattorizzabilità Sinistra}
-Consideriamo ora la grammatica \(\G: S \rightarrow aSb \mid ab\), che ormai ben conosciamo: questa grammatica ci permette di denotare, ad esempio, un linguaggio composto da parentesi annidate. Quello che non sapevamo è che non è una grammatica \(LL(1)\): ce ne possiamo accorgere calcolandone i \(first(S)\). Dal momento che l'unico elemento appartenente a questo insieme, nel caso delle due produzioni, risulta infatti essere il non-terminale \(a\), questo vuol dire che, applicando l'algoritmo per la generazione della tabella di parsing predittivo, ci troveremo con due produzioni nella posizione \(M[S, a]\).
+Consideriamo ora la grammatica \(\G: S \rightarrow aSb \mid ab\), che ormai ben conosciamo: questa grammatica ci permette di denotare, ad esempio, un linguaggio composto da parentesi annidate. Quello che non sapevamo è che non è una grammatica \(LL(1)\): ce ne possiamo accorgere calcolandone i \(first(S)\). Dal momento che l'unico elemento appartenente a questo insieme, nel caso delle due produzioni, risulta infatti essere il terminale \(a\), questo vuol dire che, applicando l'algoritmo per la generazione della tabella di parsing predittivo, ci troveremo con due produzioni nella posizione \(M[S, a]\).
 
 Il punto è che \(\G\) può essere \textbf{fattorizzata a sinistra}; in generale, una grammatica è fattorizzabile a sinistra quando:
 \begin{itemize}
