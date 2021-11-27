@@ -16,7 +16,7 @@ Durante il nostro percorso abbiamo avuto modo di attraversare quasi tutte le fas
     \item l'analisi sintattica, su cui non ci dilunghiamo troppo in questa sede dal momento che costituisce circa \(\frac{1}{3}\) di questo elaborato già da sola, verifica se la stringa ottenuta dall'analisi lessicale appartiene al linguaggio di una data grammatica (restituendo in caso positivo l'albero di derivazione); è interessante specificare che, in molti casi, a questa fase vengono accorpate ulteriori operazioni, come ad esempio la stessa analisi semantica;
     \item l'analisi semantica, che si occupa di fare controlli statici, ad esempio circa la compatibilità di operandi e operatori nei vari statements (è qui che si scoprono errori come tentativi di somma tra un \texttt{int} e un \texttt{float} o tentativi di conversione di tipo quando si fa uso di un operatore che consente operazioni tra tipi misti), o anche altri riguardanti la validità di istruzioni condizionali e di controllo (\texttt{if}, \texttt{while} e \texttt{break}).
 \end{itemize}
-A valle di tutto questo troviamo l'ultima fase del frontend della compilazione, la generazione del codice intermedio; al pari dell'analisi semantica, è possibile che anche quest'ultima fase venga implementata come parte integrante dell'analisi sintattica, e in particolare ci sono degli schemi di traduzione che vanno a sfruttare gli alberi di sintassi astratta (AST) che abbiamo visto quando abbiamo parlato di analisi semantica.
+A valle di tutto questo troviamo l'ultima fase del frontend della compilazione, la generazione del codice intermedio. Al pari dell'analisi semantica, è possibile che anche quest'ultima fase venga implementata come parte integrante dell'analisi sintattica, e in particolare ci sono degli schemi di traduzione che vanno a sfruttare gli alberi di sintassi astratta (AST) che abbiamo visto quando abbiamo parlato di analisi semantica.
 
 \section{Il codice intermedio}
 Il codice  intermedio è una rappresentazione del nostro codice di partenza, abbastanza astratta da nascondere alcune specifiche che sono tipiche del codice macchina e che ne rendono la lettura poco agevole (come ad esempio i movimenti di informazioni tra registri o tra memoria e registri), ma comunque più specifica del linguaggio originale da cui siamo partiti.
@@ -96,7 +96,6 @@ Diamo un'occhiata alla generazione del codice intermedio di un'istruzione condiz
     \centering
     \includegraphics[width=.3\textwidth]{if-then-abstract.png}
     \caption{}
-    \label{}
 \end{figure}
 dove l'etichetta \(B.true\) punta al body dell'istruzione condizionale (perché naturalmente vuol dire che la condizione è stata verificata), mentre l'etichetta \(B.false\) punta alla prima istruzione successiva alla chiusura del blocco \texttt{then}.
 
@@ -150,7 +149,6 @@ Supponiamo di voler tradurre un'istruzione condizionale che comprende anche un b
     \centering
     \includegraphics[width=.4\textwidth]{if-else-trans.png}
     \caption{}
-    \label{}
 \end{figure}
 Entrambe le etichette \(S_1.next\) e \(S_2.next\) punteranno all'istruzione successiva all'intero statement.
 \begin{align*}

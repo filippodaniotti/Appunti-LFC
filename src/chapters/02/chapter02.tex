@@ -13,15 +13,15 @@
 Le grammatiche che tratteremo in questo corso sono chiamate grammatiche generative, così dette perché vengono usate per generare linguaggi.
 
 \paragraph{Il vocabolario}
-Il primo passo per definire una grammatica è definirne il vocabolario, questo consiste in un set di simboli. Alcuni di questi simboli sono chiamati terminali (terminals) e giocano il ruolo di token nell’analisi lessicale. Un simbolo particolare nella grammatica è lo start symbol: come suggerisce il nome, questo è il simbolo che permette di iniziare a generare il linguaggio derivato dalla grammatica (tale processo sarà chiarito in seguito).
+Il primo passo per definire una grammatica è definirne un \emph{vocabolario}: questo è semplicemente un insieme di simboli. Alcuni di questi simboli sono chiamati \emph{terminali} (terminals) e giocano il ruolo di token nell’analisi lessicale. Un simbolo particolare nella grammatica è lo start symbol: come suggerisce il nome, questo è il simbolo che permette di iniziare a generare il linguaggio derivato dalla grammatica (tale processo sarà chiarito in seguito).
 
 \paragraph{Le produzioni}
-Altra cosa da fissare in una grammatica è il set delle produzioni (productions); queste sono regole di riscrittura da stringhe ad altre stringhe e rispettano la seguente limitazione: la stringa di partenza deve contenere almeno un simbolo non-terminale. Un esempio di regole per una grammatica è il seguente:
+Altra cosa da fissare in una grammatica è il set delle produzioni (productions); queste sono regole di riscrittura da stringhe in altre stringhe e rispettano la seguente limitazione: la stringa di partenza deve contenere almeno un simbolo non-terminale. Un esempio di regole per una grammatica è il seguente:
 \begin{equation}
     \{S \to aSb, S \to ab\}
     \label{produzioni_esempio_0}
 \end{equation}
-Dove \(S\) è lo starting point mentre \(a\) e \(b\) sono caratteri terminali (a volte detti anche parole).\\
+Dove \(S\) è lo starting symbol mentre \(a\) e \(b\) sono caratteri terminali.
 Per quanto abbiamo visto fin ora una grammatica generativa è composta da:
 \begin{itemize}
     \item Un vocabolario, ovvero l'insieme dei simboli
@@ -49,7 +49,9 @@ Un'altra derivazione possibile è la seguente:
 \begin{equation}
     S \implies aSb \implies aaSbb
 \end{equation}
-Diversamente da prima, \(aaSbb\) non è una parola del linguaggio perché non è composta \emph{solo} da caratteri terminali. In questo modo si può definire qual è il linguaggio determinato da una grammatica, ad esempio con la grammatica che abbiamo visto prima possiamo generare ogni sequenza di parole formate da \(n\) terminali \(a\) seguiti da \(n\) terminali \(b\).
+Diversamente da prima, \(aaSbb\) non è una parola del linguaggio perché non è composta \emph{solo} da caratteri terminali.
+
+In questo modo si può definire qual è il linguaggio determinato da una grammatica: ad esempio, con la grammatica che abbiamo visto prima possiamo generare ogni sequenza di parole formate da \(n\) terminali \(a\) seguiti da \(n\) terminali \(b\).
 Tale linguaggio può essere scritto formalmente in questo modo:
 \begin{equation}
     \{a^n b^n \mid n>0\}
@@ -76,7 +78,7 @@ Presentiamo ora una serie di esercizietti di derivazione del linguaggio da una c
     \label{Esercizio 1}
 \end{table}
 \subsubsection*{Spiegazione di Tab.\ref{Esercizio 1}:}
-Ricordiamo che si parte sempre e solo dallo start symbol a derivare un linguaggio, quindi da \(S\). L'unica derivazione che si può effettuare in questo caso è \(S \implies aAb\). Da qui in poi non si può procedere che con una delle due productions \(aA \to aaAb\) oppure \(A \to \varepsilon\), in un caso si aumenterà la stringa di un \(a\) a sinistra e di un \(b\) a destra, nell'altro caso si terminerà la derivazione.
+Ricordiamo che si parte sempre e solo dallo start symbol a derivare un linguaggio, quindi da \(S\). L'unica derivazione che si può effettuare in questo caso è \(S \implies aAb\). Da qui in poi non si può procedere che con una delle due produzioni \(aA \to aaAb\) oppure \(A \to \varepsilon\), in un caso si aumenterà la stringa di un \(a\) a sinistra e di un \(b\) a destra, nell'altro caso si terminerà la derivazione.
 
 Diventa quindi semplice vedere che il linguaggio di questa grammatica è lo stesso generato da \ref{produzioni_esempio_0}, ovvero: \(\{a^n b^n \mid n>0\}\).
 \begin{table}[H]
@@ -86,7 +88,7 @@ Diventa quindi semplice vedere che il linguaggio di questa grammatica è lo stes
     \label{Esercizio 2}
 \end{table}
 \subsubsection*{Spiegazione di Tab.\ref{Esercizio 2}:}
-Come prima si parte dal simbolo \(S\) che anche questa volta ci permette una sola produzione, quindi deriviamo senza ulteriori indugi: \(S \implies AB\). In seguito ci rendiamo conto che le productions dell'esercizio altro non sono che delle regole per generare un numero a nostro piacimento di terminali \(a\) e \(b\), quindi deriviamo tranquillamente il seguente linguaggio: \(\{a^n b^m \mid n,m \ge 1\}\).
+Come prima si parte dal simbolo \(S\) che anche questa volta ci permette una sola produzione, quindi deriviamo senza ulteriori indugi: \(S \implies AB\). In seguito ci rendiamo conto che le produzioni dell'esercizio altro non sono che delle regole per generare un numero a nostro piacimento di terminali \(a\) e \(b\), quindi deriviamo tranquillamente il seguente linguaggio: \(\{a^n b^m \mid n,m \ge 1\}\).
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{exercise3.tex}
@@ -94,7 +96,7 @@ Come prima si parte dal simbolo \(S\) che anche questa volta ci permette una sol
     \label{Esercizio 3}
 \end{table}
 \subsubsection*{Spiegazione di Tab.\ref{Esercizio 3}:}
-In questo caso il simbolo di partenza \(S\) ci offre due possibili productions, quindi dobbiamo sperimentarle entrambe per generare il linguaggio completo.
+In questo caso il simbolo di partenza \(S\) ci offre due possibili produzioni, quindi dobbiamo sperimentarle entrambe per generare il linguaggio completo.
 \begin{itemize}
     \item la seconda produzione ci porta subito ad una derivazione terminale \(S \implies abc\);
     \item la prima produzione invece \(S \to aSBc\) ci permette di ricorrere in un processo ricorsivo che continua ad aggiungere terminali \(a\) sulla sinistra, la coppia \(Bc\) sulla destra e termina solo quando decidiamo di sostituire \(S\) con \(abc\); Questo implica che nella situazione terminale ci potremo trovare in una situazione in cui abbiamo una stringa con questa forma \(aaa...abcBcBcBc...Bc\).
@@ -159,7 +161,7 @@ Una volta definiti i componenti di una grammatica generativa, definiamo le conve
 \end{itemize}
 
 \paragraph{La produzione}
-Definiamo ora formalmente l'oggetto produzione, esso è una traduzione in questa forma:
+La produzione, detto in termini molto pragmatici, è un oggetto che ha questa forma:
 \begin{equation}
     \delta \to \beta
 \end{equation}
@@ -169,9 +171,9 @@ Dove \(\delta \in V^+\), \(\delta\) contiene almeno un non terminale (non traduc
 \paragraph{Il linguaggio}
 Il linguaggio generato da una grammatica \(\mathcal{G} = (V,T,S,\mathcal{P})\) è così definito:
 \begin{equation}
-    \mathcal{L}(\mathcal{G}) = \{w \mid w \in T^* and \; S \implies^*\;  w\}
+    \mathcal{L}(\mathcal{G}) = \{w \mid w \in T^* and \; S \Rightarrow^*\;  w\}
 \end{equation}
-Quell simbolo\( \implies^*\) è il simbolo utilizzato per indicare una sequenza di derivazioni successive compatibili secondo le produzioni (anche nessuna); in altre parole, il linguaggio generato è l'insieme di tutti gli elementi (anche vuoti) che si possono derivare con uno o più passi dallo start symbol. 
+Quel simbolo \(\Rightarrow^*\) è il simbolo utilizzato per indicare una sequenza di derivazioni successive compatibili secondo le produzioni (anche nessuna); in altre parole, il linguaggio generato è l'insieme di tutti gli elementi (anche vuoti) che si possono derivare con uno o più passi dallo start symbol. 
 
 \subsection{Tipi di grammatiche generative}
 Esiste una gerarchia delle grammatiche, che non dipende dal genere di analisi che permettono di fare, ma dipende solo dalla struttura delle loro produzioni.
@@ -182,17 +184,17 @@ Si parla di \emph{context-free grammars}, o free grammars (grammatiche libere), 
 Si dice di un linguaggio che è context-free se esiste una grammatica libera che genera quello stesso linguaggio: \(\mathcal{L}\) è un linguaggio libero se e solo se esiste una grammatica libera \(\mathcal{G}\) tale che \(\mathcal{L}=\mathcal{L}(\mathcal{G})\).
 
 \paragraph{}
-L’operazione di analizzare una stringa e verificare se appartiene ad una determinata grammatica dipende naturalmente dal metodo con cui si decide di applicare la derivazione dallo starting point della grammatica stessa. Se una stringa si può derivare da una certa grammatica, si dice che la prima appartiene al linguaggio di quest'ultima.
+L’operazione di analizzare una stringa e verificare se appartiene ad una determinata grammatica dipende naturalmente dal metodo con cui si decide di applicare la derivazione dallo starting symbol della grammatica stessa. Se una stringa si può derivare da una certa grammatica, si dice che la prima appartiene al linguaggio di quest'ultima.
 Esistono due tipi di derivazione canonica:
 \begin{itemize}
-    \item Rightmost (si rimpiazzano sempre prima i non terminali più a destra)
-    \item Leftmost (si rimpiazzano sempre prima i non terminali più a sinistra)
+    \item rightmost (si rimpiazzano sempre prima i non terminali più a destra)
+    \item leftmost (si rimpiazzano sempre prima i non terminali più a sinistra)
 \end{itemize}
 Se utilizziamo come strategia una di queste due tutti i passi analitici di una derivazione sono deterministici, perché ad ogni passo o si procede con l’elemento più a destra o si procede con quello più a sinistra. Per questo motivo queste sono le due modalità di derivazione canonica.
 
 \paragraph{Gli alberi di derivazione}
-Le grammatiche libere si prestano in modo naturale ad essere processate tramite il cosiddetto albero di derivazione. Questo albero ha come radice lo starting point, poi, per ogni passo di derivazione secondo una produzione in forma \(A \to X_1 \mid X_2 \mid\dots\mid X_n \), si generano \(n\) figli del nodo con la derivazione di \(A\) messa in atto.
-Le foglie dell’albero saranno composte da \(\varepsilon\) oppure da caratteri terminali. In figura \ref{albero_di_derivazione} è riportato come esempio l'albero di derivazione della grammatica:
+Le grammatiche libere si prestano in modo naturale ad essere processate tramite il cosiddetto albero di derivazione. Questo albero ha come radice lo starting symbol, poi, per ogni passo di derivazione secondo una produzione in forma \(A \to X_1 \mid X_2 \mid\dots\mid X_n \), si generano \(n\) figli del nodo con la derivazione di \(A\) messa in atto.
+Le foglie dell’albero saranno composte da \(\varepsilon\) oppure da caratteri terminali. In Fig.\ref{albero_di_derivazione} è riportato come esempio un albero di derivazione della grammatica:
 \begin{equation}
     S \to aSb \mid \varepsilon
     \label{grammatica_allbero}
@@ -203,7 +205,7 @@ Le foglie dell’albero saranno composte da \(\varepsilon\) oppure da caratteri 
     \caption{Albero di derivazione di \ref{grammatica_allbero}}
     \label{albero_di_derivazione}
 \end{figure}
-Ma tornando con i piedi per terra, cosa centra tutto questo con i compilatori?\\
+Ma tornando con i piedi per terra, cosa c'entra tutto questo con i compilatori?\\
 Un certo programma che è stato trasformato in una stringa viene verificato controllando che la tale stringa sia derivata dalla grammatica del linguaggio in cui il programma è scritto. Un modo per verificare questo è trovare l’albero di derivazione della stringa che rappresenta tale programma.
 
 \subsection{Ambiguità delle grammatiche}\label{sec:ambiguity}
@@ -214,14 +216,7 @@ Prendiamo ad esempio la grammatica delle espressioni aritmetiche:
 \begin{equation}
     E \to E+E \mid E*E \mid  n
 \end{equation}
-dove il simbolo \(\mid\) è una modo compatto per scrivere diverse produzioni con lo stesso driver. La grammatica proposta è equivalente alla seguente: 
-\begin{align*}
-    E &\to E+E \\
-    E &\to E*E \\
-    E &\to n
-\end{align*}
-Intuitivamente si può leggere come \(exp \to exp+exp\)  o  \(exp*exp\)  o  \(numero\).\\
-Questa grammatica ci permette di fare operazioni di somma o moltiplicazione, è ambigua o meno? Per verificarlo proviamo a derivare questo \(w = n+n*n\) utilizzando la tecnica leftmost e generando due derivazioni distinte.
+dove il simbolo \(\mid\) è una modo compatto per scrivere diverse produzioni con lo stesso driver. Intuitivamente si può leggere come \(exp \to exp+exp\)  o  \(exp*exp\)  o  \(numero\), il che significa che questa grammatica genera il linguaggio delle operazioni aritmetiche di somma e moltiplicazione. La domanda che ci poniamo adesso è se questa grammatica sia ambigua o meno. Per verificarlo proviamo a derivare la parola \(w = n+n*n\) utilizzando la tecnica leftmost e generando due derivazioni distinte.
 \begin{figure}[H]
 	\centering
 	\subimport{assets/figures/}{derivazione-leftmost.tex}
@@ -246,7 +241,7 @@ La grammatica di partenza è quindi ambigua: nonostante il significato (l'interp
 Ora abbiamo visto questo processo, sappi che la prof.ssa Quaglia preferisce 14 a 1 la derivazione con albero a quella con stringa perché è più chiara.
 
 \subsubsection*{Dangling Else}
-Introduciamo una nuova forma di grammatica
+Parliamo adesso di una grammatica che rappresenta gli statement \texttt{if-else}:
 \begin{equation}
     S \to \; if \; b \; then \; S \mid if\; B\; then\; S\; else\; S \mid other
 \end{equation}
@@ -271,7 +266,7 @@ Con quale \(then\) è accoppiato l’\(else\)? Non si può sapere! Di fatto poss
     \caption{Due possibili alberi di derivazione per \(w\), entrambi corretti}
     \label{fig:dangling_else}
 \end{figure}
-Questo ci introduce il problema di come trattare la gestione del comando \(if \; then \; else\) in un linguaggio di programmazione.
+Questo ci introduce il problema di come trattare la gestione di un contesto \texttt{if-then-else} in un linguaggio di programmazione.
 Per questo nei vari linguaggi troviamo sempre qualche forma di strategia per risolvere questo problema:
 \begin{itemize}
     \item Mettere le parentesi
@@ -281,9 +276,9 @@ Per questo nei vari linguaggi troviamo sempre qualche forma di strategia per ris
 L’else è intrinsecamente ambiguo.
 
 \paragraph{Un'osservazione}
-L’ambiguità in alcuni casi può essere indecidibile, in quanto non sempre esiste un algoritmo che ci dice se la grammatica è ambigua o no.
+L’ambiguità in alcuni casi può essere indecidibile, in quanto non sempre esiste un algoritmo che ci dice se la grammatica è ambigua o no; al momento, tutto ciò che sappiamo fare per determinare l'ambiguità di una grammatica è applicare la definizione, ossia cercare di derivare una stessa parola mediante due diverse derivazioni, entrambe o rightmost o leftmost.
 
-\subsection{Piccola parentesi sui linguaggi naturali}
-I linguaggi naturali spesso nascondono molte più ambiguità delle grammatiche che affronteremo in questo corso. D'altro canto le grammatiche per linguaggi di programmazione sono molto difficili da scrivere anche perché sono pensate e studiate per ottenere una certa velocità di verifica dei programmi. Il linguaggio naturale è ben più complesso: immagina quanto dev’essere difficile descrivere una grammatica per il linguaggio naturale ed immagina poi quale complessità può avere un algoritmo di verifica di tale grammatica, ammesso che questo possa esistere. Pensa solo al fatto che spesso e volentieri il linguaggio naturale dipende dal contesto! Questa cosa nei linguaggi di programmazione non s’è mai vista per fortuna. I parser per linguaggi di programmazione hanno complessità lineare di norma, se si va a vedere i parser del linguaggio naturale\dots  sayonara!
+\subsection{Piccola parentesi sui linguaggi naturali (tutto da ripensare)}
+I linguaggi naturali spesso nascondono molte più ambiguità delle grammatiche che affronteremo in questo corso. D'altro canto le grammatiche per linguaggi di programmazione sono molto difficili da scrivere anche perché sono pensate e studiate per ottenere una certa velocità di analisi del codice. Il linguaggio naturale è ben più complesso: immagina quanto dev’essere difficile descrivere una grammatica per il linguaggio naturale ed immagina poi quale complessità può avere un algoritmo di verifica di tale grammatica, ammesso che questo possa esistere. Pensa solo al fatto che spesso e volentieri il linguaggio naturale dipende dal contesto! Questa cosa nei linguaggi di programmazione non s’è mai vista per fortuna. I parser per linguaggi di programmazione hanno complessità lineare di norma, se si va a vedere i parser del linguaggio naturale\dots  sayonara!
 
 \end{document}
