@@ -266,7 +266,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
     \centering
     \includegraphics[width=.25\textwidth,keepaspectratio]{pl-proof_1}
   \end{figure}
-  Possiamo dire, nelle due occorrenze di \(A\), sono radicati due sottoalberi distinti, che noi qui rappresenteremo colorati di verde e porpora. La parola \(z\) può quindi essere "spacchettata" in cinque sottoparole, come illustrato di seguito.
+  Possiamo dire che, nelle due occorrenze di \(A\), sono radicati due sottoalberi distinti, che noi qui rappresenteremo colorati di verde e porpora. La parola \(z\) può quindi essere "spacchettata" in cinque sottoparole, come illustrato di seguito.
   \begin{figure}
     \centering
     \includegraphics[width=.8\textwidth,keepaspectratio]{pl-proof_2}
@@ -314,7 +314,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 
 \subsection{Applicazioni}
   \paragraph{Scopo del pumping lemma}
-  Tutto (quasi) bello, ma a cosa serve questo pumping lemma? È presto detto: il pumping lemma di permette di determinare con certezza se un certo linguaggio \(\L\) \emph{non} è libero. Perché mai dovremmo volere questa informazione? Perché gli algoritmi di parsing\footnote{Il processo inverso della derivazione; non abbiate fretta, che fra poco arrivano un centinaio di pagine solo su quello.} che abbiamo a disposizione per verificare se una parola appartiente a un linguaggio generato da una grammatica libera sono esageratamente più efficienti di quelli che abbiamo per per i linguaggi generati da grammatiche dipendenti da contesto\footnote{Tutti questi algoritmi sono al più \(\mathcal{O}(n^3)\), ma per i linguaggi generati da alcune sottoclassi di grammatiche libere abbiamo a disposizione algoritmi lineari.}.
+  Tutto (quasi) bello, ma a cosa serve questo pumping lemma? È presto detto: il pumping lemma ci permette di determinare con certezza se un certo linguaggio \(\L\) \emph{non} è libero. Perché mai dovremmo volere questa informazione? Perché gli algoritmi di parsing\footnote{Il processo inverso della derivazione; non abbiate fretta, che fra poco arrivano un centinaio di pagine solo su quello.} che abbiamo a disposizione per verificare se una parola appartiente a un linguaggio generato da una grammatica libera sono esageratamente più efficienti di quelli che abbiamo per per i linguaggi generati da grammatiche dipendenti da contesto\footnote{Tutti questi algoritmi sono al più \(\mathcal{O}(n^3)\), ma per i linguaggi generati da alcune sottoclassi di grammatiche libere abbiamo a disposizione algoritmi lineari.}.
 
   \paragraph{Il negato del pumping lemma}
   Di preciso, come possiamo usare il pumping lemma per ottenere quest'informazione? Pensiamo al fatto che questo lemma è, formalmente, una semplice implicazione logica \(A \implies B\), dove l' ipotesi \(A\) è che un certo linguaggio \(\L\) sia libero e \(B\) è invece la tesi stessa del pumping lemma, la quale afferma che \(\L\) avrà una certa forma. Questo vuol dire che, usando il suo negato \(\neg (A \implies B) \equiv \neg B \implies \neg A\), possiamo vedere come verificare il negato della tesi del pumping lemma per un linguaggio \(\L\) implichi necessariamente che \(\L\) non è libero:
@@ -565,7 +565,7 @@ Intuitivamente, è facile convincersene: supponiamo infatti di produrre, a parti
 
 \begin{itemize}
   \item se applichiamo \(B\; \to\; 1\) andiamo a chiudere la derivazione con una stringa "bilanciata" (si passi sopra all'abuso di terminologia);
-  \item se invece abblichiamo la seconda produzione possibile (\(B\; \to\; 1S\)) non stiamo facendo altro che tornare al caso base del ragionamento, mantenendo comunque una stringa bilanciata;
+  \item se invece applichiamo la seconda produzione possibile (\(B\; \to\; 1S\)) non stiamo facendo altro che tornare al caso base del ragionamento, mantenendo comunque una stringa bilanciata;
   \item l'unico modo che abbiamo per introdurre un altro \(0\) è applicare la terza produzione \(S\; \to\; 0BB\), ma quei due \(B\), a questo punto, non hanno altro modo di terminare se non diventando degli \(1\).
 \end{itemize}
 

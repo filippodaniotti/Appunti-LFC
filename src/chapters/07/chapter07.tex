@@ -64,7 +64,7 @@ Nel caso del predictive top-down parsing non è mai necessario applicare la tecn
 \begin{itemize}
     \item guardiamo le parole da sinistra a destra;
     \item eseguiamo una produzione leftmost;
-    \item guardiamo un solo non-terminale per decidere quale produzione utilizzare .
+    \item guardiamo un solo non-terminale per decidere quale produzione utilizzare.
 \end{itemize}
 Tali grammatiche prevedono una tipologia di parsing per cui non è necessario backtrack, e per di più è \textbf{completamente deterministica}.
 
@@ -309,7 +309,7 @@ Utilizziamo sempre la grammatica dell'esempio precedente, che qui riportiamo per
 \begin{enumerate}
     \item Dall'algoritmo sappiamo di dover inizializzare \(follow(E) = \$\).
     \item Iniziamo guardando la prima produzione, cioè \(E \rightarrow TE'\): se poniamo \(A = E'\), allora \(\beta = \varepsilon\) e quindi dobbiamo aggiungere i \(follow(E)\) (quelli del driver) a \(follow(E')\) (quelli del body).
-    \item Sempre soffermandoci sulla stessa produzione poniamo \(A = T\): questo vuol dire che \(\beta = E' \neq \varepsilon\) e quindi, ricadendo nel primo caso, aggiungiamo \(first(E) \setminus \{\varepsilon\} = \{+\}\) a \(follow(T)\); tuttavia, essendo che \(\varepsilon \in first((E')\), allora ricadiamo anche nel secondo caso, per cui aggiungiamo \(follow(E)\) a \(follow(T)\).
+    \item Sempre soffermandoci sulla stessa produzione poniamo \(A = T\): questo vuol dire che \(\beta = E' \neq \varepsilon\) e quindi, ricadendo nel primo caso, aggiungiamo \(first(E') \setminus \{\varepsilon\} = \{+\}\) a \(follow(T)\); tuttavia, essendo che \(\varepsilon \in first(E')\), allora ricadiamo anche nel secondo caso, per cui aggiungiamo \(follow(E)\) a \(follow(T)\).
     \item Passiamo ora alla produzione \(E' \rightarrow +TE'\): poniamo quindi \(A = E'\) e \(\beta = \varepsilon\); ricadendo nel secondo caso dovremmo aggiungere \(follow(E')\) a \(follow(E')\) ma, dato che questo non fornisce informazioni aggiuntive, possiamo scartare questa informazione.
     \item Facendo sempre riferimento ad \(E' \rightarrow +TE'\), esaminiamo il caso per cui \(A = T\): visto che \(\beta = E'\), tale caso è identico a quello esaminato al punto 3 e porterà all'aggiunta dei medesimi terminali.
     \item L'ultimo elemento che non abbiamo preso in considerazione per la produzione corrente è terminale \(+\) ma, in quanto terminale, non possiamo calcolarne i follow.
@@ -318,7 +318,7 @@ Utilizziamo sempre la grammatica dell'esempio precedente, che qui riportiamo per
 
 Un caso che potrebbe risultare interessante riguarda la produzione \(F \rightarrow (E)\). Poniamo come fatto precedentemente \(A = E\): essendo che \(\beta = \textrm{ } ) \neq \varepsilon\), è necessario aggiungere \(first(\beta) \setminus \{\varepsilon\} = \{)\}\) a \(follow(E)\); visto che la seconda condizione non è vera, possiamo fermarci ed affermare che \(follow(E) = \{\$, )\}\).
 
-Inoltre, nei punti in cui si deovno aggiungere ai follow di un non-terminale i follow di un altro si lasciano delle annotazioni che si andranno a risolvere una volta terminata l'analisi di tutte le produzioni. Il risultato finale verrà rappresentato come segue:
+Inoltre, nei punti in cui si devono aggiungere ai follow di un non-terminale i follow di un altro si lasciano delle annotazioni che si andranno a risolvere una volta terminata l'analisi di tutte le produzioni. Il risultato finale verrà rappresentato come segue:
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{computing-follow.tex}
@@ -766,7 +766,7 @@ Ma, allo stesso identico modo, potremmo completare lo stesso albero parziale e o
 Anche qui, non possiamo fare altro che concludere che applicare la procedura di eliminazione della ricorsione sinistra su una grammatica ambigua \emph{non} ne elimina l'ambiguità.
 
 \section{Fattorizzabilità Sinistra}
-Consideriamo ora la grammatica \(\G: S \rightarrow aSb \mid ab\), che ormai ben conosciamo: questa grammatica ci permette di denotare, ad esempio, un linguaggio composto da parentesi annidate. Quello che non sapevamo è che non è una grammatica \(LL(1)\): ce ne possiamo accorgere calcolandone i \(first(S)\). Dal momento che l'unico elemento appartenente a questo insieme, nel caso delle due produzioni, risulta infatti essere il non-terminale \(a\), questo vuol dire che, applicando l'algoritmo per la generazione della tabella di parsing predittivo, ci troveremo con due produzioni nella posizione \(M[S, a]\).
+Consideriamo ora la grammatica \(\G: S \rightarrow aSb \mid ab\), che ormai ben conosciamo: questa grammatica ci permette di denotare, ad esempio, un linguaggio composto da parentesi annidate. Quello che non sapevamo è che non è una grammatica \(LL(1)\): ce ne possiamo accorgere calcolandone i \(first(S)\). Dal momento che l'unico elemento appartenente a questo insieme, nel caso delle due produzioni, risulta infatti essere il terminale \(a\), questo vuol dire che, applicando l'algoritmo per la generazione della tabella di parsing predittivo, ci troveremo con due produzioni nella posizione \(M[S, a]\).
 
 Il punto è che \(\G\) può essere \textbf{fattorizzata a sinistra}; in generale, una grammatica è fattorizzabile a sinistra quando:
 \begin{itemize}
@@ -879,7 +879,7 @@ Si può infatti notare che
 	\item nell'altro invece è possibile sostituire \({S'}_1\) con \texttt{else} \(c\) e \({S'}_2\) con \(\varepsilon\);
 \end{itemize}
 
-In entrambi i casi si arrivare di fatto alla stessa stringa da due alberi di derivazione differenti (ottenuti impiegando due derivazioni leftmost).
+In entrambi i casi si arriva di fatto alla stessa stringa da due alberi di derivazione differenti (ottenuti impiegando due derivazioni leftmost).
 
 Questo problema viene definito \emph{dangling else} e corrisponde a non sapere identificare in maniera certa a quale \texttt{then} appartenga un determinato \texttt{else}. Per poter risolvere tale problematica vi sono due differenti soluzioni:
 \begin{itemize}
