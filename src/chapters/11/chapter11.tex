@@ -74,7 +74,7 @@ Possiamo osservare come in questa traduzione siano state sfruttate le regole di 
 L2: x = 0
 L1:
 \end{minted}
-il controllo sulla falsità di \texttt{x} ci permette di ridurre il numero di righe e labels utilizzate, nonché sfruttare meglio la corticircuitazione, caratteristica fondamentale per un buon compilatore. Si tenga sempre a mente che non sempre le condizioni vengono valutate nello stesso esatto ordine in cui sono state scritte dal programmatore.
+il controllo sulla falsità di \texttt{x} ci permette di ridurre il numero di righe e labels utilizzate, nonché sfruttare meglio la cortocircuitazione, caratteristica fondamentale per un buon compilatore. Si tenga sempre a mente che non sempre le condizioni vengono valutate nello stesso esatto ordine in cui sono state scritte dal programmatore.
 
 \section{Statement per il controllo di flusso}
 A questo punto possiamo andare a vedere più da vicino la traduzione in codice intermedio di alcuni statements. In particolare ci interessano i seguenti:
@@ -186,7 +186,7 @@ Andiamo a confrontare il codice intermedio di queste due espressioni, riga per r
 \begin{itemize}
     \item l'etichetta \(B_1.true\) rimanda direttamente all'etichetta \(B.true\) dell'intero statement nel caso dell'\texttt{OR} (perché naturalmente è sufficiente che un elemento sia \(true\) per rendere valida l'intera espressione), mentre invece per \texttt{AND} viene semplicemente creata una nuova label;
     \item la situazione è assolutamente analoga, ma a parti invertite, per l'etichetta \(B_1.false\);
-    \item nelle due righe successive andiamo a definire le etichette per il secondo elemento delle nsotre espressioni e, in entrambi i casi, queste ultime punteranno alle etichette di uscita dell'intero statement; questo accade perché sono l'ultimo elemento dell'espressione ed il loro valore andrà a determinare quello dell'intera espressione;
+    \item nelle due righe successive andiamo a definire le etichette per il secondo elemento delle nostre espressioni e, in entrambi i casi, queste ultime punteranno alle etichette di uscita dell'intero statement; questo accade perché sono l'ultimo elemento dell'espressione ed il loro valore andrà a determinare quello dell'intera espressione;
     \item la differenza nella composizione di \(B.code\) sta quindi esclusivamente nell'etichetta che si frappone fra il codice del primo e del secondo elemento: nel caso dell'\texttt{OR}, infatti, il secondo elemento verrà valutato solo se il primo risulta falso (e qui infatti mettiamo la nuova etichetta \(B_1.false\)); viceversa nell'\texttt{AND} valutiamo il secondo solo se il primo è vero, e quindi l'etichetta frapposta è \(B_2.false\).
 \end{itemize}
 \begin{align*}

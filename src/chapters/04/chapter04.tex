@@ -240,7 +240,7 @@ La costruzione di Thompson è una procedura algoritmica che permette di costruir
 \subsection{Definizione}
 Anche questa costruzione è espressa in modo induttivo.
 \begin{labeling}{Step}
-    \item[Base] Ogni simbolo di un qualche alfabeto alfabeto \(a \in \mathcal{A}\), così come anche la parola vuota \(\varepsilon\), sono un'espressione regolare \(r\); assumiamo di avere sempre un NFA che riconosce \(\mathcal{L}(\varepsilon)\) e uno che riconosce \(\mathcal{L}(a) \; \forall a \in \mathcal{A}\).
+    \item[Base] Ogni simbolo di un qualche alfabeto \(a \in \mathcal{A}\), così come anche la parola vuota \(\varepsilon\), sono un'espressione regolare \(r\); assumiamo di avere sempre un NFA che riconosce \(\mathcal{L}(\varepsilon)\) e uno che riconosce \(\mathcal{L}(a) \; \forall a \in \mathcal{A}\).
     \item[Step] L'espressione regolare \(r\) è una tra le seguenti opzioni: 
     \begin{itemize}[noitemsep]
         \item \(r_1 \mid  r_2 \);
@@ -381,7 +381,7 @@ Anche il numero di archi è limitato, in quanto per ogni passaggio si aggiungono
 \section{Il processo di simulazione dell’automa}
 Le nostre conoscenze attuali ci permettono di costruire un automa per una certa espressione regolare, ma come si fa a decidere se una certa parola \(w\) fa parte del linguaggio di un dato automa \(\mathcal{N}\)? Si utilizza una procedura detta \emph{simulazione dell’automa}.
 
-Abbiamo già definito in \ref{linguaggio_definito_da_un_automa} come viene deciso se una parola fa parte del linguaggio riconosciuto dall’automa; prendiamo ora ad esempio \(w = bbb\) e l’automa presentato in figura \ref{automa_secondo_esempio}, e presentiamo la procedura di simualzione di un automa.
+Abbiamo già definito in \ref{linguaggio_definito_da_un_automa} come viene deciso se una parola fa parte del linguaggio riconosciuto dall’automa; prendiamo ora ad esempio \(w = bbb\) e l’automa presentato in figura \ref{automa_secondo_esempio}, e presentiamo la procedura di simulazione di un automa.
 
 \begin{figure}
     \centering
@@ -421,7 +421,7 @@ Per calcolare la \(\varepsilon\)-chiusura di un nodo di un automa useremo queste
 Ora che sappiamo quali sono le strutture dati che andremo ad utilizzare, studiamo la fase di inizializzazione: 
 \begin{itemize}
     \item all’inizio dei tempi non c’è niente sulla pila, poi inseriamo \(t\) e lo segnaliamo su \texttt{alreadyOn};
-    \item a questo punto estraiamo dalla cima dello stack, prendiamo il nodo estratto \(e\) e cerchiamo tutti i nodi che da \(e\) si raggiugono tramite un \(\varepsilon\)-arco; inseriamo tutti questi nello stack (se non sono già presenti) e ne segnaliamo l'inserimento settando il loro flag su \texttt{alreadyOn}.
+    \item a questo punto estraiamo dalla cima dello stack, prendiamo il nodo estratto \(e\) e cerchiamo tutti i nodi che da \(e\) si raggiungono tramite un \(\varepsilon\)-arco; inseriamo tutti questi nello stack (se non sono già presenti) e ne segnaliamo l'inserimento settando il loro flag su \texttt{alreadyOn}.
 \end{itemize}
 Continuiamo così finché lo stack non si svuota. L'algoritmo appena descritto si può trovare in Alg.\ref{alg:ec-computation}.
 

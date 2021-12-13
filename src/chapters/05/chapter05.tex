@@ -65,7 +65,7 @@ Questa fase serve per definire quali sono gli stati (sd) finali del nuovo insiem
 Arriva però il momento di porsi un'importante domanda: qual è la complessità di questo algoritmo?
 Poniamo le basi per affrontare una risposta: supponiamo che l’NFA abbia \(n\) stati ed \(m\) archi, mentre supponiamo che il DFA abbia \(n_d\) stati.
 \begin{itemize}
-    \item Osserviamo che il ciclo dominante naturalmente è il primo \texttt{while}; quest'ultimo  è ritpetuto \(n_d\) volte.
+    \item Osserviamo che il ciclo dominante naturalmente è il primo \texttt{while}; quest'ultimo è ripetuto \(n_d\) volte.
     \item All'interno del \texttt{while} troviamo il nostro caro \texttt{foreach} \(a \in \mathcal{A}\), che viene ripetuto \(|A|\) volte.
     \item L'ultimo fattore di peso rilevante è la chiamata alla funzione di calcolo della \(\varepsilon\)-chiusura, la quale ha costo \(\mathcal{O}(n+m)\).
 \end{itemize}

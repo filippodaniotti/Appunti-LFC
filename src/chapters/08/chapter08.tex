@@ -80,7 +80,7 @@ Nel nostro esempio precedente abbiamo cercato di capire intuitivamente quali ite
     \end{equation}
 \end{definition}
 
-La chiusura consiste sostanzialmente nell'aggiungere, per tutti quegli items che hanno un punto davanti ad un non-terminale, tutte le produzioni possibili di quel non-terminale; questo va applicato ricorsivamente fino a che non sono presenti tutte le chiusure delle produizioni con un punto davanti ad un non-terminale. Più facile a farsi che a dirsi, credetemi, come del resto qualsiasi altro procedimento che vedremo in questo capitolo.
+La chiusura consiste sostanzialmente nell'aggiungere, per tutti quegli items che hanno un punto davanti ad un non-terminale, tutte le produzioni possibili di quel non-terminale; questo va applicato ricorsivamente fino a che non sono presenti tutte le chiusure delle produzioni con un punto davanti ad un non-terminale. Più facile a farsi che a dirsi, credetemi, come del resto qualsiasi altro procedimento che vedremo in questo capitolo.
 
 \subsubsection{Esempio di calcolo della chiusura}
 Prendiamo ora ad esempio la seguente grammatica:
@@ -97,7 +97,7 @@ Come primo passo, consideriamo l'item \(E' \to \cdot E\) e calcoliamone la chius
     \item una volta aggiunte queste produzioni, vediamo ricorsivamente se si presentano altre situazioni con \(\cdot\) prima di un non-terminale;
     \item nel primo caso troviamo ancora \(\cdot E\), però abbiamo già analizzato la produzione \(E\), per cui possiamo passare oltre;
     \item nel secondo caso invece abbiamo \(\cdot T\) e non abbiamo ancora analizzato tutte le produzioni di \(T\), quindi andiamo ad aggiungere all'insieme le produzioni di \(T\);
-    \item aggiungamo \(\{T \to \cdot T * F\}\) e \(\{T \to \cdot F\}\);
+    \item aggiungiamo \(\{T \to \cdot T * F\}\) e \(\{T \to \cdot F\}\);
     \item ci troviamo di nuovo in un caso in cui abbiamo due nuove derivazioni con \(\cdot\) davanti
     a un non-terminale, ma \(\cdot T\) è già analizzato, per cui analizziamo solo \(\cdot F\);
     \item aggiungiamo le produzioni di \(F\): \(\{F \to \cdot (E)\}\) e \(\{F \to \cdot id \}\);
@@ -531,7 +531,7 @@ Per costruire una parsing table abbiamo prima di tutto bisogno di ricavare l'aut
         E &\to \cdot E*E \\
         E &\to \cdot id
     \end{align*}
-    Essendo questi gli item per lo stato 0, posso identificare due possibili transizioni (e quindi due possibili nunovi stati): \(\tau(0,E)=1 \textrm{ e } \tau(0,id)=2\).
+    Essendo questi gli item per lo stato 0, posso identificare due possibili transizioni (e quindi due possibili nuovi stati): \(\tau(0,E)=1 \textrm{ e } \tau(0,id)=2\).
     \item Analizziamo ora lo stato 2; il suo kernel è 
     \begin{equation*}
         E \to id \cdot    

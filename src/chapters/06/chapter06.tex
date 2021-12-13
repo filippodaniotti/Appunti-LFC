@@ -255,7 +255,7 @@ In sostanza, questo file ci farà sì che, nella lettura, qualsiasi carattere in
     \item \(aa\) diventerà \texttt{hello world!hello world!}.
 \end{itemize}
 
-Possiamo notare anche un'altra cosa molto interessante: solitamente, per poter utilizzare lo standard output nei programmi C, è necessario includere all'interno del file la libreria \mintinline{c}{stdio.h}, ma nel \texttt{file0.l} non vi è nemmeno l'ombra di un inlcude: è lo stesso Flex a occuparsi di aggiungere in un secondo momento tutti i dettagli necessari per la gestione dell'output.
+Possiamo notare anche un'altra cosa molto interessante: solitamente, per poter utilizzare lo standard output nei programmi C, è necessario includere all'interno del file la libreria \mintinline{c}{stdio.h}, ma nel \texttt{file0.l} non vi è nemmeno l'ombra di un include: è lo stesso Flex a occuparsi di aggiungere in un secondo momento tutti i dettagli necessari per la gestione dell'output.
 
 \subsection*{file1.l}
 \ifthenelse{\boolean{isCompiledFromMain}}{%

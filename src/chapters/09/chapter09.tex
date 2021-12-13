@@ -43,9 +43,9 @@ Come facciamo a calcolare la chiusura degli insiemi di LR(1)-items? Il metodo di
     \label{def:lr1-closure}
     Sia \(P\) un insieme di LR(1)-item, la \(closure_1(P)\) identifica il più piccolo insieme di item, con il più piccolo lookahead-set, che soddisfa la seguente equazione:
     \begin{align*}
-        closure_1(P) = P \; \cup \; &\{[B \rightarrow \cdot \gamma, \Gamma] : [A \rightarrow \alpha \cdot B \beta, \Delta] \in closure_1(P) \; \land \\ 
-        & B \rightarrow \gamma \in \P' \; \land \\
-        & first(\beta \Delta) \subseteq \Gamma\}
+        closure_1(P) =\; &P \cup \; \{[B \rightarrow \cdot \gamma, \Gamma] : [A \rightarrow \alpha \cdot B \beta, \Delta] \in closure_1(P) \\ 
+        & \land \; B \rightarrow \gamma \in \P' \\
+        & \land \; first(\beta \Delta) \subseteq \Gamma\}
     \end{align*}  
     dove \(first(\beta \Delta) = \cup_{d \in \Delta} first(\beta d)\) e ricordiamo che \(\P'\) è ricavato dall'insieme delle produzioni \(\P\) aggiungendo la produzione \(S' \to S\).
 \end{definition}
@@ -177,7 +177,7 @@ L'idea di base è semplice:
 \begin{enumerate}
     \item costruiamo lo stato di partenza con l'item \([S' \to \cdot S, {\$}]\);
     \item ricorsivamente aggiungiamo gli stati che si possono raggiungere dagli stati presenti nell'automa;
-    \item aggiungamo le transizioni che ci permettono di passare da uno stato all'altro.
+    \item aggiungiamo le transizioni che ci permettono di passare da uno stato all'altro.
 \end{enumerate}
 E come facciamo a capire quali stati sono raggiungibili a partire da un certo stato \(P\)? Se uno stato \(P\) contiene un item nella forma \([A \to \alpha \cdot Y \beta, \Delta]\) allora esiste una transizione da \(P\) ad uno stato \(Q\) che contiene l'item \([A \to \alpha Y \cdot \beta , \Delta]\); inoltre, siccome \(Q\) contiene \([A \to \alpha Y \cdot \beta , \Delta]\), esso contiene anche tutti gli item in \(closure_1([A \to \alpha Y \cdot \beta , \Delta])\).
 

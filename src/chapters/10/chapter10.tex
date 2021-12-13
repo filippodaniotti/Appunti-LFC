@@ -233,10 +233,10 @@ Nel primo esercizio di applicazione dell'SDD abbiamo studiato una grammatica con
     T' &\to *FT' \mid \varepsilon \\
     F &\to (E) \mid digit \\
 \end{align*}
-Volgiamo definire l'SDD che ci permette di valutare tale grammatica.
+Vogliamo definire l'SDD che ci permette di valutare tale grammatica.
 
-Vediamo di costruire il parse tree di \(3*5\)
-Non riportiamo l'intero albero perché la Quaglia non l'ha disegnato.
+Vediamo di costruire il parse tree di \(3*5\) (non riportiamo l'intero albero perché la Quaglia non l'ha disegnato).
+
 Questo è un sottoalbero per l'albero di parsing della formula analizzata:
 \begin{figure}[H]
     \centering
@@ -473,7 +473,7 @@ La prima grammatica su cui ragioneremo è
     Digits &\to d	&\{Digits.v = d.lexval\}
 \end{align*}
 
-La grammatica che abbiamo di fronte è LALR(1) e l'SDD è S-attribuito: l'ultima affermazione è verificabile dal fatto che il valore del padre dei sottolaberi possibili è sempre e solamente dipendente da quello dei figli. In questo caso dunque è possibile eseguire le due elaborazioni in modo congiunto e quindi possiamo calcolare il tutto durante il parsing. 
+La grammatica che abbiamo di fronte è LALR(1) e l'SDD è S-attribuito: l'ultima affermazione è verificabile dal fatto che il valore del padre dei sottoalberi possibili è sempre e solamente dipendente da quello dei figli. In questo caso dunque è possibile eseguire le due elaborazioni in modo congiunto e quindi possiamo calcolare il tutto durante il parsing. 
 
 Aggiungiamo una variazione dell'esercizio: ora vogliamo tradurre stringhe di digit al loro valore interpretato in decimale oppure in ottale.
 
