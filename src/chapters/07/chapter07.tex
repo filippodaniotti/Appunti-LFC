@@ -274,7 +274,7 @@ A questo punto, il miglior modo per procedere con l'algoritmo è, in mancanza di
     \caption{Esercizio sui first}
     \label{computing-first}
 \end{table}
-Cosa succede se invece, al posto della produzione \(T \to FT'\), diventa \(T \to T’F\)? Lasciando il resto dell'esercizio invariato, proviamo a calcolare \(first(T)\). In questo caso avremmo dovuto analizzare prima i \(first(T’) = \{\varepsilon, \ast\}\) e aggiungere \(first(T’) \setminus \{\varepsilon\} = \{\ast\}\) a \(first(T)\); tuttavia, dal momento che \(\varepsilon \in first(T')\), l’algoritmo non può arrestarsi (perché potrebbe darsi che \(T'\) sia nullo), ma è necessario considerare anche i \(first(F)\). Come svolto precedenetemente aggiungiamo \(first(F) \setminus \{\varepsilon\} = \{id, (\}\) a \(first(T)\); essendo che \(\varepsilon \notin first(F)\) posso interrompere l'algoritmo e segnare che \(first(T) = \{\ast, id, (\}\)
+Cosa succede se invece, al posto della produzione \(T \to FT'\), diventa \(T \to T’F\)? Lasciando il resto dell'esercizio invariato, proviamo a calcolare \(first(T)\). In questo caso avremmo dovuto analizzare prima i \(first(T’) = \{\varepsilon, \ast\}\) e aggiungere \(first(T’) \setminus \{\varepsilon\} = \{\ast\}\) a \(first(T)\); tuttavia, dal momento che \(\varepsilon \in first(T')\), l’algoritmo non può arrestarsi (perché potrebbe darsi che \(T'\) sia nullo), ma è necessario considerare anche i \(first(F)\). Come svolto precedentemente aggiungiamo \(first(F) \setminus \{\varepsilon\} = \{id, (\}\) a \(first(T)\); essendo che \(\varepsilon \notin first(F)\) posso interrompere l'algoritmo e segnare che \(first(T) = \{\ast, id, (\}\)
 
 \section{Follow(\(A\))}
 \subsection{Definizione}
@@ -444,7 +444,7 @@ Una volta inseriti i first nella tabella ci troveremo nella situazione rappresen
     \caption{Esercizio \ref{first-follow-ex-3} su first/follow, step 1}
     \label{first-follow-ex-3_step-1}
 \end{table}
-Ora è il momento di tuffarci a capofitto nel calcolo dei \emph{follow}; anche in questo caso tenteremo di matentere la spiegazione concisa ma completa e, per comodità notazionale, dato che nelle produzioni dell'esercizio compare il non-terminale \(A\), anche in quest'esercizio scriveremo \(X\) per indicare la \(A\) dell'algoritmo per il calcolo del \emph{follow} (come già fatto per il caso precedente). 
+Ora è il momento di tuffarci a capofitto nel calcolo dei \emph{follow}; anche in questo caso tenteremo di mantenere la spiegazione concisa ma completa e, per comodità notazionale, dato che nelle produzioni dell'esercizio compare il non-terminale \(A\), anche in quest'esercizio scriveremo \(X\) per indicare la \(A\) dell'algoritmo per il calcolo del \emph{follow} (come già fatto per il caso precedente). 
 
 Prima di affogare nei calcoli, è interessante osservare più da vicino qual è l’idea sottesa all'inserimento di \(\$\) in follow(\(S\)) come primo passo.
 
@@ -497,7 +497,7 @@ Quindi, in Tab.\ref{first-follow-ex-3_step-3}, ammiriamo la soluzione finale del
 Ora che ci siamo esercitati con i meccanismi necessari, possiamo tornare ad occuparci della nostra preoccupazione principale, ovvero come costruire una tabella di parsing.
 
 \subsection{Algoritmo per la costruzione di una parsing table}
-Rappresentato in Alg. \ref{alg:parsing-table-comp} si può osservare l'algoritmo che, data in input una grammatica \(\G\), ritorna la tabella di aprsing top down propria di quella grammatica. 
+Rappresentato in Alg. \ref{alg:parsing-table-comp} si può osservare l'algoritmo che, data in input una grammatica \(\G\), ritorna la tabella di parsing top-down propria di quella grammatica. 
 
 \subimport{assets/pseudocode/}{parsing-table-comp.tex}
 Ricordiamo brevemente che le tabelle di parsing top-down ci servono per verificare se, data una certa parola, questa può essere derivata tramite derivazione leftmost da una certa grammatica.
