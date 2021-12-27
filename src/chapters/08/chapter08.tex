@@ -113,7 +113,7 @@ Come primo passo, consideriamo l'item \(E' \to \cdot E\) e calcoliamone la chius
     F  &\to \cdot id
 \end{align*}
 
-Ora che ne abbiamo visto un'applicazione, formalizziamo questa proceduracon dello pseudocodice: solo per voi, l'algoritmo per il calcolo della chiusura
+Ora che ne abbiamo visto un'applicazione, formalizziamo questa procedura con dello pseudocodice: solo per voi, l'algoritmo per il calcolo della chiusura
 % \begin{figure}[H]
 %     \centering
 %     \includegraphics[width=.8\textwidth]{bottom-up-parsing_closure_algorithm.png}
@@ -136,7 +136,7 @@ Fino a che non esauriamo gli stati ancora da visitare andiamo a prenderli uno al
     \item esiste quindi una transizione da \(P\) a uno stato \(P'\) attraverso l'item \(A \to \alpha x \cdot \beta\); se \(x\) è un terminale, tale transizione rappresenta un'operazione di shift. Questo significa che avrò una transizione etichettata con \(x\) che mi porta da \(P\) a \(P'\);
     \item a questo punto genero il nuovo stato \(P'\) che contiene come kernel l'item \(A \to \alpha x \cdot \beta\), ricordando che poi andrò a includere tra gli item di \(P'\) anche gli item che appartengono a \(closure_0 (\{ A \to \alpha x \cdot \beta \})\), poiché se \(\beta\) è un non-terminale allora mi aspetto di poter trovare in \(P'\) anche tutto ciò che deriva da \(\beta\).
 \end{enumerate}
-C'è però una nota da aggiungere a questo procedimento: può accadere che quando generiamo un nuovo stato \(P'\) per transizione da uno stato \(P\) ci rendiamo conto che il kernel di questo stato corrisponde al kernel di un altro stato che abbiamo già visisato, diciamo \(Q\); in questo caso invece che creare un nuovo stato \(P'\), quello che facciamo è collegare tramite una \(x\)-transizione \(P\) a \(Q\).
+C'è però una nota da aggiungere a questo procedimento: può accadere che quando generiamo un nuovo stato \(P'\) per transizione da uno stato \(P\) ci rendiamo conto che il kernel di questo stato corrisponde al kernel di un altro stato che abbiamo già visitato, diciamo \(Q\); in questo caso invece che creare un nuovo stato \(P'\), quello che facciamo è collegare tramite una \(x\)-transizione \(P\) a \(Q\).
 
 \subsubsection{Esempio di costruzione di automa LR(0)}
 \label{subsubsec:esercizio_costruzione_automa_lr0}
@@ -262,14 +262,14 @@ Ci stiamo avvicinando, fra poco parleremo dell'algoritmo shift/reduce, vero e pr
 La tabella ha tante righe quanti gli stati dell'automa caratteristico, ed una colonna per ogni simbolo in \(V \cup \{ \$ \}\). La tabella dipende dall'automa caratteristico: automi diversi portano a tabelle diverse che portano a tipi di parsing diversi. 
 
 \paragraph{Le riduzioni}
-Le mosse di shift dipendono direttamente dalla funzione di transizione dell'automa, mentre le mosse di reduce sono più articolate: vanno effettuate solo quando raggiungiamo degli stati con etichette particolari, ed implicano che dobbiamo cancellare degli elementi dalla pila degli stati e dalla pila dei simboli, per poi inserire altri caratteri in quest'ultima pila. Inoltre, le mosse di reduce dipendono dal contenuto degli stati dell'automa: in un certo stato della tabella di parsing andiamo ad inserire una mossa di riduzione se la produzione \(A \to \beta\) è effettuata in uno stato contenente un reducing item per \(A \to \beta\). A questo punto però ci chiediamo: cosa sono i reducing items?
+Le mosse di shift dipendono direttamente dalla funzione di transizione dell'automa, mentre le mosse di reduce sono più articolate: vanno effettuate solo quando raggiungiamo degli stati con etichette particolari, ed implicano che dobbiamo cancellare degli elementi dalla pila degli stati e dalla pila dei simboli, per poi inserire altri caratteri in quest'ultima pila. Inoltre, le mosse di reduce dipendono dal contenuto degli stati dell'automa: in un certo stato della tabella di parsing andiamo ad inserire una mossa di riduzione se la produzione \(A \to \beta\) è effettuata in uno stato contenente un reducing item per \(A \to \beta\). A questo punto però ci chiediamo: cosa sono i \emph{reducing items}?
 \begin{itemize}
     \item nel caso di LR(0)-items avranno forma \(A \to \beta \cdot\), e indicano che siamo arrivati alla fine della derivazione di \(\beta\), per cui il marker \(\cdot\) si trova in fondo alla derivazione;
     \item nel caso LR(1)-items avranno forma \(A \to \beta \cdot, \; \Delta\), e succede quando ho terminato l'analisi della produzione di \(\beta\),  ma con una condizione in più specificata da quel \(\Delta\).
 \end{itemize}
-Le riduzioni vengono applicate in base alla \emph{lookahead function} \(\mathcal{LA}\), la quale è definita per tutte le coppie \((P,\; A \to \beta)\) tali che \(P\) èuno stato che contiene un reducing item per \(A \to \beta\).
+Le riduzioni vengono applicate in base alla \emph{lookahead function} \(\mathcal{LA}\), la quale è definita per tutte le coppie \((P,\; A \to \beta)\) tali che \(P\) è uno stato che contiene un reducing item per \(A \to \beta\).
 
-Da menzionare il fatto che la scelta dell'automa e della lookahead function per la costruzione della parsing table sono le caratteristiche che distinguono le varie tecniche di bottom-up parsing: la procedura di compilazione della tabella di parsing e l'esecuzione dell'algoritmo shift/reduce sono uguali per ogni classe considerata.
+Da menzionare il fatto che la scelta dell'automa e della \emph{lookahead function} per la costruzione della parsing table sono le caratteristiche che distinguono le varie tecniche di bottom-up parsing: la procedura di compilazione della tabella di parsing e l'esecuzione dell'algoritmo shift/reduce sono uguali per ogni classe considerata.
 
 \subsection{Costruzione di una tabella di parsing generica}
 Vediamo ora nello specifico come costruire una tabella di parsing. Abbiamo una tabella con delle entries di forma \(M[P, Y]\), dove \(P\) è uno stato e \(Y\) un simbolo del vocabolario \(V\), e dobbiamo riempire ciascuna di queste secondo le seguenti regole:
@@ -443,7 +443,7 @@ Ora però dobbiamo sostituire lo stato 4 con lo stato che è presente nella tabe
     stSt &= 0\;2\;3\\
     symSt &= a\;A
 \end{align*}
-Dobbiamo ancora consumare la \(b\) (le mosse di reduce non consumano i caratteri), quindi ora ci troviamo nella casella [3, \(b\)],e questa ci suggerisce la mossa shift 6; vediamo cosa succede:
+Dobbiamo ancora consumare la \(b\) (le mosse di reduce non consumano i caratteri), quindi ora ci troviamo nella casella [3, \(b\)], e questa ci suggerisce la mossa shift 6; vediamo cosa succede:
 \begin{align*}
     w &= \underline{abb}cde\$ \\
     stSt &= 0\;2\;3\;6\\
@@ -508,7 +508,7 @@ Ai più attenti non sarà di certo sfuggito che questa stregoneria del parsing �
     \item le caselle di reduce ci fanno indietrggiare di qualche casella;
     \item le celle error ci fanno perdere il gioco.
 \end{itemize}
-Purtroppo il tabellone di gioco non è un semplice percorso rettilineo, ma è una cosa più brutta che assomiglia un po' a un grafo. In compenso, nella nostra versione il percorso della pedina è \emph{deterministico}: non c'è un lancio dei dadi, c'è una sorta di mappa da seguire, che altro non è se non la parola \(w\) che vogliamo analizzare. E infatti l'obiettivo del nostro gioco è quello di prendere una mappa (ovvero una parola), seguirla e verificare se riusciamo ad arrivare alla casella finale con delle opportune reduce (perché ripetiamolo, la casella finale si trova "dietro all via!"). E quindi, cosa succede quando arriviamo alla casella finale? Succede che abbiamo vinto, perché vuol dire che la mappa che abbiamo seguito è valida, ovvero che la parola \(w\) considerata appartiene alla grammatica \(\G\) che ha generato il tabellone di gioco (ovvero il linguaggio); inoltre, possiamo anche capire esattamente come \(w\) deriva da \(\G\), seguendo il nostro percorso al contrario e annotandoci le mosse di reduce effettuate. Questo era tutto, siamo finalmente riusciti a dispiegare il nostro parsing una volta per tutte! \textasciitilde sam
+Purtroppo il tabellone di gioco non è un semplice percorso rettilineo, ma è una cosa più brutta che assomiglia un po' a un grafo. In compenso, nella nostra versione il percorso della pedina è \emph{deterministico}: non c'è un lancio dei dadi, c'è una sorta di mappa da seguire, che altro non è se non la parola \(w\) che vogliamo analizzare. E infatti l'obiettivo del nostro gioco è quello di prendere una mappa (ovvero una parola), seguirla e verificare se riusciamo ad arrivare alla casella finale con delle opportune reduce (perché ripetiamolo, la casella finale si trova "dietro al via!"). E quindi, cosa succede quando arriviamo alla casella finale? Succede che abbiamo vinto, perché vuol dire che la mappa che abbiamo seguito è valida, ovvero che la parola \(w\) considerata appartiene alla grammatica \(\G\) che ha generato il tabellone di gioco (ovvero il linguaggio); inoltre, possiamo anche capire esattamente come \(w\) deriva da \(\G\), seguendo il nostro percorso al contrario e annotandoci le mosse di reduce effettuate. Questo era tutto, siamo finalmente riusciti a dispiegare il nostro parsing una volta per tutte! \textasciitilde sam
 
 Ottimo, adesso che abbiamo messo le cose in chiaro possiamo passare a un secondo esercizio, tanto più complesso quanto più completo e divertente del primo.
 
