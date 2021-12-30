@@ -504,9 +504,9 @@ Non abbiamo solo trovato una soluzione al quesito iniziale, ma abbiamo anche ric
 \subsubsection{Il parsing dell'oca}
 Ai più attenti non sarà di certo sfuggito che questa stregoneria del parsing è stata fortemente ispirata dal gioco dell'oca. Pensiamoci: è come se, nel nostro parsing dell'oca, l'obiettivo del gioco fosse quello di raggiungere una casella nascosta "dietro al via"\footnote{Abbiamo fiducia nel fatto che i nostri venticinque lettori stiano al gioco e riescano a intuire il senso di quest'espressione un po' criptica; la prima volta che l'ho letta pure a me suonava molto simile a quella storiella che i terrapiattisti tanto amano sui presunti racconti dei presunti diari di Richard Byrd, in cui l'ammiraglio affermerebbe di essersi spinto centinaia di miglia "oltre il Polo Sud". "Dietro al via", "Oltre il Polo", figata, no? \textasciitilde pips}. Abbiamo tre tipi di caselle:
 \begin{itemize}
-    \item le caselle di shift ci fanno avanzare di una casella;
-    \item le caselle di reduce ci fanno indietrggiare di qualche casella;
-    \item le celle error ci fanno perdere il gioco.
+    \item le caselle di \texttt{shift} ci fanno avanzare di una casella;
+    \item le caselle di \texttt{reduce} ci fanno indietreggiare di qualche casella;
+    \item le celle \texttt{error} ci fanno perdere il gioco.
 \end{itemize}
 Purtroppo il tabellone di gioco non è un semplice percorso rettilineo, ma è una cosa più brutta che assomiglia un po' a un grafo. In compenso, nella nostra versione il percorso della pedina è \emph{deterministico}: non c'è un lancio dei dadi, c'è una sorta di mappa da seguire, che altro non è se non la parola \(w\) che vogliamo analizzare. E infatti l'obiettivo del nostro gioco è quello di prendere una mappa (ovvero una parola), seguirla e verificare se riusciamo ad arrivare alla casella finale con delle opportune reduce (perché ripetiamolo, la casella finale si trova "dietro al via!"). E quindi, cosa succede quando arriviamo alla casella finale? Succede che abbiamo vinto, perché vuol dire che la mappa che abbiamo seguito è valida, ovvero che la parola \(w\) considerata appartiene alla grammatica \(\G\) che ha generato il tabellone di gioco (ovvero il linguaggio); inoltre, possiamo anche capire esattamente come \(w\) deriva da \(\G\), seguendo il nostro percorso al contrario e annotandoci le mosse di reduce effettuate. Questo era tutto, siamo finalmente riusciti a dispiegare il nostro parsing una volta per tutte! \textasciitilde sam
 
