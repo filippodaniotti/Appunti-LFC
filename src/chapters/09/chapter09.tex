@@ -141,7 +141,7 @@ Le due produzioni di \(B\) (ovvero di \(S\)) in questo caso sono \(S \to L=R \mi
     [S &\to \cdot R, \{\$\}] \notag
 \end{align}
 A questo punto la chiusura non è completa in quando abbiamo aggiunto due elementi che possono essere presi in considerazione nella definizione ricorsiva della chiusura, ovvero soddisfano anch'essi la famosa forma \([A \rightarrow \alpha \cdot B \beta, \Delta]\).
-Analizziamo dunque \([S \to \cdot L = R, \{\$\}]\), le sue corrispondenze sono: \(B = L \texttt{, } \beta = \; \; =R \texttt{, } \Delta = \{\$\}\) (e quindi \(\Gamma = first(\beta \Delta) = first(=R\$) = \{=\}\)); le produzioni di \(L\) sono \(L \to *R \mid id\), quindi arriviamo a generare i seguenti LR(1)-items:
+Analizziamo dunque \([S \to \cdot L = R, \{\$\}]\), le sue corrispondenze sono: \(B = L \texttt{, } \beta = \; \; '=R' \texttt{, } \Delta = \{\$\}\) (e quindi \(\Gamma = first(\beta \Delta) = first(=R\$) = \{=\}\)); le produzioni di \(L\) sono \(L \to *R \mid id\), quindi arriviamo a generare i seguenti LR(1)-items:
 \begin{align*}
     [L &\to \cdot *R, \{=\}] \\
     [L &\to \cdot id, \{=\}]
@@ -199,7 +199,7 @@ Indovinate un po' con quale grammatica stiamo per andare a osservare cosa si ott
     A &\to c \nonumber \\ \notag
     B &\to c \notag
 \end{align}
-Ora chiederemo al lettore di fare uno sforzo mnemonico poderoso e di ricordare che in passato, quando abbiamo provato a costruire l'automa caratteristico SLR(1) per questa grammatica ci siamo trovati ad avere la situazione rappresentata in figura \ref{fig:lr0-automata_conflict_2}, che riprtiamo qui sotto per comodità.
+Ora chiederemo al lettore di fare uno sforzo mnemonico poderoso e di ricordare che in passato, quando abbiamo provato a costruire l'automa caratteristico SLR(1) per questa grammatica ci siamo trovati ad avere la situazione rappresentata in figura \ref{fig:lr0-automata_conflict_2}, che riportiamo qui sotto per comodità.
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{automa_conflict_LR.tex}
@@ -287,7 +287,7 @@ Abbiamo calcolato la chiusura per \(S\), ma adesso  dobbiamo calcolarla anche pe
     && &&L &\to \cdot id, \{=\} &\\
     &&closure_1(R): &&R &\to \cdot L, \{\$\}&
 \end{align*}
-Non è ancora finita purtroppo, perché trovato un altro item con il marker \(\cdot\) davanti alla \(L\); che facciamo, dobbiamo ricalcolarla? Sì, dobbiamo farlo assolutamente! Nel caso precedente la produzione \(S \to \cdot L = R\) aveva \(\beta = \{=R\}\), mentre in questo caso la produzione è \(R \to L\) e ha \(\beta = \varepsilon\), per cui il lookahead set delle produzioni di \(L\) potrebbe essere diverso in questo secondo caso, e difatti è proprio questo che succede, perché il calcolo della chiusura ci ritorna questo:
+Non è ancora finita purtroppo, perché trovato un altro item con il marker \(\cdot\) davanti alla \(L\); che facciamo, dobbiamo ricalcolarla? Sì, dobbiamo farlo assolutamente! Nel caso precedente la produzione \(S \to \cdot L = R\) aveva \(\beta = \; '=R'\), mentre in questo caso la produzione è \(R \to L\) e ha \(\beta = \varepsilon\), per cui il lookahead set delle produzioni di \(L\) potrebbe essere diverso in questo secondo caso, e difatti è proprio questo che succede, perché il calcolo della chiusura ci ritorna questo:
 \begin{align*}
     L &\to \cdot \ast R, \{\$\} \\
     L &\to \cdot id, \{\$\}
@@ -466,7 +466,7 @@ A questo punto potremmo chiederci: la grammatica Eq.\ref{gr:pointers-grammar} è
 %     \caption{help}
 % \end{figure}
 \paragraph{La grammatica è LR(1)?}
-Infatti, possiamo fin da subito escludere la presenza di conflitti r/r (ossia reduce/reduce), perché nessuno stato del nostro automa presenza due reducing items.
+Infatti, possiamo fin da subito escludere la presenza di conflitti r/r (ossia reduce/reduce), perché nessuno stato del nostro automa presenta due reducing items.
 
 Anche per verificare la presenza di conflitti s/r (shift/reduce) abbiamo una furberia simile, anche se un po' meno veloce: dobbiamo accertarci che nessuno degli stati che contengono reducing items abbia contemporaneamente delle mosse di shift; detto in termini semplici, i cerchietti col doppio cerchiettino non devono avere una freccettina uscente. Una volta che abbiamo attivato la nostra vista di falco possiamo vedere che gli stati 3, 5, 7, 8, 9, 10, 12, 13 hanno tutti il doppio cerchiettino (reducing items) ma non hanno nessuna freccia uscente, il che ci farebbe festeggiare, se non fosse per quel dannato stato 2, colpevole di avere e il doppio cerchiettino, e la freccia uscente. È finita, quindi? Abbiamo davvero un conflitto? 
 
