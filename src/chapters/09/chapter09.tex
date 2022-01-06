@@ -415,7 +415,7 @@ La situazione è molto simile a quella descritta sopra. Seguendo la transizione 
 \begin{equation*}
     L \to \ast \cdot R, \{\$\}
 \end{equation*}
-Questo è lo stesso kernel dello stato 9, ma per via del differente lookahead set creiamo comunque un nuovo stato (\(\tau(6, \ast) = 11\)). Dobbiamo anche calcolare \(closure_1(R)\) che, anche quessta volta, forza il calcolo di \(closure_1(L)\); lo stato sarà infine composto di questi items:
+Questo è lo stesso kernel dello stato 4, ma per via del differente lookahead set creiamo comunque un nuovo stato (\(\tau(6, \ast) = 11\)). Dobbiamo anche calcolare \(closure_1(R)\) che, anche questa volta, forza il calcolo di \(closure_1(L)\); lo stato sarà infine composto di questi items:
 \begin{align*}
     &&Kernel: &&L &\to \ast \cdot R, \{\$\}& \\
     &&closure_1(R): &&R &\to \cdot L, \{\$\} &\\
@@ -425,7 +425,7 @@ Questo è lo stesso kernel dello stato 9, ma per via del differente lookahead se
 Notiamo che, con l'eccezione dell'ultimo, tutti gli item sono stati già visitati, e già sappiamo dove portano (\(R \to \cdot L, \{\$\}\) a \(\tau(11, L) = 10\) e \(L \to \cdot \ast R, \{\$\}\) a \(\tau(11, \ast) = 11\), self loop), per cui ci risparmiamo di analizzare in futuro quelle mosse di shift. Ci sentiamo anche di anticipare che pure l'ultima transizione, \(\tau(11, id)\), non porterà a un nuovo stato, poiché risulterà essere un collegamento allo stato 12 (\(\tau(11, id) = 12\)).
 
 \paragraph{Stato 12}
-Uh, per fortuna questo stato è tranquillo. Stiamo infatti analizzando la transizione \(\tau 11, R\) e il kernel è:
+Uh, per fortuna questo stato è tranquillo. Stiamo infatti analizzando la transizione \(\tau(11, R)\) e il kernel è:
 \begin{equation*}
     L \to id \cdot, \{\$\}
 \end{equation*}
@@ -822,7 +822,7 @@ Il primo passo è installare lo stato 0 dell'automa:
 È subito chiaro cosa intendevamo dicendo "invece di inserire il lookahead set inseriamo una \emph{variabile}", di fatto come lookahead inseriamo un simbolo, che risolveremo solo alla fine della costruzione dell'automa.
 
 In questo caso al posto di inserire \(\$\) inseriamo una variabile chiamata \(x_0\).
-La corrispondenza tra \(x_0\) e \(\$\) la salviamo (ce la scriviamo) nel sitema di equazioni che ci porteremo dietro per tutta la costruzione.
+La corrispondenza tra \(x_0\) e \(\$\) la salviamo (ce la scriviamo) nel sistema di equazioni che ci porteremo dietro per tutta la costruzione.
 \begin{align*}
     Sistema:& \\
             & x_0 = \{\$\}
