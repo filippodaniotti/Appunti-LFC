@@ -542,7 +542,7 @@ Si noti come l'albero della sintassi astratta a sinistra sia molto più compatto
 \end{itemize}
 
 \subsection{Creazione di un AST}
-L'AST si può creare semplicemente dopo aver ottenuto l'albero di derivazione tramite delle operazoni di compattazione, tuttavia il nostro obiettivo è quello di calcolare l'AST direttamente durante la fase di parsing, ovvero contemporaneamente all'analisi sintattica.
+L'AST si può creare semplicemente dopo aver ottenuto l'albero di derivazione tramite delle operazioni di compattazione, tuttavia il nostro obiettivo è quello di calcolare l'AST direttamente durante la fase di parsing, ovvero contemporaneamente all'analisi sintattica.
 Per fare questo dobbiamo immaginare di avere a disposizione due funzioni:
 \begin{itemize}
     \item \texttt{newLeaf(label, val)} che va a salvare un nodo foglia con due campi: l'etichetta ed il valore;
@@ -599,13 +599,13 @@ Si invita il lettore a fermarsi un attimo e rileggere queste produzioni per conv
 
 Vediamo ora come viene creato in memoria l'Abstract Syntax Tree mentre stiamo svolgendo il parsing della stringa.
 Ogni volta che incontriamo una riduzione andiamo ad aggiungere un nodo all'AST che stiamo creando. Quale forma avrà questo nodo ci è dato dalle funzioni di attribuzione dei nodi dell'AST.
-Osserviamo quindi quale forma viene ad ottenere l'abero di sintassi astratta della nostra parola \(id-num+id\) mentre incontriamo le riduzioni passo dopo passo.
+Osserviamo quindi quale forma viene ad ottenere l'albero di sintassi astratta della nostra parola \(id-num+id\) mentre incontriamo le riduzioni passo dopo passo.
 \begin{enumerate}
-    \item La prima riduzone che incontriamo è \(T \to id\), che ha come funzione di attribuzione \(\{T.node = newLeaf(id, id.entry)\}\); la rappresentazione grafica di quello che si ottiene in questo caso è la seguente:
+    \item La prima riduzione che incontriamo è \(T \to id\), che ha come funzione di attribuzione \(\{T.node = newLeaf(id, id.entry)\}\); la rappresentazione grafica di quello che si ottiene in questo caso è la seguente:
     \begin{figure}[H]
         \centering
         \includegraphics[width=.6\textwidth]{ex-ast-creation-1.png}
-        \caption{Creazone del nodo foglia per l'identificatore che referenzia la variabile \(a\)}
+        \caption{Creazione del nodo foglia per l'identificatore che referenzia la variabile \(a\)}
     \end{figure}
     \item La seconda riduzione che incontriamo, \(E \to T\), ci porta ad un semplice passaggio di rinominazione di un nodo dell'AST, in quanto la sua azione semantica è \(\{E.node = T.node\}\).
     \begin{figure}[H]
