@@ -26,7 +26,7 @@ Detto questo, cominciamo.
 
 Se \(\{ww \mid w \in \L((a \mid b)^*)\}\) è un linguaggio regolare rispondere “SI”, altrimenti rispondere “NO”.
 
-Analizziamo il tutto a mente fredda: la domanda è se il linguaggio proposto è regolare, una sottoclasse dei linguaggi liberi. In questo caso non ha senso perdersi sulla definizione in quanto il linguaggio di partenza (i.e. quello a cui appartiene w) è sicuramente regolare in quanto è denotato da un'espressione regolare. A questo punto potremmo pensare che la risposta sia banala, un mero richiamo della proprietà di chiusura rispetto alla concatenazione: “isto che i linguaggi regolari sono chiusi rispetto alla concatenazione allora il linguaggio fornito è regolare”. Giusto? MA NEANCHE PER SBAGLIO! 
+Analizziamo il tutto a mente fredda: la domanda è se il linguaggio proposto è regolare, una sottoclasse dei linguaggi liberi. In questo caso non ha senso perdersi sulla definizione in quanto il linguaggio di partenza (i.e. quello a cui appartiene \(w\)) è sicuramente regolare in quanto è denotato da un'espressione regolare. A questo punto potremmo pensare che la risposta sia banala, un mero richiamo della proprietà di chiusura rispetto alla concatenazione: “visto che i linguaggi regolari sono chiusi rispetto alla concatenazione allora il linguaggio fornito è regolare”. Giusto? MA NEANCHE PER SBAGLIO! 
 
 Osserviamo meglio il tutto: se veramente valesse la proprietà di concatenazione potremmo scrivere il tutto come 
 
@@ -69,7 +69,7 @@ La risposta all'esercizio è dunque \textbf{“VERO”}.
 
 Sia \(r=b^* \mid b^* a (\varepsilon \mid a \mid b)^*\)e sia \(\mathcal{D}\) il DFA minimo per il riconoscimento di \(\L(r)\). Dire quanti stati ha \(\mathcal{D}\) e quanti di questi stati sono finali.
 
-Per poter risolvere l'esercizio è possibile applicare la Thompson's Construction per ottenere un NFA, successivamente la Subset Construction per trasformarlo in un DFA ed infine la DFA Minimization per ottenere \(\mathcal{D}\). Il procedimento, seppur efficacie, è troppo lungo da svolgere (i.e. o saltate l'esercizio e ci ritornate dopo oppure trovate un metodo furbo per farlo): per questo motivo è meglio osservare direttamente la regex. Il linguaggio denotato è \(\{b^k \mid k \geq 0\} \cup \{b^i a a^j b^k \mid i \geq 0, j \geq 0, k \geq 0\}\): se riuscissimo a trovare un DFA che ci permette di ottenere questo linguaggio poi potremmo ridurlo. 
+Per poter risolvere l'esercizio è possibile applicare la Thompson's Construction per ottenere un NFA, successivamente la Subset Construction per trasformarlo in un DFA ed infine la DFA Minimization per ottenere \(\mathcal{D}\). Il procedimento, seppur efficace, è troppo lungo da svolgere (i.e. o saltate l'esercizio e ci ritornate dopo oppure trovate un metodo furbo per farlo): per questo motivo è meglio osservare direttamente la regex. Il linguaggio denotato è \(\{b^k \mid k \geq 0\} \cup \{b^i a a^j b^k \mid i \geq 0, j \geq 0, k \geq 0\}\): se riuscissimo a trovare un DFA che ci permette di ottenere questo linguaggio poi potremmo ridurlo. 
 
 Partiamo dal primo caso: vogliamo avere la possibilità di generare 0 o più ripetizioni di \(b\), dunque abbiamo bisogno che lo stato iniziale sia anche lo stato finale (in questo modo si ha la possibilità di ottenere la stringa vuota) e che vi sia un self-loop con etichetta \(b\) (per poter considerare le parole del tipo \(b^k\)).
 
@@ -113,7 +113,7 @@ Il DFA minimizzato \(\mathcal{D}\) è dunque così costruito:
 \begin{figure}[H]
 	\centering
     \subimport{assets/figures/}{es3-d.tex}
-    \caption{Es 1: DFA Minimizzato \(b^* \mid b^* a (\varepsilon \mid a \mid b)^*\)}
+    \caption{Es 3: DFA Minimizzato \(b^* \mid b^* a (\varepsilon \mid a \mid b)^*\)}
     \label{fig:dfa-minimized-ex3}
 \end{figure}
 
@@ -128,7 +128,7 @@ Per maggiore chiarezza possiamo rappresentare l'automa per intero:
 \begin{figure}[H]
 	\centering
     \subimport{assets/figures/}{es4-a.tex}
-    \caption{Es 1: NFA di partenza}
+    \caption{Es 4: NFA di partenza}
     \label{fig:nfa-ex4}
 \end{figure}
 
@@ -146,7 +146,7 @@ Eseguiamo dunque la Subset Construction:
 \begin{figure}[H]
 	\centering
     \subimport{assets/figures/}{es4-b.tex}
-    \caption{Es 1: DFA risultante dalla Subset Construction}
+    \caption{Es 4: DFA risultante dalla Subset Construction}
     \label{fig:sc-ex4}
 \end{figure}
 
