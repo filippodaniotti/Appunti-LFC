@@ -218,7 +218,7 @@ Dal momento che tutte le coppie \texttt{pattern \{azione\}} sono scritte in ling
     \item[\texttt{\$}] end of line;
     \item[\texttt{a|b}] pipe, semantica consueta  (i.e. a or b);
     \item[\texttt{()}] raggruppamenti;
-    \item[\texttt{"+"}] il literal \texttt{"+"} (è necessario usare qusto metodo di escape per poter far riferimento ad un carattere qualunque e non al metacarattere)
+    \item[\texttt{"+"}] il literal \texttt{"+"} (è necessario usare questo metodo di escape per poter far riferimento ad un carattere qualunque e non al metacarattere)
     \item[\texttt{\{\}}] espressioni regolari scritte nel preambolo
 \end{labeling}
 
@@ -244,7 +244,7 @@ Facciamo un breve riepilogo di quanto abbiamo visto: tutti i file predisposti pe
 %     \label{file0.l}
 % \end{figure}
 
-In qusto primo esempio vediamo che nel preambolo non sono presenti né delle \texttt{define} né del codice; dal momento che non sono presenti routine inserite dall'utente, verrà invocata la procedura \texttt{yylex()} all'esecuzione. Basandoci sulla sintassi di Flex vista precedentemente, andiamo ad analizzare la parte centrale costituita da una sola coppia pattern-azione:
+In questo primo esempio vediamo che nel preambolo non sono presenti né delle \texttt{define} né del codice; dal momento che non sono presenti routine inserite dall'utente, verrà invocata la procedura \texttt{yylex()} all'esecuzione. Basandoci sulla sintassi di Flex vista precedentemente, andiamo ad analizzare la parte centrale costituita da una sola coppia pattern-azione:
 \begin{itemize}
     \item il pattern è dato dalla regular expression composta solo da \texttt{.}, il che significa che l'azione seguente farà riferimento a tutti i caratteri incontrati, tranne quello di \texttt{\(\backslash\)n} (\emph{new line});
     \item l'azione è quel \mintinline{c}{printf("hello world!")}, il che consiste banalmente nello stampare la stringa hello world ogni volta che viene eseguito un match sul pattern.

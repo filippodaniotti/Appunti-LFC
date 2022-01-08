@@ -265,7 +265,7 @@ La tabella ha tante righe quanti gli stati dell'automa caratteristico, ed una co
 Le mosse di shift dipendono direttamente dalla funzione di transizione dell'automa, mentre le mosse di reduce sono più articolate: vanno effettuate solo quando raggiungiamo degli stati con etichette particolari, ed implicano che dobbiamo cancellare degli elementi dalla pila degli stati e dalla pila dei simboli, per poi inserire altri caratteri in quest'ultima pila. Inoltre, le mosse di reduce dipendono dal contenuto degli stati dell'automa: in un certo stato della tabella di parsing andiamo ad inserire una mossa di riduzione se la produzione \(A \to \beta\) è effettuata in uno stato contenente un reducing item per \(A \to \beta\). A questo punto però ci chiediamo: cosa sono i \emph{reducing items}?
 \begin{itemize}
     \item nel caso di LR(0)-items avranno forma \(A \to \beta \cdot\), e indicano che siamo arrivati alla fine della derivazione di \(\beta\), per cui il marker \(\cdot\) si trova in fondo alla derivazione;
-    \item nel caso LR(1)-items avranno forma \(A \to \beta \cdot, \; \Delta\), e succede quando ho terminato l'analisi della produzione di \(\beta\),  ma con una condizione in più specificata da quel \(\Delta\).
+    \item nel caso LR(1)-items avranno forma \([A \to \beta \cdot, \; \Delta]\), e succede quando ho terminato l'analisi della produzione di \(\beta\),  ma con una condizione in più specificata da quel \(\Delta\).
 \end{itemize}
 Le riduzioni vengono applicate in base alla \emph{lookahead function} \(\mathcal{LA}\), la quale è definita per tutte le coppie \((P,\; A \to \beta)\) tali che \(P\) è uno stato che contiene un reducing item per \(A \to \beta\).
 
