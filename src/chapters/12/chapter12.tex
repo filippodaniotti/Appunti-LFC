@@ -69,7 +69,7 @@ Nel nostro esempio, quello che andiamo ad ottenere dalla lista di token in Eq.\r
     \label{fig:last-ex-parse-tree}
 \end{figure}
 Relativamente all'analisi sintattica abbiamo studiato ed utilizzato le due famiglie principali di metodi di parsing (basate su derivazioni leftmost in un caso e rightmost nell'altro). 
-È da sottolineare però, che esistono parser adatti all'analisi di una qualsiasi grammatica libera, tuttavia questi hanno complessità minima \(n^3\) (con \(n\) lungehezza dell'input) e questo li esclude dalla nostra wishlist.
+È da sottolineare però, che esistono parser adatti all'analisi di una qualsiasi grammatica libera, tuttavia questi hanno complessità minima \(n^3\) (con \(n\) lunghezza dell'input) e questo li esclude dalla nostra wishlist.
 Non dimentichiamoci però che, concentrandoci principalmente sulle grammatiche regolari, i parser che abbiamo esaminato in questo corso riescono a ricavare un albero di derivazione con complessità \emph{LINEAREH}.
 
 Le due, ormai ben note, tipologie principali di parsing, sono:
@@ -110,7 +110,7 @@ L'algoritmo di shift-reduce è anch'esso indipendente dal tipo di grammatica che
 
 Mentre eseguiamo l'algoritmo andiamo ad analizzare la lista di token in input: controllando token per token ed usando la parsing table come mappa, ci spostiamo nel buffer di lettura (mosse di shift) e, quando si incontra una stringa che può essere derivata da una certa produzione della grammatica, si va ad effettuare una mossa di reduce.
 
-Se non vi sono entry multiple defined possiamo terminare l'agloritmo con successo ed ottenere alla fine il parsing tree che tanto desideriamo.
+Se non vi sono entry multiple defined possiamo terminare l'algoritmo con successo ed ottenere alla fine il parsing tree che tanto desideriamo.
 
 Le 3 grammatiche viste per il parsing bottom-up, si differenziano per la precisione con cui si decide in quali caselle della tabella di parsing va inserita una determinata riduzione.
 
@@ -124,7 +124,7 @@ La differenza tra un tipo di grammatica e l'altro è la seguente:
 In realtà le possibilità non terminano qui, infatti si potrebbero ottenere delle grammatiche molto più semplici da parsare aumentando il numero di informazioni che si usano prima delle riduzioni, sostanzialmente incrementando il lookahead set: tali grammatiche potrebbero ad esempio essere \(LL(2)\) ed \(LR(2)\), ma la complessità per l'analisi della lista di token aumenterebbe parecchio in tal caso. La scelta privilegiata è quindi sforzarsi di trovare una grammatica \(LL(1)\) o \(LR(1)\) prima, per avere poi performance migliori.
 
 \subsection{Quando finisce il parsing}
-Se l'analisi sintattica dimostra che la stringa non è riconosciuta dal linguaggio, vi è la possibilità, nei compilatori moderni, di prevedere dei meccanismi di riconoscimento degli errori: spesso sono i compilatori stessi che suggeriscono all'utente dove si potrerebbero trovare gli errori sintattici all'interno del codice.
+Se l'analisi sintattica dimostra che la stringa non è riconosciuta dal linguaggio, vi è la possibilità, nei compilatori moderni, di prevedere dei meccanismi di riconoscimento degli errori: spesso sono i compilatori stessi che suggeriscono all'utente dove si potrebbero trovare gli errori sintattici all'interno del codice.
 
 In caso l'analisi sia andata a buon fine, si ottiene un parse tree che indica quali riduzioni sono state effettuate ed in quale ordine.
 
@@ -174,11 +174,11 @@ Questa fase di ottimizzazione sfrutta algoritmi su grafo facendo un'analisi di c
 
 Un esempio piuttosto comune è la \emph{subexpression elimination}, che prevede di sintetizzare tutte le espressioni che vengono ripetute nel codice: se nel nostro programma andiamo a calcolare più volte l'espressione \(\pi * e\), la subexpression elimination va a salvare in una variabile temporanea il risultato, così da evitare di calcolarlo più e più volte, sprecando risorse.
 
-Nota che tutte queste ottimizzazioni avvengono a tempo di compiliazione, nella fase statica, e sono di tipo conservativo. Questo significa che alcune occorrenze della stessa espressione possono essere eseguite in entrambi i rami di un else, quello che si fa in questo caso è assumere in modo conservativo che possano essere percorsi tutti i rami di tutte le condizioni.
+Nota che tutte queste ottimizzazioni avvengono a tempo di compilazione, nella fase statica, e sono di tipo conservativo. Questo significa che alcune occorrenze della stessa espressione possono essere eseguite in entrambi i rami di un else, quello che si fa in questo caso è assumere in modo conservativo che possano essere percorsi tutti i rami di tutte le condizioni.
 
 In sostanza le ottimizzazioni che vengono effettuate in questa fase ottimizzano in modo cieco, senza guardare i possibili flussi di esecuzione della logica del programma.
 
-Nota anche che nelle fasi successive tutte le variabili dovranno essere inserite nei vari registri: qui avverranno ulteriori ottimizzazioni, ad esempio legate ad un migliore utilizzo dei registri, che andranno ad utilizzare algoritmi di graph coloring e altre stregonerie simili.
+Nota anche che nelle fasi successive tutte le variabili dovranno essere inserite nei vari registri: qui avverranno ulteriori ottimizzazioni, ad esempio legate ad un migliore utilizzo dei registri, che andranno ad utilizzare algoritmi di \emph{graph coloring} e altre stregonerie simili.
 
 A valle dell'ottimizzatore del codice intermedio abbiamo la generazione del codice target.
 
@@ -213,7 +213,7 @@ In questo caso si ha il canonico array bucket, da cui è possibile accedere ad u
 Questa funzione si occupa di trasformare ogni carattere in un intero non negativo, tipicamente sfruttando funzioni built-in, a cui applica ulteriori operazioni per poi arrivare all'hash.
 
 Come si può definire una funzione di hash adeguata?
-Conoscendo il dominio di applicazione. Ad esempio, nel nostro caso si può notare che spesso nella scrittura dei programmi, il programmatore va a dare nomi molto similli alle variabili: questo significa che utilizzare il suffiso degli identificatori non è una buona idea perché porterebbe a diverse collisioni.
+Conoscendo il dominio di applicazione. Ad esempio, nel nostro caso si può notare che spesso nella scrittura dei programmi, il programmatore va a dare nomi molto similli alle variabili: questo significa che utilizzare il suffisso degli identificatori non è una buona idea perché porterebbe a diverse collisioni.
 
 Una scelta tipicamente buona è la seguente
 \begin{equation}
