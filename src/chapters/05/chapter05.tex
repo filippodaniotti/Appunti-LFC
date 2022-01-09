@@ -201,10 +201,10 @@ Prima di procedere, dobbiamo definire la nozione di \emph{State Equivalence}.
     \end{labeling}    
 \end{definition}
 
-L'idea generale su cui si basa l'algoritmo di minimizzazione qui proposto è che alcuni stati sono ridondanti, e per questo possono essere rimossi senza perdere informazione, vale a dire senza modificare il linguaggio riconosciuto dal DFA. Per eliminare questi stati in eccesso, utilizziamo la procedura di \emph{partition refinement}
+L'idea generale su cui si basa l'algoritmo di minimizzazione qui proposto è che alcuni stati sono ridondanti, e per questo possono essere rimossi senza perdere informazione, vale a dire senza modificare il linguaggio riconosciuto dal DFA. Per eliminare questi stati in eccesso, utilizziamo la procedura di \emph{partition refinement}.
 
 \subsection{Partition Refinement}
-Grazie a questa procedura arriveremo a partizionare gli stati in \(2\) blocchi, dove per blocchi intendiamo dei sottinsiemi disgiunti di stati.
+Grazie a questa procedura arriveremo a partizionare gli stati in \(2\) blocchi, dove per blocchi intendiamo dei sottoinsiemi disgiunti di stati.
 
 \begin{itemize}
     \item Iniziamo con \(2\) blocchi generici, \(B_{1}=F\) e \(B_{2}=S\setminus F\). Questa scelta fa sì che i due blocchi non abbiano stati equivalenti, poiché se consideriamo due stati \(s, t\) tali che \(s\in B_{1}\) e \(t\in B_{2}\), allora vale che \(\textrm{move}_{d}\!^{*}(s,\varepsilon)\in F\) e \(\textrm{move}_{d}\!^{*}(t,\varepsilon)\notin F\).
@@ -266,7 +266,7 @@ In questo caso la funzione di transizione non è totale; dobbiamo quindi renderl
 	\caption{DFA con transizione totale}
   \label{minndfa-es-2-tot}
 \end{figure}
-Dopo aver realizzato questo, iniziamo con gli insiemi \(B_{1}=\{D\}\) e \(B_{2}=\{A,B,D,sink\}\). Possiamo fare uno \emph{split} di \(B_{2}\), in quanto \(\textrm{move}_{d}(A,a) \in B_{2} \) e \(\textrm{move}_{d}(B,a) \notin B_{2} \); da questo split otteniamo i nuovi blocchi \(B_{21}=\{A,sink\}\) e \(B_{22}=\{B,C\}\).
+Dopo aver realizzato questo, iniziamo con gli insiemi \(B_{1}=\{D\}\) e \(B_{2}=\{A,B,C,sink\}\). Possiamo fare uno \emph{split} di \(B_{2}\), in quanto \(\textrm{move}_{d}(A,a) \in B_{2} \) e \(\textrm{move}_{d}(B,a) \notin B_{2} \); da questo split otteniamo i nuovi blocchi \(B_{21}=\{A,sink\}\) e \(B_{22}=\{B,C\}\).
 
 Possiamo fare un ulteriore \emph{split} di \(B_{22}\), poiché \(\textrm{move}_{d}(B,b) \in B_{22} \) e \(\textrm{move}_{d}(C,b) \notin B_{22} \); da questo otteniamo i blocchi \(B_{221}=\{B\}\) e \(B_{222}=\{C\}\).
 
