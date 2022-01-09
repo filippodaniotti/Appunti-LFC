@@ -154,7 +154,7 @@ A questo punto, partendo dallo stato iniziale \(T_1\), è possibile spostarsi al
 
 \section*{Esercizio 5}
 
-Chiamiamo \(\mathcal{D}_m\) il  DFA  ottenuto  per  minimizzazione  di \(\mathcal{D}_1\) e \(P_1\) o  stato  iniziale  di \(\mathcal{D}_m\). Dire a quale sottoinsieme degli stati di \(\mathcal{D}_1\) corrisponde \(P[abab]\)
+Chiamiamo \(\mathcal{D}_m\) il DFA ottenuto per minimizzazione di \(\mathcal{D}_1\) e \(P_1\) lo stato iniziale di \(\mathcal{D}_m\). Dire a quale sottoinsieme degli stati di \(\mathcal{D}_1\) corrisponde \(P[abab]\).
 
 L'esercizio proposto è identico a quello svolto durante una lezione del corso: la sua risoluzione si può trovare in ~\ref{subsec:dfa-minimization} \emph{Esercizi sulla minimizzazione DFA, Esercizio 2}.
 
@@ -473,7 +473,7 @@ Per poter imporre la precedenza di un operatore sull'altro è possibile risolver
 
 Per poter implementare correttamente ciò sarà necessario fornire al parser le direttive del caso per poter gestire autonomamente la situazione
 
-I conflittti generati dalla precedenza sono duqnque \((P[EaE],b)\), che viene risolto effettuando la \texttt{reduce} \(E \to E_1 a E_2\), e \((P[EbE],a)\), risolto effettuando lo \texttt{shift}. I restanti conflitti sono dovuti alla mancata associatività degli operatori per la grammatica definita. 
+I conflitti generati dalla precedenza sono dunque \((P[EaE],b)\), che viene risolto effettuando la \texttt{reduce} \(E \to E_1 a E_2\), e \((P[EbE],a)\), risolto effettuando lo \texttt{shift}. I restanti conflitti sono dovuti alla mancata associatività degli operatori per la grammatica definita. 
 
 Se il lettore fosse interessato, può trovare una spiegazione più dettagliata su un esempio analogo nella sezione ~\ref{subsec:precedence-conflicts} \emph{Gestione dei conflitti}
 
@@ -489,6 +489,6 @@ Sia \(\G\) la seguente grammatica:
 \end{align*}
 Evitando  di  ricorrere  alla  computazione  della  tabella  di  parsing,  spiegare  perché \(\G\) certamente  non è \(LR(1)\).
 
-Pur non essendo ambigua la grammatica presenta il problema che, nel momento in cui finisce di leggere la sequenza di \(a\), non si ha idea se sia necessario eseguire un'operazione \texttt{reduce} \(A \to ab\) oppure di \texttt{shift} in modo da poter eseguire successivamente \texttt{reduce} \(B \to abb\). Per poter sapere che cosa compiere si dovrebbe conoscere l'ultimo non terminale della stringa: nel caso in cui fosse una \(a\) si saprebbe di dover applicare il primo caso descritto, se fosse una \(b\) il secondo.
+Pur non essendo ambigua, la grammatica presenta il problema che, nel momento in cui finisce di leggere la sequenza di \(a\), non si ha idea se sia necessario eseguire un'operazione \texttt{reduce} \(A \to ab\) oppure di \texttt{shift} in modo da poter eseguire successivamente \texttt{reduce} \(B \to abb\). Per poter sapere che cosa compiere si dovrebbe conoscere l'ultimo non terminale della stringa: nel caso in cui fosse una \(a\) si saprebbe di dover applicare il primo caso descritto, se fosse una \(b\) il secondo.
 
 \end{document}
