@@ -26,11 +26,11 @@ Il problema che vogliamo arrivare a risolvere è, più in generale, riconoscere 
 Ad esempio, per affrontare il problema del linguaggio \ref{a^nb^n} viene naturale l'utilizzo di una struttura di tipo stack:
 
 \begin{enumerate}
-    \item leggiamo i simboli uno alla volta e li inseriamo nel nostro stack;
-    \item per ogni \(a\) che leggiamo, inseriamola nella pila;
-    \item se troviamo una \(b\), allora facciamo un pop dalla pila;
-    \item se ad un certo punto stiamo tentando di togliere un elemento da una pila vuota o se, finita l’analisi, rimangono ancora elementi nella pila, allora c’è qualche errore;
-    \item nel caso in cui al termine dell’analisi è andato tutto liscio e abbiamo svuotato la pila, allora la parola analizzata appartiene al linguaggio \ref{a^nb^n}.
+    \item leggiamo i simboli uno alla volta;
+    \item fino a quando leggiamo \(a\), inseriamoli nella pila;
+    \item per ogni successiva \(b\) facciamo un pop dalla pila;
+    \item se ad un certo punto troviamo nuovamente il simbolo \(a\) oppure se tentiamo di togliere un elemento da una pila vuota o se, finita l’analisi, rimangono ancora elementi nella pila, allora c’è qualche errore;
+    \item nel caso in cui, al termine dell’analisi, sia andato tutto liscio e abbiamo svuotato la pila, allora la parola analizzata appartiene al linguaggio \ref{a^nb^n}.
 \end{enumerate} 
 
 La precedente strategia sicuramente è ottima quando il linguaggio ha una forma simile all'esempio che abbiamo considerato. Ma consideriamo invece la grammatica che genera tutte le parole dell’alfabeto:
