@@ -8,8 +8,8 @@
 % arara: latexmk: { clean: partial }
 \begin{document}
 \chapter{Proprietà dei linguaggi liberi}  
-% È il momento di fare una gita domenicale di famiglia presso il supermercato MondoMatematica\textregistered~e perderci tra i gli scaffali invitanti e variopinti, stregati dalla capitalistica attrazione che tutte quelle proprietà, quei lemmi e quei teoremi esercitano su di noi.
-  
+% È il momento di fare una gita domenicale di famiglia presso il supermercato MondoMatematica\textregistered~e perderci tra gli scaffali invitanti e variopinti, stregati dalla capitalistica attrazione che tutte quelle proprietà, quei lemmi e quei teoremi esercitano su di noi.
+
 \section{Proprietà di chiusura}
 \subsection*{Chiusura rispetto all'unione}
 \begin{lemma}
@@ -390,11 +390,11 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
         \underbrace{aa...a}_\text{\emph{p}}\underbrace{bb...b}_\text{\emph{p}}\underbrace{cc...c}_\text{\emph{p}}
       \end{equation*}
       la scelta di quale parola \(z\) usare è fondamentale per arrivare agevolmente alla conclusione, quindi si presti bene attenzione in questa fase (Eq.\ref{eq:pl-neg_2});
-      \item questo è il punto in cui si parla della decomposizione di \(z\) (Eq.\ref{eq:pl-neg_3}): consideriamo infatti delle sottostringe \(u, v, w, x, y\) arbitrarie, per cui:
+      \item questo è il punto in cui si parla della decomposizione di \(z\) (Eq.\ref{eq:pl-neg_3}): consideriamo infatti delle sottostringhe \(u, v, w, x, y\) arbitrarie, per cui:
       \begin{itemize}
         \item sono una decomposizione della parola \(z\) (\(z = uvwxy\));
         \item la sottostringa \(vwx\) ha dimensione inferiore o uguale a \(p\) (\(|vwx| \le p\));
-        \item le due sottostringe \(v\) e \(x\) hanno dimensione non nulla (\(|vx| > 0\));
+        \item le due sottostringhe \(v\) e \(x\) hanno dimensione non nulla (\(|vx| > 0\));
       \end{itemize}
       notiamo in particolare quali posizioni potrà assumere la sottostringa \(vwx\) all'interno della parola \(z\):
       \begin{equation*}
@@ -448,7 +448,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
   A questo punto, sfruttando anche un filo di intuizione e fantasia, possiamo concludere che il linguaggio generato comprende tutte quelle parole formate dalla ripetizione di una stessa parola su \(a\) e \(b\): \(\L(\G) =\{ww \mid w\in\{a,b\}^*\}\); questo linguaggio, sfortunatamente, non è libero. 
   
   \paragraph{Dove la chiusura alla concatenazione fallisce}
-  Prima di vedere la dimostrazione effettiva, però, qualcuno potrebbe giustamente chiedersi se possiamo fare la dimostrazione considerando un linguaggio \(\L'(\G) = \{ww \mid w\in\{a,b\}^*\}\) utilizzando la chiusura rispetto alla concatenazione. Questo però non è corretto, perché le parole che appartengono a \(\L(\G)\) hanno una struttura precisa, ossia possono sempre essere divise in due sottostringe di pari lunghezza ed equivalenti; la chiusura alla concatenazione, impostata in quel modo, rischia di non rispettare questa struttura\footnote{Questa ultima affermazione è moooolto dubbia, vorrei approfondire but damn time is running out.}. \\
+  Prima di vedere la dimostrazione effettiva, però, qualcuno potrebbe giustamente chiedersi se possiamo fare la dimostrazione considerando un linguaggio \(\L'(\G) = \{ww \mid w\in\{a,b\}^*\}\) utilizzando la chiusura rispetto alla concatenazione. Questo però non è corretto, perché le parole che appartengono a \(\L(\G)\) hanno una struttura precisa, ossia possono sempre essere divise in due sottostringhe di pari lunghezza ed equivalenti; la chiusura alla concatenazione, impostata in quel modo, rischia di non rispettare questa struttura\footnote{Questa ultima affermazione è moooolto dubbia, vorrei approfondire but damn time is running out.}. \\
   Detto questo, andiamo a vedere rapidamente la dimostrazione corretta.
   \begin{proof}
     Dal momento che la dimostrazione procede in maniera analoga a quella precedente, focalizziamoci su uno dei punti cardini, ossia la scelta di \(z\): in questo caso scegliamo \(z=a^pb^pa^pb^p\), perché ci permette di concludere la dimostrazione quasi a colpo d'occhio, perché a questo punto possiamo decomporre \(z\) in \(uvwxy\) e scegliere \(vwx = b^p\); questa \(vwx\) rispetta il vincolo \(|vwx| \le p\) e possiamo sbilanciarla scegliendo, di nuovo, un indice 0 (\(uv^0wx^0y\)), per cui il negato del pumping lemma è verificato e il linguaggio considerato non è libero.
@@ -619,7 +619,7 @@ Considerata la seguente gramatica \(\mathcal{G}\), è vero che \(\mathcal{L(G)} 
 \noindent Dal momento che siamo riusciti a trovare almeno una parola \(w = aa \in \mathcal{L(G)}\), possiamo dire senza timore di smentita che \(\mathcal{L(G)} \neq \varnothing\).
 
 \subsection*{Esercizio 6}
-Quest'ultimo esercizio sarà disivo in tre parti.
+Quest'ultimo esercizio sarà diviso in tre parti.
 
 \paragraph{Parte 1}
 Si definisca una grammatica \(\mathcal{G}\) tale che \(\mathcal{L(G)}\) sia l'insieme di tutti i numeri pari nella rappresentazione binaria. Risposta:

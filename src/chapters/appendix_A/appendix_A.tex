@@ -489,6 +489,6 @@ Sia \(\G\) la seguente grammatica:
 \end{align*}
 Evitando  di  ricorrere  alla  computazione  della  tabella  di  parsing,  spiegare  perché \(\G\) certamente  non è \(LR(1)\).
 
-Pur non essendo ambigua, la grammatica presenta il problema che, nel momento in cui finisce di leggere la sequenza di \(a\), non si ha idea se sia necessario eseguire un'operazione \texttt{reduce} \(A \to ab\) oppure di \texttt{shift} in modo da poter eseguire successivamente \texttt{reduce} \(B \to abb\). Per poter sapere che cosa compiere si dovrebbe conoscere l'ultimo non terminale della stringa: nel caso in cui fosse una \(a\) si saprebbe di dover applicare il primo caso descritto, se fosse una \(b\) il secondo.
+Pur non essendo ambigua, la grammatica presenta il problema che, nel momento in cui finisce di leggere la sequenza di \(a\), non si ha idea se sia necessario eseguire un'operazione \texttt{reduce} \(A \to ab\) oppure di \texttt{shift} in modo da poter eseguire successivamente \texttt{reduce} \(B \to abb\). Per poter sapere che cosa compiere si dovrebbe conoscere l'ultimo terminale della stringa: nel caso in cui fosse una \(a\) si saprebbe di dover applicare il primo caso descritto, se fosse una \(b\) il secondo.
 
 \end{document}
