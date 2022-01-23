@@ -1,6 +1,7 @@
 \documentclass[class=book, crop=false, oneside, 12pt]{standalone}
 \usepackage{standalone}
 \usepackage{../../style}
+\usepackage{../../style_automata}
 \usepackage{csquotes}
 \graphicspath{{./assets/images/}}
 
@@ -123,7 +124,7 @@ Questo è molto interessante: se è vero che i lessemi sono perfettamente descri
 Quindi questi lessemi, essendo descritti da delle espressioni regolari, possono anche essere riconosciuti agevolmente da una macchina a stati finiti, come ad esempio quella in figura sotto, che descrive la classe \texttt{relop} di token per gli operatori relazionali.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth,keepaspectratio]{lec-14-1}
+    \subimport{assets/figures/}{automaton-relop.tex}
     \caption{Automa che riconosce la classe \texttt{relop}}
     \label{automaton-relop}
 \end{figure}
