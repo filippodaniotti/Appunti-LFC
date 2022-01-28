@@ -13,7 +13,7 @@
 Le grammatiche che tratteremo in questo corso sono chiamate grammatiche generative, così dette perché vengono usate per generare linguaggi.
 
 \paragraph{Il vocabolario}
-Il primo passo per definire una grammatica è definirne un \emph{vocabolario}: questo è semplicemente un insieme di simboli. Alcuni di questi simboli sono chiamati \emph{terminali} (terminals) e giocano il ruolo di token nell’analisi lessicale. Un simbolo particolare nella grammatica è lo start symbol: come suggerisce il nome, questo è il simbolo che permette di iniziare a generare il linguaggio derivato dalla grammatica (tale processo sarà chiarito in seguito).
+Il primo passo per definire una grammatica è definirne un \emph{vocabolario}: questo è semplicemente un insieme di simboli. Alcuni di questi simboli sono chiamati \emph{terminali} (terminals) e giocano il ruolo di token nell'analisi lessicale. Un simbolo particolare nella grammatica è lo start symbol: come suggerisce il nome, questo è il simbolo che permette di iniziare a generare il linguaggio derivato dalla grammatica (tale processo sarà chiarito in seguito).
 
 \paragraph{Le produzioni}
 Altra cosa da fissare in una grammatica è il set delle produzioni (productions); queste sono regole di riscrittura da stringhe in altre stringhe e rispettano la seguente limitazione: la stringa di partenza deve contenere almeno un simbolo non-terminale. Un esempio di regole per una grammatica è il seguente:
@@ -26,25 +26,25 @@ Per quanto abbiamo visto fin ora una grammatica generativa è composta da:
 \begin{itemize}
     \item Un vocabolario, ovvero l'insieme dei simboli
     \item Alcuni simboli speciali, ovvero i terminali, i non terminali ed il simbolo di partenza
-    \item Le produzioni, ovvero regole che permettono di trasformare stringhe contenenti non terminali in qualcos’altro
+    \item Le produzioni, ovvero regole che permettono di trasformare stringhe contenenti non terminali in qualcos'altro
 \end{itemize}
 Questi sono gli ingredienti di una grammatica generativa.
 
 \paragraph{Il linguaggio}
-Il linguaggio generato da una grammatica è l’insieme di stringhe composte solo da terminali che può essere generato partendo dallo start symbol di quella stessa grammatica.
+Il linguaggio generato da una grammatica è l'insieme di stringhe composte solo da terminali che può essere generato partendo dallo start symbol di quella stessa grammatica.
 
 \subsection{Derivare il linguaggio di una grammatica generativa}
 Per derivare un linguaggio dalla grammatica generativa dobbiamo applicare (quante volte possiamo) tutte le regole di riscrittura che appartengono alla grammatica stessa. 
 
 \paragraph{Le derivazioni}
-Ogni riscrittura è chiamata derivation step (operazione denotata dal simbolo \(\implies\), diverso dal simbolo usato nelle produzioni \(\to\)). L’operazione di derivazione serve per tradurre stringhe con caratteri non terminali in stringhe composte solo da caratteri terminali (seguendo le regole dettate dalle produzioni).
+Ogni riscrittura è chiamata derivation step (operazione denotata dal simbolo \(\implies\), diverso dal simbolo usato nelle produzioni \(\to\)). L'operazione di derivazione serve per tradurre stringhe con caratteri non terminali in stringhe composte solo da caratteri terminali (seguendo le regole dettate dalle produzioni).
 
 \paragraph{Un esempio pratico}
 Partendo dalla grammatica espressa in \ref{produzioni_esempio_0} possiamo sviluppare la seguente derivazione:
 \begin{equation}
     S \implies ab
 \end{equation}
-Questa è una derivazione da \(S\) con un singolo step; la parola \(ab\) appartiene al linguaggio della nostra grammatica d’esempio.
+Questa è una derivazione da \(S\) con un singolo step; la parola \(ab\) appartiene al linguaggio della nostra grammatica d'esempio.
 Un'altra derivazione possibile è la seguente:
 \begin{equation}
     S \implies aSb \implies aaSbb
@@ -109,7 +109,7 @@ Da questa forma, per eliminare tutti i non terminali \(B\), non abbiamo altra so
     \label{Esercizio 4}
 \end{table}
 \subsubsection*{Spiegazione di Tab.\ref{Esercizio 4}:}
-La grammatica specificata nell'esercizio non permette di generare stringhe contenenti solo caratteri terminali, di conseguenza non genera alcuna parola valida. Essendo il linguaggio definito come un insieme di parole che la grammatica può creare, per male che vada tale insieme è vuoto, ma esiste sempre. Questo è proprio il nostro caso, il linguaggio di questa grammatica è l’insieme vuoto.
+La grammatica specificata nell'esercizio non permette di generare stringhe contenenti solo caratteri terminali, di conseguenza non genera alcuna parola valida. Essendo il linguaggio definito come un insieme di parole che la grammatica può creare, per male che vada tale insieme è vuoto, ma esiste sempre. Questo è proprio il nostro caso, il linguaggio di questa grammatica è l'insieme vuoto.
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{exercise5.tex}
@@ -117,7 +117,7 @@ La grammatica specificata nell'esercizio non permette di generare stringhe conte
     \label{Esercizio 5}
 \end{table}
 \subsubsection*{Spiegazione di Tab.\ref{Esercizio 5}:}
-Non c'è molto da dire in questo caso se non che l’insieme contenente la parola vuota è diverso dall’insieme vuoto \(\{\varepsilon\} \neq \emptyset\).
+Non c'è molto da dire in questo caso se non che l'insieme contenente la parola vuota è diverso dall'insieme vuoto \(\{\varepsilon\} \neq \emptyset\).
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{exercise6.tex}
@@ -153,11 +153,11 @@ Una grammatica generativa è una tupla con questa forma \(\mathcal{G}=(V, T, S, 
 \end{itemize}
 Una volta definiti i componenti di una grammatica generativa, definiamo le convenzioni notazionali (o notazioni convenzionali) che si usano in questo campo:
 \begin{itemize}
-    \item Lettere maiuscole all’inizio dell’alfabeto (\(A\), \(B\)…) significano simbolo non terminale (\(\in (V \setminus T)\)).
-    \item Lettere maiuscole alla fine dell’alfabeto (\(X\), \(Y\), \(Z\)…) un generico simbolo del vocabolario, terminale o meno, non si sa (\(\in V\)).
+    \item Lettere maiuscole all'inizio dell'alfabeto (\(A\), \(B\)…) significano simbolo non terminale (\(\in (V \setminus T)\)).
+    \item Lettere maiuscole alla fine dell'alfabeto (\(X\), \(Y\), \(Z\)…) un generico simbolo del vocabolario, terminale o meno, non si sa (\(\in V\)).
     \item Lettere minuscole inizio alfabeto (\(a\), \(b\)…) per indicare caratteri terminali (\(\in T\)).
     \item Lettere minuscole greche per indicare stringhe che possono essere composte da terminali o non terminali \(\in V^*\), dove \(^*\) significa che possono esserci zero o più ripetizioni di elementi nella base.
-    \item Lettere minuscole in fondo all’alfabeto con pedice numerico (\(w\), \(w_0\)…) per indicare stringhe di caratteri terminali, dette anche \(words\) o \(parole\) del linguaggio. 
+    \item Lettere minuscole in fondo all'alfabeto con pedice numerico (\(w\), \(w_0\)…) per indicare stringhe di caratteri terminali, dette anche \(words\) o \(parole\) del linguaggio. 
 \end{itemize}
 
 \paragraph{La produzione}
@@ -165,7 +165,7 @@ La produzione, detto in termini molto pragmatici, è un oggetto che ha questa fo
 \begin{equation}
     \delta \to \beta
 \end{equation}
-Dove \(\delta \in V^+\), \(\delta\) contiene almeno un non terminale (non traduciamo terminali in altri terminali); il \(^+\) significa che c’è una o più ripetizioni di elementi nella base, che quindi non è vuota (\(\varepsilon\)).\\
+Dove \(\delta \in V^+\), \(\delta\) contiene almeno un non terminale (non traduciamo terminali in altri terminali); il \(^+\) significa che c'è una o più ripetizioni di elementi nella base, che quindi non è vuota (\(\varepsilon\)).\\
 \(\delta\) è detto \textbf{driver} della produzione mentre \(\beta\) è detto \textbf{body} della produzione.
 
 \paragraph{Il linguaggio}
@@ -184,17 +184,17 @@ Si parla di \emph{context-free grammars}, o free grammars (grammatiche libere), 
 Si dice di un linguaggio che è context-free se esiste una grammatica libera che genera quello stesso linguaggio: \(\mathcal{L}\) è un linguaggio libero se e solo se esiste una grammatica libera \(\mathcal{G}\) tale che \(\mathcal{L}=\mathcal{L}(\mathcal{G})\).
 
 \paragraph{}
-L’operazione di analizzare una stringa e verificare se appartiene ad una determinata grammatica dipende naturalmente dal metodo con cui si decide di applicare la derivazione dallo starting symbol della grammatica stessa. Se una stringa si può derivare da una certa grammatica, si dice che la prima appartiene al linguaggio di quest'ultima.
+L'operazione di analizzare una stringa e verificare se appartiene ad una determinata grammatica dipende naturalmente dal metodo con cui si decide di applicare la derivazione dallo starting symbol della grammatica stessa. Se una stringa si può derivare da una certa grammatica, si dice che la prima appartiene al linguaggio di quest'ultima.
 Esistono due tipi di derivazione canonica:
 \begin{itemize}
     \item rightmost (si rimpiazzano sempre prima i non terminali più a destra)
     \item leftmost (si rimpiazzano sempre prima i non terminali più a sinistra)
 \end{itemize}
-Se utilizziamo come strategia una di queste due tutti i passi analitici di una derivazione sono deterministici, perché ad ogni passo o si procede con l’elemento più a destra o si procede con quello più a sinistra. Per questo motivo queste sono le due modalità di derivazione canonica.
+Se utilizziamo come strategia una di queste due tutti i passi analitici di una derivazione sono deterministici, perché ad ogni passo o si procede con l'elemento più a destra o si procede con quello più a sinistra. Per questo motivo queste sono le due modalità di derivazione canonica.
 
 \paragraph{Gli alberi di derivazione}
 Le grammatiche libere si prestano in modo naturale ad essere processate tramite il cosiddetto albero di derivazione. Questo albero ha come radice lo starting symbol, poi, per ogni passo di derivazione secondo una produzione in forma \(A \to X_1 \mid X_2 \mid\dots\mid X_n \), si generano \(n\) figli del nodo con la derivazione di \(A\) messa in atto.
-Le foglie dell’albero saranno composte da \(\varepsilon\) oppure da caratteri terminali. In Fig.\ref{albero_di_derivazione} è riportato come esempio un albero di derivazione della grammatica:
+Le foglie dell'albero saranno composte da \(\varepsilon\) oppure da caratteri terminali. In Fig.\ref{albero_di_derivazione} è riportato come esempio un albero di derivazione della grammatica:
 \begin{equation}
     S \to aSb \mid \varepsilon
     \label{grammatica_allbero}
@@ -206,7 +206,7 @@ Le foglie dell’albero saranno composte da \(\varepsilon\) oppure da caratteri 
     \label{albero_di_derivazione}
 \end{figure}
 Ma tornando con i piedi per terra, cosa c'entra tutto questo con i compilatori?\\
-Un certo programma che è stato trasformato in una stringa viene verificato controllando che la tale stringa sia derivata dalla grammatica del linguaggio in cui il programma è scritto. Un modo per verificare questo è trovare l’albero di derivazione della stringa che rappresenta tale programma.
+Un certo programma che è stato trasformato in una stringa viene verificato controllando che la tale stringa sia derivata dalla grammatica del linguaggio in cui il programma è scritto. Un modo per verificare questo è trovare l'albero di derivazione della stringa che rappresenta tale programma.
 
 \subsection{Ambiguità delle grammatiche}\label{sec:ambiguity}
 Una grammatica \(\mathcal{G}\) si dice ambigua se esiste \(w \in \mathcal{L}(\mathcal{G})\) che può essere derivata da due derivazioni canoniche distinte, entrambe rightmost o entrambe leftmost. Distinte significa che l'ordine di applicazione delle produzioni è differente, ma questo sarà più chiaro in seguito. Noi non vogliamo grammatiche ambigue, ci complicano la vita. 
@@ -250,7 +250,7 @@ La domanda che ci poniamo a questo punto è: si tratta di una grammatica ambigua
     \label{dangling_else}
     w =\; if\; b\; then\; if\; b\; then\; other\; else\; other
 \end{equation}
-Con quale \(then\) è accoppiato l’\(else\)? Non si può sapere! Di fatto possiamo ricostruire \(w\) con questi due diversi alberi:
+Con quale \(then\) è accoppiato l'\(else\)? Non si può sapere! Di fatto possiamo ricostruire \(w\) con questi due diversi alberi:
 \begin{figure}[H]
     \begin{minipage}{.5\textwidth}
         \centering
@@ -270,15 +270,15 @@ Questo ci introduce il problema di come trattare la gestione di un contesto \tex
 Per questo nei vari linguaggi troviamo sempre qualche forma di strategia per risolvere questo problema:
 \begin{itemize}
     \item Mettere le parentesi
-    \item Eliminare l’else e usare solo if
-    \item Usare la regola del closest unmatched then (l’\(else\) è sempre valutato come appartenente all’ultimo \(then\) non ancora elsato)
+    \item Eliminare l'else e usare solo if
+    \item Usare la regola del closest unmatched then (l'\(else\) è sempre valutato come appartenente all'ultimo \(then\) non ancora elsato)
 \end{itemize}
-L’else è intrinsecamente ambiguo.
+L'else è intrinsecamente ambiguo.
 
 \paragraph{Un'osservazione}
-L’ambiguità in alcuni casi può essere indecidibile, in quanto non sempre esiste un algoritmo che ci dice se la grammatica è ambigua o no; al momento, tutto ciò che sappiamo fare per determinare l'ambiguità di una grammatica è applicare la definizione, ossia cercare di derivare una stessa parola mediante due diverse derivazioni, entrambe o rightmost o leftmost.
+L'ambiguità in alcuni casi può essere indecidibile, in quanto non sempre esiste un algoritmo che ci dice se la grammatica è ambigua o no; al momento, tutto ciò che sappiamo fare per determinare l'ambiguità di una grammatica è applicare la definizione, ossia cercare di derivare una stessa parola mediante due diverse derivazioni, entrambe o rightmost o leftmost.
 
 \subsection{Piccola parentesi sui linguaggi naturali (tutto da ripensare)}
-I linguaggi naturali spesso nascondono molte più ambiguità delle grammatiche che affronteremo in questo corso. D'altro canto le grammatiche per linguaggi di programmazione sono molto difficili da scrivere anche perché sono pensate e studiate per ottenere una certa velocità di analisi del codice. Il linguaggio naturale è ben più complesso: immagina quanto dev’essere difficile descrivere una grammatica per il linguaggio naturale ed immagina poi quale complessità può avere un algoritmo di verifica di tale grammatica, ammesso che questo possa esistere. Pensa solo al fatto che spesso e volentieri il linguaggio naturale dipende dal contesto! Questa cosa nei linguaggi di programmazione non s’è mai vista per fortuna. I parser per linguaggi di programmazione hanno complessità lineare di norma, se si va a vedere i parser del linguaggio naturale\dots  sayonara!
+I linguaggi naturali spesso nascondono molte più ambiguità delle grammatiche che affronteremo in questo corso. D'altro canto le grammatiche per linguaggi di programmazione sono molto difficili da scrivere anche perché sono pensate e studiate per ottenere una certa velocità di analisi del codice. Il linguaggio naturale è ben più complesso: immagina quanto dev'essere difficile descrivere una grammatica per il linguaggio naturale ed immagina poi quale complessità può avere un algoritmo di verifica di tale grammatica, ammesso che questo possa esistere. Pensa solo al fatto che spesso e volentieri il linguaggio naturale dipende dal contesto! Questa cosa nei linguaggi di programmazione non s'è mai vista per fortuna. I parser per linguaggi di programmazione hanno complessità lineare di norma, se si va a vedere i parser del linguaggio naturale\dots  sayonara!
 
 \end{document}

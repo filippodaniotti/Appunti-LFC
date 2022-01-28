@@ -31,7 +31,7 @@ e che quindi espressioni come la seguente sono grammaticali e ben formate second
 \end{minted}
 Il mestiere dell'analizzatore lessicale è proprio quello di ricevere in input un \texttt{pippo} qualsiasi e, in output, determinare che è un \emph{identificatore}, ossia la categoria più astratta (lessema) di cui \texttt{pippo} è istanza.
 
-% L’analizzatore lessicale lavora in tandem (pipeline) con l’analizzatore sintattico per non si sa bene come o perché
+% L'analizzatore lessicale lavora in tandem (pipeline) con l'analizzatore sintattico per non si sa bene come o perché
 \subsection{Esempio: la grammatica di C99}
 Andiamo a vedere da vicino la grammatica di un reale linguaggio, anzi, del linguaggio preferito di tutti noi, ossia il C (nella versione \(99\), scritta per il parser \emph{Bison}); il lettore interessato ad approfondire può trovare lo stesso file al seguente indirizzo: \url{http://www.quut.com/c/ANSI-C-grammar-y-1999.html}. Andiamo a vedere un frammento di quel codice:
 \ifthenelse{\boolean{isCompiledFromMain}}{%
@@ -92,7 +92,7 @@ Un'altra cosa che possiamo osservare è la dichiarazione di quello che è lo sta
 Questa dichiarazione in realtà potrebbe non essere presente su alcuni file contenenti grammatiche, dal momento che, in sua assenza, non otteniamo degli errori, bensì viene preso il non-terminale della prima produzione listata a seguito come starting symbol.
 
 
-Il ruolo dell’analizzatore lessicale è quindi analizzare il sorgente e decidere, di volta in volta, quale derivazione può essere applicata a ciascuna delle righe del sorgente analizzato. Una volta completato l'albero di derivazione e quindi arrivato presso un terminale (ad esempio \texttt{IDENTIFIER}), l'analizzatore lessicale andrà anche ad associargli informazioni come valore e tipo, dal momento che è necessario distinguere quell'\texttt{IDENTIFIER} da un altro. Nel programma potremmo appunto avere due \texttt{IDENTIFIER} di diverso tipo, ma in ogni caso dovremo conservare delle informazioni aggiuntive di qualche sorta (nome, tipo, scope e altro ancora). Tutte queste informazioni vengono conservate in una \emph{symbol table}.
+Il ruolo dell'analizzatore lessicale è quindi analizzare il sorgente e decidere, di volta in volta, quale derivazione può essere applicata a ciascuna delle righe del sorgente analizzato. Una volta completato l'albero di derivazione e quindi arrivato presso un terminale (ad esempio \texttt{IDENTIFIER}), l'analizzatore lessicale andrà anche ad associargli informazioni come valore e tipo, dal momento che è necessario distinguere quell'\texttt{IDENTIFIER} da un altro. Nel programma potremmo appunto avere due \texttt{IDENTIFIER} di diverso tipo, ma in ogni caso dovremo conservare delle informazioni aggiuntive di qualche sorta (nome, tipo, scope e altro ancora). Tutte queste informazioni vengono conservate in una \emph{symbol table}.
 
 Infine, le ultime righe del file contengono informazioni utili al particolare analizzatore sintattico utilizzato; avremo modo di parlarne nel dettaglio in futuro.
 
@@ -153,7 +153,7 @@ Adesso dobbiamo pensare come ottimizzare l'uso di una struttura simile per l'ana
 Il procedimento che seguiamo è il seguente:
 \begin{enumerate}
     \item innanzitutto simuliamo l'NFA creato come sopra descritto;
-    \item nel caso di ambiguità, ossia di situazioni come quella descritta sopra tra \mintinline{c}{if} e \mintinline{c}{iffoff}, la convenzione è di proseguire la simulazione finché nessun’altra transizione è possibile, solitamente quando incontriamo uno spazio o un \texttt{\(\backslash\)n}, privilegiando quindi il match più lungo (si parla di cercare il \emph{longest match});
+    \item nel caso di ambiguità, ossia di situazioni come quella descritta sopra tra \mintinline{c}{if} e \mintinline{c}{iffoff}, la convenzione è di proseguire la simulazione finché nessun'altra transizione è possibile, solitamente quando incontriamo uno spazio o un \texttt{\(\backslash\)n}, privilegiando quindi il match più lungo (si parla di cercare il \emph{longest match});
     \item se nell'insieme di stati che abbiamo raggiunto ci sono delle azioni disponibili, allora andremo ad eseguire quella appartenente al longest match, in caso di pareggio ciascuna azione avrà una priorità, e noi eseguiremo quella con più alta priorità;
     \item se nessun'azione è disponibile, dobbiamo invece tornare indietro nella sequenza di stati percorsi, fermarci nel primo insieme di stati che presenta almeno uno stato finale e delle azioni associate e cercare di nuovo quella prioritaria; per ognuno di questi passi all'indietro, dobbiamo ricordarci di aggiornare il puntatore all'input buffer.
 \end{enumerate}

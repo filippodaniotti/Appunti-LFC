@@ -274,7 +274,7 @@ A questo punto, il miglior modo per procedere con l'algoritmo è, in mancanza di
     \caption{Esercizio sui first}
     \label{computing-first}
 \end{table}
-Cosa succede se invece, al posto della produzione \(T \to FT'\), diventa \(T \to T’F\)? Lasciando il resto dell'esercizio invariato, proviamo a calcolare \(first(T)\). In questo caso avremmo dovuto analizzare prima i \(first(T’) = \{\varepsilon, \ast\}\) e aggiungere \(first(T’) \setminus \{\varepsilon\} = \{\ast\}\) a \(first(T)\); tuttavia, dal momento che \(\varepsilon \in first(T')\), l’algoritmo non può arrestarsi (perché potrebbe darsi che \(T'\) sia nullo), ma è necessario considerare anche i \(first(F)\). Come svolto precedentemente aggiungiamo \(first(F) \setminus \{\varepsilon\} = \{id, (\}\) a \(first(T)\); essendo che \(\varepsilon \notin first(F)\) posso interrompere l'algoritmo e segnare che \(first(T) = \{\ast, id, (\}\)
+Cosa succede se invece, al posto della produzione \(T \to FT'\), diventa \(T \to T'F\)? Lasciando il resto dell'esercizio invariato, proviamo a calcolare \(first(T)\). In questo caso avremmo dovuto analizzare prima i \(first(T') = \{\varepsilon, \ast\}\) e aggiungere \(first(T') \setminus \{\varepsilon\} = \{\ast\}\) a \(first(T)\); tuttavia, dal momento che \(\varepsilon \in first(T')\), l'algoritmo non può arrestarsi (perché potrebbe darsi che \(T'\) sia nullo), ma è necessario considerare anche i \(first(F)\). Come svolto precedentemente aggiungiamo \(first(F) \setminus \{\varepsilon\} = \{id, (\}\) a \(first(T)\); essendo che \(\varepsilon \notin first(F)\) posso interrompere l'algoritmo e segnare che \(first(T) = \{\ast, id, (\}\)
 
 \section{Follow(\(A\))}
 \subsection{Definizione}
@@ -375,7 +375,7 @@ Per comodità notazionale, dato che nelle produzioni dell'esercizio compare il n
         \item in questo caso ho che devo aggiungere a \(follow(B)\) i \(first(b)\), ovvero \(\{b\}\);
         \item \(\beta\) è diverso da \(\varepsilon\) ed inoltre \(\varepsilon \notin first(\beta)\), quindi termino anche questo branch.
     \end{enumerate}
-    \item Ho concluso quindi l’analisi delle produzioni di \(S\) e passo quindi ad analizzare la produzione di \(A\):
+    \item Ho concluso quindi l'analisi delle produzioni di \(S\) e passo quindi ad analizzare la produzione di \(A\):
     \begin{enumerate}
         \item parto da \(A \to Ac\): in questo caso non ho altra scelta che considerare \(X = A\), quindi \(\beta = c\): ricadendo nel primo \texttt{if} dell'algoritmo, aggiungo \(first(c) \setminus \{\varepsilon\}\) (ovvero \(\{c\}\)) ai \(follow(A)\);
         \item chiudo quindi il branch dato che il secondo \texttt{if} non si applica;
@@ -389,7 +389,7 @@ Per comodità notazionale, dato che nelle produzioni dell'esercizio compare il n
         \item in questo caso andiamo direttamente nel secondo \texttt{if} che ci dice di aggiungere i \(follow(B)\) ai \(follow(D)\); nella tabella, quindi, indico un altro placeholder;
         \item abbiamo terminato le possibili interpretazioni delle produzioni per la derivazione \(B \to CD\).
     \end{enumerate}
-    \item Le produzioni di \(C\), come quelle di \(D\), non sono del tipo \(\alpha X \beta\), dato che non contengono caratteri non-terminali; queste produzioni non ci danno informazioni sui \emph{follow} e l’algoritmo ci dice pertanto di ignorarle;
+    \item Le produzioni di \(C\), come quelle di \(D\), non sono del tipo \(\alpha X \beta\), dato che non contengono caratteri non-terminali; queste produzioni non ci danno informazioni sui \emph{follow} e l'algoritmo ci dice pertanto di ignorarle;
     \item a questo punto abbiamo terminato le produzioni da analizzare, non ci resta altro che risolvere i placeholder che abbiamo lasciato nella tabella durante i passi precedenti.
 \end{enumerate}
 Osserviamo in Tab.\ref{first-follow-ex-2_step-2} come risulta la tabella prima della sostituzione dei placeholder
@@ -446,14 +446,14 @@ Una volta inseriti i first nella tabella ci troveremo nella situazione rappresen
 \end{table}
 Ora è il momento di tuffarci a capofitto nel calcolo dei \emph{follow}; anche in questo caso tenteremo di mantenere la spiegazione concisa ma completa e, per comodità notazionale, dato che nelle produzioni dell'esercizio compare il non-terminale \(A\), anche in quest'esercizio scriveremo \(X\) per indicare la \(A\) dell'algoritmo per il calcolo del \emph{follow} (come già fatto per il caso precedente). 
 
-Prima di affogare nei calcoli, è interessante osservare più da vicino qual è l’idea sottesa all'inserimento di \(\$\) in follow(\(S\)) come primo passo.
+Prima di affogare nei calcoli, è interessante osservare più da vicino qual è l'idea sottesa all'inserimento di \(\$\) in follow(\(S\)) come primo passo.
 
-Questa azione risulta intuitiva se si pensa che \(follow(Z)\) rappresenta quello che io mi aspetto di poter trovare dopo quello che derivo da un certo simbolo non-terminale \(Z\), con un certo numero di passi; quindi si capisce che, essendo \(S\) l’origine di tutte le parole generate da una certa grammatica, mi aspetto che, una volta analizzato tutto ciò che è generato da \(S\), troverò il terminatore di stringa, ovvero proprio \(\$\).
+Questa azione risulta intuitiva se si pensa che \(follow(Z)\) rappresenta quello che io mi aspetto di poter trovare dopo quello che derivo da un certo simbolo non-terminale \(Z\), con un certo numero di passi; quindi si capisce che, essendo \(S\) l'origine di tutte le parole generate da una certa grammatica, mi aspetto che, una volta analizzato tutto ciò che è generato da \(S\), troverò il terminatore di stringa, ovvero proprio \(\$\).
 
 \noindent Bene, ora siamo pronti a fare a pugni coi calcoli.
 
 \begin{enumerate}
-    \item Partiamo con l’analizzare le produzioni di \(S\), iniziando con \(S \to aA\);
+    \item Partiamo con l'analizzare le produzioni di \(S\), iniziando con \(S \to aA\);
     \begin{enumerate}
         \item possiamo considerare solo \(X = A\), quindi per forza di cose avremo che \(\beta = \varepsilon\);
         \item passiamo subito al secondo \texttt{if}, che ci dice di aggiungere i \(follow(S)\) ai \(follow(A)\); lasciamo quindi un placeholder nella tabella e proseguiamo.
@@ -475,7 +475,7 @@ Questa azione risulta intuitiva se si pensa che \(follow(Z)\) rappresenta quello
         \item in questo caso \(X = C\), quindi troviamo che \(\beta = c\);
         \item come per il caso appena visto, aggiungiamo \(first(c)=\{c\}\) a \(follow(C)\) e chiudiamo il branch.
     \end{enumerate}
-    \item Infine, tutte le rimanenti produzioni non sono nella forma \(\alpha X \beta\), quindi possiamo ragionevolmente dire di aver terminato l’analisi;
+    \item Infine, tutte le rimanenti produzioni non sono nella forma \(\alpha X \beta\), quindi possiamo ragionevolmente dire di aver terminato l'analisi;
     \item l'ultimo passo che rimane da svolgere è la sostituzione dei placeholder.
 \end{enumerate}
 Osserviamo quindi in Tab.\ref{first-follow-ex-3_step-2}, come risulta la tabella dell' Es.\ref{first-follow-ex-3} prima della sostituzione dei placeholder.
