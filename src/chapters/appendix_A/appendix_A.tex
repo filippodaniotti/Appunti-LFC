@@ -26,7 +26,7 @@ Detto questo, cominciamo.
 
 Se \(\{ww \mid w \in \L((a \mid b)^*)\}\) è un linguaggio regolare rispondere “SI”, altrimenti rispondere “NO”.
 
-Analizziamo il tutto a mente fredda: la domanda è se il linguaggio proposto è regolare, una sottoclasse dei linguaggi liberi. In questo caso non ha senso perdersi sulla definizione in quanto il linguaggio di partenza (i.e. quello a cui appartiene \(w\)) è sicuramente regolare in quanto è denotato da un'espressione regolare. A questo punto potremmo pensare che la risposta sia banala, un mero richiamo della proprietà di chiusura rispetto alla concatenazione: “visto che i linguaggi regolari sono chiusi rispetto alla concatenazione allora il linguaggio fornito è regolare”. Giusto? MA NEANCHE PER SBAGLIO! 
+Analizziamo il tutto a mente fredda: la domanda è se il linguaggio proposto è regolare, una sottoclasse dei linguaggi liberi. In questo caso non ha senso perdersi sulla definizione in quanto il linguaggio di partenza (i.e. quello a cui appartiene \(w\)) è sicuramente regolare in quanto è denotato da un'espressione regolare. A questo punto potremmo pensare che la risposta sia banale, un mero richiamo della proprietà di chiusura rispetto alla concatenazione: “visto che i linguaggi regolari sono chiusi rispetto alla concatenazione allora il linguaggio fornito è regolare”. Giusto? MA NEANCHE PER SBAGLIO! 
 
 Osserviamo meglio il tutto: se veramente valesse la proprietà di concatenazione potremmo scrivere il tutto come 
 
@@ -441,7 +441,7 @@ Caliamoci dunque nei panni del parser e immaginiamo come dovremmo considerare la
 
 \begin{enumerate}
     \item Come detto precedentemente, i terminali \(n\) comportano \texttt{reduce} \(E \to n\) e ciò accade indipendentemente dal carattere letto dall'input buffer, questo perché nel nostro linguaggio abbiamo la possibilità di fare parole del tipo \(n,\; n+n,\; n*n,\; n+n*n,\; n*n+n\)
-    \item Per questo motivo non dovrebbero esserci problemi ad arrivare al punto in cui \(sySt = EaE\); essendo che abbimo eseguito implicitamente delle reduce ricordiamoci che le \(E.v = n.lexval\)
+    \item Per questo motivo non dovrebbero esserci problemi ad arrivare al punto in cui \(sySt = EaE\); essendo che abbiamo eseguito implicitamente delle reduce ricordiamoci che le \(E.v = n.lexval\)
     \item A questo punto avremmo un conflitto di shift/reduce citato in precedenza, tuttavia ci viene detto di dare priorità all'operazione di \texttt{shift}
     \item Eseguendo tale operazione ci ritroviamo nella situazione analoga dove non si dovrebbero avere troppi problemi nell'arrivare al punto in cui \(sySt = EaEbE\)
     \item A questo punto, leggendo in input \$, non è possibile fare altro se non eseguire un'operazione di \texttt{reduce} \(E \to E_1bE_2\), per cui \(sySt = EaE\) e, applicando la regola associata alla riduzione, otteniamo \(E.v = E_1.v + E_2.v = 3 + 4 = 7\) 
