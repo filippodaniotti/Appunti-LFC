@@ -153,7 +153,7 @@ Ci rimane ora da analizzare \([S \to \cdot R, \{\$\}]\), che soddisfa la nostra 
     [R &\to \cdot L, \{\$\}]
 \end{align*}
 questo item presenta il marker davanti a un non-terminale; può generare nuovi item per la chiusura che stiamo calcolando?
-Nonostante la produzione con driver \(L\) sia già stata analizzata (vedi Eq.\ref{prod:production-L}), è necessario eseguire nuovamente la sua chiusura in quanto ha un lookahed-set differente (nel caso precedente \(\beta= \; \;  =R\), mentre ora \(\beta=\varepsilon\)), il che ci porta a ripetere la chiusura per l'item \([R \to \cdot L, \{\$\}]\), ricavando i seguenti LR(1)-items:
+Nonostante la produzione con driver \(L\) sia già stata analizzata (vedi Eq.\ref{prod:production-L}), è necessario eseguire nuovamente la sua chiusura in quanto ha un lookahead-set differente (nel caso precedente \(\beta= \; \;  =R\), mentre ora \(\beta=\varepsilon\)), il che ci porta a ripetere la chiusura per l'item \([R \to \cdot L, \{\$\}]\), ricavando i seguenti LR(1)-items:
 \begin{align*}
     [L &\to \cdot *R, \{\$\}] \\
     [L &\to \cdot id, \{\$\}]
@@ -879,7 +879,7 @@ Kernel dello stato 1:
     \caption{Kernel stato 1: sulla sinistra automa simbolico, sulla destra automa LR(1)}
 \end{figure}
 notiamo come invece che scrivere il lookahead set come insieme creiamo una nuova variabile \(x_1\) per indicarlo: questo stratagemma ci serve per aggiornare il valore del lookahead set nel caso dovessimo tornare in questo stato con un nuovo \(\Delta\), sarà chiaro in seguito. Dobbiamo aggiornare anche il nostro sistema in cui salviamo il valore effettivo della variabile.
-In questo caso il lookahed set del kernel, essendo \(\beta = \varepsilon\) è proprio uguale al lookahead set della produzione da cui arriviamo, quindi \(x_0\), aggiorniamo dunque alacremente il nostro sistema di equazioni.
+In questo caso il lookahead set del kernel, essendo \(\beta = \varepsilon\) è proprio uguale al lookahead set della produzione da cui arriviamo, quindi \(x_0\), aggiorniamo dunque alacremente il nostro sistema di equazioni.
 \begin{align*}
     Sistema:& \\
             & x_0 = \{\$\} \\
@@ -1201,7 +1201,7 @@ Kernel dello stato 1:
 \begin{align*}
     S' \to S \cdot, x_1
 \end{align*}
-In questo caso \(\beta = \varepsilon\), quindi il lookahead set del kernel sarà uguale al lookahead set della produaizone che ci ha portati in 1, ci salviamo questo risultato.
+In questo caso \(\beta = \varepsilon\), quindi il lookahead set del kernel sarà uguale al lookahead set della produzione che ci ha portati in 1, ci salviamo questo risultato.
 \begin{align*}
     Sistema:& \\
             & x_0 = \{\$\}\\
