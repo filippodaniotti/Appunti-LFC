@@ -429,7 +429,7 @@ Ci troviamo ora nello stato 2 e leggiamo il secondo carattere della parola che �
 Ora siamo in 4 e leggiamo \(b\). La cella [4,\(b\)] ci suggerisce di compiere una mossa di reduce, nello specifico \(R: A \to b\); questo significa che compiremo due operazioni:
 \begin{itemize}
     \item elimineremo tanti stati da \(stSt\) quanti gli elementi nel body della produzione (ovvero \(1\), dato che \(|b|\ = 1\));
-    \item eliminiremo il body stesso da \(symSt\) e, al suo posto, inseriremo il driver della riduzione, in questo caso \(A\).
+    \item elimineremo il body stesso da \(symSt\) e, al suo posto, inseriremo il driver della riduzione, in questo caso \(A\).
 \end{itemize} 
 Le nostre strutture saranno quindi valorizzate così: 
 \begin{align*}
@@ -622,7 +622,7 @@ Tutto questo è fantastico, ma purtroppo c'è un grosso elefante nella nostra st
 \end{table}
 \noindent Quindi, se vogliamo perseguire la nostra ricerca di un parsing deterministico (e lo vogliamo), toccherà rimboccarsi le maniche e andare a capire come possiamo risolvere questi conflitti, non diversamente da quanto già avevamo fatto nel parsing top-down con le entries multiple defined.
 
-I nostri conflitti sono localizzati solo in quattro situazioni, ovverp quando ci troviamo in uno tra gli stati 5 o 6 e, contemporaneamente, troviamo in lettura un simbolo tra \(+\) o \(\ast\).
+I nostri conflitti sono localizzati solo in quattro situazioni, ovvero quando ci troviamo in uno tra gli stati 5 o 6 e, contemporaneamente, troviamo in lettura un simbolo tra \(+\) o \(\ast\).
 
 \begin{table}[H]
     \centering
@@ -641,7 +641,7 @@ E insomma, qual è il segreto per risolvere questi dannati conflitti? Quello che
 \paragraph{L'utilità dei parse trees}
 Possiamo aiutarci se pensiamo ai parse tree della nostra grammatica: gli alberi, infatti, per loro stessa costruzione, veicolano informazioni sull'annidamento dei loro elementi in maniera molto efficace, e l'annidamento può tranquillamente avere una corrispondenza diretta con la parentesizzazione (quindi con le regole di precedenza tra espressioni). Di fatto assumendo, come facciamo noi, che i sottoalberi vengano risolti prima degli alberi padri, stabiliamo delle regole di precedenza del tutto simili a quelle che si possono ottenere con una parentesizzazione.
 
-Nello specifico, noi siamo interessati a esprimire l'associatività sinistra degli operatori \(+\) e \(*\), nonché la precedenza di \(*\) rispetto a \(+\). Diciamolo in maniera ancora più pragmatica: se guardiamo gli esempi in Fig.\ref{fig:ex2-sh_re-ptree}, vogliamo sempre avere l'albero Fig.\ref{fig:ex2-sh_re-ptree_1} al posto di Fig.\ref{fig:ex2-sh_re-ptree_2} quando stiamo valutando una stessa espressione (\(E + E + E\), ad esempio), e vogliamo che la precedenza tra i due operatori sia tale da generare sempre alberi di derivazione come Fig.\ref{fig:ex2-sh_re-ptree_3} e Fig.\ref{fig:ex2-sh_re-ptree_4}: \(E*E\) è più "in basso", ergo verrà eseguita prima, ergo avrà precedenza su \(E+E\).
+Nello specifico, noi siamo interessati a esprimere l'associatività sinistra degli operatori \(+\) e \(*\), nonché la precedenza di \(*\) rispetto a \(+\). Diciamolo in maniera ancora più pragmatica: se guardiamo gli esempi in Fig.\ref{fig:ex2-sh_re-ptree}, vogliamo sempre avere l'albero Fig.\ref{fig:ex2-sh_re-ptree_1} al posto di Fig.\ref{fig:ex2-sh_re-ptree_2} quando stiamo valutando una stessa espressione (\(E + E + E\), ad esempio), e vogliamo che la precedenza tra i due operatori sia tale da generare sempre alberi di derivazione come Fig.\ref{fig:ex2-sh_re-ptree_3} e Fig.\ref{fig:ex2-sh_re-ptree_4}: \(E*E\) è più "in basso", ergo verrà eseguita prima, ergo avrà precedenza su \(E+E\).
 \begin{figure}[H]
     \begin{minipage}[b]{.4\textwidth}
         \centering
