@@ -13,7 +13,7 @@ In questo ultimo capitolo ripercorreremo sommariamente tutte le tappe che abbiam
 Inoltre approfitteremo di questo per presentare dei piccoli approfondimenti trasversali, curiosità, divagazioni un po' casuali, barzellette e anche qualche battutaccia, il tutto per mantenere vivo l'interesse dello stanchissimo lettore che ha attraversato pianure, mari, monti, la città sotterranea di Agharti, il regno di Prete Gianni, l'ultima Thule e l'isola di Mu, tutto durante queste 300 pagine, il tutto viaggiando in un camioncino della verdura, il tutto per imparare qualcosa su quelle strane bestie che sono i linguaggi formali e i compilatori.
 
 
-Partiamo quindi con il ripetere, per l'ennessima volta, in maniera schematica le fasi della compilazione ed il loro scopo:
+Partiamo quindi con il ripetere, per l'ennesima volta, in maniera schematica le fasi della compilazione ed il loro scopo:
 \paragraph{Analisi lessicale} In questa fase si prende la stringa in ingresso e la si trasforma in una sequenza di token, che diamo in pasto all'analizzatore sintattico.
 
 \paragraph{Analisi sintattica} A questo punto verifichiamo (attraverso il parsing) se la sequenza di token aderisce alla specifica grammatica del linguaggio di programmazione che stiamo utilizzando. Se è così, ricaviamo un albero di parsing per la stringa data in input. 
@@ -51,7 +51,7 @@ La stringa che andremo ad analizzare nell'analisi sintattica si dimenticherà po
 \begin{equation}
     id = id + id * num
 \end{equation}
-L'analizzatore lessicale deve saper riconoscere le parole chiave del linguaggio, differenziandole da eventuali identificatori ambigui (ad esempio \(while22\)); la strategia più utilizzata per risolvere tale problematica è quella del \emph{longest match}: si assegna la categoria di token che identifica la versione più lunga possibile della stringa che si riesce a matchare.
+L'analizzatore lessicale deve saper riconoscere le parole chiave del linguaggio, differenziandole da eventuali identificatori ambigui (ad esempio "\(while22\)"); la strategia più utilizzata per risolvere tale problematica è quella del \emph{longest match}: si assegna la categoria di token che identifica la versione più lunga possibile della stringa che si riesce a matchare.
 \\\\
 Per svolgere il loro compito, gli analizzatori lessicali utilizzano automi a stati finiti, sia in versione deterministica che non deterministica.
 In qualsiasi caso, i tipi di linguaggi che gli analizzatori lessicali vanno ad approcciare sono tutti linguaggi regolari, derivati quindi da grammatiche regolari.
@@ -190,7 +190,7 @@ A questo punto possiamo finalmente tradurre il codice intermedio in codice targe
     \caption{Generazione codice target da codice intermedio ottimizzato}
     \label{fig:final-example-target-code}
 \end{figure}
-Spiegamo qualche dettaglio: il suffisso \texttt{F} sta per float per sottolineare che tutte le operazioni coinvolgono dei float e, per questo motivo, è necessario ad esempio trattarli in maniera distinta dagli int. Possiamo osservare che nella prima riga viene caricato il contenuto di \texttt{id3} come float nel registro \texttt{R2}, poi avviene una moltiplicazione tra float che coinvolge \texttt{R2} e \(60\); segue un'operazione di \texttt{load} di un altro float e così via.
+Spieghiamo qualche dettaglio: il suffisso \texttt{F} sta per float per sottolineare che tutte le operazioni coinvolgono dei float e, per questo motivo, è necessario ad esempio trattarli in maniera distinta dagli int. Possiamo osservare che nella prima riga viene caricato il contenuto di \texttt{id3} come float nel registro \texttt{R2}, poi avviene una moltiplicazione tra float che coinvolge \texttt{R2} e \(60\); segue un'operazione di \texttt{load} di un altro float e così via.
 
 L'ultima nota che aggiungiamo riguardo a questa fase è che, come già accennato precedentemente, anche qui intervengono meccanismi di ottimizzazione, in questo caso strettamente legati al codice macchina (e quindi alla macchina target).
 
@@ -213,13 +213,13 @@ In questo caso si ha il canonico array bucket, da cui è possibile accedere ad u
 Questa funzione si occupa di trasformare ogni carattere in un intero non negativo, tipicamente sfruttando funzioni built-in, a cui applica ulteriori operazioni per poi arrivare all'hash.
 
 Come si può definire una funzione di hash adeguata?
-Conoscendo il dominio di applicazione. Ad esempio, nel nostro caso si può notare che spesso nella scrittura dei programmi, il programmatore va a dare nomi molto similli alle variabili: questo significa che utilizzare il suffisso degli identificatori non è una buona idea perché porterebbe a diverse collisioni.
+Conoscendo il dominio di applicazione. Ad esempio, nel nostro caso si può notare che spesso nella scrittura dei programmi, il programmatore va a dare nomi molto simili alle variabili: questo significa che utilizzare il suffisso degli identificatori non è una buona idea perché porterebbe a diverse collisioni.
 
 Una scelta tipicamente buona è la seguente
 \begin{equation}
     (\sum_{i=1}^{n} \phi^{n-i}c_i) \; mod \; \texttt{size}
 \end{equation}
-Utilizzando funzioni hash di questo tipo si possono evitare con buona probabililtà le problematiche legate alla scarsa fantasia del nostro amico programmatore.
+Utilizzando funzioni hash di questo tipo si possono evitare con buona probabilità le problematiche legate alla scarsa fantasia del nostro amico programmatore.
 
 \paragraph{Scope} Ora che abbiamo discusso le metodologie di implementazione di una symbol table, andiamo ad analizzare una problematica con cui tutte devono fare i conti: lo \emph{scoping}.
 
