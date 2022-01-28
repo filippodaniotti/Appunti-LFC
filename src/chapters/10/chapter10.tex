@@ -657,7 +657,7 @@ Mentre per le riduzioni con non-terminali nel body abbiamo utilizzato delle funz
 Abbiamo visto quindi che si può ricavare l'AST mentre si esegue il nostro caro parsing bottom-up.
 Ma non è sempre così, l'albero di sintassi astratta in questo caso è stato costruito su una grammatica LALR con un SDD con tutti attributi sintetizzati (vedi \ref{SDD:LALR-grammar}, non ci sono attributi ereditati), è questo che ci ha permesso di costruire l'AST mentre costruivamo l'albero di parsing.
 
-Sottolineamo questo aspetto per dire che nel caso in cui abbiamo un SDD L-attribuito non è detto che si possa compiere la costruzione dell'AST mentre si fa il parsing. Per aver ragion di ciò presentiamo subito un esempio in cui compaiono appunto attributi ereditati.
+Sottolineiamo questo aspetto per dire che nel caso in cui abbiamo un SDD L-attribuito non è detto che si possa compiere la costruzione dell'AST mentre si fa il parsing. Per aver ragion di ciò presentiamo subito un esempio in cui compaiono appunto attributi ereditati.
 
 \subsection{Esempio di creazione di un AST con attributi ereditati}
 L'esercizio in questo caso ci richiede di calcolare gli attributi per definire le funzioni di attribuzione per le produzioni della grammatica così definita:
@@ -679,7 +679,7 @@ In quel caso i valori sintetizzati in sottoalberi fratelli devono essere utilizz
     \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part.jpg}
     \caption{Pezzo del grafo delle dipendenze di \(3*5\)}
 \end{figure}
-Osservando quest'immagine è esemplice notare che per risolvere il valore di \(T'\) abbiamo bisogno dei valori nel sottoalbero di \(T'\) ma anche del valore di \(F\) che è fratello sinistro di \(T'\), quindi abbiamo bisogno di introdurre attributi ereditati.
+Osservando quest'immagine è semplice notare che per risolvere il valore di \(T'\) abbiamo bisogno dei valori nel sottoalbero di \(T'\) ma anche del valore di \(F\) che è fratello sinistro di \(T'\), quindi abbiamo bisogno di introdurre attributi ereditati.
 Lo stesso avviene per la grammatica che stiamo considerando ora, quella per gli operatori \(+\) e \(-\) di cui dobbiamo completare l'SDD (\ref{SDD:ex-2-AST}).
 
 
@@ -743,7 +743,7 @@ Queste produzioni ci permettono di creare due foglie:
 
 Come si può intuire, il nostro scopo con tali regole è fare in modo che in T.node siano memorizzate le informazioni della foglia che abbiamo creato in modo da poterle recuperare in seguito.
 
-Come avevamo già potuto mostare in precedenza, il sottoalbero sinistro ha bisogno di passare le proprie informazioni al sottoalbero destro; visto che stiamo parlando di nodi fratelli non possiamo ottenere queste informazioni in altro modo se non ricorrendo agli attributi ereditati: ci servirà dunque una regola del tipo \(E'.i = T.node\).
+Come avevamo già potuto mostrare in precedenza, il sottoalbero sinistro ha bisogno di passare le proprie informazioni al sottoalbero destro; visto che stiamo parlando di nodi fratelli non possiamo ottenere queste informazioni in altro modo se non ricorrendo agli attributi ereditati: ci servirà dunque una regola del tipo \(E'.i = T.node\).
 
 Associamo dunque per il momento la regola descritta alla produzione corretta 
 
