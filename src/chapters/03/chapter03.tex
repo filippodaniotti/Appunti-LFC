@@ -38,7 +38,7 @@
     \item \(V'_1\) e \(V'_2\) si ottengo effettuando un'operazione di \emph{refresh} sui non terminali, in modo da evitare collisioni di nomi (vedremo più avanti come mai quest'operazione è importante), inoltre questo vocabolario è completato con l'introduzione di un nuovo start symbol;
     \item l'insieme dei terminali è l'unione dei due insiemi di terminali di \(\mathcal{G}_1\) e \(\mathcal{G}_2\);
     \item \(S\) è il nuovo start symbol, non presente in \(V'_1 \cup V'_2\), e \(S'_1\) e \(S'_2\) sono di nuovo il refresh degli start symbol rispettivamente di \(\mathcal{G}_2\) e \(\mathcal{G}_2\);
-    \item infine, l'insieme delle produzioni è dato dall'unione tra i refresh delle produzioni delle due grammatiche di partenza  \(\mathcal{G}_1\) e \(\mathcal{G}_2\), unito a una nuova produzione che, dal nuovo start symbol, produce il resfresh dello start symbol di una delle due grammatiche di partenza.
+    \item infine, l'insieme delle produzioni è dato dall'unione tra i refresh delle produzioni delle due grammatiche di partenza  \(\mathcal{G}_1\) e \(\mathcal{G}_2\), unito a una nuova produzione che, dal nuovo start symbol, produce il refresh dello start symbol di una delle due grammatiche di partenza.
   \end{itemize}
 
   \noindent Questa definizione ci basta per asserire che \(\mathcal{L(G)}\) è libero e \(\mathcal{L(G)} = \mathcal{L}(\mathcal{G}_1)  \cup \mathcal{L}(\mathcal{G}_2) \).
@@ -92,7 +92,7 @@
 
   \noindent Il linguaggio prodotto da questa nuova grammatica sarebbe diverso da quello dato dall'unione delle due grammatiche di partenza, poiché avremmo \(\mathcal{L(G)} = \{aa, ab, ba, bb\} \neq \mathcal{L}(\mathcal{G}_1)  \cup \mathcal{L}(\mathcal{G}_2) \).
 
-  Con un'opportuno resfreshing otteniamo invece:
+  Con un'opportuno refreshing otteniamo invece:
   % \begin{figure}
   %   \centering
   %   \includegraphics[width=.3\textwidth,keepaspectratio]{why-refresh_3}
@@ -259,7 +259,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 
   Adesso definiamo \(p\) come la lunghezza della più lunga parola derivabile con degli alberi di derivazione, e che inoltre sia tale che i suoi cammini, a partire dalla radice, siano lunghi al più come il numero di non-terminali di \(\mathcal{G}\). Consideriamo quindi anche una parola \(z \in \mathcal{L}\), più lunga di \(p\) (\(|z| > p\)). Possiamo quindi essere sicuri che esiste un albero di derivazione per \(z\) che possiede almeno un cammino la cui lunghezza è strettamente maggiore del numero di non-terminali, poiché \(|z| >p\).
 
-  Adesso, per un qualche albero di derivazione, andiamo a considerare la più profonda coppia di occorrenze dello stesso non-terminale lungo un qualche cammino; con più profonda coppia di occerrenze intendiamo la coppia composta dalla più lontana e dalla seconda più lontana occorrenza dalla radice di uno stesso non terminale.
+  Adesso, per un qualche albero di derivazione, andiamo a considerare la più profonda coppia di occorrenze dello stesso non-terminale lungo un qualche cammino; con più profonda coppia di occorrenze intendiamo la coppia composta dalla più lontana e dalla seconda più lontana occorrenza dalla radice di uno stesso non terminale.
 
   Andiamo a visualizzare la situazione attraverso un albero di derivazione, considerando le due occorrenze di un non-terminale \(A\).
   \begin{figure}
@@ -314,7 +314,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 
 \subsection{Applicazioni}
   \paragraph{Scopo del pumping lemma}
-  Tutto (quasi) bello, ma a cosa serve questo pumping lemma? È presto detto: il pumping lemma ci permette di determinare con certezza se un certo linguaggio \(\L\) \emph{non} è libero. Perché mai dovremmo volere questa informazione? Perché gli algoritmi di parsing\footnote{Il processo inverso della derivazione; non abbiate fretta, che fra poco arrivano un centinaio di pagine solo su quello.} che abbiamo a disposizione per verificare se una parola appartiente a un linguaggio generato da una grammatica libera sono esageratamente più efficienti di quelli che abbiamo per per i linguaggi generati da grammatiche dipendenti da contesto\footnote{Tutti questi algoritmi sono al più \(\mathcal{O}(n^3)\), ma per i linguaggi generati da alcune sottoclassi di grammatiche libere abbiamo a disposizione algoritmi lineari.}.
+  Tutto (quasi) bello, ma a cosa serve questo pumping lemma? È presto detto: il pumping lemma ci permette di determinare con certezza se un certo linguaggio \(\L\) \emph{non} è libero. Perché mai dovremmo volere questa informazione? Perché gli algoritmi di parsing\footnote{Il processo inverso della derivazione; non abbiate fretta, che fra poco arrivano un centinaio di pagine solo su quello.} che abbiamo a disposizione per verificare se una parola appartiene a un linguaggio generato da una grammatica libera sono esageratamente più efficienti di quelli che abbiamo per per i linguaggi generati da grammatiche dipendenti da contesto\footnote{Tutti questi algoritmi sono al più \(\mathcal{O}(n^3)\), ma per i linguaggi generati da alcune sottoclassi di grammatiche libere abbiamo a disposizione algoritmi lineari.}.
 
   \paragraph{Il negato del pumping lemma}
   Di preciso, come possiamo usare il pumping lemma per ottenere quest'informazione? Pensiamo al fatto che questo lemma è, formalmente, una semplice implicazione logica \(A \implies B\), dove l' ipotesi \(A\) è che un certo linguaggio \(\L\) sia libero e \(B\) è invece la tesi stessa del pumping lemma, la quale afferma che \(\L\) avrà una certa forma. Questo vuol dire che, usando il suo negato \(\neg (A \implies B) \equiv \neg B \implies \neg A\), possiamo vedere come verificare il negato della tesi del pumping lemma per un linguaggio \(\L\) implichi necessariamente che \(\L\) non è libero:
@@ -335,7 +335,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
     \item \(P_3 \equiv |vx| > 0 \; \land\)
     \item \(P_4 \equiv \forall i \in \mathbb{N}.uv^iwx^iy \in \mathcal{L}\)
   \end{itemize}
-  Richiamando alla mente le regole di equivalenza tra i quantificatori (\(\neg\forall.x \equiv \exists.x\) e \(\neg\exists.x \equiv \forall.x\)) e facendo un passaggio per volta non dovrebbe esserce difficile raggiungere il risultato cercato:
+  Richiamando alla mente le regole di equivalenza tra i quantificatori (\(\neg\forall.x \equiv \exists.x\) e \(\neg\exists.x \equiv \forall.x\)) e facendo un passaggio per volta non dovrebbe esserci difficile raggiungere il risultato cercato:
   \begin{gather*}
     \neg(\exists p \in \mathbb{N}^+. \forall z \in \L: |z| > p. \exists u, v, w, x, y. P) \\
     \\
@@ -426,7 +426,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
   \begin{itemize}
     \item la produzione iniziale è sempre \(S \to CD\), per cui non possiamo prescindere dallo sviluppo di \(C\) (nel prossimo punto capiremo perché è importante);
     \item le stringhe crescono in lunghezza solamente grazie sviluppo del non-terminale \(C\);
-    \item il non-terminale \(D\) agisce come un delimitatore destro, dal momento che quando ha alla sua sinsitra un terminale \(A\) o \(B\) ci permette di svilupparlo nel relativo terminale;
+    \item il non-terminale \(D\) agisce come un delimitatore destro, dal momento che quando ha alla sua sinistra un terminale \(A\) o \(B\) ci permette di svilupparlo nel relativo terminale;
     \item quando un terminale (\(a\) o \(b\)) si trova a destra di un non-terminale (\(B\) o \(B\)), la posizione di questi può essere scambiata (\(Ab \to bA\)).
   \end{itemize}
   Proviamo quindi a sviluppare delle derivazioni di prova e vedere cosa succede.
@@ -600,7 +600,7 @@ Nonostante l'esercizio, in apparenza, sia solo leggermente diverso dal precedent
 \end{align*}
 
 \subsection*{Esercizio 5 - Grammatiche contestuali}
-Considerata la seguente gramatica \(\mathcal{G}\), è vero che \(\mathcal{L(G)} = \varnothing\)?
+Considerata la seguente grammatica \(\mathcal{G}\), è vero che \(\mathcal{L(G)} = \varnothing\)?
 
 \begin{align*}
   \mathcal{G}: S\; &\to\; aBS\; \mid bA \\
