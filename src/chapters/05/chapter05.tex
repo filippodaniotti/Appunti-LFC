@@ -349,7 +349,7 @@ A questo punto ho raggiunto una partizione in cui tutti i blocchi contengono un 
 In questo caso ho terminato lo svolgimento dell'algoritmo di partition refinement; questo significa che il DFA da cui sono partito (ottenuto da subset construction) era esattamente minimo.
 
 \subsubsection[Tutta da risistemare]{Discussione: “Qual è la scelta ottimale per lo split?”}
-Domanda interessante. La discussione, essendo un trivia, verrà trascritta in un \sout{secondo} terzo momento\footnote{Ragazzi, chiediamo venia, abbiammo scoperto di questo todo a poche ore dalla release, non c'era modo di riprendere in mano il discorso.}.
+Domanda interessante. La discussione, essendo un trivia, verrà trascritta in un \sout{secondo} terzo momento\footnote{Ragazzi, chiediamo venia, abbiamo scoperto di questo todo a poche ore dalla release, non c'era modo di riprendere in mano il discorso.}.
 % L’idea alla base dell’algoritmo più efficiente è andare a splittare i blocchi che sono splittabili per archi entranti nei blocchi più piccoli.
 % Un algoritmo non efficientissimo ma davvero semplice da scrivere è il seguente
 % Algoritmo di Brzozowski
@@ -368,14 +368,14 @@ Domanda interessante. La discussione, essendo un trivia, verrà trascritta in un
         \mathcal{L} = \mathcal{L}((a\mid b)^\ast a (a\mid b)^{n-1})  
         \label{linguaggio_lemma_limiti_dfa}
     \end{equation}
-    Dal momento che è un linguaggio regolare, questo può essere rappresentato utilizzando un automa a stati finiti. Esiste un NFA con esattamente \(n+1\) stati che accetta il linguaggio \(\mathcal{L}\); tale automa è rappresentiato in figura \ref{nfa_lemma_limiti_dfa}.
+    Dal momento che è un linguaggio regolare, questo può essere rappresentato utilizzando un automa a stati finiti. Esiste un NFA con esattamente \(n+1\) stati che accetta il linguaggio \(\mathcal{L}\); tale automa è rappresentato in figura \ref{nfa_lemma_limiti_dfa}.
     \begin{figure}[H]
         \centering
         \subimport{assets/figures/}{dfa_dimension.tex}
         \caption{NFA rappresentante il linguaggio \ref{linguaggio_lemma_limiti_dfa}}
         \label{nfa_lemma_limiti_dfa}
     \end{figure}
-    Supponiamo per assurdo che esista un DFA minimo, diaciamo \(\mathcal{D}\), che accetti il linguaggio \(\mathcal{L}\) ed abbia \(k<2^n\) stati.
+    Supponiamo per assurdo che esista un DFA minimo, diciamo \(\mathcal{D}\), che accetti il linguaggio \(\mathcal{L}\) ed abbia \(k<2^n\) stati.
 
     Sappiamo esserci esattamente \(2^n\) parole distinte su \(\{a, b\}\) la cui lunghezza è \(n\). Esistono quindi 2 percorsi in \(\mathcal{D}\) tali che:
     \begin{itemize}
