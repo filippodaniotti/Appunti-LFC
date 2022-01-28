@@ -126,7 +126,7 @@ Andiamo ora a vedere da vicino la prima istruzione dalla nostra lista, \(P \to S
 Il senso stesso dell'espressione \(P \to S\) sembra suggerire che il programma \(P\) possa essere visto globalmente come uno statement.
 \begin{itemize}
     \item \(newlabel()\) è una funzione che, una volta invocata, genera una nuova etichetta;
-    \item \(\triangleright\) è un operatore che denota la concatezione di due (o più) segmenti di codice intermedio;
+    \item \(\triangleright\) è un operatore che denota la concatenazione di due (o più) segmenti di codice intermedio;
     \item \(label(L)\) assegna l'etichetta \(L\) alla prossima istruzione a tre indirizzi generata;
     \item \(S.next\), come intuibile, è l'etichetta che denota la prima istruzione da eseguire dopo la fine di \(S\); se ipoteticamente volessimo uscire da \(S\) prima della chiamata a \(S.next\), allora dovremmo esplicitamente eseguire un \texttt{goto}.
 \end{itemize}
