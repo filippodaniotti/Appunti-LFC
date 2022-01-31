@@ -12,12 +12,12 @@
     \begin{forest}
         for tree={s sep=15mm}
         [{\textit{T}},edge=dotted
-            [{\textit{F}},edge=dotted 
+            [{\textit{F}},edge=dotted
                 [{\textit{digit}},edge=dotted]
             ]
             [{\textit{T}$'$},edge=dotted
                 [{\textit{*}},edge=dotted]
-                [{\textit{F}},edge=dotted
+                [{\textit{F}},edge=dotted,before computing xy={s/.average={s}{siblings}}
                     [{\textit{digit}},edge=dotted]
                 ]
                 [{\textit{T}$'_1$},edge=dotted

@@ -13,7 +13,7 @@
         for tree={s sep=15mm, l=15mm}
         [{\textit{T}$'$},name=t2,edge=dotted
             [{\textit{*}},edge=dotted]
-            [{\textit{F}},name=f2,edge=dotted]
+            [{\textit{F}},name=f2,edge=dotted,before computing xy={s/.average={s}{siblings}}]
             [{\textit{T}$'_1$},name=t3,edge=dotted]
         ]
         \tikzset{every node/.style={font=\footnotesize\itshape,color=blue}}
@@ -22,7 +22,7 @@
         \path(f2) to ([xshift=0.3cm,yshift=-0.2cm]f2) node(s3){.s};
         \path(t3) to ([xshift=-0.4cm,yshift=-0.2cm]t3) node(i2){.i};
         \path(t3) to ([xshift=0.5cm,yshift=0.1cm]t3) node(s5){.s};
-        \draw[->, blue] (i1) to[out=-50,in=160] (i2);
+        \draw[->, blue] (i1) to[out=-55,in=160] (i2);
         \draw[->, blue] (s3) to[out=-25,in=-160] (i2);
         \draw[->, blue] (s5) to[out=120,in=-20] (s6);
     \end{forest}

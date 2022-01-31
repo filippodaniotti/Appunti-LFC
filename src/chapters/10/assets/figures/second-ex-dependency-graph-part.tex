@@ -17,7 +17,7 @@
             ]
             [{\textit{T}$'$},name=t2,edge=dotted
                 [{\textit{*}},edge=dotted]
-                [{\textit{F}},name=f2,edge=dotted
+                [{\textit{F}},name=f2,edge=dotted,before computing xy={s/.average={s}{siblings}}
                     [{\textit{digit}},name=d2,edge=dotted,name=d2]
                 ]
                 [{\textit{T}$'_1$},name=t3,edge=dotted
@@ -37,7 +37,7 @@
         \path(t1) to ([xshift=0.5cm]t1) node(s7){.s};
         \draw[->, blue] (s1) to[out=80,in=-45] (s2);
         \draw[->, blue] (s2) to[out=-10,in=200] (i1);
-        \draw[->, blue] (i1) to[out=-35,in=160] (i2);
+        \draw[->, blue] (i1) to[out=-45,in=160] (i2);
         \draw[->, blue] (s4) to[out=90,in=-45] (s3);
         \draw[->, blue] (s3) to[out=-15,in=-160] (i2);
         \draw[->, blue] (i2) to[out=-30,in=-90] (s5);
