@@ -1,0 +1,32 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+\usepackage{../../../../style_tree}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{forest}
+        for tree={s sep=10mm, l=5mm}
+        [{\textit{V.val}}
+            [{\textit{E.val}} 
+                [{\textit{E.val}}
+                    [{\textit{T.val}}
+                        [{\textit{F.val}}
+                            [{\textit{digit.lexval}}]
+                        ]
+                    ]
+                ]
+                [{\textit{+}}]
+                [{\textit{T.val}}
+                    [{\textit{F.val}}
+                        [{\textit{digit.lexval}}]
+                    ]
+                ]
+            ]
+        ]
+    \end{forest}
+\end{document}
