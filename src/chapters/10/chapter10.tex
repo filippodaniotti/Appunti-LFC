@@ -530,7 +530,14 @@ Sia data la grammatica
 Se vogliamo fare il parsing della parola \(digit+digit\) otteniamo i seguenti alberi di parsing e di sintassi astratta.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth]{ast-first-example.png}
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \subimport{assets/figures/}{ast-first-example-part-1.tex}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \subimport{assets/figures/}{ast-first-example-part-2.tex}
+    \end{subfigure}%
     \caption{Due alberi per la parola \(digit+digit\): sulla sinistra albero di sintassi astratta, sulla destra albero di derivazione}
     \label{fig:ast-first-example}
 \end{figure}
