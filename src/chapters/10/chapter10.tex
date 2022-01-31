@@ -676,7 +676,7 @@ Per visualizzare la situazione possiamo andare a rivedere l'SDD che abbiamo cost
 In quel caso i valori sintetizzati in sottoalberi fratelli devono essere utilizzati da altri sottoalberi fratelli per ricavare il loro proprio valore, per esser chiari riportiamo qui la figura.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part.jpg}
+    \subimport{assets/figures/}{second-ex-dependency-graph-part.tex}
     \caption{Pezzo del grafo delle dipendenze di \(3*5\)}
 \end{figure}
 Osservando quest'immagine è semplice notare che per risolvere il valore di \(T'\) abbiamo bisogno dei valori nel sottoalbero di \(T'\) ma anche del valore di \(F\) che è fratello sinistro di \(T'\), quindi abbiamo bisogno di introdurre attributi ereditati.
