@@ -1,0 +1,43 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+\usepackage{tikz}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+
+
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,455); %set diagram left start at 0, and has height of 455
+
+%Shape: Rectangle [id:dp5329089634291293] 
+\draw  [fill={rgb, 255:red, 111; green, 185; blue, 239 }  ,fill opacity=0.5 ] (290.5,90.5) -- (389.5,90.5) -- (389.5,140.4) -- (290.5,140.4) -- cycle ;
+
+%Shape: Rectangle [id:dp6757827754178827] 
+\draw  [fill={rgb, 255:red, 111; green, 185; blue, 239 }  ,fill opacity=0.5 ] (290.5,140.13) -- (389.5,140.13) -- (389.5,189.8) -- (290.5,189.8) -- cycle ;
+
+%Shape: Rectangle [id:dp21980547454404853] 
+\draw  [fill={rgb, 255:red, 111; green, 185; blue, 239 }  ,fill opacity=0.5 ] (290.5,190) -- (389.5,190) -- (389.5,239.8) -- (290.5,239.8) -- cycle ;
+
+% Text Node
+\draw (232,136) node [anchor=north west][inner sep=0.75pt]   [align=left] {$\displaystyle B$\textit{.true }:};
+% Text Node
+\draw (232.5,237) node [anchor=north west][inner sep=0.75pt]   [align=left] {$\displaystyle S$\textit{.next }:};
+% Text Node
+\draw (229.5,185) node [anchor=north west][inner sep=0.75pt]   [align=left] {$\displaystyle B$\textit{.false }:};
+
+% Text Node
+\draw (315.5,108.25) node [anchor=north west][inner sep=0.75pt]   [align=left] {$\displaystyle B$\textit{.code}};
+% Text Node
+\draw (315,157.96) node [anchor=north west][inner sep=0.75pt]   [align=left] {$\displaystyle S_{1}$\textit{.code}};
+% Text No5e
+\draw (315,207.9) node [anchor=north west][inner sep=0.75pt]   [align=left] {$\displaystyle S_{2}$\textit{.code}};
+
+
+\end{tikzpicture}
+\end{document}

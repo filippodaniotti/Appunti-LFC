@@ -1,0 +1,44 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+\usepackage{tikz}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,455); %set diagram left start at 0, and has height of 455
+
+%Shape: Square [id:dp17784083626466107] 
+\draw   (79.75,122) -- (150,122) -- (150,192.25) -- (79.75,192.25) -- cycle ;
+%Shape: Square [id:dp7682162447973615] 
+\draw   (79.75,196.5) -- (150,196.5) -- (150,266.75) -- (79.75,266.75) -- cycle ;
+
+
+% Text Node
+\draw (90.38,148.13) node [anchor=north west][inner sep=0.75pt]   [align=left] {\begin{minipage}[lt]{34.73pt}\setlength\topsep{0pt}
+\begin{center}
+$\displaystyle B$\textit{.code}
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw (86.88,222.63) node [anchor=north west][inner sep=0.75pt]   [align=left] {\begin{minipage}[lt]{39.16pt}\setlength\topsep{0pt}
+\begin{center}
+$\displaystyle S_{1}$\textit{.code}
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw (17,186.5) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textit{B.true} :};
+% Text Node
+\draw (15,269.75) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textit{B.false} :};
+
+
+\end{tikzpicture}
+\end{document}
