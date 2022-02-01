@@ -27,7 +27,7 @@ jobs:
         with:
           tag_name: ${{ github.run_id }}
           release_name: Release ${{ github.ref_name }}
-          body: ""
+          body: "Release"
           draft: false
           prerelease: false
         if: ${{ success() }}
