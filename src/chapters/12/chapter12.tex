@@ -166,7 +166,7 @@ Si può osservare l'utilizzo di questa strategia applicata al nostro esempio: ri
     t1 &= inttofloat(60) \\
     t2 &= id3 * t1 \\
     t3 &= id2 + t2 \\
-    id1 &= t3 \\
+    id1 &= t3
 \end{align*}
 Una cosa a cui prestare attenzione è il fatto che gli identificatori \texttt{id1}, \texttt{id2} e \texttt{id3} sono riferimenti alle istanze locali degli identificatori: ciò vuol dire che si entra già nel territorio in cui si necessita di un meccanismo di \emph{scope}, ma di questo parleremo in seguito.
 
@@ -176,7 +176,7 @@ A questo punto si passa all'ottimizzazione del codice intermedio, fase che ha le
 Nell'esempio che stiamo trattando si riesce ad ottimizzare il codice riducendo subito il \(60\) in float ed eliminando operazioni temporanee non strettamente necessarie. Vediamo subito come risulterebbe un'ottimizzazione fatta secondo queste prerogative:
 \begin{align*}
     t1 &= id3 * 60.0 \\
-    id1 &= id2 + t2 \\
+    id1 &= id2 + t2
 \end{align*}
 Questa fase di ottimizzazione sfrutta algoritmi su grafo facendo un'analisi di catene di \emph{definition use}: tenendo conto del momento della dichiarazione e dell'utilizzo di una certa variabile, è possibile ad esempio decidere di eliminare o spostare tale dichiarazione.
 
