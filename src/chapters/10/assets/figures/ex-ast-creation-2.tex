@@ -1,0 +1,45 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+\usepackage{tikz}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,455); %set diagram left start at 0, and has height of 455
+
+%Shape: Square [id:dp8198654959235923] 
+\draw   (110,70) -- (140,70) -- (140,100) -- (110,100) -- cycle ;
+%Shape: Square [id:dp9763944137067684] 
+\draw   (140,70) -- (170,70) -- (170,100) -- (140,100) -- cycle ;
+%Shape: Square [id:dp783034311436511] 
+\draw   (330,70) -- (360,70) -- (360,100) -- (330,100) -- cycle ;
+%Shape: Square [id:dp9815718499285826] 
+\draw   (330,100) -- (360,100) -- (360,130) -- (330,130) -- cycle ;
+%Curve Lines [id:da9284366753890596] 
+\draw    (155,85) .. controls (162.51,137.32) and (185.64,170.49) .. (215.72,146.05) .. controls (245.35,121.97) and (293.14,113.46) .. (328.21,114.73) ;
+\draw [shift={(329.8,114.8)}, rotate = 182.6] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+%Shape: Rectangle [id:dp21941235714534812] 
+\draw   (360,70) -- (460,70) -- (460,100) -- (360,100) -- cycle ;
+%Shape: Rectangle [id:dp09279310421738818] 
+\draw   (360,100) -- (460,100) -- (460,130) -- (360,130) -- cycle ;
+%Shape: Rectangle [id:dp2867508279974149] 
+\draw  [dash pattern={on 0.84pt off 2.51pt}] (330,130) -- (460,130) -- (460,160) -- (330,160) -- cycle ;
+
+% Text Node
+\draw (75.55,108.2) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textcolor[rgb]{1,0,0}{$\displaystyle E$\textit{.node}}};
+% Text Node
+\draw (117,77) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textit{\textcolor[rgb]{0.01,0,1}{\textbf{id}}}};
+% Text Node
+\draw (340,81) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textit{\textcolor[rgb]{0.01,0,1}{\textbf{c}}}};
+% Text Node
+\draw (340,110) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textit{\textcolor[rgb]{0.01,0,1}{\textbf{a}}}};
+
+\end{tikzpicture}
+
+\end{document}
