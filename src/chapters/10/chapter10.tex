@@ -231,7 +231,7 @@ Nel primo esercizio di applicazione dell'SDD abbiamo studiato una grammatica con
     E' &\to +TE \mid \varepsilon \\
     T &\to FT' \\
     T' &\to *FT' \mid \varepsilon \\
-    F &\to (E) \mid digit \\
+    F &\to (E) \mid digit
 \end{align*}
 Vogliamo definire l'SDD che ci permette di valutare tale grammatica.
 
@@ -467,7 +467,6 @@ Analizziamo ora delle grammatiche che permettono di tradurre stringhe in numeri:
 Possiamo pensare di scrivere una grammatica che genera il linguaggio delle stringhe di digit e il relativo schema di traduzione. 
 
 La prima grammatica su cui ragioneremo è
-
 \begin{align*}
     S &\to Digits	&\{print(Digits.v)\} \\
     Digits &\to Digits_1 d	&\{Digits.v = Digits_1.v * 10 + d.lexval\} \\
@@ -479,7 +478,6 @@ La grammatica che abbiamo di fronte è LALR(1) e l'SDD è S-attribuito: l'ultima
 Aggiungiamo una variazione dell'esercizio: ora vogliamo tradurre stringhe di digit al loro valore interpretato in decimale oppure in ottale.
 
 Una possibile grammatica che genera il linguaggio descritto è questa:
-
 \begin{align*}
     S &\to Num \\
     Num &\to o \textrm{ } Digits \mid Digits \\
@@ -493,7 +491,6 @@ La grammatica è LALR(1) anche in questo caso, però abbiamo un problema: non è
 Per poter raggiungere i nostri obiettivi a livello di efficienza dobbiamo riprovare modificando la grammatica in modo che ci consenta di svolgere entrambe le operazioni contemporaneamente.
 
 Per poter ottenere un risultato migliore potremmo inserire due nuovi non-terminali in modo da poterci aiutare con le regole in un secondo momento: consideriamo infatti di modificare la grammatica nel modo seguente
-
 \begin{align*}
     S &\to Num \\
     Num &\to O \textrm{ } Digits \mid D \textrm{ } Digits \\
@@ -503,7 +500,6 @@ Per poter ottenere un risultato migliore potremmo inserire due nuovi non-termina
 \end{align*}
 
 Di per sé non sembra essere cambiato molto ma in realtà in questo caso abbiamo la possibilità di inserire delle regole dove possiamo valorizzare delle variabili globali in modo da stabilire la base:
-
 \begin{align*}
     S &\to Num &\{print(Num.v)\}\\
     Num &\to O \textrm{ } Digits &\{Num.v = Digits.v\}\\
@@ -525,7 +521,7 @@ Sia data la grammatica
 \begin{align*}
     E &\to E+T \mid T \\
     T &\to T*F \mid F \\
-    F &\to (E) \mid id \\
+    F &\to (E) \mid id
 \end{align*}
 Se vogliamo fare il parsing della parola \(digit+digit\) otteniamo i seguenti alberi di parsing e di sintassi astratta.
 \begin{figure}[H]
@@ -701,7 +697,6 @@ Utilizzando gli attributi ereditati non si riesce ad eseguire in maniera immedia
 In questo caso per poter trasportare le informazioni da un ramo dell'albero ad un altro è necessario utilizzare degli attributi ereditati: in modo simile a quanto fatto per calcolare il valore delle espressioni aritmetiche, in questo caso assegniamo dei riferimenti a dei nodi. 
 
 Per poter capire al meglio che tipo di regole devono essere applicate è necessario partire da un parse tree: prendiamo dunque come esempio particolare la parola \(id - num\), ottenuta dall'analisi lessicale di \(a - 4\); senza troppa fatica dovremmo poterci accorgere che usando una derivazione di tipo leftmost i passi di derivazione sono
-
 \begin{align*}
     E \Rightarrow TE' \Rightarrow idE' \Rightarrow id-TE' \Rightarrow id-numE' \Rightarrow id-num
 \end{align*}
@@ -735,7 +730,6 @@ La situazione cambia se vogliamo esaminare l'arco esattamente successivo: l'arco
 A questo punto dobbiamo definire le \textbf{funzioni di attribuzione} associate alle produzioni: tale operazione come sempre non è facile da eseguire ma vedremo di analizzarla passo per passo. 
 
 Cominciamo inserendo le azioni semantiche delle produzioni finali della grammatica proposta: queste definiscono le foglie del nostro parse tree e dovranno occuparsi di generare gli elementi finali dell'abstract syntax tree.
-
 \begin{align*}
     T &\to id &\{T.node = newLeaf(id, id.entry)\} \\
     T &\to num &\{T.node = newLeaf(num, num.lexval)\}
@@ -753,7 +747,6 @@ Come si può intuire, il nostro scopo con tali regole è fare in modo che in T.n
 Come avevamo già potuto mostrare in precedenza, il sottoalbero sinistro ha bisogno di passare le proprie informazioni al sottoalbero destro; visto che stiamo parlando di nodi fratelli non possiamo ottenere queste informazioni in altro modo se non ricorrendo agli attributi ereditati: ci servirà dunque una regola del tipo \(E'.i = T.node\).
 
 Associamo dunque per il momento la regola descritta alla produzione corretta 
-
 \begin{align*}
     E &\to TE' &\{E'.i = T.node\}
 \end{align*}
@@ -761,7 +754,6 @@ Associamo dunque per il momento la regola descritta alla produzione corretta
 Volendo chiarire subito alcuni possibili dubbi, sottolineo il fatto che questa non sarà l'unica regola che sarà associata a tale produzione (si è voluto optare per un aggiunta graduale) e che le produzioni a cui è stata aggiunta l'azione semantica sono quelle dove \(T\) ed \(E'\) compaiono nel body.
 
 A questo punto possiamo passare alle produzioni che si occupano delle operazioni aritmetiche, nel nostro caso della produzione \(E' \to -TE'\): per via del nostro esempio potremmo limitarci semplicemente ad eseguire il risultato dell'espressione \(E'.i - T.node\) (ricordiamoci che precedentemente abbiamo fatto in modo che \(E'.i\) contenesse il valore del sottoalbero sinistro), tuttavia dobbiamo considerare anche i casi per cui vi potrebbero essere altre operazioni in seguito (e.g. id + id - num + id - ...). Per questo motivo facciamo in modo di passare ad \(E'\) il risultato di tale operazione in modo che possa utilizzarlo nel caso di produzioni successive: questo potrebbe essere visto come un esempio di ricorsione dove di fatto stiamo "mandando avanti" i risultati delle operazioni e dovremo in seguito capire qual è il nostro caso base. Aggiungiamo dunque una regola che fa al caso nostro 
-
 \begin{align*}
     E' &\to -TE_{1}' &\{E_{1}'.i = newNode('-', E'.i, T.node)\}
 \end{align*}
@@ -769,20 +761,17 @@ A questo punto possiamo passare alle produzioni che si occupano delle operazioni
 Grazie a questa azione semantica siamo in grado di generare un nodo con etichetta \(-\) e con un riferimento per ogni operando: il riferimento di questo nodo viene passato poi ad \(E_1'.i\), in questo modo riuscirà a svolgere le operazioni successive. 
 
 Come abbiamo detto precedentemente, dovremo prima o poi interrompere tale ricorsione e quindi necessitiamo di un caso base: banalmente smetteremo di fare nuove chiamate nel momento in cui non avremo più operatori e quindi nel caso in cui utilizzeremo la produzione \(E' \to \varepsilon\). In questo momento dovremo riportare il risultato di tutta la nostra computazione (i.e. i nostri riferimenti): per fare ciò semplicemente andiamo ad assegnare a \(E'.node\) i riferimenti ottenuti fino a quel momento
-
 \begin{align*}
      E' &\to \varepsilon &\{E'.node = E'.i\}
 \end{align*}
 
 A questo punto abbiamo trattato il nostro caso base ma è necessario ritornare sulle produzioni già analizzate in modo da poter restituire il tutto al "chiamante": aggiungiamo dunque   
-
 \begin{align*}
     E &\to TE' &\{E.node = E'.node\} \\
     E' &\to -TE_{1}' &\{E'.node = E_{1}'.node\}
 \end{align*}
 
 A questo punto possiamo riassumere le regole come segue
-
 \begin{align*}
     E &\to TE' &\{E.node = E'.node; E'.i = T.node\} \\
     E' &\to +TE_{1}' &\{E'.node = E_{1}'.node; E_{1}'.i = newNode(+, E'.i, T.node)\} \\
@@ -832,7 +821,6 @@ Il risultato finale è dunque rappresentabile nel seguente modo:
 \subsubsection{Es attribuzione tipo degli identificatori}
 
 Consideriamo la seguente grammatica
-
 \begin{align*}
     D &\to TL \\
     T &\to int \\
@@ -859,20 +847,17 @@ dunque il parse tree può essere così rappresentato
 \end{figure}
 
 Partiamo dalle produzioni più semplici, cioè quelle che si occupano di definire il tipo degli attributi: in questo caso banalmente possiamo passare l'attributo sintetizzato al driver della produzione
-
 \begin{align*}
     T &\to int &\{T.type = int\} \\
     T &\to float &\{T.type = float\}
 \end{align*}
 
 Guardando il parse tree osserviamo che la risoluzione del sottoalbero destro dipende dal sottoalbero sinistro: una volta scoperto il tipo delle nostre entry abbiamo bisogno di fornire questa informazione alla funzione nell'altro sottoalbero, ma ciò è possibile solamente utilizzando degli attributi ereditati. Per questo motivo possiamo introdurre la seguente regola
-
 \begin{align*}
-    D &\to TL &\{L.i = T.type\} \\
+    D &\to TL &\{L.i = T.type\}
 \end{align*}
 
 Una volta che abbiamo trovato il modo per poterci trasportare il tipo dobbiamo effettivamente utilizzarlo per le nostre entry: a questo scopo possiamo andare a valorizzare le regole per le produzioni rimaste nel seguente modo
-
 \begin{align*}
     L &\to L_1, id &\{addtype(id.entry, L.i);\; L_1.i = L.i\}\\
     L &\to id &\{addtype(id.entry, L.i)\}
