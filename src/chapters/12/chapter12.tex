@@ -132,11 +132,19 @@ In caso l'analisi sia andata a buon fine, si ottiene un parse tree che indica qu
 Questa è la fase in cui si va a valorizzare la sequenza di token che si ricava dall'analisi lessicale; nel nostro caso quello che otterremo dall'analisi semantica ha questa forma:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth]{final-example-semantic-output.png}
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \subimport{assets/figures/}{final-example-parsing-tree.tex}
+    \end{subfigure}%
+    {\Huge$\Rightarrow$}%
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \subimport{assets/figures/}{final-example-semantic-output.tex}
+    \end{subfigure}
     \caption{Output dell'analisi semantica}
     \label{fig:last-ex-semantic-output}
 \end{figure}
-Si noti che il \(<num, 60>\) è stato trasformato in \texttt{inttofloat} con nodo figlio \(60\): questo è avvenuto perché l'analisi semantica è quella che si occupa di attribuire un valore (e di conseguenza anche un tipo) ai token. Proprio per questo motivo, gli effetti dell'analisi semantica non si vedranno solo nell'albero, come mostrato in Fig.\ref{fig:last-ex-semantic-output}, ma anche nella tabella dei simboli che riportiamo qui:
+Si noti che il \(\langle num, 60 \rangle \) è stato trasformato in \texttt{inttofloat} con nodo figlio \(60\): questo è avvenuto perché l'analisi semantica è quella che si occupa di attribuire un valore (e di conseguenza anche un tipo) ai token. Proprio per questo motivo, gli effetti dell'analisi semantica non si vedranno solo nell'albero, come mostrato in Fig.\ref{fig:last-ex-semantic-output}, ma anche nella tabella dei simboli che riportiamo qui:
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{symbol-table-updated.tex}
