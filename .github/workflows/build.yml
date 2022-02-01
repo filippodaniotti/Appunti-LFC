@@ -1,4 +1,4 @@
-name: Build LaTeX document and release publish
+name: Build LaTeX document and publish release
 on:
   push:
     branches: master
