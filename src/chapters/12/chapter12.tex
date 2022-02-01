@@ -194,7 +194,28 @@ A valle dell'ottimizzatore del codice intermedio abbiamo la generazione del codi
 A questo punto possiamo finalmente tradurre il codice intermedio in codice target. Riportiamo in seguito quello che otteniamo a seguito di questa fase dal nostro esempio.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.6\textwidth]{final-example-target-code.png}
+    \centering
+    \begin{subfigure}{.3\textwidth}
+        \centering
+        \begin{equation*}
+            \begin{aligned}
+                t1  &= id3 * 60.0 \\
+                id1 &= id2 + t2   \\
+                                  \\
+            \end{aligned}
+        \end{equation*}
+    \end{subfigure}%
+    {\Huge$\Rightarrow$}%
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \begin{align*}
+            &LDF  &R2, \quad &id3 \quad      \\
+            &MULF &R2, \quad &R2, \quad 60.0 \\
+            &LDF  &R1, \quad &id2 \quad      \\
+            &ADDF &R1, \quad &R1, \quad R2   \\
+            &STF  &id1 \quad &R1  \quad      \\
+        \end{align*}
+    \end{subfigure}
     \caption{Generazione codice target da codice intermedio ottimizzato}
     \label{fig:final-example-target-code}
 \end{figure}
