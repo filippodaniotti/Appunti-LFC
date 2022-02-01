@@ -1,0 +1,59 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+\usepackage{tikz}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\scalebox{0.75}{
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,455); %set diagram left start at 0, and has height of 455
+
+%Shape: Square [id:dp8198654959235923] 
+\draw   (65.95,70) -- (95.95,70) -- (95.95,100) -- (65.95,100) -- cycle ;
+%Shape: Square [id:dp9763944137067684] 
+\draw   (95.95,70) -- (125.95,70) -- (125.95,100) -- (95.95,100) -- cycle ;
+%Shape: Square [id:dp783034311436511] 
+\draw   (360,70) -- (390,70) -- (390,100) -- (360,100) -- cycle ;
+%Shape: Square [id:dp9815718499285826] 
+\draw   (360,100) -- (390,100) -- (390,130) -- (360,130) -- cycle ;
+%Curve Lines [id:da9284366753890596] 
+\draw    (110.95,85) .. controls (112.92,98.73) and (122.56,165.24) .. (156.2,182) .. controls (189.84,198.76) and (243.4,156.4) .. (272.6,138) .. controls (300.92,120.15) and (338.28,117.36) .. (358.02,116.84) ;
+\draw [shift={(359.8,116.8)}, rotate = 178.81] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+%Shape: Rectangle [id:dp21941235714534812] 
+\draw   (390,70) -- (490,70) -- (490,100) -- (390,100) -- cycle ;
+%Shape: Rectangle [id:dp09279310421738818] 
+\draw   (390,100) -- (490,100) -- (490,130) -- (390,130) -- cycle ;
+%Shape: Rectangle [id:dp2867508279974149] 
+\draw  [dash pattern={on 0.84pt off 2.51pt}] (360,130) -- (490,130) -- (490,160) -- (360,160) -- cycle ;
+%Shape: Square [id:dp366571263143209] 
+\draw   (233.45,70) -- (263.45,70) -- (263.45,100) -- (233.45,100) -- cycle ;
+%Shape: Rectangle [id:dp05082073880425719] 
+\draw   (193.45,70) -- (233.45,70) -- (233.45,100) -- (193.45,100) -- cycle ;
+
+% Text Node
+\draw (31.5,108.2) node [anchor=north west][inner sep=0.75pt]   [align=left] {$\displaystyle E$\textit{.node}};
+% Text Node
+\draw (72.15,77) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textit{\textcolor[rgb]{0.01,0,1}{\textbf{id}}}};
+% Text Node
+\draw (369.4,79.5) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textit{\textcolor[rgb]{0.01,0,1}{\textbf{c}}}};
+% Text Node
+\draw (369.4,110.3) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textit{\textcolor[rgb]{0.01,0,1}{\textbf{a}}}};
+% Text Node
+\draw (197.05,80) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textit{\textcolor[rgb]{0.01,0,1}{\textbf{num}}}};
+% Text Node
+\draw (243.45,79) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textcolor[rgb]{0.01,0,1}{\textbf{4}}};
+% Text Node
+\draw (171,108.2) node [anchor=north west][inner sep=0.75pt]   [align=left] {$\displaystyle T$\textit{.node}};
+
+\end{tikzpicture}
+
+}
+
+\end{document}

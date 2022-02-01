@@ -8,9 +8,8 @@
 % arara: pdflatex
 % arara: latexmk: { clean: partial }
 \begin{document}
-\tikzset{
-    node distance=2.5cm, % specifies the minimum distance between two nodes.
-    }
+\tikzset{node distance=2.5cm}
+\scalebox{0.8}{
     \begin{tikzpicture} 
         
         \node[state] (0) {0};
@@ -71,6 +70,7 @@
         \path [use as bounding box] ($(A)$) rectangle ($(B)$);
         
     \end{tikzpicture}
-    \end{document}
+}
+\end{document}
     
     
