@@ -21,11 +21,11 @@ jobs:
           name: build-dispensa
           path: ./src/main.pdf
         if: ${{ success() }}
-      - name: Send dispensa to Telegram Group
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: Oh oh oh! buon natale piccoli dinosauri
-          document: src/main.pdf
-        if: ${{ success() }}
+      # - name: Send dispensa to Telegram Group
+        # uses: appleboy/telegram-action@master
+        # with:
+          # to: ${{ secrets.TELEGRAM_TO }}
+          # token: ${{ secrets.TELEGRAM_TOKEN }}
+          # message: Oh oh oh! buon natale piccoli dinosauri
+          # document: src/main.pdf
+        # if: ${{ success() }}
