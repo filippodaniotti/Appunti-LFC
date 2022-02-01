@@ -27,6 +27,7 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           release_name: Release ${{ github.ref_name }}
+          body: ""
           draft: false
           prerelease: false
         if: ${{ success() }}
