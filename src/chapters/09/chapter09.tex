@@ -816,7 +816,40 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     \item Il primo passo è installare lo stato 0 dell'automa:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-stato_0.png}
+        \renewcommand{\arraystretch}{1.1}
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \rowcolors{3}{lightgray!20}{lightgray!20}
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$0 :$ } \\
+                \hline
+                $S' \rightarrow \cdot S, \{ x_0 \}$ \\ 
+                \hline\hline
+                $S \rightarrow \cdot L = R, \{ x_0 \}$ \\
+                $S \rightarrow \cdot R, \{ x_0 \}$ \\
+                $L \rightarrow \cdot *R, \{ =, x_0 \}$ \\
+                $L \rightarrow \cdot \textit{id}, \{ =, x_0 \}$ \\
+                $R \rightarrow \cdot L, \{ x_0 \}$ \\
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \rowcolors{3}{lightgray!20}{lightgray!20}
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$0 :$ } \\
+                \hline
+                $S' \rightarrow \cdot S, \{ \$ \}$ \\ 
+                \hline\hline
+                $S \rightarrow \cdot L = R, \{ \$ \}$ \\
+                $S \rightarrow \cdot R, \{ \$ \}$ \\
+                $L \rightarrow \cdot *R, \{ =, \$ \}$ \\
+                $L \rightarrow \cdot \textit{id}, \{ =, \$ \}$ \\
+                $R \rightarrow \cdot L, \{ \$ \}$ \\
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \renewcommand{\arraystretch}{1}
         \caption{Stato 0: sulla sinistra automa simbolico, sulla destra automa LR(1)}
         \label{img:ex_automa_simbolico-stato_0}
     \end{figure}
@@ -876,7 +909,26 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     \item Kernel dello stato 1:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.7\textwidth]{ex_automa_simbolic-kernel_s1.png}
+        \renewcommand{\arraystretch}{1.1}
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$1 :$ } \\
+                \hline
+                $S' \rightarrow S \cdot, \{ x_1 \}$ \\ 
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$1 :$ } \\
+                \hline
+                $S' \rightarrow S \cdot, \{ \$ \}$ \\ 
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \renewcommand{\arraystretch}{1}
         \caption{Kernel stato 1: sulla sinistra automa simbolico, sulla destra automa LR(1)}
     \end{figure}
     Notiamo come invece che scrivere il lookahead set come insieme creiamo una nuova variabile \(x_1\) per indicarlo: questo stratagemma ci serve per aggiornare il valore del lookahead set nel caso dovessimo tornare in questo stato con un nuovo \(\Delta\), sarà chiaro in seguito. Dobbiamo aggiornare anche il nostro sistema in cui salviamo il valore effettivo della variabile.
@@ -893,7 +945,28 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     \item Kernel dello stato 2:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s2.png}
+        \renewcommand{\arraystretch}{1.1}
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$2 :$ } \\
+                \hline
+                $S \rightarrow L \cdot = R, \{ x_2 \}$ \\ 
+                $R \rightarrow L \cdot, \{ x_3 \}$ \\ 
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$2 :$ } \\
+                \hline
+                $S \rightarrow L \cdot = R, \{ \$ \}$ \\ 
+                $R \rightarrow L \cdot, \{ \$ \}$ \\  
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \renewcommand{\arraystretch}{1}
         \caption{Kernel stato 2: sulla sinistra automa simbolico, sulla destra automa LR(1)}
     \end{figure}
     In questo caso il kernel contiene due item perché nello stato 0 abbiamo due item che presentano la possibilità di una \(L\)-transizione; ognuno di questi item quindi avrà il suo lookahead set simbolico: andiamo ad aggiornare subito il nostro sistema, sapendo che le produzioni che ci portano allo stato due hanno come lookahead set \(x_0\).
@@ -911,7 +984,26 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     \item Kernel dello stato 3:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s3.png}
+        \renewcommand{\arraystretch}{1.1}
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$3 :$ } \\
+                \hline
+                $S \rightarrow R \cdot, \{ x_4 \}$ \\ 
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$3 :$ } \\
+                \hline
+                $S \rightarrow R \cdot, \{ \$ \}$ \\ 
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \renewcommand{\arraystretch}{1}
         \caption{Kernel stato 3: sulla sinistra automa simbolico, sulla destra automa LR(1)}
     \end{figure}
     Anche in questo caso abbiamo che \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), riportiamo subito questa informazione all'interno del sistema.
@@ -930,7 +1022,36 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     \item Kernel dello stato 4:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s4.png}
+        \renewcommand{\arraystretch}{1.1}
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \rowcolors{3}{lightgray!20}{lightgray!20}
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$4 :$ } \\
+                \hline
+                $L \rightarrow * \cdot R, \{ x_5 \}$ \\
+                \hline\hline
+                $R \rightarrow \cdot L, \{ x_5 \}$ \\
+                $L \rightarrow \cdot *R, \{ x_5 \}$ \\
+                $L \rightarrow \cdot \textit{id}, \{ x_5 \}$ \\
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \rowcolors{3}{lightgray!20}{lightgray!20}
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$4 :$ } \\
+                \hline
+                $L \rightarrow * \cdot R, \{ =, \$ \}$ \\
+                \hline\hline
+                $R \rightarrow \cdot L, \{ =, \$ \}$ \\
+                $L \rightarrow \cdot *R, \{ =, \$ \}$ \\
+                $L \rightarrow \cdot \textit{id}, \{ =, \$ \}$ \\
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \renewcommand{\arraystretch}{1}
         \caption{Kernel stato 4: sulla sinistra automa simbolico, sulla destra automa LR(1)}
     \end{figure}
     Anche in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
@@ -956,7 +1077,26 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     \item Kernel dello stato 5:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s5.png}
+        \renewcommand{\arraystretch}{1.1}
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$5 :$ } \\
+                \hline
+                $L \rightarrow \textit{id} \cdot, \{ x_6 \}$ \\
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$5 :$ } \\
+                \hline
+                $L \rightarrow \textit{id} \cdot, \{ =, \$ \}$ \\
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \renewcommand{\arraystretch}{1}
         \caption{Kernel stato 5: sulla sinistra automa simbolico, sulla destra automa LR(1)}
     \end{figure}
     anche in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
@@ -977,7 +1117,36 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     \item Kernel dello stato 6:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s6.png}
+        \renewcommand{\arraystretch}{1.1}
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \rowcolors{3}{lightgray!20}{lightgray!20}
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$6 :$ } \\
+                \hline
+                $S \rightarrow L = \cdot R, \{ x_7 \}$ \\
+                \hline\hline
+                $R \rightarrow \cdot L, \{ x_7 \}$ \\
+                $L \rightarrow \cdot *R, \{ x_7 \}$ \\
+                $L \rightarrow \cdot \textit{id}, \{ x_7 \}$ \\
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \rowcolors{3}{lightgray!20}{lightgray!20}
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$6 :$ } \\
+                \hline
+                $S \rightarrow L = \cdot R, \{ \$ \}$ \\
+                \hline\hline
+                $R \rightarrow \cdot L, \{ \$ \}$ \\
+                $L \rightarrow \cdot *R, \{ \$ \}$ \\
+                $L \rightarrow \cdot \textit{id}, \{ \$ \}$ \\
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \renewcommand{\arraystretch}{1}
         \caption{Kernel stato 6: sulla sinistra automa simbolico, sulla destra automa LR(1)}
     \end{figure}
     In questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
@@ -1005,7 +1174,26 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     \item Kernel dello stato 7:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s7.png}
+        \renewcommand{\arraystretch}{1.1}
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$7 :$ } \\
+                \hline
+                $L \rightarrow * R \cdot, \{ x_8 \}$ \\
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$7 :$ } \\
+                \hline
+                $L \rightarrow * R \cdot, \{ =, \$ \}$ \\
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \renewcommand{\arraystretch}{1}
         \caption{Kernel stato 7: sulla sinistra automa simbolico, sulla destra automa LR(1)}
     \end{figure}
     in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
@@ -1029,7 +1217,26 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     \item Kernel dello stato 8:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s8.png}
+        \renewcommand{\arraystretch}{1.1}
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$8 :$ } \\
+                \hline
+                $R \rightarrow L \cdot, \{ x_9 \}$ \\
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$8 :$ } \\
+                \hline
+                $R \rightarrow L \cdot, \{ =, \$ \}$ \\
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \renewcommand{\arraystretch}{1}
         \caption{Kernel stato 8: sulla sinistra automa simbolico, sulla destra automa LR(1)}
     \end{figure}
     In questo caso il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
@@ -1090,7 +1297,26 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     \item Kernel dello stato 9:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s9.png}
+        \renewcommand{\arraystretch}{1.1}
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$9 :$ } \\
+                \hline
+                $S \rightarrow L = R \cdot, \{ x_{10} \}$ \\
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \begin{subfigure}{.45\textwidth}
+            \centering
+            \begin{tabular}{|l|}
+                \multicolumn{1}{l}{$9 :$ } \\
+                \hline
+                $S \rightarrow L = R \cdot, \{ \$ \}$ \\
+                \hline
+            \end{tabular}
+        \end{subfigure}%
+        \renewcommand{\arraystretch}{1}
         \caption{Kernel stato 9: sulla sinistra automa simbolico, sulla destra automa LR(1)}
     \end{figure}
     In questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), ovvero \(x_{10} = \{x_7\}\), aggiorno quindi il sistema di equazioni.
