@@ -902,7 +902,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
                 & x_0 = \{\$\} \\
                 & x_1 = x_0 \\
                 & x_2 = x_0 \\
-                & x_3 = x_0 \\
+                & x_3 = x_0
     \end{align*}
     Grazie al cielo non si presentano chiusure; analizzeremo le transizioni in seguito.
 
@@ -921,7 +921,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
                 & x_1 = x_0 \\
                 & x_2 = x_0 \\
                 & x_3 = x_0 \\
-                & x_4 = x_0 \\
+                & x_4 = x_0
     \end{align*}
     Il kernel dello stato 3 non presenta nè chiusure nè transizioni, quindi procediamo oltre senza esitazioni.
 
@@ -968,7 +968,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
                 & x_3 = x_0 \\
                 & x_4 = x_0 \\
                 & x_5 = \{=, \$\} \\
-                & x_6 = \{=, \$\} \\
+                & x_6 = \{=, \$\}
     \end{align*}
     Anche qui, pace all'anima nostra, inseriamo il lookahead set come variabile aggiuntiva e la valorizziamo nel nostro sistema di equazioni.
 
@@ -990,7 +990,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
                 & x_4 = x_0 \\
                 & x_5 = \{=, \$\} \\
                 & x_6 = \{=, \$\} \\
-                & x_7 = x_2 \\
+                & x_7 = x_2
     \end{align*}
     Ora passiamo ad analizzare le chiusure degli item di questo stato.
     Grazie alla presenza del marker davanti ad una \(R\) aggiungiamo questi item allo stato:
@@ -1019,7 +1019,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
                 & x_5 = \{=, \$\} \\
                 & x_6 = \{=, \$\} \\
                 & x_7 = x_2 \\
-                & x_8 = x_5 \\
+                & x_8 = x_5
     \end{align*}
     A questo punto dovremmo fare la chiusura no? ma è già tutto chiuso, come alle 22:30 di sera a Trento...
     % NDR: 23:30 è fin troppo notte inoltrata...
@@ -1044,7 +1044,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
                 & x_6 = \{=, \$\} \\
                 & x_7 = x_2 \\
                 & x_8 = x_5 \\
-                & x_9 = x_5 \\
+                & x_9 = x_5
     \end{align*}
     Anche qui niente chiusure.
 
@@ -1064,7 +1064,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
                 & x_6 = \{=, \$\} \\
                 & x_7 = x_2 \\
                 & x_8 = x_5 \\
-                & x_9 = x_5 \\
+                & x_9 = x_5
     \end{align*}
 
     Passiamo ora ad analizzare la transizione \(\tau(4, id)\), che deriva dall'item \([L \to \cdot id, \; \{x_5\}]\);
@@ -1082,7 +1082,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
                 & x_6 = \{=, \$\} \cup \{x_5\} \\
                 & x_7 = x_2 \\
                 & x_8 = x_5 \\
-                & x_9 = x_5 \\
+                & x_9 = x_5
     \end{align*}
 
     Passiamo oltre, la prossima transizione su cui ci concentriamo è \(\tau(6, R)\), derivante da \([S \to L = \cdot R, \; \{x_7\}]\), che ci porta a scoprire lo stato 9.
@@ -1106,7 +1106,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
                 & x_7 = x_2 \\
                 & x_8 = x_5 \\
                 & x_9 = x_5 \\
-                & x_{10} = x_7 \\
+                & x_{10} = x_7
     \end{align*}
     Anche questo kernel ci regala poche emozioni (e nessuna chiusura) quindi concludiamo l'analisi dello stato 9.
 
@@ -1123,7 +1123,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
                 & x_7 = x_2 \\
                 & x_8 = x_5 \\
                 & x_9 = x_5 \cup \{x_7\} \\
-                & x_{10} = x_7 \\
+                & x_{10} = x_7
     \end{align*}
     niente chiusure, passiamo oltre.
 
