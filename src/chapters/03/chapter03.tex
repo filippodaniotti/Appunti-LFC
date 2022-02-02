@@ -65,7 +65,7 @@
 
 \begin{osservazione}
   È semplice convincersi dell'importanza dell'operazione di refreshing. Se consideriamo due grammatiche \(\mathcal{G}_1, \mathcal{G}_2\) con le seguenti produzioni:
-  % \begin{figure}
+  % \begin{figure}[H]
   %   \centering
   %   \includegraphics[width=.7\textwidth,keepaspectratio]{why-refresh_1}
   % \end{figure}
@@ -78,7 +78,7 @@
   \noindent Avremo quindi generati i seguenti linguaggi: \(\mathcal{L}(\mathcal{G}_1)  = \{aa\}\) e \(\mathcal{L}(\mathcal{G}_2)  = \{bb\}\).
 
   Se non effettuassimo refreshing, ci troveremo ad avere una nuova grammatica con le seguenti produzioni:
-  % \begin{figure}
+  % \begin{figure}[H]
   %   \centering
   %   \includegraphics[width=.3\textwidth,keepaspectratio]{why-refresh_2}
   % \end{figure}
@@ -93,7 +93,7 @@
   \noindent Il linguaggio prodotto da questa nuova grammatica sarebbe diverso da quello dato dall'unione delle due grammatiche di partenza, poiché avremmo \(\mathcal{L(G)} = \{aa, ab, ba, bb\} \neq \mathcal{L}(\mathcal{G}_1)  \cup \mathcal{L}(\mathcal{G}_2) \).
 
   Con un'opportuno refreshing otteniamo invece:
-  % \begin{figure}
+  % \begin{figure}[H]
   %   \centering
   %   \includegraphics[width=.3\textwidth,keepaspectratio]{why-refresh_3}
   % \end{figure}
@@ -208,7 +208,7 @@ A questo punto, andiamo a sostituire ogni produzione della forma \(A \rightarrow
 \paragraph{Esempio di applicazione}
 Andiamo a vedere un esempio considerando la seguente grammatica:
 %
-% \begin{figure}
+% \begin{figure}[H]
 %   \centering
 %   \includegraphics[width=.3\textwidth,keepaspectratio]{ex-th-1-3-1_1}
 % \end{figure}
@@ -222,7 +222,7 @@ Andiamo a vedere un esempio considerando la seguente grammatica:
 
 Osserviamo subito che \(C\) ha solo una produzione e questa conduce a \(\varepsilon\), pertanto è annullabile; allo stesso modo, \(B\) è annullabile attraverso \(C\) e \(S\) è annullabile attraverso \(A, B\) e \(C\). Con le operazioni che abbiamo illustrato poc'anzi, la grammatica che otteniamo è la seguente:
 
-% \begin{figure}
+% \begin{figure}[H]
 %   \centering
 %   \includegraphics[width=.3\textwidth,keepaspectratio]{ex-th-1-3-1_2}
 % \end{figure}
@@ -262,12 +262,12 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
   Adesso, per un qualche albero di derivazione, andiamo a considerare la più profonda coppia di occorrenze dello stesso non-terminale lungo un qualche cammino; con più profonda coppia di occorrenze intendiamo la coppia composta dalla più lontana e dalla seconda più lontana occorrenza dalla radice di uno stesso non terminale.
 
   Andiamo a visualizzare la situazione attraverso un albero di derivazione, considerando le due occorrenze di un non-terminale \(A\).
-  \begin{figure}
+  \begin{figure}[H]
     \centering
     \includegraphics[width=.25\textwidth,keepaspectratio]{pl-proof_1}
   \end{figure}
   Possiamo dire che, nelle due occorrenze di \(A\), sono radicati due sottoalberi distinti, che noi qui rappresenteremo colorati di verde e porpora. La parola \(z\) può quindi essere "spacchettata" in cinque sottoparole, come illustrato di seguito.
-  \begin{figure}
+  \begin{figure}[H]
     \centering
     \includegraphics[width=.8\textwidth,keepaspectratio]{pl-proof_2}
   \end{figure}
@@ -285,7 +285,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
     \end{minipage}
   \end{figure}
   Allo stesso modo sappiamo che, se a partire da \(A_1\) possiamo ottenere un sottoalbero di derivazioni \(w\), questo stesso sottoalbero può essere ottenuto a partire da \(A_2\).
-  \begin{figure}
+  \begin{figure}[H]
     \centering
     \includegraphics[width=.25\textwidth,keepaspectratio]{pl-proof_5}
   \end{figure}

@@ -259,7 +259,7 @@ Anche questa costruzione è espressa in modo induttivo.
 \subsection{Spiegazione in dettaglio}
 Vediamo ora la rappresentazione grafica di questo algoritmo. Partiamo dai passi base.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=.5\textwidth,keepaspectratio]{Thompson_base}
     \caption{Thompson nel caso base}
@@ -268,7 +268,7 @@ Vediamo ora la rappresentazione grafica di questo algoritmo. Partiamo dai passi 
 
 \noindent La spiegazione dell'algoritmo nel caso base è banale, osserviamo invece con più interesse lo step induttivo.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{Thompson_step}
     \caption{Thompson nello step induttivo}
@@ -340,7 +340,7 @@ Il prossimo passaggio è la traduzione dell'operatore di parentesi, il che è ba
 
 \noindent Quindi applichiamo la costruzione di Thompson per la Kleene star all'automa per \(r_4\), ottenendo quindi l'automa per \(r_5\).
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \subimport{assets/figures/}{thompson2_kleeny.tex}
     \caption{Applicazione della costruzione per la Kleene star}
@@ -355,7 +355,7 @@ Il prossimo passaggio è la traduzione dell'operatore di parentesi, il che è ba
 
 \noindent Applichiamo quindi la costruzione di Thompson per la concatenazione.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \subimport{assets/figures/}{thompson3_conc.tex}
     \caption{Applicazione della costruzione per la concatenazione}
@@ -364,7 +364,7 @@ Il prossimo passaggio è la traduzione dell'operatore di parentesi, il che è ba
 
 \noindent Dobbiamo infine riapplicare il passo della concatenazione per le due \(b\) mancanti.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \subimport{assets/figures/}{thompson4_conc.tex}
     \caption{Applicazione della costruzione per la concatenazione (II)}
@@ -383,7 +383,7 @@ Le nostre conoscenze attuali ci permettono di costruire un automa per una certa 
 
 Abbiamo già definito in \ref{linguaggio_definito_da_un_automa} come viene deciso se una parola fa parte del linguaggio riconosciuto dall'automa; prendiamo ora ad esempio \(w = bbb\) e l'automa presentato in figura \ref{automa_secondo_esempio}, e presentiamo la procedura di simulazione di un automa.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \subimport{assets/figures/}{nfa4_simulazione.tex}
     \caption{Esempio di automa}
@@ -450,7 +450,7 @@ Se invece la condizione precedente non è verificata, allora si è avverato uno 
 \subsection{Esempi di simulazione}
 Applichiamo ora, come esempio, l'algoritmo di simulazione di un NFA dato (Fig.\ref{es-sim-1}), verificando se accetta la parola \(w  = ababb\). Lo svolgimento è rappresentato in Tab.\ref{es-sim-1-tbl}.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \subimport{assets/figures/}{thompson4_conc.tex}
     \caption{Esempio di simulazione}
@@ -490,7 +490,7 @@ Continuo così finché non finisco i simboli; a quel punto devo verificare se es
 
 \noindent Nota che diciamo il più piccolo insieme per evitare di proseguire in loop infiniti come quello rappresentato in figura \ref{nfa_ciclico}.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \subimport{assets/figures/}{nfa5_e-closure.tex}
     \caption{Se non scegliessimo il più piccolo \(X\) potremmo incorrere in cicli infiniti.}

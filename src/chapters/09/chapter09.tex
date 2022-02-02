@@ -184,7 +184,7 @@ E come facciamo a capire quali stati sono raggiungibili a partire da un certo st
 \paragraph{Algoritmo}
 Proviamo ora a chiarire tale procedura tramite la sua scrittura in forma algoritmica, si veda \ref{alg:lr1-automata}.
 
-% \begin{figure}
+% \begin{figure}[H]
 %     \centering
 %     \includegraphics[width=\textwidth]{alg-construct-lr1-automata.png}
 %     \caption{Algoritmo per la costruzione di un automa LR(1)}
@@ -814,7 +814,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
 
 \begin{itemize}
     \item Il primo passo è installare lo stato 0 dell'automa:
-    \begin{figure}[h!]
+    \begin{figure}[H]
         \centering
         \includegraphics[width=.7\textwidth]{ex_automa_simbolico-stato_0.png}
         \caption{Stato 0: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -874,7 +874,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     La prima transizione che troviamo è \(\tau(0,S)\) che ci porta ad un nuovo stato, lo stato 1.
     
     \item Kernel dello stato 1:
-    \begin{figure}[h!]
+    \begin{figure}[H]
         \centering
         \includegraphics[width=.7\textwidth]{ex_automa_simbolic-kernel_s1.png}
         \caption{Kernel stato 1: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -891,7 +891,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     La prossima transizione che andiamo ad analizzare è \(\tau(0,L)\) che ci porta in un nuovo stato, diciamo 2.
     
     \item Kernel dello stato 2:
-    \begin{figure}[h!]
+    \begin{figure}[H]
         \centering
         \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s2.png}
         \caption{Kernel stato 2: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -909,7 +909,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     Passiamo quindi all'osservazione della transizione \(\tau(0,R)\), che ci porta nello stato 3.
     
     \item Kernel dello stato 3:
-    \begin{figure}[h!]
+    \begin{figure}[H]
         \centering
         \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s3.png}
         \caption{Kernel stato 3: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -928,7 +928,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     La prossima transizione che dobbiamo analizzare è \(\tau(0,*)\), questa deriva dalla produzione \([L \to \cdot *R, \; \{=, x_0\}]\).
     
     \item Kernel dello stato 4:
-    \begin{figure}[h!]
+    \begin{figure}[H]
         \centering
         \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s4.png}
         \caption{Kernel stato 4: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -954,7 +954,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     Prossima transizione da analizzare: \(\tau(0,id)\) che deriva dall'item \([L \to \cdot id, \; \{=, x_0\}]\) e ci porta nello stato 5.
     
     \item Kernel dello stato 5:
-    \begin{figure}[h!]
+    \begin{figure}[H]
         \centering
         \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s5.png}
         \caption{Kernel stato 5: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -975,7 +975,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     Abbiamo finito le transizioni dallo stato 0! Prossima transizione da analizzare \(\tau(2, =)\), che deriva dall'item \([S \to L \cdot = R, \; \{x_2\}]\), ci porta direttamente allo stato 6.
     
     \item Kernel dello stato 6:
-    \begin{figure}[h!]
+    \begin{figure}[H]
         \centering
         \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s6.png}
         \caption{Kernel stato 6: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -1003,7 +1003,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     Passiamo ora ad analizzare la transizione \(\tau(4, R)\), che deriva dall'item \([L \to * \cdot R, \; \{x_5\}]\) e ci spara nello stato 7.
     
     \item Kernel dello stato 7:
-    \begin{figure}[h!]
+    \begin{figure}[H]
         \centering
         \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s7.png}
         \caption{Kernel stato 7: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -1027,7 +1027,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     Passiamo quindi ad analizzare la transizione \(\tau(4, L)\) che prende le mosse dall'item \([R \to \cdot L, \; \{x_5\}]\) e ci porta nello stato 8.
     
     \item Kernel dello stato 8:
-    \begin{figure}[h!]
+    \begin{figure}[H]
         \centering
         \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s8.png}
         \caption{Kernel stato 8: sulla sinistra automa simbolico, sulla destra automa LR(1)}
@@ -1088,7 +1088,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
     Passiamo oltre, la prossima transizione su cui ci concentriamo è \(\tau(6, R)\), derivante da \([S \to L = \cdot R, \; \{x_7\}]\), che ci porta a scoprire lo stato 9.
     
     \item Kernel dello stato 9:
-    \begin{figure}[h!]
+    \begin{figure}[H]
         \centering
         \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s9.png}
         \caption{Kernel stato 9: sulla sinistra automa simbolico, sulla destra automa LR(1)}
