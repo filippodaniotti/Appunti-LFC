@@ -264,30 +264,36 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
   Andiamo a visualizzare la situazione attraverso un albero di derivazione, considerando le due occorrenze di un non-terminale \(A\).
   \begin{figure}[H]
     \centering
-    \includegraphics[width=.25\textwidth,keepaspectratio]{pl-proof_1}
+    \subimport{assets/figures/}{pl-proof-1.tex}
   \end{figure}
   Possiamo dire che, nelle due occorrenze di \(A\), sono radicati due sottoalberi distinti, che noi qui rappresenteremo colorati di verde e porpora. La parola \(z\) può quindi essere "spacchettata" in cinque sottoparole, come illustrato di seguito.
   \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth,keepaspectratio]{pl-proof_2}
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \subimport{assets/figures/}{pl-proof-2.tex}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+      \centering
+      \subimport{assets/figures/}{pl-proof-3.tex}
+  \end{subfigure}%
   \end{figure}
   Dal momento che \(A_1\) e \(A_2\) sono occorrenze di uno stesso non-terminale, condividono la medesima famiglia di produzioni. Questo fatto è notevole: se, a partire da \(A_2\), siamo riusciti a trovare una qualche sequenza di derivazioni tale da essere arrivati a \(A_1\), allora con la stessa sequenza possiamo trovare una nuova occorrenza di \(A\), il che ci rende ragionevolmente certi che possiamo generare un numero arbitrario di sottostringhe \(v, x\) di \(z\).
   \begin{figure}[H]
     \centering
-    \begin{minipage}{0.25\textwidth}
+    \begin{subfigure}{.5\textwidth}
       \centering
-      \includegraphics[width=\textwidth,keepaspectratio]{pl-proof_3}
-    \end{minipage}
-     \hfill
-    \begin{minipage}{0.25\textwidth}
+      \subimport{assets/figures/}{pl-proof-4.tex}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
       \centering
-      \includegraphics[width=\textwidth,keepaspectratio]{pl-proof_4}
-    \end{minipage}
+      \subimport{assets/figures/}{pl-proof-5.tex}
+  \end{subfigure}%
   \end{figure}
   Allo stesso modo sappiamo che, se a partire da \(A_1\) possiamo ottenere un sottoalbero di derivazioni \(w\), questo stesso sottoalbero può essere ottenuto a partire da \(A_2\).
   \begin{figure}[H]
     \centering
-    \includegraphics[width=.25\textwidth,keepaspectratio]{pl-proof_5}
+    \subimport{assets/figures/}{pl-proof-6.tex}
   \end{figure}
   Queste affermazioni possono essere riassunte, per l'appunto, nella formula:
   \begin{equation*}
