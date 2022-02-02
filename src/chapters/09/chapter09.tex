@@ -1140,7 +1140,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
                 & x_7 = x_2 \\
                 & x_8 = x_5 \\
                 & x_9 = x_5 \cup \{x_7\} \\
-                & x_{10} = x_7 \\
+                & x_{10} = x_7
     \end{align*}
 
     \item Passiamo alla prossima transizione che è \(\tau(6, id)\), derivante da \([L \to \cdot id, \{x_7\}]\), che ci porta in uno stato con kernel LR(0) = \([L \to id \cdot]\), che corrisponde al già visitato stato 5, quindi aggiorniamo semplicemente il lookahead set di tale stato.
@@ -1156,7 +1156,7 @@ La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'au
                 & x_7 = x_2 \\
                 & x_8 = x_5 \\
                 & x_9 = x_5 \cup \{x_7\} \\
-                & x_{10} = x_7 \\
+                & x_{10} = x_7
     \end{align*}
 \end{itemize}
 
@@ -1268,7 +1268,7 @@ Ma la componente LR(0) (cioè il primo elemento della coppia) del kernel è ugua
             & x_1 = x_0 \\
             & x_2 = x_0 \cup \{b\} \\
             & x_3 = x_0 \cup \{b\} \\
-            & x_4 = x_2 \\
+            & x_4 = x_2
 \end{align*}
 \subsubsection*{Stato 4}
 La prossima produzione che analizziamo è  \(\tau(2,b)\), che ci capitombola nel nuovo stato 4 tramite l'item \([S \to a \cdot b, \{x_3\}]\).
