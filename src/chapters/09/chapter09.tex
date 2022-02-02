@@ -812,346 +812,353 @@ Andiamo a costruire l'automa simbolico per la nostra cara grammatica
 \end{align*}
 La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'automa LR(1) per rendere più chiare le differenze tra queste due costruzioni.
 
-Il primo passo è installare lo stato 0 dell'automa:
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-stato_0.png}
-    \caption{Stato 0: sulla sinistra automa simbolico, sulla destra automa LR(1)}
-    \label{img:ex_automa_simbolico-stato_0}
-\end{figure}
-È subito chiaro cosa intendevamo dicendo "invece di inserire il lookahead set inseriamo una \emph{variabile}", di fatto come lookahead inseriamo un simbolo, che risolveremo solo alla fine della costruzione dell'automa.
-
-In questo caso al posto di inserire \(\$\) inseriamo una variabile chiamata \(x_0\).
-La corrispondenza tra \(x_0\) e \(\$\) la salviamo (ce la scriviamo) nel sistema di equazioni che ci porteremo dietro per tutta la costruzione.
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\}
-\end{align*}
-
-Quando andiamo a fare la chiusura, essendo gli item simbolici in tutto e per tutto simili agli item LR(1), utilizziamo la \(closure_1\).
-Questa volta però abbiamo come lookahead set le variabili, in questo caso il nostro lookahead set è \(x_0\).
-
-Procedendo un passettino alla volta la chiusura dello stato 0 si fa così:
 \begin{itemize}
-    \item in primis dobbiamo includere la chiusura per le produzioni di S:
-    \begin{itemize}
-        \item dalle due produzioni di \(S\) della nostra grammatica otteniamo i due item:
-        \begin{align*}
-            S &\to \cdot L = R,  \; \{x_0\} \\
-            S &\to \cdot R,  \; \{x_0\}
-        \end{align*}
-        in questo caso il lookahead set è facile da calcolare perché \(\beta\) di
-        \(S' \to \cdot S\) è \(\varepsilon\) mentre \(\Delta = x_0\);
-    \end{itemize}
-    \item ora abbiamo introdotto anche un marker davanti alla \(L\), quindi dobbiamo chiudere anche per \(L\):
-    \begin{itemize}
-        \item dalle produzioni di \(L\) otteniamo i due item:
-        \begin{align*}
-            L &\to \cdot *R, \; \{=\} \\
-            L &\to \cdot id, \; \{=\}
-        \end{align*}
-        in questo caso, dato che \(\beta \neq \varepsilon\), vediamo come il lookahead set corrisponda ad un carattere e non una variabile, questo è possibile mentre stiamo calcolando la chiusura di item simbolici;
-    \end{itemize}
-    \item infine, avendo introdotto anche \(R\), dobbiamo calcolare la chiusura indotta dalle produzioni di \(R\):
-    \begin{itemize}
-        \item abbiamo solo una produzione per \(R\), che ci porta ad inserire l'item 
-        \begin{equation*}
-            R \to \cdot L, \; \{x_0\}
-        \end{equation*}
-        è andato tutto liscio come l'olio no?
-    \end{itemize}
-    \item invece no! perché abbiamo introdotto una nuova chiusura per \(L\), che è diversa dalla precedente perché ora il lookahead set della chiusura è \(x_0\) invece che \(=\), quindi quello che dobbiamo fare è ricalcolare le chiusure di \(L\) con questo nuovo lookahead; dato che siamo skillati e sappiamo già come andrà a finire aggiungiamo semplicemente \(\{x_0\}\) al lookahead set delle produzioni di \(L\) che abbiamo già elencato poco fa, quindi:
+    \item Il primo passo è installare lo stato 0 dell'automa:
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-stato_0.png}
+        \caption{Stato 0: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+        \label{img:ex_automa_simbolico-stato_0}
+    \end{figure}
+    È subito chiaro cosa intendevamo dicendo "invece di inserire il lookahead set inseriamo una \emph{variabile}"; di fatto, come lookahead, inseriamo un simbolo, che risolveremo solo alla fine della costruzione dell'automa.
+
+    In questo caso al posto di inserire \(\$\) inseriamo una variabile chiamata \(x_0\).
+    La corrispondenza tra \(x_0\) e \(\$\) la salviamo (ce la scriviamo) nel sistema di equazioni che ci porteremo dietro per tutta la costruzione.
     \begin{align*}
-        L &\to \cdot *R, \; \{=, x_0\} \\
-        L &\to \cdot id, \; \{=, x_0\}
+        Sistema:& \\
+                & x_0 = \{\$\}
+    \end{align*}
+
+    Quando andiamo a fare la chiusura, essendo gli item simbolici in tutto e per tutto simili agli item LR(1), utilizziamo la \(closure_1\).
+    Questa volta però abbiamo come lookahead set le variabili, in questo caso il nostro lookahead set è \(x_0\).
+
+    Procedendo un passettino alla volta la chiusura dello stato 0 si fa così:
+    \begin{itemize}
+        \item in primis dobbiamo includere la chiusura per le produzioni di S:
+        \begin{itemize}
+            \item dalle due produzioni di \(S\) della nostra grammatica otteniamo i due item:
+            \begin{align*}
+                S &\to \cdot L = R,  \; \{x_0\} \\
+                S &\to \cdot R,  \; \{x_0\}
+            \end{align*}
+            in questo caso il lookahead set è facile da calcolare perché \(\beta\) di
+            \(S' \to \cdot S\) è \(\varepsilon\) mentre \(\Delta = x_0\);
+        \end{itemize}
+        \item ora abbiamo introdotto anche un marker davanti alla \(L\), quindi dobbiamo chiudere anche per \(L\):
+        \begin{itemize}
+            \item dalle produzioni di \(L\) otteniamo i due item:
+            \begin{align*}
+                L &\to \cdot *R, \; \{=\} \\
+                L &\to \cdot id, \; \{=\}
+            \end{align*}
+            in questo caso, dato che \(\beta \neq \varepsilon\), vediamo come il lookahead set corrisponda ad un carattere e non una variabile, questo è possibile mentre stiamo calcolando la chiusura di item simbolici;
+        \end{itemize}
+        \item infine, avendo introdotto anche \(R\), dobbiamo calcolare la chiusura indotta dalle produzioni di \(R\):
+        \begin{itemize}
+            \item abbiamo solo una produzione per \(R\), che ci porta ad inserire l'item 
+            \begin{equation*}
+                R \to \cdot L, \; \{x_0\}
+            \end{equation*}
+            è andato tutto liscio come l'olio no?
+        \end{itemize}
+        \item invece no! perché abbiamo introdotto una nuova chiusura per \(L\), che è diversa dalla precedente perché ora il lookahead set della chiusura è \(x_0\) invece che \(=\), quindi quello che dobbiamo fare è ricalcolare le chiusure di \(L\) con questo nuovo lookahead; dato che siamo skillati e sappiamo già come andrà a finire aggiungiamo semplicemente \(\{x_0\}\) al lookahead set delle produzioni di \(L\) che abbiamo già elencato poco fa, quindi:
+        \begin{align*}
+            L &\to \cdot *R, \; \{=, x_0\} \\
+            L &\to \cdot id, \; \{=, x_0\}
+        \end{align*}
+    \end{itemize}
+    Il consiglio per chi non ha capito questi passaggi è quello di fare qualche esercizio di costruzione di automi LR(1), fidatevi ne vale la pena!
+    Per tutti gli altri invece si apre ora una strada tortuosa verso una valle di lacrime, ma non indugiamo oltre, l'esame è vicino e non c'è tempo da perdere.
+
+    Orbene, passiamo ad analizzare le transazioni uscenti dallo stato 0.
+    La prima transizione che troviamo è \(\tau(0,S)\) che ci porta ad un nuovo stato, lo stato 1.
+    
+    \item Kernel dello stato 1:
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=.7\textwidth]{ex_automa_simbolic-kernel_s1.png}
+        \caption{Kernel stato 1: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \end{figure}
+    Notiamo come invece che scrivere il lookahead set come insieme creiamo una nuova variabile \(x_1\) per indicarlo: questo stratagemma ci serve per aggiornare il valore del lookahead set nel caso dovessimo tornare in questo stato con un nuovo \(\Delta\), sarà chiaro in seguito. Dobbiamo aggiornare anche il nostro sistema in cui salviamo il valore effettivo della variabile.
+    In questo caso il lookahead set del kernel, essendo \(\beta = \varepsilon\) è proprio uguale al lookahead set della produzione da cui arriviamo, quindi \(x_0\), aggiorniamo dunque alacremente il nostro sistema di equazioni.
+    \begin{align*}
+        Sistema:& \\
+                & x_0 = \{\$\} \\
+                & x_1 = x_0
+    \end{align*}
+    Lo stato 1 non ha chiusure da calcolare e nemmeno transizioni, quindi passiamo oltre.
+
+    La prossima transizione che andiamo ad analizzare è \(\tau(0,L)\) che ci porta in un nuovo stato, diciamo 2.
+    
+    \item Kernel dello stato 2:
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s2.png}
+        \caption{Kernel stato 2: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \end{figure}
+    In questo caso il kernel contiene due item perché nello stato 0 abbiamo due item che presentano la possibilità di una \(L\)-transizione; ognuno di questi item quindi avrà il suo lookahead set simbolico: andiamo ad aggiornare subito il nostro sistema, sapendo che le produzioni che ci portano allo stato due hanno come lookahead set \(x_0\).
+    \begin{align*}
+        Sistema:& \\
+                & x_0 = \{\$\} \\
+                & x_1 = x_0 \\
+                & x_2 = x_0 \\
+                & x_3 = x_0 \\
+    \end{align*}
+    Grazie al cielo non si presentano chiusure; analizzeremo le transizioni in seguito.
+
+    Passiamo quindi all'osservazione della transizione \(\tau(0,R)\), che ci porta nello stato 3.
+    
+    \item Kernel dello stato 3:
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s3.png}
+        \caption{Kernel stato 3: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \end{figure}
+    Anche in questo caso abbiamo che \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), riportiamo subito questa informazione all'interno del sistema.
+    \begin{align*}
+        Sistema:& \\
+                & x_0 = \{\$\} \\
+                & x_1 = x_0 \\
+                & x_2 = x_0 \\
+                & x_3 = x_0 \\
+                & x_4 = x_0 \\
+    \end{align*}
+    Il kernel dello stato 3 non presenta nè chiusure nè transizioni, quindi procediamo oltre senza esitazioni.
+
+    La prossima transizione che dobbiamo analizzare è \(\tau(0,*)\), questa deriva dalla produzione \([L \to \cdot *R, \; \{=, x_0\}]\).
+    
+    \item Kernel dello stato 4:
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s4.png}
+        \caption{Kernel stato 4: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \end{figure}
+    Anche in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
+    \begin{align*}
+        Sistema:& \\
+                & x_0 = \{\$\} \\
+                & x_1 = x_0 \\
+                & x_2 = x_0 \\
+                & x_3 = x_0 \\
+                & x_4 = x_0 \\
+                & x_5 = \{=, \$\}
+    \end{align*}
+    Finalmente uno stato che ci dia la \emph{soddisfazione} di calcolare delle chiusure, grazie alle produzioni di \(R\) in primis e di \(L\) poi otteniamo la seguente chiusura per gli item dello stato 4:
+    \begin{align*}
+        R &\to \cdot L, \; \{x_5\} \\
+        L &\to \cdot *R, \; \{x_5\} \\
+        L &\to \cdot id, \; \{x_5\}
+    \end{align*}
+    Che spettacolo, eh? passiamo oltre.
+
+    Prossima transizione da analizzare: \(\tau(0,id)\) che deriva dall'item \([L \to \cdot id, \; \{=, x_0\}]\) e ci porta nello stato 5.
+    
+    \item Kernel dello stato 5:
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s5.png}
+        \caption{Kernel stato 5: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \end{figure}
+    anche in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
+    \begin{align*}
+        Sistema:& \\
+                & x_0 = \{\$\} \\
+                & x_1 = x_0 \\
+                & x_2 = x_0 \\
+                & x_3 = x_0 \\
+                & x_4 = x_0 \\
+                & x_5 = \{=, \$\} \\
+                & x_6 = \{=, \$\} \\
+    \end{align*}
+    Anche qui, pace all'anima nostra, inseriamo il lookahead set come variabile aggiuntiva e la valorizziamo nel nostro sistema di equazioni.
+
+    Abbiamo finito le transizioni dallo stato 0! Prossima transizione da analizzare \(\tau(2, =)\), che deriva dall'item \([S \to L \cdot = R, \; \{x_2\}]\), ci porta direttamente allo stato 6.
+    
+    \item Kernel dello stato 6:
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s6.png}
+        \caption{Kernel stato 6: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \end{figure}
+    In questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
+    \begin{align*}
+        Sistema:& \\
+                & x_0 = \{\$\} \\
+                & x_1 = x_0 \\
+                & x_2 = x_0 \\
+                & x_3 = x_0 \\
+                & x_4 = x_0 \\
+                & x_5 = \{=, \$\} \\
+                & x_6 = \{=, \$\} \\
+                & x_7 = x_2 \\
+    \end{align*}
+    Ora passiamo ad analizzare le chiusure degli item di questo stato.
+    Grazie alla presenza del marker davanti ad una \(R\) aggiungiamo questi item allo stato:
+    \begin{align*}
+        R &\to \cdot L, \; \{x_7\} \\
+        L &\to \cdot *R, \; \{x_7\} \\
+        L &\to \cdot id, \; \{x_7\}
+    \end{align*}
+
+    Passiamo ora ad analizzare la transizione \(\tau(4, R)\), che deriva dall'item \([L \to * \cdot R, \; \{x_5\}]\) e ci spara nello stato 7.
+    
+    \item Kernel dello stato 7:
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s7.png}
+        \caption{Kernel stato 7: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \end{figure}
+    in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
+    \begin{align*}
+        Sistema:& \\
+                & x_0 = \{\$\} \\
+                & x_1 = x_0 \\
+                & x_2 = x_0 \\
+                & x_3 = x_0 \\
+                & x_4 = x_0 \\
+                & x_5 = \{=, \$\} \\
+                & x_6 = \{=, \$\} \\
+                & x_7 = x_2 \\
+                & x_8 = x_5 \\
+    \end{align*}
+    A questo punto dovremmo fare la chiusura no? ma è già tutto chiuso, come alle 22:30 di sera a Trento...
+    % NDR: 23:30 è fin troppo notte inoltrata...
+
+    Passiamo quindi ad analizzare la transizione \(\tau(4, L)\) che prende le mosse dall'item \([R \to \cdot L, \; \{x_5\}]\) e ci porta nello stato 8.
+    
+    \item Kernel dello stato 8:
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s8.png}
+        \caption{Kernel stato 8: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \end{figure}
+    In questo caso il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
+    \begin{align*}
+        Sistema:& \\
+                & x_0 = \{\$\} \\
+                & x_1 = x_0 \\
+                & x_2 = x_0 \\
+                & x_3 = x_0 \\
+                & x_4 = x_0 \\
+                & x_5 = \{=, \$\} \\
+                & x_6 = \{=, \$\} \\
+                & x_7 = x_2 \\
+                & x_8 = x_5 \\
+                & x_9 = x_5 \\
+    \end{align*}
+    Anche qui niente chiusure.
+
+    Passiamo ad analizzare la transizione \(\tau(4,*)\), che deriva dall'item \([L \to \cdot * R, \{x_5\}]\); 
+    
+    \item Ora, se osserviamo bene il kernel dello stato in cui arriveremmo tramite questa transizione, ci rendiamo conto che è un kernel che abbiamo già incontrato, nello specifico proprio nello stato 4 da cui stiamo partendo, cosa significa tutto ciò?
+
+    Significa semplicemente che c'è un arco uscente da 4 che ci riporta in 4 (self loop in gergo) tramite una \(*\)-transizione. È qui che vediamo finalmente la grande differenza di costruzione tra automi LR(1) ed automi simbolici: in un automa LR(1) avremmo costruito un nuovo stato (perché il lookahead set in questo caso è diverso dal lookahead set dello stato 4), invece ora andiamo semplicemente ad aggiornare il lookahead set dello stato 4 aggiungendo il lookahead set della transizione  \(\tau(4,*)\) (che fatalità corrisponde proprio a \(x_5\)).
+    \begin{align*}
+        Sistema:& \\
+                & x_0 = \{\$\} \\
+                & x_1 = x_0 \\
+                & x_2 = x_0 \\
+                & x_3 = x_0 \\
+                & x_4 = x_0 \\
+                & x_5 = \{=, \$\} \cup \{x_5\} \\
+                & x_6 = \{=, \$\} \\
+                & x_7 = x_2 \\
+                & x_8 = x_5 \\
+                & x_9 = x_5 \\
+    \end{align*}
+
+    Passiamo ora ad analizzare la transizione \(\tau(4, id)\), che deriva dall'item \([L \to \cdot id, \; \{x_5\}]\);
+    
+    \item Colpo di scena! anche questo kernel ci è noto, corrisponde a quello dello stato 5, quindi andiamo ad aggiornare il lookahead set dello stato 5.
+    Il lookahead set della transizione \(\tau(4, id)\) è ancora una volta \(x_5\).
+    \begin{align*}
+        Sistema:& \\
+                & x_0 = \{\$\} \\
+                & x_1 = x_0 \\
+                & x_2 = x_0 \\
+                & x_3 = x_0 \\
+                & x_4 = x_0 \\
+                & x_5 = \{=, \$\} \cup \{x_5\} \\
+                & x_6 = \{=, \$\} \cup \{x_5\} \\
+                & x_7 = x_2 \\
+                & x_8 = x_5 \\
+                & x_9 = x_5 \\
+    \end{align*}
+
+    Passiamo oltre, la prossima transizione su cui ci concentriamo è \(\tau(6, R)\), derivante da \([S \to L = \cdot R, \; \{x_7\}]\), che ci porta a scoprire lo stato 9.
+    
+    \item Kernel dello stato 9:
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s9.png}
+        \caption{Kernel stato 9: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \end{figure}
+    In questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), ovvero \(x_{10} = \{x_7\}\), aggiorno quindi il sistema di equazioni.
+    \begin{align*}
+        Sistema:& \\
+                & x_0 = \{\$\} \\
+                & x_1 = x_0 \\
+                & x_2 = x_0 \\
+                & x_3 = x_0 \\
+                & x_4 = x_0 \\
+                & x_5 = \{=, \$\} \cup \{x_5\} \\
+                & x_6 = \{=, \$\} \cup \{x_5\} \\
+                & x_7 = x_2 \\
+                & x_8 = x_5 \\
+                & x_9 = x_5 \\
+                & x_{10} = x_7 \\
+    \end{align*}
+    Anche questo kernel ci regala poche emozioni (e nessuna chiusura) quindi concludiamo l'analisi dello stato 9.
+
+    \item La prossima transizione è \(\tau(6, L)\) che deriva da \([R \to \cdot L, \{x_7\}]\); tale transizione ci porterebbe in uno stato con kernel LR(0) = \([R \to L \cdot ]\), che quindi corrisponde al nostro stato 8: invece che creare un nuovo stato andiamo ad aggiornare il lookahead set dello stato 8 con il lookahead set che deriva dalla transizione \(\tau(6, L)\).
+    \begin{align*}
+        Sistema:& \\
+                & x_0 = \{\$\} \\
+                & x_1 = x_0 \\
+                & x_2 = x_0 \\
+                & x_3 = x_0 \\
+                & x_4 = x_0 \\
+                & x_5 = \{=, \$\} \cup \{x_5\} \\
+                & x_6 = \{=, \$\} \cup \{x_5\} \\
+                & x_7 = x_2 \\
+                & x_8 = x_5 \\
+                & x_9 = x_5 \cup \{x_7\} \\
+                & x_{10} = x_7 \\
+    \end{align*}
+    niente chiusure, passiamo oltre.
+
+    \item Prossima transizione \(\tau(6, *)\), derivante dall'item \([L \to \cdot * R, \{x_7\}]\), il target di questa transizione è uno stato con kernel LR(0) \([L \to *\cdot R]\), ovvero lo stato 4. Quindi anche questa volta non creiamo un nuovo stato ma andiamo ad aggiornare il kernel dello stato 4.
+    \begin{align*}
+        Sistema:& \\
+                & x_0 = \{\$\} \\
+                & x_1 = x_0 \\
+                & x_2 = x_0 \\
+                & x_3 = x_0 \\
+                & x_4 = x_0 \\
+                & x_5 = \{=, \$\} \cup \{x_5\} \cup \{x_7\} \\
+                & x_6 = \{=, \$\} \cup \{x_5\} \\
+                & x_7 = x_2 \\
+                & x_8 = x_5 \\
+                & x_9 = x_5 \cup \{x_7\} \\
+                & x_{10} = x_7 \\
+    \end{align*}
+
+    \item Passiamo alla prossima transizione che è \(\tau(6, id)\), derivante da \([L \to \cdot id, \{x_7\}]\), che ci porta in uno stato con kernel LR(0) = \([L \to id \cdot]\), che corrisponde al già visitato stato 5, quindi aggiorniamo semplicemente il lookahead set di tale stato.
+    \begin{align*}
+        Sistema:& \\
+                & x_0 = \{\$\} \\
+                & x_1 = x_0 \\
+                & x_2 = x_0 \\
+                & x_3 = x_0 \\
+                & x_4 = x_0 \\
+                & x_5 = \{=, \$\} \cup \{x_5\} \cup \{x_7\} \\
+                & x_6 = \{=, \$\} \cup \{x_5\} \cup \{x_7\} \\
+                & x_7 = x_2 \\
+                & x_8 = x_5 \\
+                & x_9 = x_5 \cup \{x_7\} \\
+                & x_{10} = x_7 \\
     \end{align*}
 \end{itemize}
-Il consiglio per chi non ha capito questi passaggi è quello di fare qualche esercizio di costruzione di automi LR(1), fidatevi ne vale la pena!
-Per tutti gli altri invece si apre ora una strada tortuosa verso una valle di lacrime, ma non indugiamo oltre, l'esame è vicino e non c'è tempo da perdere.
-
-Orbene, passiamo ad analizzare le transazioni uscenti dallo stato 0.
-La prima transizione che troviamo è \(\tau(0,S)\) che ci porta ad un nuovo stato, lo stato 1.
-\\
-Kernel dello stato 1:
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolic-kernel_s1.png}
-    \caption{Kernel stato 1: sulla sinistra automa simbolico, sulla destra automa LR(1)}
-\end{figure}
-notiamo come invece che scrivere il lookahead set come insieme creiamo una nuova variabile \(x_1\) per indicarlo: questo stratagemma ci serve per aggiornare il valore del lookahead set nel caso dovessimo tornare in questo stato con un nuovo \(\Delta\), sarà chiaro in seguito. Dobbiamo aggiornare anche il nostro sistema in cui salviamo il valore effettivo della variabile.
-In questo caso il lookahead set del kernel, essendo \(\beta = \varepsilon\) è proprio uguale al lookahead set della produzione da cui arriviamo, quindi \(x_0\), aggiorniamo dunque alacremente il nostro sistema di equazioni.
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\} \\
-            & x_1 = x_0
-\end{align*}
-Lo stato 1 non ha chiusure da calcolare e nemmeno transizioni, quindi passiamo oltre.
-
-La prossima transizione che andiamo ad analizzare è \(\tau(0,L)\) che ci porta in un nuovo stato, diciamo 2.
-\\
-Kernel dello stato 2:
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s2.png}
-    \caption{Kernel stato 2: sulla sinistra automa simbolico, sulla destra automa LR(1)}
-\end{figure}
-in questo caso il kernel contiene due item perché nello stato 0 abbiamo due item che presentano la possibilità di una \(L\)-transizione; ognuno di questi item quindi avrà il suo lookahead set simbolico: andiamo ad aggiornare subito il nostro sistema, sapendo che le produzioni che ci portano allo stato due hanno come lookahead set \(x_0\).
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\} \\
-            & x_1 = x_0 \\
-            & x_2 = x_0 \\
-            & x_3 = x_0 \\
-\end{align*}
-grazie al cielo non si presentano chiusure; analizzeremo le transizioni in seguito.
-
-Passiamo quindi all'osservazione della transizione \(\tau(0,R)\), che ci porta nello stato 3.
-\\
-Kernel dello stato 3:
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s3.png}
-    \caption{Kernel stato 3: sulla sinistra automa simbolico, sulla destra automa LR(1)}
-\end{figure}
-anche in questo caso abbiamo che \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), riportiamo subito questa informazione all'interno del sistema.
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\} \\
-            & x_1 = x_0 \\
-            & x_2 = x_0 \\
-            & x_3 = x_0 \\
-            & x_4 = x_0 \\
-\end{align*}
-il kernel dello stato 3 non presenta nè chiusure nè transizioni, quindi procediamo oltre senza esitazioni.
-
-La prossima transizione che dobbiamo analizzare è \(\tau(0,*)\), questa deriva dalla produzione \([L \to \cdot *R, \; \{=, x_0\}]\).
-\\
-Kernel dello stato 4:
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s4.png}
-    \caption{Kernel stato 4: sulla sinistra automa simbolico, sulla destra automa LR(1)}
-\end{figure}
-anche in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\} \\
-            & x_1 = x_0 \\
-            & x_2 = x_0 \\
-            & x_3 = x_0 \\
-            & x_4 = x_0 \\
-            & x_5 = \{=, \$\}
-\end{align*}
-finalmente uno stato che ci dia la \emph{soddisfazione} di calcolare delle chiusure, grazie alle produzioni di \(R\) in primis e di \(L\) poi otteniamo la seguente chiusura per gli item dello stato 4:
-\begin{align*}
-    R &\to \cdot L, \; \{x_5\} \\
-    L &\to \cdot *R, \; \{x_5\} \\
-    L &\to \cdot id, \; \{x_5\}
-\end{align*}
-che spettacolo, eh? passiamo oltre.
-
-Prossima transizione da analizzare: \(\tau(0,id)\) che deriva dall'item \([L \to \cdot id, \; \{=, x_0\}]\) e ci porta nello stato 5.
-\\
-Kernel dello stato 5:
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s5.png}
-    \caption{Kernel stato 5: sulla sinistra automa simbolico, sulla destra automa LR(1)}
-\end{figure}
-anche in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\} \\
-            & x_1 = x_0 \\
-            & x_2 = x_0 \\
-            & x_3 = x_0 \\
-            & x_4 = x_0 \\
-            & x_5 = \{=, \$\} \\
-            & x_6 = \{=, \$\} \\
-\end{align*}
-Anche qui, pace all'anima nostra, inseriamo il lookahead set come variabile aggiuntiva e la valorizziamo nel nostro sistema di equazioni.
-
-Abbiamo finito le transizioni dallo stato 0! Prossima transizione da analizzare \(\tau(2, =)\), che deriva dall'item \([S \to L \cdot = R, \; \{x_2\}]\), ci porta direttamente allo stato 6.
-\\
-Kernel dello stato 6:
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s6.png}
-    \caption{Kernel stato 6: sulla sinistra automa simbolico, sulla destra automa LR(1)}
-\end{figure}
-in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\} \\
-            & x_1 = x_0 \\
-            & x_2 = x_0 \\
-            & x_3 = x_0 \\
-            & x_4 = x_0 \\
-            & x_5 = \{=, \$\} \\
-            & x_6 = \{=, \$\} \\
-            & x_7 = x_2 \\
-\end{align*}
-Ora passiamo ad analizzare le chiusure degli item di questo stato.
-Grazie alla presenza del marker davanti ad una \(R\) aggiungiamo questi item allo stato:
-\begin{align*}
-    R &\to \cdot L, \; \{x_7\} \\
-    L &\to \cdot *R, \; \{x_7\} \\
-    L &\to \cdot id, \; \{x_7\}
-\end{align*}
-
-Passiamo ora ad analizzare la transizione \(\tau(4, R)\), che deriva dall'item \([L \to * \cdot R, \; \{x_5\}]\) e ci spara nello stato 7.
-\\
-Kernel dello stato 7:
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s7.png}
-    \caption{Kernel stato 7: sulla sinistra automa simbolico, sulla destra automa LR(1)}
-\end{figure}
-in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\} \\
-            & x_1 = x_0 \\
-            & x_2 = x_0 \\
-            & x_3 = x_0 \\
-            & x_4 = x_0 \\
-            & x_5 = \{=, \$\} \\
-            & x_6 = \{=, \$\} \\
-            & x_7 = x_2 \\
-            & x_8 = x_5 \\
-\end{align*}
-a questo punto dovremmo fare la chiusura no? ma è già tutto chiuso, come alle 23:30 di sera a Trento...
-
-Passiamo quindi ad analizzare la transizione \(\tau(4, L)\) che prende le mosse dall'item \([R \to \cdot L, \; \{x_5\}]\) e ci porta nello stato 8.
-\\
-Kernel dello stato 8:
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s8.png}
-    \caption{Kernel stato 8: sulla sinistra automa simbolico, sulla destra automa LR(1)}
-\end{figure}
-in questo caso il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\} \\
-            & x_1 = x_0 \\
-            & x_2 = x_0 \\
-            & x_3 = x_0 \\
-            & x_4 = x_0 \\
-            & x_5 = \{=, \$\} \\
-            & x_6 = \{=, \$\} \\
-            & x_7 = x_2 \\
-            & x_8 = x_5 \\
-            & x_9 = x_5 \\
-\end{align*}
-anche qui niente chiusure.
-
-Passiamo ad analizzare la transizione \(\tau(4,*)\), che deriva dall'item \([L \to \cdot * R, \{x_5\}]\); ora, se osserviamo bene il kernel dello stato in cui arriveremmo tramite questa transizione ci rediamo conto che è un kernel che abbiamo già incontrato, nello specifico proprio nello stato 4 da cui stiamo partendo, cosa significa tutto ciò?
-
-Significa semplicemente che c'è un arco uscente da 4 che ci riporta in 4 (self loop in gergo) tramite una \(*\)-transizione. È qui che vediamo finalmente la grande differenza di costruzione tra automi LR(1) ed automi simbolici: in un automa LR(1) avremmo costruito un nuovo stato (perché il lookahead set in questo caso è diverso dal lookahead set dello stato 4), invece ora andiamo semplicemente ad aggiornare il lookahead set dello stato 4 aggiungendo il lookahead set della transizione  \(\tau(4,*)\) (che fatalità corrisponde proprio a \(x_5\)).
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\} \\
-            & x_1 = x_0 \\
-            & x_2 = x_0 \\
-            & x_3 = x_0 \\
-            & x_4 = x_0 \\
-            & x_5 = \{=, \$\} \cup \{x_5\} \\
-            & x_6 = \{=, \$\} \\
-            & x_7 = x_2 \\
-            & x_8 = x_5 \\
-            & x_9 = x_5 \\
-\end{align*}
-
-Passiamo ora ad analizzare la transizione \(\tau(4, id)\), che deriva dall'item \([L \to \cdot id, \; \{x_5\}]\), colpo di scena! anche questo kernel ci è noto, corrisponde a quello dello stato 5, quindi andiamo ad aggiornare il lookahead set dello stato 5.
-Il lookahead set della transizione \(\tau(4, id)\) è ancora una volta \(x_5\).
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\} \\
-            & x_1 = x_0 \\
-            & x_2 = x_0 \\
-            & x_3 = x_0 \\
-            & x_4 = x_0 \\
-            & x_5 = \{=, \$\} \cup \{x_5\} \\
-            & x_6 = \{=, \$\} \cup \{x_5\} \\
-            & x_7 = x_2 \\
-            & x_8 = x_5 \\
-            & x_9 = x_5 \\
-\end{align*}
-
-Passiamo oltre, la prossima transizione su cui ci concentriamo è \(\tau(6, R)\), derivante da \([S \to L = \cdot R, \; \{x_7\}]\), che ci porta a scoprire lo stato 9.
-\\
-Kernel dello stato 9:
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s9.png}
-    \caption{Kernel stato 9: sulla sinistra automa simbolico, sulla destra automa LR(1)}
-\end{figure}
-in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), ovvero \(x_{10} = \{x_7\}\), aggiorno quindi il sistema di equazioni.
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\} \\
-            & x_1 = x_0 \\
-            & x_2 = x_0 \\
-            & x_3 = x_0 \\
-            & x_4 = x_0 \\
-            & x_5 = \{=, \$\} \cup \{x_5\} \\
-            & x_6 = \{=, \$\} \cup \{x_5\} \\
-            & x_7 = x_2 \\
-            & x_8 = x_5 \\
-            & x_9 = x_5 \\
-            & x_{10} = x_7 \\
-\end{align*}
-anche questo kernel ci regala poche emozioni (e nessuna chiusura) quindi concludiamo l'analisi dello stato 9.
-
-La prossima transizione è \(\tau(6, L)\) che deriva da \([R \to \cdot L, \{x_7\}]\); tale transizione ci porterebbe in uno stato con kernel LR(0) = \([R \to L \cdot ]\), che quindi corrisponde al nostro stato 8: invece che creare un nuovo stato andiamo ad aggiornare il lookahead set dello stato 8 con il lookahead set che deriva dalla transizione \(\tau(6, L)\).
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\} \\
-            & x_1 = x_0 \\
-            & x_2 = x_0 \\
-            & x_3 = x_0 \\
-            & x_4 = x_0 \\
-            & x_5 = \{=, \$\} \cup \{x_5\} \\
-            & x_6 = \{=, \$\} \cup \{x_5\} \\
-            & x_7 = x_2 \\
-            & x_8 = x_5 \\
-            & x_9 = x_5 \cup \{x_7\} \\
-            & x_{10} = x_7 \\
-\end{align*}
-niente chiusure, passiamo oltre.
-
-Prossima transizione \(\tau(6, *)\), derivante dall'item \([L \to \cdot * R, \{x_7\}]\), il target di questa transizione è uno stato con kernel LR(0) \([L \to *\cdot R]\), ovvero lo stato 4. Quindi anche questa volta non creiamo un nuovo stato ma andiamo ad aggiornare il kernel dello stato 4.
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\} \\
-            & x_1 = x_0 \\
-            & x_2 = x_0 \\
-            & x_3 = x_0 \\
-            & x_4 = x_0 \\
-            & x_5 = \{=, \$\} \cup \{x_5\} \cup \{x_7\} \\
-            & x_6 = \{=, \$\} \cup \{x_5\} \\
-            & x_7 = x_2 \\
-            & x_8 = x_5 \\
-            & x_9 = x_5 \cup \{x_7\} \\
-            & x_{10} = x_7 \\
-\end{align*}
-
-Passiamo alla prossima transizione che è \(\tau(6, id)\), derivante da \([L \to \cdot id, \{x_7\}]\), che ci porta in uno stato con kernel LR(0) = \([L \to id \cdot]\), che corrisponde al già visitato stato 5, quindi aggiorniamo semplicemente il lookahead set di tale stato.
-\begin{align*}
-    Sistema:& \\
-            & x_0 = \{\$\} \\
-            & x_1 = x_0 \\
-            & x_2 = x_0 \\
-            & x_3 = x_0 \\
-            & x_4 = x_0 \\
-            & x_5 = \{=, \$\} \cup \{x_5\} \cup \{x_7\} \\
-            & x_6 = \{=, \$\} \cup \{x_5\} \cup \{x_7\} \\
-            & x_7 = x_2 \\
-            & x_8 = x_5 \\
-            & x_9 = x_5 \cup \{x_7\} \\
-            & x_{10} = x_7 \\
-\end{align*}
 
 Oh butei, abbiamo finito di analizzare l'automa, quindi andiamo a risolvere lo strascico di equazioni che ci siamo tirati dietro per tutto l'esercizio:
 \begin{align*}
@@ -1169,7 +1176,7 @@ Per concludere questo esempio ricordiamo brevemente quali sarebbero i passi da s
     \item inseriamo tutti gli stati;
     \item le mosse di shift (le transizioni) sono esattamente quelle identificate e corrispondono alle transizioni dell'automa caratteristico LR(0) per questa grammatica;
     \item gli stati con riduzioni sono tutti quelli che presentano una produzione con il marker in fondo al body;
-    \item le lookahead function (le etichette per le riduizioni) corrispondono ai lookahead set calcolati nella risoluzione del sistema.
+    \item le lookahead function (le etichette per le riduzioni) corrispondono ai lookahead set calcolati nella risoluzione del sistema.
 \end{enumerate}
 Carino questo esempio, eh? per festeggiare il suo completamento ci concediamo la risoluzione di un altro esercizio dello stesso tipo.
 
@@ -1193,7 +1200,7 @@ Passiamo alla chiusura del kernel:
     S &\to \cdot aSb, x_0 \\
     S &\to \cdot ab, x_0
 \end{align*}
-Lo stato 0 non ci regala altre chiusure, ma ci regala due belle transizioni, una per \(a\) ed una per \(S\).
+Lo stato 0 non ci regala altre chiusure, ma ci regala due belle transizioni, una per \(S\) ed una per \(a\).
 \\\\
 Analizziamo quindi la transizione \(\tau(0,S)\), che ci porta nel nuovo stato 1.
 \subsubsection*{Stato 1}
@@ -1276,8 +1283,8 @@ Aggiorniamo il sistema:
     Sistema:& \\
             & x_0 = \{\$\}\\
             & x_1 = x_0 \\
-            & x_2 = x_0 \\
-            & x_3 = x_0 \\
+            & x_2 = x_0 \cup \{b\} \\
+            & x_3 = x_0 \cup \{b\} \\
             & x_4 = x_2 \\
             & x_5 = x_3 
 \end{align*}
