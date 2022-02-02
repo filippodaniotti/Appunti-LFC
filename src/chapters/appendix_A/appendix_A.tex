@@ -26,7 +26,7 @@ Detto questo, cominciamo.
 
 Se \(\{ww \mid w \in \L((a \mid b)^*)\}\) è un linguaggio regolare rispondere “SI”, altrimenti rispondere “NO”.
 
-Analizziamo il tutto a mente fredda: la domanda è se il linguaggio proposto è regolare, una sottoclasse dei linguaggi liberi. In questo caso non ha senso perdersi sulla definizione in quanto il linguaggio di partenza (i.e. quello a cui appartiene w) è sicuramente regolare in quanto è denotato da un'espressione regolare. A questo punto potremmo pensare che la risposta sia banala, un mero richiamo della proprietà di chiusura rispetto alla concatenazione: “isto che i linguaggi regolari sono chiusi rispetto alla concatenazione allora il linguaggio fornito è regolare”. Giusto? MA NEANCHE PER SBAGLIO! 
+Analizziamo il tutto a mente fredda: la domanda è se il linguaggio proposto è regolare, una sottoclasse dei linguaggi liberi. In questo caso non ha senso perdersi sulla definizione in quanto il linguaggio di partenza (i.e. quello a cui appartiene \(w\)) è sicuramente regolare in quanto è denotato da un'espressione regolare. A questo punto potremmo pensare che la risposta sia banale, un mero richiamo della proprietà di chiusura rispetto alla concatenazione: “visto che i linguaggi regolari sono chiusi rispetto alla concatenazione allora il linguaggio fornito è regolare”. Giusto? MA NEANCHE PER SBAGLIO! 
 
 Osserviamo meglio il tutto: se veramente valesse la proprietà di concatenazione potremmo scrivere il tutto come 
 
@@ -69,7 +69,7 @@ La risposta all'esercizio è dunque \textbf{“VERO”}.
 
 Sia \(r=b^* \mid b^* a (\varepsilon \mid a \mid b)^*\)e sia \(\mathcal{D}\) il DFA minimo per il riconoscimento di \(\L(r)\). Dire quanti stati ha \(\mathcal{D}\) e quanti di questi stati sono finali.
 
-Per poter risolvere l'esercizio è possibile applicare la Thompson's Construction per ottenere un NFA, successivamente la Subset Construction per trasformarlo in un DFA ed infine la DFA Minimization per ottenere \(\mathcal{D}\). Il procedimento, seppur efficacie, è troppo lungo da svolgere (i.e. o saltate l'esercizio e ci ritornate dopo oppure trovate un metodo furbo per farlo): per questo motivo è meglio osservare direttamente la regex. Il linguaggio denotato è \(\{b^k \mid k \geq 0\} \cup \{b^i a a^j b^k \mid i \geq 0, j \geq 0, k \geq 0\}\): se riuscissimo a trovare un DFA che ci permette di ottenere questo linguaggio poi potremmo ridurlo. 
+Per poter risolvere l'esercizio è possibile applicare la Thompson's Construction per ottenere un NFA, successivamente la Subset Construction per trasformarlo in un DFA ed infine la DFA Minimization per ottenere \(\mathcal{D}\). Il procedimento, seppur efficace, è troppo lungo da svolgere (i.e. o saltate l'esercizio e ci ritornate dopo oppure trovate un metodo furbo per farlo): per questo motivo è meglio osservare direttamente la regex. Il linguaggio denotato è \(\{b^k \mid k \geq 0\} \cup \{b^i a a^j b^k \mid i \geq 0, j \geq 0, k \geq 0\}\): se riuscissimo a trovare un DFA che ci permette di ottenere questo linguaggio poi potremmo ridurlo. 
 
 Partiamo dal primo caso: vogliamo avere la possibilità di generare 0 o più ripetizioni di \(b\), dunque abbiamo bisogno che lo stato iniziale sia anche lo stato finale (in questo modo si ha la possibilità di ottenere la stringa vuota) e che vi sia un self-loop con etichetta \(b\) (per poter considerare le parole del tipo \(b^k\)).
 
@@ -113,7 +113,7 @@ Il DFA minimizzato \(\mathcal{D}\) è dunque così costruito:
 \begin{figure}[H]
 	\centering
     \subimport{assets/figures/}{es3-d.tex}
-    \caption{Es 1: DFA Minimizzato \(b^* \mid b^* a (\varepsilon \mid a \mid b)^*\)}
+    \caption{Es 3: DFA Minimizzato \(b^* \mid b^* a (\varepsilon \mid a \mid b)^*\)}
     \label{fig:dfa-minimized-ex3}
 \end{figure}
 
@@ -128,7 +128,7 @@ Per maggiore chiarezza possiamo rappresentare l'automa per intero:
 \begin{figure}[H]
 	\centering
     \subimport{assets/figures/}{es4-a.tex}
-    \caption{Es 1: NFA di partenza}
+    \caption{Es 4: NFA di partenza}
     \label{fig:nfa-ex4}
 \end{figure}
 
@@ -146,7 +146,7 @@ Eseguiamo dunque la Subset Construction:
 \begin{figure}[H]
 	\centering
     \subimport{assets/figures/}{es4-b.tex}
-    \caption{Es 1: DFA risultante dalla Subset Construction}
+    \caption{Es 4: DFA risultante dalla Subset Construction}
     \label{fig:sc-ex4}
 \end{figure}
 
@@ -154,13 +154,13 @@ A questo punto, partendo dallo stato iniziale \(T_1\), è possibile spostarsi al
 
 \section*{Esercizio 5}
 
-Chiamiamo \(\mathcal{D}_m\) il  DFA  ottenuto  per  minimizzazione  di \(\mathcal{D}_1\) e \(P_1\) o  stato  iniziale  di \(\mathcal{D}_m\). Dire a quale sottoinsieme degli stati di \(\mathcal{D}_1\) corrisponde \(P[abab]\)
+Chiamiamo \(\mathcal{D}_m\) il DFA ottenuto per minimizzazione di \(\mathcal{D}_1\) e \(P_1\) lo stato iniziale di \(\mathcal{D}_m\). Dire a quale sottoinsieme degli stati di \(\mathcal{D}_1\) corrisponde \(P[abab]\).
 
 L'esercizio proposto è identico a quello svolto durante una lezione del corso: la sua risoluzione si può trovare in ~\ref{subsec:dfa-minimization} \emph{Esercizi sulla minimizzazione DFA, Esercizio 2}.
 
 \section*{Esercizio 6}
 
-Scrivere l’intera riga della tabella di parsing \(LL(1)\) per \(\G_1\) relativa al non-terminale \(B\).
+Scrivere l'intera riga della tabella di parsing \(LL(1)\) per \(\G_1\) relativa al non-terminale \(B\).
 
 Riportiamo \(\G_1\) per praticità
 
@@ -321,7 +321,7 @@ Gli item \(LR(1)\) che appartengono allo stato target 5 del nostro automa caratt
 
 \section*{Esercizio 9}
 
-Siano: \(H\) lo stato iniziale dell’automa caratteristico per il parsing \(LALR(1)\) di \(\G_1\); \(T\) la tabella di parsing \(LALR(1)\) per \(\G_1\). Se non ci sono conflitti nello stato \(H[BcBaBc]\) di \(T\), rispondere “NO CONFLICT”. Altrimenti, per ciascuna \(X\) tale che la entry \(T(H[BcBaBc], X)\) contiene un conflitto, dire, specificando a quale \(X\) ci si riferisce:  (i) di che tipo di conflitto si tratta; (ii) quale/i riduzione/i sono coinvolte.
+Siano: \(H\) lo stato iniziale dell'automa caratteristico per il parsing \(LALR(1)\) di \(\G_1\); \(T\) la tabella di parsing \(LALR(1)\) per \(\G_1\). Se non ci sono conflitti nello stato \(H[BcBaBc]\) di \(T\), rispondere “NO CONFLICT”. Altrimenti, per ciascuna \(X\) tale che la entry \(T(H[BcBaBc], X)\) contiene un conflitto, dire, specificando a quale \(X\) ci si riferisce:  (i) di che tipo di conflitto si tratta; (ii) quale/i riduzione/i sono coinvolte.
 
 Riportiamo \(\G_1\) per praticità
 
@@ -417,7 +417,7 @@ La soluzione all'esercizio dunque è
 
 \section*{Esercizio 11}
 
-Sia \(P\) lo  stato  iniziale  del  parser  \(LALR(1)\)  per  la  grammatica  dello  \(SDD \; \mathcal{V}_1\). Il parser ha 4  conflitti shift/reduce:  uno in \((P[EaE],a)\), uno in \((P[EaE],b)\), uno in \((P[EbE],a)\) e uno in \((P[EbE],b)\).  Supponiamo  che  tutti  e  4  i  conflitti  siano  risolti  a  favore  dello  shift.   Supponiamo  inoltre  che  l’attributo \(n.lexval\) del terminale \(n\) sia il numero intero rappresentato da \(n\).  Se l'input \(2a3b4\) non è riconosciuto, rispondere “ERROR”. Altrimenti dire quale valore viene valutato per \(S.v\) su input \(2a3b4\).
+Sia \(P\) lo  stato  iniziale  del  parser  \(LALR(1)\)  per  la  grammatica  dello  \(SDD \; \mathcal{V}_1\). Il parser ha 4  conflitti shift/reduce:  uno in \((P[EaE],a)\), uno in \((P[EaE],b)\), uno in \((P[EbE],a)\) e uno in \((P[EbE],b)\).  Supponiamo  che  tutti  e  4  i  conflitti  siano  risolti  a  favore  dello  shift.   Supponiamo  inoltre  che  l'attributo \(n.lexval\) del terminale \(n\) sia il numero intero rappresentato da \(n\).  Se l'input \(2a3b4\) non è riconosciuto, rispondere “ERROR”. Altrimenti dire quale valore viene valutato per \(S.v\) su input \(2a3b4\).
 
 Riportiamo \(\mathcal{V}_1\) per praticità
 
@@ -441,7 +441,7 @@ Caliamoci dunque nei panni del parser e immaginiamo come dovremmo considerare la
 
 \begin{enumerate}
     \item Come detto precedentemente, i terminali \(n\) comportano \texttt{reduce} \(E \to n\) e ciò accade indipendentemente dal carattere letto dall'input buffer, questo perché nel nostro linguaggio abbiamo la possibilità di fare parole del tipo \(n,\; n+n,\; n*n,\; n+n*n,\; n*n+n\)
-    \item Per questo motivo non dovrebbero esserci problemi ad arrivare al punto in cui \(sySt = EaE\); essendo che abbimo eseguito implicitamente delle reduce ricordiamoci che le \(E.v = n.lexval\)
+    \item Per questo motivo non dovrebbero esserci problemi ad arrivare al punto in cui \(sySt = EaE\); essendo che abbiamo eseguito implicitamente delle reduce ricordiamoci che le \(E.v = n.lexval\)
     \item A questo punto avremmo un conflitto di shift/reduce citato in precedenza, tuttavia ci viene detto di dare priorità all'operazione di \texttt{shift}
     \item Eseguendo tale operazione ci ritroviamo nella situazione analoga dove non si dovrebbero avere troppi problemi nell'arrivare al punto in cui \(sySt = EaEbE\)
     \item A questo punto, leggendo in input \$, non è possibile fare altro se non eseguire un'operazione di \texttt{reduce} \(E \to E_1bE_2\), per cui \(sySt = EaE\) e, applicando la regola associata alla riduzione, otteniamo \(E.v = E_1.v + E_2.v = 3 + 4 = 7\) 
@@ -473,7 +473,7 @@ Per poter imporre la precedenza di un operatore sull'altro è possibile risolver
 
 Per poter implementare correttamente ciò sarà necessario fornire al parser le direttive del caso per poter gestire autonomamente la situazione
 
-I conflittti generati dalla precedenza sono duqnque \((P[EaE],b)\), che viene risolto effettuando la \texttt{reduce} \(E \to E_1 a E_2\), e \((P[EbE],a)\), risolto effettuando lo \texttt{shift}. I restanti conflitti sono dovuti alla mancata associatività degli operatori per la grammatica definita. 
+I conflitti generati dalla precedenza sono dunque \((P[EaE],b)\), che viene risolto effettuando la \texttt{reduce} \(E \to E_1 a E_2\), e \((P[EbE],a)\), risolto effettuando lo \texttt{shift}. I restanti conflitti sono dovuti alla mancata associatività degli operatori per la grammatica definita. 
 
 Se il lettore fosse interessato, può trovare una spiegazione più dettagliata su un esempio analogo nella sezione ~\ref{subsec:precedence-conflicts} \emph{Gestione dei conflitti}
 
@@ -489,6 +489,6 @@ Sia \(\G\) la seguente grammatica:
 \end{align*}
 Evitando  di  ricorrere  alla  computazione  della  tabella  di  parsing,  spiegare  perché \(\G\) certamente  non è \(LR(1)\).
 
-Pur non essendo ambigua la grammatica presenta il problema che, nel momento in cui finisce di leggere la sequenza di \(a\), non si ha idea se sia necessario eseguire un'operazione \texttt{reduce} \(A \to ab\) oppure di \texttt{shift} in modo da poter eseguire successivamente \texttt{reduce} \(B \to abb\). Per poter sapere che cosa compiere si dovrebbe conoscere l'ultimo non terminale della stringa: nel caso in cui fosse una \(a\) si saprebbe di dover applicare il primo caso descritto, se fosse una \(b\) il secondo.
+Pur non essendo ambigua, la grammatica presenta il problema che, nel momento in cui finisce di leggere la sequenza di \(a\), non si ha idea se sia necessario eseguire un'operazione \texttt{reduce} \(A \to ab\) oppure di \texttt{shift} in modo da poter eseguire successivamente \texttt{reduce} \(B \to abb\). Per poter sapere che cosa compiere si dovrebbe conoscere l'ultimo terminale della stringa: nel caso in cui fosse una \(a\) si saprebbe di dover applicare il primo caso descritto, se fosse una \(b\) il secondo.
 
 \end{document}

@@ -1,0 +1,47 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+\usepackage{../../../../style_tree}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{forest}
+        for tree={s sep=15mm}
+        [{\textit{T}},name=t1,edge=dotted
+            [{\textit{F}},name=f1,edge=dotted 
+                [{\textit{digit}},name=d1,edge=dotted]
+            ]
+            [{\textit{T}$'$},name=t2,edge=dotted
+                [{\textit{*}},edge=dotted]
+                [{\textit{F}},name=f2,edge=dotted,before computing xy={s/.average={s}{siblings}}
+                    [{\textit{digit}},name=d2,edge=dotted,name=d2]
+                ]
+                [{\textit{T}$'_1$},name=t3,edge=dotted
+                    [{$\epsilon$},edge=dotted]
+                ]
+            ]
+        ]
+        \tikzset{every node/.style={font=\footnotesize\itshape,color=blue}}
+        \path(d1) to ([xshift=0.6cm]d1) node(s1){.s};
+        \path(f1) to ([xshift=0.3cm,yshift=-0.2cm]f1) node(s2){.s};
+        \path(t2) to ([xshift=-0.5cm]t2) node(i1){.i};
+        \path(t2) to ([xshift=0.5cm,yshift=0.1cm]t2) node(s6){.s};
+        \path(f2) to ([xshift=0.3cm,yshift=-0.2cm]f2) node(s3){.s};
+        \path(d2) to ([xshift=0.6cm]d2) node(s4){.s};
+        \path(t3) to ([xshift=-0.4cm,yshift=-0.2cm]t3) node(i2){.i};
+        \path(t3) to ([xshift=0.5cm,yshift=0.1cm]t3) node(s5){.s};
+        \path(t1) to ([xshift=0.5cm]t1) node(s7){.s};
+        \draw[->, blue] (s1) to[out=80,in=-45] (s2);
+        \draw[->, blue] (s2) to[out=-10,in=200] (i1);
+        \draw[->, blue] (i1) to[out=-45,in=160] (i2);
+        \draw[->, blue] (s4) to[out=90,in=-45] (s3);
+        \draw[->, blue] (s3) to[out=-15,in=-160] (i2);
+        \draw[->, blue] (i2) to[out=-30,in=-90] (s5);
+        \draw[->, blue] (s5) to[out=120,in=0] (s6);
+        \draw[->, blue] (s6) to[out=120,in=0] (s7);
+    \end{forest}
+\end{document}

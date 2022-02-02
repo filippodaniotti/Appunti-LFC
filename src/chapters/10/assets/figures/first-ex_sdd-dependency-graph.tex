@@ -1,0 +1,32 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+\usepackage{../../../../style_tree}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{forest}
+        for tree={s sep=10mm, l=15mm}
+        [{\textit{V.val}}
+            [{\textit{E.val}},edge=dotted
+                [{\textit{E.val}},edge=dotted
+                    [{\textit{T.val}},edge=dotted
+                        [{\textit{F.val}},edge=dotted
+                            [{\textit{digit.lexval}},edge=dotted] { \draw[->, blue] () to[out=135,in=225] (!u); }
+                        ] { \draw[->, blue] () to[out=135,in=225] (!u); }
+                    ] { \draw[->, blue] () to[out=135,in=225] (!u); }
+                ] { \draw[->, blue] () to[out=70,in=200] (!u); }
+                [{\textit{+}},edge=dotted]
+                [{\textit{T.val}},edge=dotted
+                    [{\textit{F.val}},edge=dotted
+                        [{\textit{digit.lexval}},edge=dotted] { \draw[->, blue] () to[out=45,in=-45] (!u); }
+                    ] { \draw[->, blue] () to[out=45,in=-45] (!u); }
+                ] { \draw[->, blue] () to[out=110,in=-20] (!u); }
+            ] { \draw[->, blue] () to[out=45,in=-45] (!u); }
+        ]
+    \end{forest}
+\end{document}

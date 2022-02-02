@@ -13,7 +13,7 @@ In questo ultimo capitolo ripercorreremo sommariamente tutte le tappe che abbiam
 Inoltre approfitteremo di questo per presentare dei piccoli approfondimenti trasversali, curiosità, divagazioni un po' casuali, barzellette e anche qualche battutaccia, il tutto per mantenere vivo l'interesse dello stanchissimo lettore che ha attraversato pianure, mari, monti, la città sotterranea di Agharti, il regno di Prete Gianni, l'ultima Thule e l'isola di Mu, tutto durante queste 300 pagine, il tutto viaggiando in un camioncino della verdura, il tutto per imparare qualcosa su quelle strane bestie che sono i linguaggi formali e i compilatori.
 
 
-Partiamo quindi con il ripetere, per l'ennessima volta, in maniera schematica le fasi della compilazione ed il loro scopo:
+Partiamo quindi con il ripetere, per l'ennesima volta, in maniera schematica le fasi della compilazione ed il loro scopo:
 \paragraph{Analisi lessicale} In questa fase si prende la stringa in ingresso e la si trasforma in una sequenza di token, che diamo in pasto all'analizzatore sintattico.
 
 \paragraph{Analisi sintattica} A questo punto verifichiamo (attraverso il parsing) se la sequenza di token aderisce alla specifica grammatica del linguaggio di programmazione che stiamo utilizzando. Se è così, ricaviamo un albero di parsing per la stringa data in input. 
@@ -35,7 +35,7 @@ Data in input la stringa rappresentata in \ref{eq:last-ex}, l'analizzatore lessi
 Riportiamo la lista di identificatori.
 \begin{equation}
     \label{eq:last-ex-tokens}
-    <id,1> assign <id,2> sumop <id, 3> mulop <num, 60>
+    \langle id,1 \rangle \ assign \ \langle id,2 \rangle \ sumop \ \langle id,3 \rangle \ mulop \ \langle num,60 \rangle
 \end{equation}
 Riportiamo ora la tabella dei simboli (Tab.\ref{tab:last-ex-symbol-table}).
 \begin{table}[H]
@@ -51,7 +51,7 @@ La stringa che andremo ad analizzare nell'analisi sintattica si dimenticherà po
 \begin{equation}
     id = id + id * num
 \end{equation}
-L'analizzatore lessicale deve saper riconoscere le parole chiave del linguaggio, differenziandole da eventuali identificatori ambigui (ad esempio \(while22\)); la strategia più utilizzata per risolvere tale problematica è quella del \emph{longest match}: si assegna la categoria di token che identifica la versione più lunga possibile della stringa che si riesce a matchare.
+L'analizzatore lessicale deve saper riconoscere le parole chiave del linguaggio, differenziandole da eventuali identificatori ambigui (ad esempio "\(while22\)"); la strategia più utilizzata per risolvere tale problematica è quella del \emph{longest match}: si assegna la categoria di token che identifica la versione più lunga possibile della stringa che si riesce a matchare.
 \\\\
 Per svolgere il loro compito, gli analizzatori lessicali utilizzano automi a stati finiti, sia in versione deterministica che non deterministica.
 In qualsiasi caso, i tipi di linguaggi che gli analizzatori lessicali vanno ad approcciare sono tutti linguaggi regolari, derivati quindi da grammatiche regolari.
@@ -64,12 +64,12 @@ Nella fase di analisi sintattica vogliamo innanzitutto capire se la lista di tok
 Nel nostro esempio, quello che andiamo ad ottenere dalla lista di token in Eq.\ref{eq:last-ex-tokens} è il seguente albero di parsing.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.5\textwidth]{final-example-parsing-tree.png}
+    \subimport{assets/figures/}{final-example-parsing-tree.tex}
     \caption{Parsing tree ricavato dal nostro esempio}
     \label{fig:last-ex-parse-tree}
 \end{figure}
 Relativamente all'analisi sintattica abbiamo studiato ed utilizzato le due famiglie principali di metodi di parsing (basate su derivazioni leftmost in un caso e rightmost nell'altro). 
-È da sottolineare però, che esistono parser adatti all'analisi di una qualsiasi grammatica libera, tuttavia questi hanno complessità minima \(n^3\) (con \(n\) lungehezza dell'input) e questo li esclude dalla nostra wishlist.
+È da sottolineare però, che esistono parser adatti all'analisi di una qualsiasi grammatica libera, tuttavia questi hanno complessità minima \(n^3\) (con \(n\) lunghezza dell'input) e questo li esclude dalla nostra wishlist.
 Non dimentichiamoci però che, concentrandoci principalmente sulle grammatiche regolari, i parser che abbiamo esaminato in questo corso riescono a ricavare un albero di derivazione con complessità \emph{LINEAREH}.
 
 Le due, ormai ben note, tipologie principali di parsing, sono:
@@ -110,7 +110,7 @@ L'algoritmo di shift-reduce è anch'esso indipendente dal tipo di grammatica che
 
 Mentre eseguiamo l'algoritmo andiamo ad analizzare la lista di token in input: controllando token per token ed usando la parsing table come mappa, ci spostiamo nel buffer di lettura (mosse di shift) e, quando si incontra una stringa che può essere derivata da una certa produzione della grammatica, si va ad effettuare una mossa di reduce.
 
-Se non vi sono entry multiple defined possiamo terminare l'agloritmo con successo ed ottenere alla fine il parsing tree che tanto desideriamo.
+Se non vi sono entry multiple defined possiamo terminare l'algoritmo con successo ed ottenere alla fine il parsing tree che tanto desideriamo.
 
 Le 3 grammatiche viste per il parsing bottom-up, si differenziano per la precisione con cui si decide in quali caselle della tabella di parsing va inserita una determinata riduzione.
 
@@ -124,7 +124,7 @@ La differenza tra un tipo di grammatica e l'altro è la seguente:
 In realtà le possibilità non terminano qui, infatti si potrebbero ottenere delle grammatiche molto più semplici da parsare aumentando il numero di informazioni che si usano prima delle riduzioni, sostanzialmente incrementando il lookahead set: tali grammatiche potrebbero ad esempio essere \(LL(2)\) ed \(LR(2)\), ma la complessità per l'analisi della lista di token aumenterebbe parecchio in tal caso. La scelta privilegiata è quindi sforzarsi di trovare una grammatica \(LL(1)\) o \(LR(1)\) prima, per avere poi performance migliori.
 
 \subsection{Quando finisce il parsing}
-Se l'analisi sintattica dimostra che la stringa non è riconosciuta dal linguaggio, vi è la possibilità, nei compilatori moderni, di prevedere dei meccanismi di riconoscimento degli errori: spesso sono i compilatori stessi che suggeriscono all'utente dove si potrerebbero trovare gli errori sintattici all'interno del codice.
+Se l'analisi sintattica dimostra che la stringa non è riconosciuta dal linguaggio, vi è la possibilità, nei compilatori moderni, di prevedere dei meccanismi di riconoscimento degli errori: spesso sono i compilatori stessi che suggeriscono all'utente dove si potrebbero trovare gli errori sintattici all'interno del codice.
 
 In caso l'analisi sia andata a buon fine, si ottiene un parse tree che indica quali riduzioni sono state effettuate ed in quale ordine.
 
@@ -132,11 +132,19 @@ In caso l'analisi sia andata a buon fine, si ottiene un parse tree che indica qu
 Questa è la fase in cui si va a valorizzare la sequenza di token che si ricava dall'analisi lessicale; nel nostro caso quello che otterremo dall'analisi semantica ha questa forma:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth]{final-example-semantic-output.png}
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \subimport{assets/figures/}{final-example-parsing-tree.tex}
+    \end{subfigure}%
+    {\Huge$\Rightarrow$}%
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \subimport{assets/figures/}{final-example-semantic-output.tex}
+    \end{subfigure}
     \caption{Output dell'analisi semantica}
     \label{fig:last-ex-semantic-output}
 \end{figure}
-Si noti che il \(<num, 60>\) è stato trasformato in \texttt{inttofloat} con nodo figlio \(60\): questo è avvenuto perché l'analisi semantica è quella che si occupa di attribuire un valore (e di conseguenza anche un tipo) ai token. Proprio per questo motivo, gli effetti dell'analisi semantica non si vedranno solo nell'albero, come mostrato in Fig.\ref{fig:last-ex-semantic-output}, ma anche nella tabella dei simboli che riportiamo qui:
+Si noti che il \(\langle num, 60 \rangle \) è stato trasformato in \texttt{inttofloat} con nodo figlio \(60\): questo è avvenuto perché l'analisi semantica è quella che si occupa di attribuire un valore (e di conseguenza anche un tipo) ai token. Proprio per questo motivo, gli effetti dell'analisi semantica non si vedranno solo nell'albero, come mostrato in Fig.\ref{fig:last-ex-semantic-output}, ma anche nella tabella dei simboli che riportiamo qui:
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{symbol-table-updated.tex}
@@ -158,7 +166,7 @@ Si può osservare l'utilizzo di questa strategia applicata al nostro esempio: ri
     t1 &= inttofloat(60) \\
     t2 &= id3 * t1 \\
     t3 &= id2 + t2 \\
-    id1 &= t3 \\
+    id1 &= t3
 \end{align*}
 Una cosa a cui prestare attenzione è il fatto che gli identificatori \texttt{id1}, \texttt{id2} e \texttt{id3} sono riferimenti alle istanze locali degli identificatori: ciò vuol dire che si entra già nel territorio in cui si necessita di un meccanismo di \emph{scope}, ma di questo parleremo in seguito.
 
@@ -168,17 +176,17 @@ A questo punto si passa all'ottimizzazione del codice intermedio, fase che ha le
 Nell'esempio che stiamo trattando si riesce ad ottimizzare il codice riducendo subito il \(60\) in float ed eliminando operazioni temporanee non strettamente necessarie. Vediamo subito come risulterebbe un'ottimizzazione fatta secondo queste prerogative:
 \begin{align*}
     t1 &= id3 * 60.0 \\
-    id1 &= id2 + t2 \\
+    id1 &= id2 + t2
 \end{align*}
 Questa fase di ottimizzazione sfrutta algoritmi su grafo facendo un'analisi di catene di \emph{definition use}: tenendo conto del momento della dichiarazione e dell'utilizzo di una certa variabile, è possibile ad esempio decidere di eliminare o spostare tale dichiarazione.
 
 Un esempio piuttosto comune è la \emph{subexpression elimination}, che prevede di sintetizzare tutte le espressioni che vengono ripetute nel codice: se nel nostro programma andiamo a calcolare più volte l'espressione \(\pi * e\), la subexpression elimination va a salvare in una variabile temporanea il risultato, così da evitare di calcolarlo più e più volte, sprecando risorse.
 
-Nota che tutte queste ottimizzazioni avvengono a tempo di compiliazione, nella fase statica, e sono di tipo conservativo. Questo significa che alcune occorrenze della stessa espressione possono essere eseguite in entrambi i rami di un else, quello che si fa in questo caso è assumere in modo conservativo che possano essere percorsi tutti i rami di tutte le condizioni.
+Nota che tutte queste ottimizzazioni avvengono a tempo di compilazione, nella fase statica, e sono di tipo conservativo. Questo significa che alcune occorrenze della stessa espressione possono essere eseguite in entrambi i rami di un else, quello che si fa in questo caso è assumere in modo conservativo che possano essere percorsi tutti i rami di tutte le condizioni.
 
 In sostanza le ottimizzazioni che vengono effettuate in questa fase ottimizzano in modo cieco, senza guardare i possibili flussi di esecuzione della logica del programma.
 
-Nota anche che nelle fasi successive tutte le variabili dovranno essere inserite nei vari registri: qui avverranno ulteriori ottimizzazioni, ad esempio legate ad un migliore utilizzo dei registri, che andranno ad utilizzare algoritmi di graph coloring e altre stregonerie simili.
+Nota anche che nelle fasi successive tutte le variabili dovranno essere inserite nei vari registri: qui avverranno ulteriori ottimizzazioni, ad esempio legate ad un migliore utilizzo dei registri, che andranno ad utilizzare algoritmi di \emph{graph coloring} e altre stregonerie simili.
 
 A valle dell'ottimizzatore del codice intermedio abbiamo la generazione del codice target.
 
@@ -186,11 +194,32 @@ A valle dell'ottimizzatore del codice intermedio abbiamo la generazione del codi
 A questo punto possiamo finalmente tradurre il codice intermedio in codice target. Riportiamo in seguito quello che otteniamo a seguito di questa fase dal nostro esempio.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.6\textwidth]{final-example-target-code.png}
+    \centering
+    \begin{subfigure}{.3\textwidth}
+        \centering
+        \begin{equation*}
+            \begin{aligned}
+                t1  &= id3 * 60.0 \\
+                id1 &= id2 + t2   \\
+                                  \\
+            \end{aligned}
+        \end{equation*}
+    \end{subfigure}%
+    {\Huge$\Rightarrow$}%
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \begin{align*}
+            &LDF  &R2, \quad &id3 \quad      \\
+            &MULF &R2, \quad &R2, \quad 60.0 \\
+            &LDF  &R1, \quad &id2 \quad      \\
+            &ADDF &R1, \quad &R1, \quad R2   \\
+            &STF  &id1 \quad &R1  \quad      \\
+        \end{align*}
+    \end{subfigure}
     \caption{Generazione codice target da codice intermedio ottimizzato}
     \label{fig:final-example-target-code}
 \end{figure}
-Spiegamo qualche dettaglio: il suffisso \texttt{F} sta per float per sottolineare che tutte le operazioni coinvolgono dei float e, per questo motivo, è necessario ad esempio trattarli in maniera distinta dagli int. Possiamo osservare che nella prima riga viene caricato il contenuto di \texttt{id3} come float nel registro \texttt{R2}, poi avviene una moltiplicazione tra float che coinvolge \texttt{R2} e \(60\); segue un'operazione di \texttt{load} di un altro float e così via.
+Spieghiamo qualche dettaglio: il suffisso \texttt{F} sta per float per sottolineare che tutte le operazioni coinvolgono dei float e, per questo motivo, è necessario ad esempio trattarli in maniera distinta dagli int. Possiamo osservare che nella prima riga viene caricato il contenuto di \texttt{id3} come float nel registro \texttt{R2}, poi avviene una moltiplicazione tra float che coinvolge \texttt{R2} e \(60\); segue un'operazione di \texttt{load} di un altro float e così via.
 
 L'ultima nota che aggiungiamo riguardo a questa fase è che, come già accennato precedentemente, anche qui intervengono meccanismi di ottimizzazione, in questo caso strettamente legati al codice macchina (e quindi alla macchina target).
 
@@ -213,13 +242,13 @@ In questo caso si ha il canonico array bucket, da cui è possibile accedere ad u
 Questa funzione si occupa di trasformare ogni carattere in un intero non negativo, tipicamente sfruttando funzioni built-in, a cui applica ulteriori operazioni per poi arrivare all'hash.
 
 Come si può definire una funzione di hash adeguata?
-Conoscendo il dominio di applicazione. Ad esempio, nel nostro caso si può notare che spesso nella scrittura dei programmi, il programmatore va a dare nomi molto similli alle variabili: questo significa che utilizzare il suffiso degli identificatori non è una buona idea perché porterebbe a diverse collisioni.
+Conoscendo il dominio di applicazione. Ad esempio, nel nostro caso si può notare che spesso nella scrittura dei programmi, il programmatore va a dare nomi molto simili alle variabili: questo significa che utilizzare il suffisso degli identificatori non è una buona idea perché porterebbe a diverse collisioni.
 
 Una scelta tipicamente buona è la seguente
 \begin{equation}
-    (\sum_{i=1}^{n} \phi^{n-i}c_i) \; mod \; \texttt{size}
+    \left(\sum_{i=1}^{n} \phi^{n-i}c_i\right) \mod \texttt{size}
 \end{equation}
-Utilizzando funzioni hash di questo tipo si possono evitare con buona probabililtà le problematiche legate alla scarsa fantasia del nostro amico programmatore.
+Utilizzando funzioni hash di questo tipo si possono evitare con buona probabilità le problematiche legate alla scarsa fantasia del nostro amico programmatore.
 
 \paragraph{Scope} Ora che abbiamo discusso le metodologie di implementazione di una symbol table, andiamo ad analizzare una problematica con cui tutte devono fare i conti: lo \emph{scoping}.
 

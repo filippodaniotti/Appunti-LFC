@@ -13,11 +13,11 @@
 \section{Traduzione da NFA a DFA}
 Abbiamo già discusso in passato di come la simulazione su DFA sia più efficiente che su NFA, quindi ora siamo interessati a risolvere questo problema: dato un qualunque NFA come si può ricavare un DFA che riconosca lo stesso linguaggio?
 
-Un mezzo per raggiungere questo scopo è l’utilizzo di una sorta di meccanismo di \(\varepsilon\)-chiusura permanente (che elimini in modo permanente le \(\varepsilon\)-transizioni); questo meccanismo si chiama \emph{subset construction}.
+Un mezzo per raggiungere questo scopo è l'utilizzo di una sorta di meccanismo di \(\varepsilon\)-chiusura permanente (che elimini in modo permanente le \(\varepsilon\)-transizioni); questo meccanismo si chiama \emph{subset construction}.
 
 
-\subsection{Algoritmo di Subset Costruction}
-L’algoritmo di Subset Construction serve per ricavare un DFA dato un certo NFA.
+\subsection{Algoritmo di Subset Construction}
+L'algoritmo di Subset Construction serve per ricavare un DFA dato un certo NFA.
 
 L'idea di base è quella di utilizzare la \(\varepsilon\)-chiusura per mappare insiemi di stati del dato NFA (che in seguito chiameremo rozzamente \emph{stati non deterministici}) in stati per il nuovo DFA (che in seguito chiameremo ancor più rozzamente \emph{stati deterministici}).
 
@@ -63,9 +63,9 @@ Questa fase serve per definire quali sono gli stati (sd) finali del nuovo insiem
 
 \subsubsection{Complessità}
 Arriva però il momento di porsi un'importante domanda: qual è la complessità di questo algoritmo?
-Poniamo le basi per affrontare una risposta: supponiamo che l’NFA abbia \(n\) stati ed \(m\) archi, mentre supponiamo che il DFA abbia \(n_d\) stati.
+Poniamo le basi per affrontare una risposta: supponiamo che l'NFA abbia \(n\) stati ed \(m\) archi, mentre supponiamo che il DFA abbia \(n_d\) stati.
 \begin{itemize}
-    \item Osserviamo che il ciclo dominante naturalmente è il primo \texttt{while}; quest'ultimo  è ritpetuto \(n_d\) volte.
+    \item Osserviamo che il ciclo dominante naturalmente è il primo \texttt{while}; quest'ultimo è ripetuto \(n_d\) volte.
     \item All'interno del \texttt{while} troviamo il nostro caro \texttt{foreach} \(a \in \mathcal{A}\), che viene ripetuto \(|A|\) volte.
     \item L'ultimo fattore di peso rilevante è la chiamata alla funzione di calcolo della \(\varepsilon\)-chiusura, la quale ha costo \(\mathcal{O}(n+m)\).
 \end{itemize}
@@ -104,7 +104,7 @@ Per \(T2\) compio banalmente le stesse azioni che ho svolto per \(T1\), che quin
 
 Alla fine della fiera, devo trovare quali sono gli stati finali del nostro automa deterministico, quindi faccio le varie intersezioni (come descritto dall'algoritmo) e segno come stati (deterministici) finali tutti quegli stati (deterministici) che contengono almeno uno stato (non deterministico) che sia esso stesso finale nell'NFA.
 
-Una volta terminata questa operazione abbiamo trovato quindi l’automa a stati finiti deterministico che riconosce lo stesso linguaggio dell’NFA di partenza; possiamo vederne una rappresentazione in figura \ref{sol_sc_1}.
+Una volta terminata questa operazione abbiamo trovato quindi l'automa a stati finiti deterministico che riconosce lo stesso linguaggio dell'NFA di partenza; possiamo vederne una rappresentazione in figura \ref{sol_sc_1}.
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{subset_constr_1_DFA.tex}
@@ -130,13 +130,13 @@ Dato l'automa a stati finiti non deterministico in figura \ref{es_sc_2}, calcola
     \label{sol-sc-ex2}
 \end{table} 
 
-Dato che lo svolgimento dei pass dell'algoritmo non presenta né novità né difficoltà in questo esempio, non è fornita una spiegazione estesa dei passaggi.
+Dato che lo svolgimento dei passi dell'algoritmo non presenta né novità né difficoltà in questo esempio, non è fornita una spiegazione estesa dei passaggi.
 
-A questo punto abbiamo considerato tutti gli stati in \(R\) quindi ora è il momento di determinare quali sono gli stati (deterministici) finali. L’unico stato finale nell'NFA è \(E\), quindi tutti e solo gli stati deterministici che contengono \(E\) sono stati deterministici finali. \(T0\), \(T1\) e \(T2\) sono tutti stati finali. Il DFA risultante si può ammirare in figura \ref{sol_sc_2}.
+A questo punto abbiamo considerato tutti gli stati in \(R\) quindi ora è il momento di determinare quali sono gli stati (deterministici) finali. L'unico stato finale nell'NFA è \(E\), quindi tutti e solo gli stati deterministici che contengono \(E\) sono stati deterministici finali. \(T0\), \(T1\) e \(T2\) sono tutti stati finali. Il DFA risultante si può ammirare in figura \ref{sol_sc_2}.
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{subset_constr_2_DFA.tex}
-    \caption{DFA ottenuto tramite}
+    \caption{DFA ottenuto tramite Subset Construction}
     \label{sol_sc_2}
 \end{figure}
 
@@ -201,10 +201,10 @@ Prima di procedere, dobbiamo definire la nozione di \emph{State Equivalence}.
     \end{labeling}    
 \end{definition}
 
-L'idea generale su cui si basa l'algoritmo di minimizzazione qui proposto è che alcuni stati sono ridondanti, e per questo possono essere rimossi senza perdere informazione, vale a dire senza modificare il linguaggio riconosciuto dal DFA. Per eliminare questi stati in eccesso, utilizziamo la procedura di \emph{partition refinement}
+L'idea generale su cui si basa l'algoritmo di minimizzazione qui proposto è che alcuni stati sono ridondanti, e per questo possono essere rimossi senza perdere informazione, vale a dire senza modificare il linguaggio riconosciuto dal DFA. Per eliminare questi stati in eccesso, utilizziamo la procedura di \emph{partition refinement}.
 
 \subsection{Partition Refinement}
-Grazie a questa procedura arriveremo a partizionare gli stati in \(2\) blocchi, dove per blocchi intendiamo dei sottinsiemi disgiunti di stati.
+Grazie a questa procedura arriveremo a partizionare gli stati in \(2\) blocchi, dove per blocchi intendiamo dei sottoinsiemi disgiunti di stati.
 
 \begin{itemize}
     \item Iniziamo con \(2\) blocchi generici, \(B_{1}=F\) e \(B_{2}=S\setminus F\). Questa scelta fa sì che i due blocchi non abbiano stati equivalenti, poiché se consideriamo due stati \(s, t\) tali che \(s\in B_{1}\) e \(t\in B_{2}\), allora vale che \(\textrm{move}_{d}\!^{*}(s,\varepsilon)\in F\) e \(\textrm{move}_{d}\!^{*}(t,\varepsilon)\notin F\).
@@ -266,7 +266,7 @@ In questo caso la funzione di transizione non è totale; dobbiamo quindi renderl
 	\caption{DFA con transizione totale}
   \label{minndfa-es-2-tot}
 \end{figure}
-Dopo aver realizzato questo, iniziamo con gli insiemi \(B_{1}=\{D\}\) e \(B_{2}=\{A,B,D,sink\}\). Possiamo fare uno \emph{split} di \(B_{2}\), in quanto \(\textrm{move}_{d}(A,a) \in B_{2} \) e \(\textrm{move}_{d}(B,a) \notin B_{2} \); da questo split otteniamo i nuovi blocchi \(B_{21}=\{A,sink\}\) e \(B_{22}=\{B,C\}\).
+Dopo aver realizzato questo, iniziamo con gli insiemi \(B_{1}=\{D\}\) e \(B_{2}=\{A,B,C,sink\}\). Possiamo fare uno \emph{split} di \(B_{2}\), in quanto \(\textrm{move}_{d}(A,a) \in B_{2} \) e \(\textrm{move}_{d}(B,a) \notin B_{2} \); da questo split otteniamo i nuovi blocchi \(B_{21}=\{A,sink\}\) e \(B_{22}=\{B,C\}\).
 
 Possiamo fare un ulteriore \emph{split} di \(B_{22}\), poiché \(\textrm{move}_{d}(B,b) \in B_{22} \) e \(\textrm{move}_{d}(C,b) \notin B_{22} \); da questo otteniamo i blocchi \(B_{221}=\{B\}\) e \(B_{222}=\{C\}\).
 
@@ -298,13 +298,13 @@ Procediamo dunque, come da prassi, con lo svolgimento della procedura di subset 
 	\label{mindfa-es-3-tab}
 \end{table}
 A questo punto dobbiamo costruirne la rappresentazione del DFA, che si può osservare in Fig.\ref{dfa-sc-es-3-mindfa}, e trovarne il minimo.
-\begin{figure}
+\begin{figure}[H]
 	\centering
     \subimport{assets/figures/}{subset_constr_3_DFA.tex}
 	\caption{DFA ottenuto con subset construction}
 	\label{dfa-sc-es-3-mindfa}
 \end{figure}
-Procediamo ora con l’algoritmo di partition refinement per minimizzare il precedente DFA.
+Procediamo ora con l'algoritmo di partition refinement per minimizzare il precedente DFA.
 
 Il primo passo è quello di dividere l'insieme \(S\) degli stati in due blocchi: gli stati finali (\(B2\)) e gli stati non finali (\(B1\)).
 In questo caso le partizioni sono le seguenti:
@@ -312,12 +312,12 @@ In questo caso le partizioni sono le seguenti:
     B1 = \{T0,T1,T2,T3\} \quad \textrm{e} \quad B2 = \{T4,T5,T6,T7\}
 \end{equation*}
 
-A questo punto procediamo con le raffinazioni successive. Se all’interno dello stesso blocco troviamo due stati che, tramite una \(a\)-transizione, portano a due blocchi distinti (con \(a\) terminale qualsiasi dell’alfabeto \(\mathcal{A}\)), allora splittiamo questo blocco in due nuovi blocchi nel seguente modo:
+A questo punto procediamo con le raffinazioni successive. Se all'interno dello stesso blocco troviamo due stati che, tramite una \(a\)-transizione, portano a due blocchi distinti (con \(a\) terminale qualsiasi dell'alfabeto \(\mathcal{A}\)), allora splittiamo questo blocco in due nuovi blocchi nel seguente modo:
 \begin{enumerate}
-    \item identifichiamo i due stati \(s_1\) e \(s_2\) che con una \(a\)-transizione portano rispettivamente uno in un blocco \(By\) e l’altro in un blocco \(Bz\);
+    \item identifichiamo i due stati \(s_1\) e \(s_2\) che con una \(a\)-transizione portano rispettivamente uno in un blocco \(By\) e l'altro in un blocco \(Bz\);
     \item creiamo due nuovi sottoblocchi di \(Bx\): \(Bx_{1}\) conterrà tutti gli stati che da \(Bx\) arrivano a \(By\) con una \(a\)-transizione e \(Bx_{2}\) conterrà tutti gli stati in \(Bx \setminus Bx_{1}\).
 \end{enumerate} 
-Preme sottolineare che la scelta di quale blocco splittare influisce molto sull’efficienza dell’algoritmo, e gli algoritmi più efficienti svolgono questa scelta in maniera mirata.
+Preme sottolineare che la scelta di quale blocco splittare influisce molto sull'efficienza dell'algoritmo, e gli algoritmi più efficienti svolgono questa scelta in maniera mirata.
 
 Osservo che \(\textrm{move}_d (T2,a)\) non ha lo stesso blocco target di \(\textrm{move}_d (T0,a) \): infatti, con una \(a\)-transizione da \(T0\) raggiungo \(B1\), con una \(a\)-transizione da \(T2\) raggiungo \(B2\). Decido quindi di splittare \(B1\) secondo \(\textrm{move}_d (T0,a) \). In questo caso il risultato della partizione è il seguente:
 \begin{equation*}
@@ -349,8 +349,8 @@ A questo punto ho raggiunto una partizione in cui tutti i blocchi contengono un 
 In questo caso ho terminato lo svolgimento dell'algoritmo di partition refinement; questo significa che il DFA da cui sono partito (ottenuto da subset construction) era esattamente minimo.
 
 \subsubsection[Tutta da risistemare]{Discussione: “Qual è la scelta ottimale per lo split?”}
-Domanda interessante. La discussione, essendo un trivia, verrà trascritta in un \sout{secondo} terzo momento\footnote{Ragazzi, chiediamo venia, abbiammo scoperto di questo todo a poche ore dalla release, non c'era modo di riprendere in mano il discorso.}.
-% L’idea alla base dell’algoritmo più efficiente è andare a splittare i blocchi che sono splittabili per archi entranti nei blocchi più piccoli.
+Domanda interessante. La discussione, essendo un trivia, verrà trascritta in un \sout{secondo} terzo momento\footnote{Ragazzi, chiediamo venia, abbiamo scoperto di questo todo a poche ore dalla release, non c'era modo di riprendere in mano il discorso.}.
+% L'idea alla base dell'algoritmo più efficiente è andare a splittare i blocchi che sono splittabili per archi entranti nei blocchi più piccoli.
 % Un algoritmo non efficientissimo ma davvero semplice da scrivere è il seguente
 % Algoritmo di Brzozowski
 % % min(D) = sub_c(rev(sub_c(rev(D))))
@@ -368,14 +368,14 @@ Domanda interessante. La discussione, essendo un trivia, verrà trascritta in un
         \mathcal{L} = \mathcal{L}((a\mid b)^\ast a (a\mid b)^{n-1})  
         \label{linguaggio_lemma_limiti_dfa}
     \end{equation}
-    Dal momento che è un linguaggio regolare, questo può essere rappresentato utilizzando un automa a stati finiti. Esiste un NFA con esattamente \(n+1\) stati che accetta il linguaggio \(\mathcal{L}\); tale automa è rappresentiato in figura \ref{nfa_lemma_limiti_dfa}.
+    Dal momento che è un linguaggio regolare, questo può essere rappresentato utilizzando un automa a stati finiti. Esiste un NFA con esattamente \(n+1\) stati che accetta il linguaggio \(\mathcal{L}\); tale automa è rappresentato in figura \ref{nfa_lemma_limiti_dfa}.
     \begin{figure}[H]
         \centering
         \subimport{assets/figures/}{dfa_dimension.tex}
         \caption{NFA rappresentante il linguaggio \ref{linguaggio_lemma_limiti_dfa}}
         \label{nfa_lemma_limiti_dfa}
     \end{figure}
-    Supponiamo per assurdo che esista un DFA minimo, diaciamo \(\mathcal{D}\), che accetti il linguaggio \(\mathcal{L}\) ed abbia \(k<2^n\) stati.
+    Supponiamo per assurdo che esista un DFA minimo, diciamo \(\mathcal{D}\), che accetti il linguaggio \(\mathcal{L}\) ed abbia \(k<2^n\) stati.
 
     Sappiamo esserci esattamente \(2^n\) parole distinte su \(\{a, b\}\) la cui lunghezza è \(n\). Esistono quindi 2 percorsi in \(\mathcal{D}\) tali che:
     \begin{itemize}
@@ -469,7 +469,7 @@ Vediamo subito come possiamo applicare il lemma per dimostrare la seguente affer
 \end{equation}
 Prima di proseguire con la dimostrazione formale, proviamo a spiegare che intuizione potrebbe dirci che ci troviamo davanti ad un linguaggio non regolare.
 
-Se \(\mathcal{L}\) fosse un linguaggio regolare dovrebbe essere possibile rappresentarlo con un NFA o un DFA. Proviamo quindi a immaginare il DFA che riconosce questo linguaggio, come dovrebbe essere? Per bilanciare il numero di \(b\) e di \(a\) dovrebbe in qualche modo obbligare l’inserimento di una \(b\) per ogni \(a\) inserita in precedenza, ma questo non si può fare a meno di inserire infiniti stati, il che è impossibile.
+Se \(\mathcal{L}\) fosse un linguaggio regolare dovrebbe essere possibile rappresentarlo con un NFA o un DFA. Proviamo quindi a immaginare il DFA che riconosce questo linguaggio, come dovrebbe essere? Per bilanciare il numero di \(b\) e di \(a\) dovrebbe in qualche modo obbligare l'inserimento di una \(b\) per ogni \(a\) inserita in precedenza, ma questo non si può fare a meno di inserire infiniti stati, il che è impossibile.
 
 Procediamo quindi con la dimostrazione tramite pumping lemma. Supponiamo \(\mathcal{L}\) regolare e prendiamo \(p\) intero positivo arbitrario (il negato della tesi deve valere per ogni \(p\)). Ora, costruiamo la parola \(z=a^p b^p\); abbiamo che \(|z|>p\).
 Osserviamo che, per ogni decomposizione di \(z\) in \(u,v,w\) che rispetta i vincoli qui sotto riportati:

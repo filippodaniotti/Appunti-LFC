@@ -1,0 +1,26 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+\usepackage{../../../../style_tree}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{forest}
+        for tree={s sep=40mm}
+        [{\textit{T}},name=t1,edge=dotted
+            [{\textit{F}},name=f1,edge=dotted]
+            [{\textit{T}$'$},name=t2,edge=dotted]
+        ]
+        \tikzset{every node/.style={font=\footnotesize\itshape,color=blue}}
+        \path(f1) to ([xshift=0.3cm,yshift=-0.2cm]f1) node(s2){.s};
+        \path(t2) to ([xshift=-0.5cm]t2) node(i1){.i};
+        \path(t2) to ([xshift=0.5cm,yshift=0.1cm]t2) node(s6){.s};
+        \path(t1) to ([xshift=0.5cm]t1) node(s7){.s};
+        \draw[->, blue] (s2) to[out=-10,in=200] (i1);
+        \draw[->, blue] (s6) to[out=120,in=0] (s7);
+    \end{forest}
+\end{document}

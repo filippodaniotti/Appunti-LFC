@@ -1,0 +1,23 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[ruled,linesnumbered,vlined]{algorithm2e}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{algorithm}[H]
+        \label{alg:postorder-visit}
+        \DontPrintSemicolon
+        
+        \SetKwFunction{Postorder}{postorder}
+        \SetKwFunction{Visit}{visit}
+
+        \ForEach{child \(C \in T\) from the left} {
+            \Postorder{C};
+        }
+        
+        \Visit{N}
+        
+        \caption{postorder(\textsc{Tree} \(T\))}
+    \end{algorithm}
+\end{document}

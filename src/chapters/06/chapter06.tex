@@ -1,6 +1,7 @@
 \documentclass[class=book, crop=false, oneside, 12pt]{standalone}
 \usepackage{standalone}
 \usepackage{../../style}
+\usepackage{../../style_automata}
 \usepackage{csquotes}
 \graphicspath{{./assets/images/}}
 
@@ -30,7 +31,7 @@ e che quindi espressioni come la seguente sono grammaticali e ben formate second
 \end{minted}
 Il mestiere dell'analizzatore lessicale è proprio quello di ricevere in input un \texttt{pippo} qualsiasi e, in output, determinare che è un \emph{identificatore}, ossia la categoria più astratta (lessema) di cui \texttt{pippo} è istanza.
 
-% L’analizzatore lessicale lavora in tandem (pipeline) con l’analizzatore sintattico per non si sa bene come o perché
+% L'analizzatore lessicale lavora in tandem (pipeline) con l'analizzatore sintattico per non si sa bene come o perché
 \subsection{Esempio: la grammatica di C99}
 Andiamo a vedere da vicino la grammatica di un reale linguaggio, anzi, del linguaggio preferito di tutti noi, ossia il C (nella versione \(99\), scritta per il parser \emph{Bison}); il lettore interessato ad approfondire può trovare lo stesso file al seguente indirizzo: \url{http://www.quut.com/c/ANSI-C-grammar-y-1999.html}. Andiamo a vedere un frammento di quel codice:
 \ifthenelse{\boolean{isCompiledFromMain}}{%
@@ -91,7 +92,7 @@ Un'altra cosa che possiamo osservare è la dichiarazione di quello che è lo sta
 Questa dichiarazione in realtà potrebbe non essere presente su alcuni file contenenti grammatiche, dal momento che, in sua assenza, non otteniamo degli errori, bensì viene preso il non-terminale della prima produzione listata a seguito come starting symbol.
 
 
-Il ruolo dell’analizzatore lessicale è quindi analizzare il sorgente e decidere, di volta in volta, quale derivazione può essere applicata a ciascuna delle righe del sorgente analizzato. Una volta completato l'albero di derivazione e quindi arrivato presso un terminale (ad esempio \texttt{IDENTIFIER}), l'analizzatore lessicale andrà anche ad associargli informazioni come valore e tipo, dal momento che è necessario distinguere quell'\texttt{IDENTIFIER} da un altro. Nel programma potremmo appunto avere due \texttt{IDENTIFIER} di diverso tipo, ma in ogni caso dovremo conservare delle informazioni aggiuntive di qualche sorta (nome, tipo, scope e altro ancora). Tutte queste informazioni vengono conservate in una \emph{symbol table}.
+Il ruolo dell'analizzatore lessicale è quindi analizzare il sorgente e decidere, di volta in volta, quale derivazione può essere applicata a ciascuna delle righe del sorgente analizzato. Una volta completato l'albero di derivazione e quindi arrivato presso un terminale (ad esempio \texttt{IDENTIFIER}), l'analizzatore lessicale andrà anche ad associargli informazioni come valore e tipo, dal momento che è necessario distinguere quell'\texttt{IDENTIFIER} da un altro. Nel programma potremmo appunto avere due \texttt{IDENTIFIER} di diverso tipo, ma in ogni caso dovremo conservare delle informazioni aggiuntive di qualche sorta (nome, tipo, scope e altro ancora). Tutte queste informazioni vengono conservate in una \emph{symbol table}.
 
 Infine, le ultime righe del file contengono informazioni utili al particolare analizzatore sintattico utilizzato; avremo modo di parlarne nel dettaglio in futuro.
 
@@ -123,7 +124,7 @@ Questo è molto interessante: se è vero che i lessemi sono perfettamente descri
 Quindi questi lessemi, essendo descritti da delle espressioni regolari, possono anche essere riconosciuti agevolmente da una macchina a stati finiti, come ad esempio quella in figura sotto, che descrive la classe \texttt{relop} di token per gli operatori relazionali.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth,keepaspectratio]{lec-14-1}
+    \subimport{assets/figures/}{automaton-relop.tex}
     \caption{Automa che riconosce la classe \texttt{relop}}
     \label{automaton-relop}
 \end{figure}
@@ -141,7 +142,7 @@ Sappiamo anche che, avendo delle espressioni regolari, per ciascuna di queste po
 Da notare che nel caso d'uso del compilatore ci sono delle azioni associate agli stati finali (se l'analizzatore legge un assegnamento compie, appunto, le azioni per registrare l'assegnamento).
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.4\textwidth,keepaspectratio]{lec-14-2.png}
+    \subimport{assets/figures/}{nfa-for-grammar-regex.tex}
     \caption{}
     \label{nfa_for_grammar_regular_expressions}
 \end{figure}
@@ -152,7 +153,7 @@ Adesso dobbiamo pensare come ottimizzare l'uso di una struttura simile per l'ana
 Il procedimento che seguiamo è il seguente:
 \begin{enumerate}
     \item innanzitutto simuliamo l'NFA creato come sopra descritto;
-    \item nel caso di ambiguità, ossia di situazioni come quella descritta sopra tra \mintinline{c}{if} e \mintinline{c}{iffoff}, la convenzione è di proseguire la simulazione finché nessun’altra transizione è possibile, solitamente quando incontriamo uno spazio o un \texttt{\(\backslash\)n}, privilegiando quindi il match più lungo (si parla di cercare il \emph{longest match});
+    \item nel caso di ambiguità, ossia di situazioni come quella descritta sopra tra \mintinline{c}{if} e \mintinline{c}{iffoff}, la convenzione è di proseguire la simulazione finché nessun'altra transizione è possibile, solitamente quando incontriamo uno spazio o un \texttt{\(\backslash\)n}, privilegiando quindi il match più lungo (si parla di cercare il \emph{longest match});
     \item se nell'insieme di stati che abbiamo raggiunto ci sono delle azioni disponibili, allora andremo ad eseguire quella appartenente al longest match, in caso di pareggio ciascuna azione avrà una priorità, e noi eseguiremo quella con più alta priorità;
     \item se nessun'azione è disponibile, dobbiamo invece tornare indietro nella sequenza di stati percorsi, fermarci nel primo insieme di stati che presenta almeno uno stato finale e delle azioni associate e cercare di nuovo quella prioritaria; per ognuno di questi passi all'indietro, dobbiamo ricordarci di aggiornare il puntatore all'input buffer.
 \end{enumerate}
@@ -218,7 +219,7 @@ Dal momento che tutte le coppie \texttt{pattern \{azione\}} sono scritte in ling
     \item[\texttt{\$}] end of line;
     \item[\texttt{a|b}] pipe, semantica consueta  (i.e. a or b);
     \item[\texttt{()}] raggruppamenti;
-    \item[\texttt{"+"}] il literal \texttt{"+"} (è necessario usare qusto metodo di escape per poter far riferimento ad un carattere qualunque e non al metacarattere)
+    \item[\texttt{"+"}] il literal \texttt{"+"} (è necessario usare questo metodo di escape per poter far riferimento ad un carattere qualunque e non al metacarattere)
     \item[\texttt{\{\}}] espressioni regolari scritte nel preambolo
 \end{labeling}
 
@@ -244,7 +245,7 @@ Facciamo un breve riepilogo di quanto abbiamo visto: tutti i file predisposti pe
 %     \label{file0.l}
 % \end{figure}
 
-In qusto primo esempio vediamo che nel preambolo non sono presenti né delle \texttt{define} né del codice; dal momento che non sono presenti routine inserite dall'utente, verrà invocata la procedura \texttt{yylex()} all'esecuzione. Basandoci sulla sintassi di Flex vista precedentemente, andiamo ad analizzare la parte centrale costituita da una sola coppia pattern-azione:
+In questo primo esempio vediamo che nel preambolo non sono presenti né delle \texttt{define} né del codice; dal momento che non sono presenti routine inserite dall'utente, verrà invocata la procedura \texttt{yylex()} all'esecuzione. Basandoci sulla sintassi di Flex vista precedentemente, andiamo ad analizzare la parte centrale costituita da una sola coppia pattern-azione:
 \begin{itemize}
     \item il pattern è dato dalla regular expression composta solo da \texttt{.}, il che significa che l'azione seguente farà riferimento a tutti i caratteri incontrati, tranne quello di \texttt{\(\backslash\)n} (\emph{new line});
     \item l'azione è quel \mintinline{c}{printf("hello world!")}, il che consiste banalmente nello stampare la stringa hello world ogni volta che viene eseguito un match sul pattern.
@@ -255,7 +256,7 @@ In sostanza, questo file ci farà sì che, nella lettura, qualsiasi carattere in
     \item \(aa\) diventerà \texttt{hello world!hello world!}.
 \end{itemize}
 
-Possiamo notare anche un'altra cosa molto interessante: solitamente, per poter utilizzare lo standard output nei programmi C, è necessario includere all'interno del file la libreria \mintinline{c}{stdio.h}, ma nel \texttt{file0.l} non vi è nemmeno l'ombra di un inlcude: è lo stesso Flex a occuparsi di aggiungere in un secondo momento tutti i dettagli necessari per la gestione dell'output.
+Possiamo notare anche un'altra cosa molto interessante: solitamente, per poter utilizzare lo standard output nei programmi C, è necessario includere all'interno del file la libreria \mintinline{c}{stdio.h}, ma nel \texttt{file0.l} non vi è nemmeno l'ombra di un include: è lo stesso Flex a occuparsi di aggiungere in un secondo momento tutti i dettagli necessari per la gestione dell'output.
 
 \subsection*{file1.l}
 \ifthenelse{\boolean{isCompiledFromMain}}{%

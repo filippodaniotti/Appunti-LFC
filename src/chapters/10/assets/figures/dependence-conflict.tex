@@ -1,0 +1,19 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+\usepackage{../../../../style_tree}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{forest}
+        for tree={s sep=10mm, l=15mm}
+        [{\textit{A.s}}
+            [{\textit{B.i}},edge=dotted
+            ] { \draw[->, blue] () to[out=north east,in=south east] (!u); }
+        ] { \draw[->, blue] () to[out=south west,in=north west] (!N); }
+    \end{forest}
+\end{document}

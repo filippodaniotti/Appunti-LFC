@@ -1,0 +1,34 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows, shapes.geometric, decorations.pathmorphing}
+
+\usepackage{../../../../style_automata}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \tikzset{
+    node distance=2cm, % specifies the minimum distance between two nodes.
+    }
+
+    \scalebox{0.8}{
+    \begin{tikzpicture}
+
+        % Apex angle 60 degrees
+        \node[isosceles triangle, rotate=90, isosceles triangle apex angle=60, draw, minimum size=4cm] (T) {};
+        \draw[] ([yshift=0.2cm]T.apex) node[](S){\textbf{S}};
+        \draw[] ([yshift=-2cm]T.apex) node[](A2){\textbf{A1}};
+        \draw[] (A2.south) node[isosceles triangle, rotate=90, isosceles triangle apex angle=90, draw, minimum size=1.71cm, anchor=apex] (T2) {};
+        \draw[] ([yshift=-0.1mm]A2.south) node[isosceles triangle, rotate=90, isosceles triangle apex angle=90, minimum size=1.75cm, anchor=apex, fill=white] (T2) {};
+        \draw[] (A2.south) node[isosceles triangle, rotate=90, isosceles triangle apex angle=90, draw, minimum size=1cm, anchor=apex, fill=violet!50] (T1) {};
+        
+        \draw[] ([yshift=-0.2cm,xshift=-0.3cm]T.right corner) node[](u){\textbf{u}};
+        \draw[] ([yshift=-0.2cm]T1.lower side) node[color=violet!50](w){\textbf{w}};
+        \draw[] ([yshift=-0.2cm,xshift=0.3cm]T.left corner) node[](y){\textbf{y}};
+
+        \draw [decorate,decoration={snake,amplitude=.4mm,segment length=2mm,post length=0mm}] (S.south) -- (A2.north);
+        
+    \end{tikzpicture}
+    }
+\end{document}

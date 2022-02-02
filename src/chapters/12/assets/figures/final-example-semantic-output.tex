@@ -1,0 +1,27 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+\usepackage{../../../../style_tree}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{forest}
+        for tree={l=2.5mm}
+        [{\textit{assign}}
+            [{$\langle \textit{id}, 1 \rangle$}]
+            [{\textit{sumop}}
+                [{$\langle \textit{id}, 2 \rangle$}]
+                [{\textit{mulop}}
+                    [{$\langle \textit{id}, 3 \rangle$}]
+                    [{\textit{inttofloat}}
+                        [{$60$}]
+                    ]
+                ]
+            ]
+        ]
+    \end{forest}
+\end{document}

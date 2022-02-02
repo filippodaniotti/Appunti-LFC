@@ -8,8 +8,8 @@
 % arara: latexmk: { clean: partial }
 \begin{document}
 \chapter{Proprietà dei linguaggi liberi}  
-% È il momento di fare una gita domenicale di famiglia presso il supermercato MondoMatematica\textregistered~e perderci tra i gli scaffali invitanti e variopinti, stregati dalla capitalistica attrazione che tutte quelle proprietà, quei lemmi e quei teoremi esercitano su di noi.
-  
+% È il momento di fare una gita domenicale di famiglia presso il supermercato MondoMatematica\textregistered~e perderci tra gli scaffali invitanti e variopinti, stregati dalla capitalistica attrazione che tutte quelle proprietà, quei lemmi e quei teoremi esercitano su di noi.
+
 \section{Proprietà di chiusura}
 \subsection*{Chiusura rispetto all'unione}
 \begin{lemma}
@@ -38,7 +38,7 @@
     \item \(V'_1\) e \(V'_2\) si ottengo effettuando un'operazione di \emph{refresh} sui non terminali, in modo da evitare collisioni di nomi (vedremo più avanti come mai quest'operazione è importante), inoltre questo vocabolario è completato con l'introduzione di un nuovo start symbol;
     \item l'insieme dei terminali è l'unione dei due insiemi di terminali di \(\mathcal{G}_1\) e \(\mathcal{G}_2\);
     \item \(S\) è il nuovo start symbol, non presente in \(V'_1 \cup V'_2\), e \(S'_1\) e \(S'_2\) sono di nuovo il refresh degli start symbol rispettivamente di \(\mathcal{G}_2\) e \(\mathcal{G}_2\);
-    \item infine, l'insieme delle produzioni è dato dall'unione tra i refresh delle produzioni delle due grammatiche di partenza  \(\mathcal{G}_1\) e \(\mathcal{G}_2\), unito a una nuova produzione che, dal nuovo start symbol, produce il resfresh dello start symbol di una delle due grammatiche di partenza.
+    \item infine, l'insieme delle produzioni è dato dall'unione tra i refresh delle produzioni delle due grammatiche di partenza  \(\mathcal{G}_1\) e \(\mathcal{G}_2\), unito a una nuova produzione che, dal nuovo start symbol, produce il refresh dello start symbol di una delle due grammatiche di partenza.
   \end{itemize}
 
   \noindent Questa definizione ci basta per asserire che \(\mathcal{L(G)}\) è libero e \(\mathcal{L(G)} = \mathcal{L}(\mathcal{G}_1)  \cup \mathcal{L}(\mathcal{G}_2) \).
@@ -65,7 +65,7 @@
 
 \begin{osservazione}
   È semplice convincersi dell'importanza dell'operazione di refreshing. Se consideriamo due grammatiche \(\mathcal{G}_1, \mathcal{G}_2\) con le seguenti produzioni:
-  % \begin{figure}
+  % \begin{figure}[H]
   %   \centering
   %   \includegraphics[width=.7\textwidth,keepaspectratio]{why-refresh_1}
   % \end{figure}
@@ -78,7 +78,7 @@
   \noindent Avremo quindi generati i seguenti linguaggi: \(\mathcal{L}(\mathcal{G}_1)  = \{aa\}\) e \(\mathcal{L}(\mathcal{G}_2)  = \{bb\}\).
 
   Se non effettuassimo refreshing, ci troveremo ad avere una nuova grammatica con le seguenti produzioni:
-  % \begin{figure}
+  % \begin{figure}[H]
   %   \centering
   %   \includegraphics[width=.3\textwidth,keepaspectratio]{why-refresh_2}
   % \end{figure}
@@ -92,8 +92,8 @@
 
   \noindent Il linguaggio prodotto da questa nuova grammatica sarebbe diverso da quello dato dall'unione delle due grammatiche di partenza, poiché avremmo \(\mathcal{L(G)} = \{aa, ab, ba, bb\} \neq \mathcal{L}(\mathcal{G}_1)  \cup \mathcal{L}(\mathcal{G}_2) \).
 
-  Con un'opportuno resfreshing otteniamo invece:
-  % \begin{figure}
+  Con un'opportuno refreshing otteniamo invece:
+  % \begin{figure}[H]
   %   \centering
   %   \includegraphics[width=.3\textwidth,keepaspectratio]{why-refresh_3}
   % \end{figure}
@@ -208,7 +208,7 @@ A questo punto, andiamo a sostituire ogni produzione della forma \(A \rightarrow
 \paragraph{Esempio di applicazione}
 Andiamo a vedere un esempio considerando la seguente grammatica:
 %
-% \begin{figure}
+% \begin{figure}[H]
 %   \centering
 %   \includegraphics[width=.3\textwidth,keepaspectratio]{ex-th-1-3-1_1}
 % \end{figure}
@@ -222,7 +222,7 @@ Andiamo a vedere un esempio considerando la seguente grammatica:
 
 Osserviamo subito che \(C\) ha solo una produzione e questa conduce a \(\varepsilon\), pertanto è annullabile; allo stesso modo, \(B\) è annullabile attraverso \(C\) e \(S\) è annullabile attraverso \(A, B\) e \(C\). Con le operazioni che abbiamo illustrato poc'anzi, la grammatica che otteniamo è la seguente:
 
-% \begin{figure}
+% \begin{figure}[H]
 %   \centering
 %   \includegraphics[width=.3\textwidth,keepaspectratio]{ex-th-1-3-1_2}
 % \end{figure}
@@ -259,35 +259,41 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 
   Adesso definiamo \(p\) come la lunghezza della più lunga parola derivabile con degli alberi di derivazione, e che inoltre sia tale che i suoi cammini, a partire dalla radice, siano lunghi al più come il numero di non-terminali di \(\mathcal{G}\). Consideriamo quindi anche una parola \(z \in \mathcal{L}\), più lunga di \(p\) (\(|z| > p\)). Possiamo quindi essere sicuri che esiste un albero di derivazione per \(z\) che possiede almeno un cammino la cui lunghezza è strettamente maggiore del numero di non-terminali, poiché \(|z| >p\).
 
-  Adesso, per un qualche albero di derivazione, andiamo a considerare la più profonda coppia di occorrenze dello stesso non-terminale lungo un qualche cammino; con più profonda coppia di occerrenze intendiamo la coppia composta dalla più lontana e dalla seconda più lontana occorrenza dalla radice di uno stesso non terminale.
+  Adesso, per un qualche albero di derivazione, andiamo a considerare la più profonda coppia di occorrenze dello stesso non-terminale lungo un qualche cammino; con più profonda coppia di occorrenze intendiamo la coppia composta dalla più lontana e dalla seconda più lontana occorrenza dalla radice di uno stesso non terminale.
 
   Andiamo a visualizzare la situazione attraverso un albero di derivazione, considerando le due occorrenze di un non-terminale \(A\).
-  \begin{figure}
+  \begin{figure}[H]
     \centering
-    \includegraphics[width=.25\textwidth,keepaspectratio]{pl-proof_1}
+    \subimport{assets/figures/}{pl-proof-1.tex}
   \end{figure}
   Possiamo dire che, nelle due occorrenze di \(A\), sono radicati due sottoalberi distinti, che noi qui rappresenteremo colorati di verde e porpora. La parola \(z\) può quindi essere "spacchettata" in cinque sottoparole, come illustrato di seguito.
-  \begin{figure}
+  \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth,keepaspectratio]{pl-proof_2}
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \subimport{assets/figures/}{pl-proof-2.tex}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+      \centering
+      \subimport{assets/figures/}{pl-proof-3.tex}
+  \end{subfigure}%
   \end{figure}
   Dal momento che \(A_1\) e \(A_2\) sono occorrenze di uno stesso non-terminale, condividono la medesima famiglia di produzioni. Questo fatto è notevole: se, a partire da \(A_2\), siamo riusciti a trovare una qualche sequenza di derivazioni tale da essere arrivati a \(A_1\), allora con la stessa sequenza possiamo trovare una nuova occorrenza di \(A\), il che ci rende ragionevolmente certi che possiamo generare un numero arbitrario di sottostringhe \(v, x\) di \(z\).
   \begin{figure}[H]
     \centering
-    \begin{minipage}{0.25\textwidth}
+    \begin{subfigure}{.5\textwidth}
       \centering
-      \includegraphics[width=\textwidth,keepaspectratio]{pl-proof_3}
-    \end{minipage}
-     \hfill
-    \begin{minipage}{0.25\textwidth}
+      \subimport{assets/figures/}{pl-proof-4.tex}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
       \centering
-      \includegraphics[width=\textwidth,keepaspectratio]{pl-proof_4}
-    \end{minipage}
+      \subimport{assets/figures/}{pl-proof-5.tex}
+  \end{subfigure}%
   \end{figure}
   Allo stesso modo sappiamo che, se a partire da \(A_1\) possiamo ottenere un sottoalbero di derivazioni \(w\), questo stesso sottoalbero può essere ottenuto a partire da \(A_2\).
-  \begin{figure}
+  \begin{figure}[H]
     \centering
-    \includegraphics[width=.25\textwidth,keepaspectratio]{pl-proof_5}
+    \subimport{assets/figures/}{pl-proof-6.tex}
   \end{figure}
   Queste affermazioni possono essere riassunte, per l'appunto, nella formula:
   \begin{equation*}
@@ -314,7 +320,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
 
 \subsection{Applicazioni}
   \paragraph{Scopo del pumping lemma}
-  Tutto (quasi) bello, ma a cosa serve questo pumping lemma? È presto detto: il pumping lemma ci permette di determinare con certezza se un certo linguaggio \(\L\) \emph{non} è libero. Perché mai dovremmo volere questa informazione? Perché gli algoritmi di parsing\footnote{Il processo inverso della derivazione; non abbiate fretta, che fra poco arrivano un centinaio di pagine solo su quello.} che abbiamo a disposizione per verificare se una parola appartiente a un linguaggio generato da una grammatica libera sono esageratamente più efficienti di quelli che abbiamo per per i linguaggi generati da grammatiche dipendenti da contesto\footnote{Tutti questi algoritmi sono al più \(\mathcal{O}(n^3)\), ma per i linguaggi generati da alcune sottoclassi di grammatiche libere abbiamo a disposizione algoritmi lineari.}.
+  Tutto (quasi) bello, ma a cosa serve questo pumping lemma? È presto detto: il pumping lemma ci permette di determinare con certezza se un certo linguaggio \(\L\) \emph{non} è libero. Perché mai dovremmo volere questa informazione? Perché gli algoritmi di parsing\footnote{Il processo inverso della derivazione; non abbiate fretta, che fra poco arrivano un centinaio di pagine solo su quello.} che abbiamo a disposizione per verificare se una parola appartiene a un linguaggio generato da una grammatica libera sono esageratamente più efficienti di quelli che abbiamo per per i linguaggi generati da grammatiche dipendenti da contesto\footnote{Tutti questi algoritmi sono al più \(\mathcal{O}(n^3)\), ma per i linguaggi generati da alcune sottoclassi di grammatiche libere abbiamo a disposizione algoritmi lineari.}.
 
   \paragraph{Il negato del pumping lemma}
   Di preciso, come possiamo usare il pumping lemma per ottenere quest'informazione? Pensiamo al fatto che questo lemma è, formalmente, una semplice implicazione logica \(A \implies B\), dove l' ipotesi \(A\) è che un certo linguaggio \(\L\) sia libero e \(B\) è invece la tesi stessa del pumping lemma, la quale afferma che \(\L\) avrà una certa forma. Questo vuol dire che, usando il suo negato \(\neg (A \implies B) \equiv \neg B \implies \neg A\), possiamo vedere come verificare il negato della tesi del pumping lemma per un linguaggio \(\L\) implichi necessariamente che \(\L\) non è libero:
@@ -335,7 +341,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
     \item \(P_3 \equiv |vx| > 0 \; \land\)
     \item \(P_4 \equiv \forall i \in \mathbb{N}.uv^iwx^iy \in \mathcal{L}\)
   \end{itemize}
-  Richiamando alla mente le regole di equivalenza tra i quantificatori (\(\neg\forall.x \equiv \exists.x\) e \(\neg\exists.x \equiv \forall.x\)) e facendo un passaggio per volta non dovrebbe esserce difficile raggiungere il risultato cercato:
+  Richiamando alla mente le regole di equivalenza tra i quantificatori (\(\neg\forall.x \equiv \exists.x\) e \(\neg\exists.x \equiv \forall.x\)) e facendo un passaggio per volta non dovrebbe esserci difficile raggiungere il risultato cercato:
   \begin{gather*}
     \neg(\exists p \in \mathbb{N}^+. \forall z \in \L: |z| > p. \exists u, v, w, x, y. P) \\
     \\
@@ -390,11 +396,11 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
         \underbrace{aa...a}_\text{\emph{p}}\underbrace{bb...b}_\text{\emph{p}}\underbrace{cc...c}_\text{\emph{p}}
       \end{equation*}
       la scelta di quale parola \(z\) usare è fondamentale per arrivare agevolmente alla conclusione, quindi si presti bene attenzione in questa fase (Eq.\ref{eq:pl-neg_2});
-      \item questo è il punto in cui si parla della decomposizione di \(z\) (Eq.\ref{eq:pl-neg_3}): consideriamo infatti delle sottostringe \(u, v, w, x, y\) arbitrarie, per cui:
+      \item questo è il punto in cui si parla della decomposizione di \(z\) (Eq.\ref{eq:pl-neg_3}): consideriamo infatti delle sottostringhe \(u, v, w, x, y\) arbitrarie, per cui:
       \begin{itemize}
         \item sono una decomposizione della parola \(z\) (\(z = uvwxy\));
         \item la sottostringa \(vwx\) ha dimensione inferiore o uguale a \(p\) (\(|vwx| \le p\));
-        \item le due sottostringe \(v\) e \(x\) hanno dimensione non nulla (\(|vx| > 0\));
+        \item le due sottostringhe \(v\) e \(x\) hanno dimensione non nulla (\(|vx| > 0\));
       \end{itemize}
       notiamo in particolare quali posizioni potrà assumere la sottostringa \(vwx\) all'interno della parola \(z\):
       \begin{equation*}
@@ -426,7 +432,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
   \begin{itemize}
     \item la produzione iniziale è sempre \(S \to CD\), per cui non possiamo prescindere dallo sviluppo di \(C\) (nel prossimo punto capiremo perché è importante);
     \item le stringhe crescono in lunghezza solamente grazie sviluppo del non-terminale \(C\);
-    \item il non-terminale \(D\) agisce come un delimitatore destro, dal momento che quando ha alla sua sinsitra un terminale \(A\) o \(B\) ci permette di svilupparlo nel relativo terminale;
+    \item il non-terminale \(D\) agisce come un delimitatore destro, dal momento che quando ha alla sua sinistra un terminale \(A\) o \(B\) ci permette di svilupparlo nel relativo terminale;
     \item quando un terminale (\(a\) o \(b\)) si trova a destra di un non-terminale (\(B\) o \(B\)), la posizione di questi può essere scambiata (\(Ab \to bA\)).
   \end{itemize}
   Proviamo quindi a sviluppare delle derivazioni di prova e vedere cosa succede.
@@ -448,7 +454,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
   A questo punto, sfruttando anche un filo di intuizione e fantasia, possiamo concludere che il linguaggio generato comprende tutte quelle parole formate dalla ripetizione di una stessa parola su \(a\) e \(b\): \(\L(\G) =\{ww \mid w\in\{a,b\}^*\}\); questo linguaggio, sfortunatamente, non è libero. 
   
   \paragraph{Dove la chiusura alla concatenazione fallisce}
-  Prima di vedere la dimostrazione effettiva, però, qualcuno potrebbe giustamente chiedersi se possiamo fare la dimostrazione considerando un linguaggio \(\L'(\G) = \{ww \mid w\in\{a,b\}^*\}\) utilizzando la chiusura rispetto alla concatenazione. Questo però non è corretto, perché le parole che appartengono a \(\L(\G)\) hanno una struttura precisa, ossia possono sempre essere divise in due sottostringe di pari lunghezza ed equivalenti; la chiusura alla concatenazione, impostata in quel modo, rischia di non rispettare questa struttura\footnote{Questa ultima affermazione è moooolto dubbia, vorrei approfondire but damn time is running out.}. \\
+  Prima di vedere la dimostrazione effettiva, però, qualcuno potrebbe giustamente chiedersi se possiamo fare la dimostrazione considerando un linguaggio \(\L'(\G) = \{ww \mid w\in\{a,b\}^*\}\) utilizzando la chiusura rispetto alla concatenazione. Questo però non è corretto, perché le parole che appartengono a \(\L(\G)\) hanno una struttura precisa, ossia possono sempre essere divise in due sottostringhe di pari lunghezza ed equivalenti; la chiusura alla concatenazione, impostata in quel modo, rischia di non rispettare questa struttura\footnote{Questa ultima affermazione è moooolto dubbia, vorrei approfondire but damn time is running out.}. \\
   Detto questo, andiamo a vedere rapidamente la dimostrazione corretta.
   \begin{proof}
     Dal momento che la dimostrazione procede in maniera analoga a quella precedente, focalizziamoci su uno dei punti cardini, ossia la scelta di \(z\): in questo caso scegliamo \(z=a^pb^pa^pb^p\), perché ci permette di concludere la dimostrazione quasi a colpo d'occhio, perché a questo punto possiamo decomporre \(z\) in \(uvwxy\) e scegliere \(vwx = b^p\); questa \(vwx\) rispetta il vincolo \(|vwx| \le p\) e possiamo sbilanciarla scegliendo, di nuovo, un indice 0 (\(uv^0wx^0y\)), per cui il negato del pumping lemma è verificato e il linguaggio considerato non è libero.
@@ -540,7 +546,7 @@ Consideriamo la seguente grammatica:
     \subcaption{\(T\; \to\; bTa\; \mid ba\)}
     \label{fig:ex-2_2}
   \end{minipage}
-  \caption{Due diversi alberi di derivazione che portano alla parola \(abac\)}
+  \caption{Due diversi \emph{step di derivazione} che portano alla parola \(abac\)}
   \label{fig:ex-2}
 \end{figure}
 
@@ -600,7 +606,7 @@ Nonostante l'esercizio, in apparenza, sia solo leggermente diverso dal precedent
 \end{align*}
 
 \subsection*{Esercizio 5 - Grammatiche contestuali}
-Considerata la seguente gramatica \(\mathcal{G}\), è vero che \(\mathcal{L(G)} = \varnothing\)?
+Considerata la seguente grammatica \(\mathcal{G}\), è vero che \(\mathcal{L(G)} = \varnothing\)?
 
 \begin{align*}
   \mathcal{G}: S\; &\to\; aBS\; \mid bA \\
@@ -613,13 +619,13 @@ Considerata la seguente gramatica \(\mathcal{G}\), è vero che \(\mathcal{L(G)} 
 \begin{figure}[H]
 	\centering
 	\subimport{assets/figures/}{ex-5.tex}
-	\caption{Albero che rappresenta graficamente alcuni tentativi di derivazione usando le produzioni di \(\mathcal{G}\)}
+	\caption{\emph{"Albero di derivazione"} che rappresenta graficamente alcuni tentativi di derivazione usando le produzioni di \(\mathcal{G}\)}
 \end{figure}
 
 \noindent Dal momento che siamo riusciti a trovare almeno una parola \(w = aa \in \mathcal{L(G)}\), possiamo dire senza timore di smentita che \(\mathcal{L(G)} \neq \varnothing\).
 
 \subsection*{Esercizio 6}
-Quest'ultimo esercizio sarà disivo in tre parti.
+Quest'ultimo esercizio sarà diviso in tre parti.
 
 \paragraph{Parte 1}
 Si definisca una grammatica \(\mathcal{G}\) tale che \(\mathcal{L(G)}\) sia l'insieme di tutti i numeri pari nella rappresentazione binaria. Risposta:
@@ -638,6 +644,7 @@ Si definisca una grammatica \(\mathcal{G'}\) tale che \(\mathcal{L(G')} = \{ 1^n
 \paragraph{Parte 3}
 Ci chiediamo: \(\mathcal{L(G)} = \mathcal{L(G')}\)?
 
-La risposta è no. Ad esempio, condieriamo la stringa \(w = 00\); questa appartiene a \(\mathcal{L(G)}\) attraverso la produzione \(S\; \implies\; 0S\; \implies\; 00 \), ma non appartiene a \(\mathcal{L(G')}\).
+La risposta è no. Ad esempio, consideriamo la stringa \(w = 00\); 
+questa appartiene a \(\mathcal{L(G)}\) attraverso la produzione \(S\; \implies\; 0S\; \implies\; 00 \), ma non appartiene a \(\mathcal{L(G')}\).
 
 \end{document}

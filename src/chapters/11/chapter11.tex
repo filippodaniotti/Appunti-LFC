@@ -74,7 +74,7 @@ Possiamo osservare come in questa traduzione siano state sfruttate le regole di 
 L2: x = 0
 L1:
 \end{minted}
-il controllo sulla falsità di \texttt{x} ci permette di ridurre il numero di righe e labels utilizzate, nonché sfruttare meglio la corticircuitazione, caratteristica fondamentale per un buon compilatore. Si tenga sempre a mente che non sempre le condizioni vengono valutate nello stesso esatto ordine in cui sono state scritte dal programmatore.
+il controllo sulla falsità di \texttt{x} ci permette di ridurre il numero di righe e labels utilizzate, nonché sfruttare meglio la cortocircuitazione, caratteristica fondamentale per un buon compilatore. Si tenga sempre a mente che non sempre le condizioni vengono valutate nello stesso esatto ordine in cui sono state scritte dal programmatore.
 
 \section{Statement per il controllo di flusso}
 A questo punto possiamo andare a vedere più da vicino la traduzione in codice intermedio di alcuni statements. In particolare ci interessano i seguenti:
@@ -94,7 +94,7 @@ In questo schema \(P\) sta per \emph{program}, \(S\) sta per \emph{statement} e 
 Diamo un'occhiata alla generazione del codice intermedio di un'istruzione condizionale come potrebbe essere un comune costrutto \texttt{if-then}. Possiamo schematizzarne la struttura in questo modo:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.3\textwidth]{if-then-abstract.png}
+    \subimport{assets/figures/}{if-then-abstract.tex}
     \caption{}
 \end{figure}
 dove l'etichetta \(B.true\) punta al body dell'istruzione condizionale (perché naturalmente vuol dire che la condizione è stata verificata), mentre l'etichetta \(B.false\) punta alla prima istruzione successiva alla chiusura del blocco \texttt{then}.
@@ -126,7 +126,7 @@ Andiamo ora a vedere da vicino la prima istruzione dalla nostra lista, \(P \to S
 Il senso stesso dell'espressione \(P \to S\) sembra suggerire che il programma \(P\) possa essere visto globalmente come uno statement.
 \begin{itemize}
     \item \(newlabel()\) è una funzione che, una volta invocata, genera una nuova etichetta;
-    \item \(\triangleright\) è un opereatore che denota la concatezione di due (o più) segmenti di codice intermedio;
+    \item \(\triangleright\) è un operatore che denota la concatenazione di due (o più) segmenti di codice intermedio;
     \item \(label(L)\) assegna l'etichetta \(L\) alla prossima istruzione a tre indirizzi generata;
     \item \(S.next\), come intuibile, è l'etichetta che denota la prima istruzione da eseguire dopo la fine di \(S\); se ipoteticamente volessimo uscire da \(S\) prima della chiamata a \(S.next\), allora dovremmo esplicitamente eseguire un \texttt{goto}.
 \end{itemize}
@@ -139,15 +139,15 @@ Vediamo adesso nello specifico come tradurre uno statement \(S\) che si compone 
     & & B.false &= S_1.next = S.next \\
     & & S.code &= B.code \triangleright label(B.true) \triangleright S_1.code
 \end{align*}
-La prima cosa che facciamo è creare una nuova label \(B.true\) che etichetti l'inizio del blocco di codice da eseguire nel caso in cui la condizione \(B\) sia verificata. Nel caso in cui \(B\) risulti invece falsa, assegnamo all'etichetta di \(B.false\) il blocco successivo ad \(S_1\) (quindi successivo al blocco \texttt{then}); dal momento che in questo caso non abbiamo anche un \texttt{else}, il codice successivo a \(S_1\) sarà quello successivo a tutto lo statement \(S\).
+La prima cosa che facciamo è creare una nuova label \(B.true\) che etichetti l'inizio del blocco di codice da eseguire nel caso in cui la condizione \(B\) sia verificata. Nel caso in cui \(B\) risulti invece falsa, assegniamo all'etichetta di \(B.false\) il blocco successivo ad \(S_1\) (quindi successivo al blocco \texttt{then}); dal momento che in questo caso non abbiamo anche un \texttt{else}, il codice successivo a \(S_1\) sarà quello successivo a tutto lo statement \(S\).
 
-Complessivamente, il valore che assegnamo al nostro statement \(S\) sarà quindi costituito dal codice della condizione booleana \(B.code\), l'etichetta \(B.true\) e il blocco di codice da eseguire nel caso in cui l'istruzione sia verificata (\(S_1.code\)). Nel caso in cui la condizione booleana non fosse valutata come vera, il programma eseguirebbe, come detto in precedenza, la prima istruzione contenuta in \(B.false\). 
+Complessivamente, il valore che assegniamo al nostro statement \(S\) sarà quindi costituito dal codice della condizione booleana \(B.code\), l'etichetta \(B.true\) e il blocco di codice da eseguire nel caso in cui l'istruzione sia verificata (\(S_1.code\)). Nel caso in cui la condizione booleana non fosse valutata come vera, il programma eseguirebbe, come detto in precedenza, la prima istruzione contenuta in \(B.false\). 
 
 \subsection{Blocco \texttt{if-then-else}}
 Supponiamo di voler tradurre un'istruzione condizionale che comprende anche un blocco \texttt{else}. Questo naturalmente cambia leggermente la traduzione, poiché l'etichetta \(B.false\) non punterà più alla prima istruzione successiva al blocco \texttt{then}, bensì dovrà essere creata ex novo, e punterà alla prima istruzione del blocco \texttt{else}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.4\textwidth]{if-else-trans.png}
+    \subimport{assets/figures/}{if-else-trans.tex}
     \caption{}
 \end{figure}
 Entrambe le etichette \(S_1.next\) e \(S_2.next\) punteranno all'istruzione successiva all'intero statement.
@@ -159,7 +159,7 @@ Entrambe le etichette \(S_1.next\) e \(S_2.next\) punteranno all'istruzione succ
     & & S.code =\; &B.code \triangleright label(B.true) \triangleright S_1.code\; \triangleright \\
     & & &gen(goto\; S.next) \triangleright label(B.false) \triangleright S_2.code
 \end{align*}
-Il codice intermedio dello statement \(S\) è dato quindi dalla concatenazione di tutti questi blocchi; particolare riguardo all'istruzione \(gen(goto\; S.next)\), che deve essere eplicitata per poter saltare all'istruzione contenuta in \(S.next\).
+Il codice intermedio dello statement \(S\) è dato quindi dalla concatenazione di tutti questi blocchi; particolare riguardo all'istruzione \(gen(goto\; S.next)\), che deve essere esplicitata per poter saltare all'istruzione contenuta in \(S.next\).
 
 \subsection{Traduzione di un ciclo \texttt{while}}
 Prendiamo adesso visione del codice intermedio di un ciclo. 
@@ -186,7 +186,7 @@ Andiamo a confrontare il codice intermedio di queste due espressioni, riga per r
 \begin{itemize}
     \item l'etichetta \(B_1.true\) rimanda direttamente all'etichetta \(B.true\) dell'intero statement nel caso dell'\texttt{OR} (perché naturalmente è sufficiente che un elemento sia \(true\) per rendere valida l'intera espressione), mentre invece per \texttt{AND} viene semplicemente creata una nuova label;
     \item la situazione è assolutamente analoga, ma a parti invertite, per l'etichetta \(B_1.false\);
-    \item nelle due righe successive andiamo a definire le etichette per il secondo elemento delle nsotre espressioni e, in entrambi i casi, queste ultime punteranno alle etichette di uscita dell'intero statement; questo accade perché sono l'ultimo elemento dell'espressione ed il loro valore andrà a determinare quello dell'intera espressione;
+    \item nelle due righe successive andiamo a definire le etichette per il secondo elemento delle nostre espressioni e, in entrambi i casi, queste ultime punteranno alle etichette di uscita dell'intero statement; questo accade perché sono l'ultimo elemento dell'espressione ed il loro valore andrà a determinare quello dell'intera espressione;
     \item la differenza nella composizione di \(B.code\) sta quindi esclusivamente nell'etichetta che si frappone fra il codice del primo e del secondo elemento: nel caso dell'\texttt{OR}, infatti, il secondo elemento verrà valutato solo se il primo risulta falso (e qui infatti mettiamo la nuova etichetta \(B_1.false\)); viceversa nell'\texttt{AND} valutiamo il secondo solo se il primo è vero, e quindi l'etichetta frapposta è \(B_2.false\).
 \end{itemize}
 \begin{align*}

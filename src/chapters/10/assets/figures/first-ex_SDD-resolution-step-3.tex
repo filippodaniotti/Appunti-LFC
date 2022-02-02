@@ -1,0 +1,32 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+\usepackage{../../../../style_tree}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{forest}
+        for tree={s sep=10mm, l=5mm}
+        [{\textit{V.val}}
+            [{\textit{E.val}}
+                [{\textit{E.val} $ = 3$},color=blue
+                    [{\textit{T.val} $ = 3$},color=blue
+                        [{\textit{F.val} $ = 3$}
+                            [{\textit{digit.lexval} $ = 3$}]
+                        ]
+                    ]
+                ]
+                [{\textit{+}},before computing xy={s/.average={s}{siblings}}]
+                [{\textit{T.val} $ = 4$}
+                    [{\textit{F.val} $ = 4$}
+                        [{\textit{digit.lexval} $ = 4$}]
+                    ]
+                ]
+            ]
+        ]
+    \end{forest}
+\end{document}
