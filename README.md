@@ -25,6 +25,10 @@ Se durante la lettura doveste incorrere in errori di qualsiasi tipo, tra gli alt
 Se preferite non segnalare l'errore tramite Github potete comunque contattarci personalmente tramite gli indirizzi email che trovate [sui nostri profili Github](#la-squadra), oppure con la mail istituzionale `nome.cognome@studenti.unitn.it`, o naturalmente con mezzi più informali. 
 
 ## How to build
+
+### Dispensa file PDF
+Se non voleste imbattervi nella compilazione del progetto per ottenere un file PDF della dispensa, potete trovare il documento nella [sezione `Releases` di Github](https://github.com/filippodaniotti/Appunti-LFC/releases).  
+
 ### Standard build chain
 Prerequisiti:
 
