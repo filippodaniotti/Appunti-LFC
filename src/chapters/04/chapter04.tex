@@ -37,7 +37,7 @@ La precedente strategia sicuramente è ottima quando il linguaggio ha una forma 
 
 \begin{equation}
     \label{alfabeto}
-    S \to a \mid b \mid … \mid z \mid aS \mid bS \mid … \mid zS
+    S \to a \mid b \mid \cdots \mid z \mid aS \mid bS \mid \cdots \mid zS
 \end{equation}
 
 Per riconoscere parole generate da una tale grammatica il metodo di analisi naturale è una automa a stati finiti come quella in figura \ref{macchina_a_stati_finiti}.
@@ -401,7 +401,7 @@ Vediamo che leggere \(bbb\) da \(S_0\) è uguale a leggerlo da uno qualunque tra
 La risposta è sì, possiamo farlo! Per vedere in che modo dobbiamo prima introdurre il concetto di \(\varepsilon\)-chiusura.
 
 
-\subsection{\(\varepsilon\)-chiusura di un automa}
+\subsection{\texorpdfstring{$\varepsilon$}{Epsilon}-chiusura di un automa}
 Sia \((S, \mathcal{A}, \textrm{move}_n, S_0, F)\) un NFA, sia \(t\) uno stato in \(S\) e \(T\) un sottoinsieme di \(S\).
 
 Definiamo \(\varepsilon\)-chiusura\((\{t\})\) l’insieme di stati in \(S\) che sono raggiungibili da \(t\) tramite zero o più \(\varepsilon\)-transizioni (nota che \(t\) è sempre in questo insieme).
@@ -474,8 +474,7 @@ Nel secondo step il simbolo che devo aggiungere è la seconda lettera di \(w\), 
 
 Continuo così finché non finisco i simboli; a quel punto devo verificare se esiste nel mio insieme \(states\) uno stato finale. In questo caso è presente (\(10\)), e quindi la parola \(w\) appartiene al linguaggio riconosciuto dall’automa raffigurato.
 
-
-\subsection{Nota sulla \(\varepsilon\)-chiusura}
+\subsection{Nota sulla \texorpdfstring{$\varepsilon$}{Epsilon}-chiusura}
 \begin{theorem}
     Sia \(N = (S, \mathcal{A}, \textrm{move}_n, S_0, F)\) un NFA e sia \(M \subseteq S\).
     
