@@ -723,7 +723,7 @@ Inoltre, se ad esempio avessimo scritto \(T \to id * T\), avremmo perso la left-
 \subsubsection{Esercizio sulla risoluzione dei conflitti}
 Sia data la seguente grammatica:
 \begin{align}
-    \label{eq:ex3-slr1-grammarr}
+    \label{eq:ex3-slr1-grammar}
     \G: S &\to aAd \mid bBd \mid aBe \mid bAe \\
     A &\to c \nonumber \\ \notag
     B &\to c \notag
@@ -796,7 +796,7 @@ La situazione è ben rappresentata dalla figura \ref{fig:lr0-automata_conflict} 
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{automa_conflict_LR.tex}
-    \caption{Dettaglio dell'automa di tipo LR(0) per la grammatica \ref{eq:ex3-slr1-grammarr}, si noti come con una \(c\)-transizione si possa arrivare in 6 sia da 3 che da 2}
+    \caption{Dettaglio dell'automa di tipo LR(0) per la grammatica \ref{eq:ex3-slr1-grammar}, si noti come con una \(c\)-transizione si possa arrivare in 6 sia da 3 che da 2}
     \label{fig:lr0-automata_conflict}
 \end{figure}
 
