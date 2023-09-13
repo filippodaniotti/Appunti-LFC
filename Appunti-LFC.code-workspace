@@ -6,7 +6,35 @@
 	],
 	"settings": {
 		"latex-workshop.latex.autoBuild.run": "never",
-		"latex-workshop.latex.autoClean.run": "onSucceeded",
+		"latex-workshop.latex.autoClean.run": "onBuilt",
+		"latex-workshop.latex.clean.subfolder.enabled": true,
+		"latex-workshop.latex.clean.fileTypes": [
+			"*.aux",
+			"*.bbl",
+			"*.blg",
+			"*.idx",
+			"*.ind",
+			"*.lof",
+			"*.lot",
+			"*.out",
+			"*.toc",
+			"*.acn",
+			"*.acr",
+			"*.alg",
+			"*.glg",
+			"*.glo",
+			"*.gls",
+			"*.fls",
+			"*.log",
+			"*.fdb_latexmk",
+			"*.snm",
+			"*.synctex(busy)",
+			"*.synctex.gz(busy)",
+			"*.gz",
+			"*.nav",
+			"_minted*/*", //remove all minted folders content
+			"_minted*/" //remove the actual folder
+		],
 		"latex-workshop.latex.tools": [
 			{
 				"name": "pdflatex",
