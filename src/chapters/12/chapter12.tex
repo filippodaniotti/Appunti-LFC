@@ -78,7 +78,7 @@ Le due, ormai ben note, tipologie principali di parsing, sono:
     \item parsing bottom-up.
 \end{itemize} 
 
-\subsection{Parsing top-down\\ \small{Quello bello}}
+\subsection[Parsing top-down]{Parsing top-down \\ \small{Quello bello}}
 Quando ci troviamo al cospetto di grammatiche \(LL(1)\), riusciamo a ricavare il parse tree senza bisogno di backtrack utilizzando il parsing top-down.
 La strategia di analisi del parsing top-down prevede di partire dalla derivazione dello start symbol e poi, utilizzando la derivazione di tipo leftmost, costruire il parse tree.
 Se la grammatica è \(LL(1)\) va tutto liscio ed otteniamo l'albero di parsing in men che non si dica, se non lo è dobbiamo ricorrere al backtrack, ma noi non vogliamo che questo succeda, Larry (se nemmeno voi, come il revisore, avete capito... sorridete e annuite: non si contraddice mai un pazzo).
@@ -90,7 +90,7 @@ Abbiamo quindi visto delle caratteristiche che vogliamo evitare per assicurarci 
     \item Le grammatiche \emph{ambigue} \textbf{non} sono \(LL(1)\), perché esiste almeno una stringa nel linguaggio che può essere derivata in 2 modi diversi (entrambi leftmost).
 \end{itemize}
 
-\subsection{Parsing bottom-up\\ \small{Quello tosto}}
+\subsection[Parsing bottom-up]{Parsing bottom-up\\ \small{Quello tosto}}
 L'altra grossa famigliola di grammatiche che abbiamo visto contiene quelle grammatiche che possono essere analizzate tramite il parsing bottom-up, di questa famiglia siamo andati ad indagare queste tipologie di grammatiche:
 \begin{itemize}
     \item \(SLR\)
