@@ -205,7 +205,7 @@ In questo esempio, invece, il linguaggio denotato dalla nostra grammatica è com
     \label{filling-parsing-table2}
 \end{table}
 
-\section{First(\(\alpha\))}
+\section{First(\texorpdfstring{$\alpha$}{Alpha})} 
 \subsection{Definizione}
 \begin{definition}
     Chiamiamo \(first(\alpha)\) quell'insieme di terminali che sono posti all'inizio delle stringhe derivate da \(\alpha\).
@@ -226,7 +226,7 @@ Il concetto di \(first\) può essere definito ricorsivamente come segue:
 
     Nell'ultimo caso, quello ricorsivo, si ha che \(first(A)\) è dato dall'unione di tutti i \(first(\alpha)\), dove \(\alpha\) è il body di tutte quelle produzioni della grammatica che hanno \(A\) come driver.
 
-\subsection{Algoritmo di calcolo di first(\(\alpha\))}
+\subsection{Algoritmo di calcolo di first(\texorpdfstring{$\alpha$}{Alpha})}
 
 Mostriamo ora un algoritmo che ci permette di calcolare \(first(Y_1 \ldots Y_n)\) (con \(Y_i \in V\)), cioè l'insieme dei first per una certa parola considerata.
 
@@ -274,9 +274,9 @@ A questo punto, il miglior modo per procedere con l'algoritmo è, in mancanza di
     \caption{Esercizio sui first}
     \label{computing-first}
 \end{table}
-Cosa succede se invece, al posto della produzione \(T \to FT'\), diventa \(T \to T’F\)? Lasciando il resto dell'esercizio invariato, proviamo a calcolare \(first(T)\). In questo caso avremmo dovuto analizzare prima i \(first(T’) = \{\varepsilon, \ast\}\) e aggiungere \(first(T’) \setminus \{\varepsilon\} = \{\ast\}\) a \(first(T)\); tuttavia, dal momento che \(\varepsilon \in first(T')\), l’algoritmo non può arrestarsi (perchè potrebbe darsi che \(T'\) sia nullo), ma è necessario considerare anche i \(first(F)\). Come svolto precedenetemente aggiungiamo \(first(F) \setminus \{\varepsilon\} = \{id, (\}\) a \(first(T)\); essendo che \(\varepsilon \notin first(T')\) posso interrompere l'algoritmo e segnare che \(first(T) = \{\ast, id, (\}\)
+Cosa succede se invece, al posto della produzione \(T \to FT^\prime \), diventa \(T \to T^\prime F\)? Lasciando il resto dell'esercizio invariato, proviamo a calcolare \(first(T)\). In questo caso avremmo dovuto analizzare prima i \(first(T ^\prime) = \{\varepsilon, \ast\}\) e aggiungere \(first(T ^\prime) \setminus \{\varepsilon\} = \{\ast\}\) a \(first(T)\); tuttavia, dal momento che \(\varepsilon \in first(T ^\prime)\), l’algoritmo non può arrestarsi (perchè potrebbe darsi che \(T ^\prime \) sia nullo), ma è necessario considerare anche i \(first(F)\). Come svolto precedenetemente aggiungiamo \(first(F) \setminus \{\varepsilon\} = \{id, (\}\) a \(first(T)\); essendo che \(\varepsilon \notin first(T ^\prime)\) posso interrompere l'algoritmo e segnare che \(first(T) = \{\ast, id, (\}\)
 
-\section{Follow(\(A\))}
+\section{Follow(\texorpdfstring{${A}$}{A})} 
 \subsection{Definizione}
 A differenza dei \emph{first}, che sono definiti per stringhe generiche di terminali e non-terminali, i \emph{follow} sono computati solamente per i non-terminali: scriveremo dunque \(follow(A)\).
 \begin{definition}
@@ -284,7 +284,7 @@ A differenza dei \emph{first}, che sono definiti per stringhe generiche di termi
 \end{definition}
 I \emph{first} evidenziano quali sono i terminali per cui iniziano le stringhe derivabili da certi elementi (stringhe o non-terminali), i \emph{follow} invece indicano quali sono i terminali che possono seguire.
 
-\subsection{Algoritmo per il calcolo dei follow(\(A\))}
+\subsection{Algoritmo per il calcolo dei follow(\texorpdfstring{${A}$}{A})}
 \subimport{assets/pseudocode/}{follow.tex}
 L'algoritmo comincia inizializzando \(follow(S) = \$\): dal momento che dallo start symbol si possono generare tutte le possibili parole appartenenti al linguaggio della grammatica, allora possiamo aspettarci di trovare il terminatore di stringa \$ dopo una qualsiasi parola. Negli altri casi, invece, \(\forall A\) tale che \(A\) è un non-terminale, inizializziamo \(follow(A) = \emptyset\).
 
@@ -648,7 +648,6 @@ Fermiamoci un attimo e facciamo il punto della situazione. Prima di questa ampia
 
 Consideriamo la grammatica delle espressioni aritmetiche, visto che siamo partiti da quella; proviamo ad applicare le nostre regole di eliminazione e vediamo cosa succede.
 \begin{align*}
-    \label{non-ll1_grammar}
     \G: E &\to E+T \mid T \\
     T &\to T*F \mid F \nonumber \\
     F &\to (E) \mid id \nonumber 
@@ -705,7 +704,7 @@ Ne abbiamo un ulteriore conferma se andiamo a calcolare i first/follow per \(E\)
 Nota bene: non dobbiamo cadere nell'errore di supporre che, magari, la nostra procedura funzioni a meno che non sia lanciata su grammatiche ambigue, perché non ne abbiamo fornito alcuna prova. Da questo  esempio possiamo solamente concludere, a malincuore, che la procedura di eliminazione della ricorsione sinistra \emph{non garantisce} di ottenere delle grammatiche \(LL(1)\).
 
 \subsection{Eliminare la ricorsione sinistra elimina l'ambiguità?}
-Possiamo però chiederci: la grammatica \(\mathcal{G'}\) che abbiamo ottenuto è ancora ambigua, oppure applicando la nostra procedura ne abbiamo eliminato l'ambiguità? Ricordiamo che l'ambiguità della grammatica di partenza risiedeva nell'impossibilità di esprimere l'associatività degli operatori e la precedenza dell'uno sull'altro \footnote{Si riveda a ~\ref{sec:ambguity} in caso servisse un ripasso.}. 
+Possiamo però chiederci: la grammatica \(\mathcal{G'}\) che abbiamo ottenuto è ancora ambigua, oppure applicando la nostra procedura ne abbiamo eliminato l'ambiguità? Ricordiamo che l'ambiguità della grammatica di partenza risiedeva nell'impossibilità di esprimere l'associatività degli operatori e la precedenza dell'uno sull'altro \footnote{Si riveda a ~\ref{sec:ambiguity} in caso servisse un ripasso.}. 
 
 Sfortunatamente, riusciamo a trovare senza troppi problemi due derivazioni rightmost che ci portano a ottenere la medesima stringa \(id + id * id\):
 \begin{align*}
