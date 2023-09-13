@@ -5,6 +5,7 @@
 		}
 	],
 	"settings": {
+		"latex-workshop.latex.autoBuild.run": "never",
 		"latex-workshop.latex.autoClean.run": "onSucceeded",
 		"latex-workshop.latex.tools": [
 			{

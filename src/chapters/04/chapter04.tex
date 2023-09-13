@@ -480,7 +480,7 @@ Continuo così finché non finisco i simboli; a quel punto devo verificare se es
     
     Allora la \(\varepsilon\)-chiusura\((M)\) è il più piccolo insieme \(X \subseteq S\) tale che \(X\) è una soluzione alla seguente equazione:
     \begin{equation}
-        X = M \cup \{ N’ \mid N \in X \cap N’ \in \textrm{move}_n (N,\varepsilon)\}
+        X = M \cup \{ N^\prime \mid N \in X \cap N^\prime \in \textrm{move}_n (N,\varepsilon)\}
         \label{eps-closure-set-eq}
     \end{equation}
 \end{theorem}
@@ -494,7 +494,7 @@ Continuo così finché non finisco i simboli; a quel punto devo verificare se es
     \label{nfa_ciclico}
 \end{figure}
 
-Osserviamo con attenzione la formula appena descritta: \(X\) è \(M\) stesso, unito anche a tutti gli stati \(N’\) raggiungibili da \(N\) tramite una \(\varepsilon\)-transizione, dove \(N\) è uno stato qualsiasi in \(M\).
+Osserviamo con attenzione la formula appena descritta: \(X\) è \(M\) stesso, unito anche a tutti gli stati \(N^\prime \) raggiungibili da \(N\) tramite una \(\varepsilon\)-transizione, dove \(N\) è uno stato qualsiasi in \(M\).
 
 Balza subito all'occhio come la formula per definire \(X\) dipenda da \(X\) stessa; per questo motivo non dovremmo poterla calcolare, giusto? 
 Sbagliato! In informatica possiamo risolvere queste equazioni date certe caratteristiche, ed è qui che giunge in nostro aiuto il teorema del punto fisso. 
@@ -553,7 +553,7 @@ Andiamo quindi ad analizzare la complessità di queste procedure.
 \subsection{Complessità della costruzione di Thompson}
 Consideriamo la  complessità di generazione di un NFA con \(n\) nodi e \(m\) archi; conoscendo le quattro operazioni, sappiamo che, per ogni passo, aggiungeremo al massimo \(2\) nodi e \(4\) archi (dalla Kleene star, l'operazione più costosa), per cui avremo che \(n \le 2|r|\) e \(m \le 4|r|\), per cui abbiamo che la somma \(n + m\) è dell'ordine della dimensione dell'espressione regolare (\(\mathcal{O}(|r|)\)) e, poiché avremo in totale \(|r|\) passi, ciascuno dei quali eseguibile in tempo costante, possiamo felicemente concludere che \(T(\textrm{Thompson}(r)) = \mathcal{O}(|r|)\).
 
-\subsection{Complessità del calcolo della \(\varepsilon\)-chiusura}
+\subsection{Complessità del calcolo della \texorpdfstring{$\varepsilon$}{Epsilon}-chiusura}
 Prima di analizzare il costo della simulazione, dobbiamo analizzare il costo della \(\varepsilon\)-chiusura. Tenendo sempre a mente il codice (Alg.\ref{alg:ec-wrapper} e Alg.\ref{alg:ec-computation}), evidenziamo che le strutture usate sono:
 \begin{itemize}
     \item uno stack per contenere gli elementi non ancora incontrati;
