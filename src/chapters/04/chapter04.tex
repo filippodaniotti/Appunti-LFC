@@ -433,6 +433,7 @@ Continuiamo così finché lo stack non si svuota. L'algoritmo appena descritto s
 % \end{algorithm}
 Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'algoritmo per la verifica dell'appartenenza di una parola \(w\) al linguaggio riconosciuto da un automa, ovvero l'algoritmo di simulazione (Alg.\ref{alg:nfa-simulation}).
 
+\label{alg:nfa-simulation}
 \subimport{assets/pseudocode/}{nfa-simulation.tex}
 Dove \texttt{\$} è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \texttt{\$}).
 Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(S_0\) e la aggiungiamo all'insieme \texttt{states}; prendiamo il primo simbolo nella parola tramite \(nextChar()\) e poi entriamo nel ciclo che compone il corpo della procedura.

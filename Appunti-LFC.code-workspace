@@ -25,7 +25,7 @@
 			"*.glo",
 			"*.gls",
 			"*.fls",
-			"*.log",
+			"*.log", // use log file to check errors
 			"*.fdb_latexmk",
 			"*.snm",
 			"*.synctex(busy)",
