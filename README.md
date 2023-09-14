@@ -115,4 +115,3 @@ Nota: all'interno del di `Appunti-LFC.code-workspace` oltre lo stretto necessari
 -   Revisori
     -   [Michele Yin](https://github.com/BigEmperor26)
     -   [Giacomo Zanolli](https://github.com/civts)
-    -   [Marco Toniolo](https://github.com/Toniolo-Marco)
