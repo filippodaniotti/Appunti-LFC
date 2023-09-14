@@ -34,10 +34,10 @@ Questi sono gli ingredienti di una grammatica generativa.
 Il linguaggio generato da una grammatica è l’insieme di stringhe composte solo da terminali che può essere generato partendo dallo start symbol di quella stessa grammatica.
 
 \subsection{Derivare il linguaggio di una grammatica generativa}
-Per derivare un linguaggio dalla grammatica generativa dobbiamo applicare (quante volte possiamo) tutte le regole di riscrittura che appartengono alla grammatica stessa. 
+Per derivare un linguaggio dalla grammatica generativa dobbiamo applicare, \textbf{quante volte possiamo}, tutte le regole di riscrittura che appartengono alla grammatica stessa. 
 
 \paragraph{Le derivazioni}
-Ogni riscrittura è chiamata derivation step (operazione denotata dal simbolo \(\implies\), diverso dal simbolo usato nelle produzioni \(\to\)). L’operazione di derivazione serve per tradurre stringhe con caratteri non terminali in stringhe composte solo da caratteri terminali (seguendo le regole dettate dalle produzioni).
+Ogni riscrittura è chiamata derivation step (operazione denotata dal simbolo \(\implies\), diverso dal simbolo usato nelle produzioni \(\to\)). L’operazione di derivazione serve per tradurre stringhe con caratteri non terminali in stringhe composte \textbf{solo} da caratteri terminali (seguendo le regole dettate dalle produzioni).
 
 \paragraph{Un esempio pratico}
 Partendo dalla grammatica espressa in \ref{produzioni_esempio_0} possiamo sviluppare la seguente derivazione:
@@ -99,7 +99,7 @@ In questo caso il simbolo di partenza \(S\) ci offre due possibili productions, 
     \item la seconda produzione ci porta subito ad una derivazione terminale \(S \implies abc\);
     \item la prima produzione invece \(S \to aSBc\) ci permette di ricorrere in un processo ricorsivo che continua ad aggiungere terminali \(a\) sulla sinistra, la coppia \(Bc\) sulla destra e termina solo quando decidiamo di sostituire \(S\) con \(abc\); Questo implica che nella situazione terminale ci potremo trovare in una situazione in cui abbiamo una stringa con questa forma \(aaa...abcBcBcBc...Bc\).
 \end{itemize}
-Da questa forma per eliminare tutti i non terminali \(B\) non abbiamo altra soluzione se non quella di utilizzare la produzione \(cB \to Bc\) per spostare tutte le \(c\) in fondo ed in seguito con \(bB \to bb\) trasformare tutte le \(B\) in \(b\). Il linguaggio che ricaviamo alla fine è \(\{a^nb^nc^n \mid n>0\}\).
+Da questa forma per eliminare tutti i non terminali \(B\) non abbiamo altra soluzione se non quella di utilizzare la produzione \(cB \to Bc\) per spostare tutte le \(c\) in fondo. Alla prima sostituzione otteniamo: \(aaa...abBcBc ... Bc ... BcBcc\). Riutilizzando la stessa regola possiamo spostare tutte le \( B \) da destra verso il centro, ottenendo: \(aaa...abBB...Bcc...ccc\)  ed in seguito con \(bB \to bb\) trasformare tutte le \(B\) in \(b\). Il linguaggio che ricaviamo alla fine è \(\{a^nb^nc^n \mid n>0\}\).
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{exercise4.tex}
