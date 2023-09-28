@@ -85,9 +85,9 @@ Prerequisiti:
 
 Procedimento:
 
-1. All'interno della repo troverete il file `Appunti-LFC.code-workspace`; in questo file di configurazione sono presenti tutte le impostazioni per compilare con successo il progetto.
+1. All'interno della repo troverete il file `Appunti-LFC.code-workspace`; in questo file di configurazione sono presenti tutte le impostazioni per compilare con successo il progetto. Per farlo funzionare, è necessario che il workspace sia aperto con VS Code. (Aprire il file e premere **Open Workspace**)
 
-2. Per compilare, è sufficiente aprire il workspace con VS Code e premere `Ctrl+Alt+B` (o `Cmd+Alt+B` su Mac) se questa è la vostra shortcut, altrimenti premere il pulsante verde play (<span style="color:green;font-weight:700;font-size:20px">⊳</span>).
+2. Per compilare, basta premere `Ctrl+Alt+B` (o `Cmd+Alt+B` su Mac) se questa è la vostra shortcut, altrimenti premere il pulsante verde play (<span style="color:green;font-weight:700;font-size:20px">⊳</span>).
 
 Nota: all'interno del di `Appunti-LFC.code-workspace` oltre lo stretto necessario sono presenti diverse opzioni (e.g. `autoBuild.run: "onSave", autoClean.run: "onBuilt"` ).
 Per disattivarle è sufficiente commentare o cancellare la riga corrispondente. Per maggiori informazioni consultare la documentazione sui [workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces) e per le diverse opzioni di compiling quella di [Latex Workshop](https://github.com/James-Yu/LaTeX-Workshop/wiki/Compile).
