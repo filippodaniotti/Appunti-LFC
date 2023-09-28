@@ -44,8 +44,13 @@
 					"-synctex=1",
 					"-interaction=nonstopmode",
 					"-file-line-error",
-					"-output-directory=%OUTDIR%",
-					"%DOC%"
+					// to compile always main.tex (even when saving a subfile)
+					"-output-directory=%WORKSPACE_FOLDER%/src",
+					"%WORKSPACE_FOLDER%/src/main.tex"
+
+					// to compile only the current file (useful when saving a subfile)
+					// "-output-directory=%OUTDIR%",
+					// "%DOC%"
 				]
 			}
 		],

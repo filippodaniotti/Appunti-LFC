@@ -1,3 +1,4 @@
+% !TEX root = ../../main.tex
 \documentclass[class=book, crop=false, oneside, 12pt]{standalone}
 \usepackage{standalone}
 \usepackage{../../style}
@@ -8,7 +9,6 @@
 \begin{document}
 \chapter{Proprietà dei linguaggi liberi}
 È il momento di fare una gita domenicale di famiglia presso il supermercato MondoMatematica\textregistered e perderci tra i gli scaffali invitanti e variopinti, stregati dalla capitalistica attrazione che tutte quelle proprietà, quei lemmi e quei teoremi esercitano su di noi.
-  
 \section{Proprietà di chiusura}
 \subsection*{Chiusura rispetto all'unione}
 \begin{lemma}
@@ -547,13 +547,13 @@ In questo esercizio ci chiediamo quale sia il linguaggio generato dalla seguente
   B\; &\to\; 1\; \mid 1S\; \mid 0BB
 \end{align*}
 
-\noindent Il linguaggio generato è uno tale che ogni sua stringa possiede un egual numero di \(0\) e \(1\).
+\noindent Il linguaggio generato è tale che ogni sua stringa possiede un egual numero di \(0\) e \(1\).
 
 Intuitivamente, è facile convincersene: supponiamo infatti di produrre, a partire da \(S\), una stringa \(0B\). A questo punto ci sono dati tre casi:
 
 \begin{itemize}
   \item se applichiamo \(B\; \to\; 1\) andiamo a chiudere la derivazione con una stringa "bilanciata" (si passi sopra all'abuso di terminologia);
-  \item se invece abblichiamo la seconda produzione possibile \(B\; \to\; 1S\) non stiamo facendo altro che tornare al caso base del ragionamento, mantenendo comunque una stringa bilanciata;
+  \item se invece applichiamo la seconda produzione possibile \(B\; \to\; 1S\) non stiamo facendo altro che tornare al caso base del ragionamento, mantenendo comunque una stringa bilanciata;
   \item l'unico modo che abbiamo per introdurre un altro \(0\) è applicare la terza produzione \(S\; \to\; 0BB\), ma quei due \(B\), a questo punto, non hanno altro modo di terminare se non diventando degli \(1\).
 \end{itemize}
 
