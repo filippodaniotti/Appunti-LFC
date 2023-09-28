@@ -9,6 +9,7 @@
 *.fdb_latexmk
 *.sta
 *.pdf
+!/src/main.pdf
 *.synctex(busy)
 out/
 
