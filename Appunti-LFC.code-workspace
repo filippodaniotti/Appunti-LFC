@@ -46,8 +46,7 @@
 					"-file-line-error",
 					// to compile always main.tex (even when saving a subfile)
 					"-output-directory=%WORKSPACE_FOLDER%/src",
-					"%WORKSPACE_FOLDER%/src/main.tex"
-
+					"%WORKSPACE_FOLDER%/src/main.tex" // Original Path for
 					// to compile only the current file (useful when saving a subfile)
 					// "-output-directory=%OUTDIR%",
 					// "%DOC%"
