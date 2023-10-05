@@ -90,7 +90,9 @@ Procedimento:
 2. Per compilare, basta premere `Ctrl+Alt+B` (o `Cmd+Alt+B` su Mac) se questa è la vostra shortcut, altrimenti premere il pulsante verde play (<span style="color:green;font-weight:700;font-size:20px">⊳</span>).
 
 Nota: all'interno del di `Appunti-LFC.code-workspace` oltre lo stretto necessario sono presenti diverse opzioni (e.g. `autoBuild.run: "onSave", autoClean.run: "onBuilt"` ).
-Per disattivarle è sufficiente commentare o cancellare la riga corrispondente. Per maggiori informazioni consultare la documentazione sui [workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces) e per le diverse opzioni di compiling quella di [Latex Workshop](https://github.com/James-Yu/LaTeX-Workshop/wiki/Compile).
+Per utilizzare queste opzioni è necessario aprire solo la cartella contenente il file `Appunti-LFC.code-workspace` e successivamente aprire il workspace.
+Per disattivarle è sufficiente commentare o cancellare la riga corrispondente.
+Per maggiori informazioni consultare la documentazione sui [workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces) e per le diverse opzioni di compiling quella di [Latex Workshop](https://github.com/James-Yu/LaTeX-Workshop/wiki/Compile).
 
 ## Principali pacchetti impiegati
 
