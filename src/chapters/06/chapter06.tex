@@ -121,12 +121,20 @@ I lessemi sono estremamente facili da descrivere utilizzando le espressioni rego
 Questo è molto interessante: se è vero che i lessemi sono perfettamente descrivibili con dei linguaggi regolari, allora vuol dire che possiamo utilizzare quelli in sede di analisi lessicale, senza dover tirare in ballo i più potenti ma decisamente più complessi linguaggi liberi.
 
 Quindi questi lessemi, essendo descritti da delle espressioni regolari, possono anche essere riconosciuti agevolmente da una macchina a stati finiti, come ad esempio quella in figura sotto, che descrive la classe \texttt{relop} di token per gli operatori relazionali.
+
+% Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth,keepaspectratio]{lec-14-1}
-    \caption{Automa chericonosce la classe \texttt{relop}}
+    \subimport{assets/figures/}{automa_relop.tex}
+    \caption{Automa che riconosce la classe \texttt{relop}}
     \label{automaton-relop}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=\textwidth,keepaspectratio]{lec-14-1}
+%     \caption{Automa che riconosce la classe \texttt{relop}}
+% \end{figure}
 È molto semplice intuire graficamente che ciascun percorso che termini in uno stato finale ritorna un token, sotto forma di coppia, in cui il \texttt{token-name} è appunto quello della classe \texttt{relop}, mentre il \texttt{token-value} indica qual è l'elemento della classe da ritornare.
 
 \paragraph{Retract}

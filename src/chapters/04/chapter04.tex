@@ -308,12 +308,19 @@ Presentiamo ora un esempio particolare per assimilare meglio questa costruzione.
 \noindent Ci sono quindi due espressioni che compaiono in questo esempio: \(a = r_1\) e \(b = r_2\).
 In primis applichiamo la regola di base (\ref{Thompson_base}).
 
+% Using Figure instead of Image
 \begin{figure}
     \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{esempio_Thompson_0}
+    \subimport{assets/figures/}{esempio_Thompson_0.tex}
     \caption{Applicazione del passo base della costruzione di Thompson}
     \label{esempio_Thompson_0}
 \end{figure}
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.7\textwidth,keepaspectratio]{esempio_Thompson_0}
+%     \caption{Applicazione del passo base della costruzione di Thompson}
+% \end{figure}
 
 Concentriamoci ora sulla prima espressione, \( a \mid b = r_1 \mid r_2 = r_3\); applichiamo la costruzione di Thompson per l’alternanza ai due automi per \(r_1\) e \(r_2\), otteniamo quindi l’automa per \(r_3\).
 

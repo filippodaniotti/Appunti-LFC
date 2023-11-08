@@ -5,7 +5,7 @@
 		}
 	],
 	"settings": {
-		"latex-workshop.latex.autoBuild.run": "onSave",
+		"latex-workshop.latex.autoBuild.run": "never",
 		"latex-workshop.latex.autoClean.run": "onBuilt",
 		"latex-workshop.latex.clean.subfolder.enabled": true,
 		"latex-workshop.latex.clean.fileTypes": [
