@@ -135,6 +135,7 @@ Quindi questi lessemi, essendo descritti da delle espressioni regolari, possono 
 %     \includegraphics[width=\textwidth,keepaspectratio]{lec-14-1}
 %     \caption{Automa che riconosce la classe \texttt{relop}}
 % \end{figure}
+
 È molto semplice intuire graficamente che ciascun percorso che termini in uno stato finale ritorna un token, sotto forma di coppia, in cui il \texttt{token-name} è appunto quello della classe \texttt{relop}, mentre il \texttt{token-value} indica qual è l'elemento della classe da ritornare.
 
 \paragraph{Retract}
@@ -147,12 +148,21 @@ Immaginiamo di avere delle espressioni regolari che denotano il linguaggio dei l
 
 Sappiamo anche che, avendo delle espressioni regolari, per ciascuna di queste possiamo costruire un NFA che riconosce il linguaggio denotato dall'espressione considerata; possiamo a questo punto immaginare di far collidere questi NFA inserendo uno stato iniziale extra e collegandolo a ciascun NFA tramite una \(\varepsilon\)-transizione, come mostrato in Fig.\ref{nfa_for_grammar_regular_expressions} sotto.
 Da notare che nel caso d'uso del compilatore ci sono delle azioni associate agli stati finali (se l'analizzatore legge un assegnamento compie, appunto, le azioni per registrare l'assegnamento).
+% use Figure instead of Image
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.4\textwidth,keepaspectratio]{lec-14-2.png}
+    \subimport{assets/figures/}{nfa_for_grammar_regular_expressions.tex}
     \caption{}
     \label{nfa_for_grammar_regular_expressions}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.4\textwidth,keepaspectratio]{lec-14-2.png}
+%     \caption{}
+%     \label{nfa_for_grammar_regular_expressions}
+% \end{figure}
 Una struttura di questo tipo può riconoscere i linguaggi denotati da tutte le espressioni regolari per cui abbiamo costruito degli NFA. 
 
 Adesso dobbiamo pensare come ottimizzare l'uso di una struttura simile per l'analisi lessicale. Potremmo trovarci infatti a gestire problemi di diversa natura, in particolare relativi all'input buffering: ad esempio, come posso fare a sapere se i due caratteri \texttt{i} e \texttt{f} che ho appena letto stanno a indicare la keyword \mintinline{c}{if} e non un ipotetico identificatore \mintinline{c}{iffoff}? Detto in maniera informale, come decido quando fermarmi, quando tornare indietro, quando e se ho letto più di quanto mi serviva?
