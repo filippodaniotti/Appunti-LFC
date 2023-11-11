@@ -1,0 +1,56 @@
+\documentclass[varwidth, 15pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+\usepackage{forest}
+\usepackage{array}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{minipage}[c]{.4\textwidth}
+        \centering
+        \begin{forest}
+            for tree={
+                s sep=15mm, % siblings distance
+                l sep=7.5mm, % level distance
+                font=\itshape\fontsize{15}{14},
+            },
+            [+
+                [digit]
+                [digit]
+            ]
+        \end{forest}
+    \end{minipage}%
+    \begin{minipage}[c]{.2\textwidth}
+        \centering
+        \textbf{invece di}
+    \end{minipage}%
+    \begin{minipage}[c]{.4\textwidth}
+        \centering
+        \begin{forest}
+            for tree={
+                s sep=15mm, % siblings distance
+                l sep=7.5mm, % level distance
+                font=\itshape\fontsize{15}{14},
+            },
+            [V
+                [E
+                    [E
+                        [T
+                            [F
+                                [digit]
+                            ]
+                        ]
+                    ]
+                    [+]
+                    [T
+                        [F
+                            [digit]
+                        ]
+                    ]
+                ]
+            ]
+        \end{forest}
+    \end{minipage}
+\end{document}

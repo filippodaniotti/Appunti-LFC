@@ -1,0 +1,37 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+\usepackage{forest}
+
+\usepackage{tikz}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{forest}
+        for tree={
+            s sep=15mm, % siblings distance
+            l sep=7.5mm, % level distance
+            font=\itshape\fontsize{15}{14},
+            edge=dotted, % Imposta tutti gli archi come puntini
+        },
+        [V
+            [E
+                [E
+                    [T
+                        [F
+                           [digit] {\draw[->, blue, line width=1.25pt] () to[bend left=45] (!u.south west);}
+                        ] {\draw[->, blue, line width=1.25pt] () to[bend left=45] (!u.south west);}
+                    ] {\draw[->, blue, line width=1.25pt] () to[bend left=45] (!u.south west);}
+                ] {\draw[->, blue, line width=1.25pt] () to[bend left=45] (!u.west);}
+                [+]
+                [T
+                    [F
+                        [digit] {\draw[->, blue, line width=1.25pt] () to[bend right=45] (!u.south east);}
+                    ] {\draw[->, blue, line width=1.25pt] () to[bend right=45] (!u.south east);}
+                ] {\draw[->, blue, line width=1.25pt] () to[bend right=45] (!u.east);}
+            ] {\draw[->, blue, line width=1.25pt] () to[bend right=45] (!u.south east);}
+        ],
+    \end{forest}
+\end{document}

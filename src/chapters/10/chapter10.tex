@@ -39,19 +39,29 @@ L'analizzatore lessicale passa poi all'analizzatore sintattico la tabella dei si
 È arrivato, come da prassi, il momento di applicare la nostra filosofia del \emph{learning by doing}, osservando un esempio di utilizzo di una grammatica attribuita.
 
 \subsection{Esempio}
-Prendiamo come esempio la nostra grammatica per la valutazione delle espressioni aritmetiche per valutare l'espressione rappresentata dall'albero di derivazione in Fig.\ref{fig:first-ex_SDD}.
+Prendiamo come esempio la nostra grammatica per la valutazione delle espressioni aritmetiche per valutare l'espressione rappresentata dall'albero di derivazione in Fig.\ref{fig:ex_albero_derivazione_somma_1}.
 \begin{align*}
     V &\to E \\
     E &\to E + T \mid T\\
     T &\to T * F \mid F\\
     F &\to (E) \mid digit
 \end{align*}
+
+% Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth]{first-ex_SDD.jpg}
+    \subimport{assets/figures}{ex_albero_derivazione_somma_1.tex}
     \caption{Albero di derivazione per una somma}
-    \label{fig:first-ex_SDD}
+    \label{fig:ex_albero_derivazione_somma_1}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.8\textwidth]{first-ex_sdd.jpg}
+%     \caption{Albero di derivazione per una somma}
+%     \label{fig:first-ex_SDD}
+% \end{figure}
+
 Prendiamo il caso in cui il primo digit abbia assegnato come valore 3, mentre il secondo abbia valore 4.
 Questi valori, come spiegato prima, sono memorizzati nella tabella dei simboli.
 
@@ -94,19 +104,30 @@ Nota che i pedici numerici usati in alcune produzioni sono usati solo per differ
 \paragraph*{Utilizzo dell'SDD} Ora che abbiamo la grammatica attribuita possiamo utilizzarla appunto per dare un valore al parse tree della nostra somma.
 
 Per valutare un albero di derivazione si utilizza un parse tree annotato. Questo è un parse tree in cui ogni nodo contiene le annotazioni che riguardano gli attributi del simbolo che si trova in quel nodo.
-Si può capire al volo cosa intendiamo guardando il parse tree annotato corrispondente al parse tree precedente (Fig.\ref{fig:first-ex_SDD})) che è raffigurato qui sotto.
+Si può capire al volo cosa intendiamo guardando il parse tree annotato corrispondente al parse tree precedente (Fig.\ref{fig:ex_albero_derivazione_somma_2}) che è raffigurato qui sotto.
+
+% Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth]{first-ex_noted-parse-tree.jpg}
-    \caption{Parse tree annoiato per la somma in \ref{fig:first-ex_SDD}}
-    \label{fig:first-ex_noted-parse-tree}
+    \subimport{assets/figures/}{ex_albero_derivazione_somma_2.tex}
+    \caption{Albero di derivazione per una somma in \ref{fig:ex_albero_derivazione_somma_1}}
+    \label{fig:ex_albero_derivazione_somma_2}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.8\textwidth]{first-ex_noted-parse-tree.jpg}
+%     \caption{Parse tree annotato per la somma in \ref{fig:first-ex_SDD}}
+%     \label{fig:first-ex_noted-parse-tree}
+% \end{figure}
+
 Ciò a cui si deve fare attenzione in questo caso è che ad ogni nodo è aggiunta l'annotazione riguardante il valore del nodo stesso.
 
 Ma a cosa serve il parse tree annotato? È presto detto!
 
 \noindent Il parse tree annotato viene letto dal basso verso l'alto seguendo le regole di attribuzione che sono segnate sui vari nodi per ottenere la valutazione dell'albero stesso. Vediamo ora questo procedimento passo per passo.
 
+% Using Figure instead of Image
 \begin{enumerate}
     \item Partendo dal basso applichiamo innanzitutto la regola
     \begin{align*}
@@ -114,7 +135,7 @@ Ma a cosa serve il parse tree annotato? È presto detto!
     \end{align*}
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-1.jpg}
+        \subimport{assets/figures/}{res_albero_derivazione_somma_1.tex}
         \caption{Passo 1 della valutazione tramite SDD}
     \end{figure}
     \item Il secondo passo prevede di applicare la regola
@@ -123,7 +144,7 @@ Ma a cosa serve il parse tree annotato? È presto detto!
     \end{align*}
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-2.jpg}
+        \subimport{assets/figures/}{res_albero_derivazione_somma_2.tex}
         \caption{Passo 2 della valutazione tramite SDD}
     \end{figure}
     \item Successivamente applichiamo la regola
@@ -132,7 +153,7 @@ Ma a cosa serve il parse tree annotato? È presto detto!
     \end{align*}
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-3.jpg}
+        \subimport{assets/figures/}{res_albero_derivazione_somma_3.tex}
         \caption{Passo 3 della valutazione tramite SDD}
     \end{figure}
     \item Il quarto passo prevede di applicare la regola
@@ -141,7 +162,7 @@ Ma a cosa serve il parse tree annotato? È presto detto!
     \end{align*}
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-4.jpg}
+        \subimport{assets/figures/}{res_albero_derivazione_somma_4.tex}
         \caption{Passo 4 della valutazione tramite SDD}
     \end{figure}
     \item Infine, andiamo ad applicare la regola
@@ -150,10 +171,59 @@ Ma a cosa serve il parse tree annotato? È presto detto!
     \end{align*}
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-5.jpg}
+        \subimport{assets/figures/}{res_albero_derivazione_somma_5.tex}
         \caption{Passo finale della valutazione tramite SDD}
     \end{figure}
 \end{enumerate}
+
+% \begin{enumerate}
+%     \item Partendo dal basso applichiamo innanzitutto la regola
+%     \begin{align*}
+%         F &\to digit & &\{F.val = digit.lexval\}
+%     \end{align*}
+%     \begin{figure}[H]
+%         \centering
+%         \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-1.jpg}
+%         \caption{Passo 1 della valutazione tramite SDD}
+%     \end{figure}
+%     \item Il secondo passo prevede di applicare la regola
+%     \begin{align*}
+%         T &\to F & &\{T.val = F.val\}
+%     \end{align*}
+%     \begin{figure}[H]
+%         \centering
+%         \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-2.jpg}
+%         \caption{Passo 2 della valutazione tramite SDD}
+%     \end{figure}
+%     \item Successivamente applichiamo la regola
+%     \begin{align*}
+%         E &\to T & &\{E.val = T.val\}
+%     \end{align*}
+%     \begin{figure}[H]
+%         \centering
+%         \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-3.jpg}
+%         \caption{Passo 3 della valutazione tramite SDD}
+%     \end{figure}
+%     \item Il quarto passo prevede di applicare la regola
+%     \begin{align*}
+%         E &\to E_1 + T & &\{E.val = E_1.val + T.val\}
+%     \end{align*}
+%     \begin{figure}[H]
+%         \centering
+%         \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-4.jpg}
+%         \caption{Passo 4 della valutazione tramite SDD}
+%     \end{figure}
+%     \item Infine, andiamo ad applicare la regola
+%     \begin{align*}
+%         V &\to E & &\{V.val = E.val\}
+%     \end{align*}
+%     \begin{figure}[H]
+%         \centering
+%         \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-5.jpg}
+%         \caption{Passo finale della valutazione tramite SDD}
+%     \end{figure}
+% \end{enumerate}
+
 Dovrebbe essere chiaro a questo punto come si possa utilizzare una grammatica attribuita per calcolare il valore di una certa parola di una data grammatica:
 \begin{enumerate}
     \item si crea il parse tree annotato per tale parola;
@@ -177,33 +247,64 @@ Non è sempre detto che un parse tree annotato possa essere valutato, per verifi
 \noindent Se invece troviamo un ordinamento topologico per questo dependency graph allora l'SDD è valutabile ed abbiamo anche un ordine da seguire per la valutazione.
 
 Ad esempio per il parse tree annotato dell'esercizio precedente otteniamo questo grafo delle dipendenze in cui le dipendenze sono indicate con le frecce azzurre (mentre la linea tratteggiata rappresenta gli archi del parse tree).
+
+% Using Figure instead of Images
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth]{first-ex_SDD-dependency-graph.jpg}
+    \subimport{assets/figures/}{dependency_graph_ex_albero_derivazione_somma.tex}
     \caption{Albero di parsing annotato e relativo grafo delle dipendenze}
-    \label{fig:first-ex_SDD-dependency-graph}
+    \label{fig:dependency_graph_ex_albero_derivazione_somma}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.8\textwidth]{first-ex_SDD-dependency-graph.jpg}
+%     \caption{Albero di parsing annotato e relativo grafo delle dipendenze}
+%     \label{fig:first-ex_SDD-dependency-graph}
+% \end{figure}
+
 In generale vale questa regola: quando tutti gli attributi sono di tipo sintetizzato allora una visita in postordine può sostituire sempre l'ordinamento topologico, capiremo in seguito le motivazioni dietro questa affermazione.
 
 Riportiamo lo pseudocodice della visita in postordine, per chi non avesse ascoltato il Montre a suo tempo:
+
+% Using PseudoCode instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth]{postorder-visit.jpg}
+    \subimport{assets/pseudocode/}{postorder-visit.tex}
     \caption{Algoritmo della visita in postordine, versione PQ}
-    \label{fig:postorder-visit}
+    \label{alg:postorder-visit}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.8\textwidth]{postorder-visit.jpg}
+%     \caption{Algoritmo della visita in postordine, versione PQ}
+%     \label{fig:postorder-visit}
+% \end{figure}
+
 Quando un SDD contiene sia elementi sintetizzati che ereditati allora non c'è la garanzia che un ordinamento topologico esista per tale SDD.
 Per esempio, se si ha una regola come 
 \begin{align*}
     A &\to B & & &\{A.s = B.i; B.i = A.s+7\} 
 \end{align*}
 si potrebbe trovare un ciclo all'interno del grafo delle dipendenze con una forma simile:
+
+% Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.5\textwidth]{dependence-conflict.jpg}
+    \subimport{assets/figures/}{dependence_conflict.tex}
     \caption{Conflitto di dipendenza}
-    \label{fig:dependence-conflict}
+    \label{fig:dependence_conflict}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.5\textwidth]{dependence-conflict.jpg}
+%     \caption{Conflitto di dipendenza}
+%     \label{fig:dependence-conflict}
+% \end{figure}
+
 Quindi nel caso generale si calcola sempre l'ordinamento topologico dell'SDD, solo nel caso specifico di SDD costituiti solo da attributi sintetizzati ci basta la visita in postordine (che in questo caso corrisponde proprio ad un ordinamento topologico).
 
 Esistono due classi di SDD per cui è sempre garantita l'esistenza di un ordinamento topologico:
@@ -238,24 +339,42 @@ Volgiamo definire l'SDD che ci permette di valutare tale grammatica.
 Vediamo di costruire il parse tree di \(3*5\)
 Non riportiamo l'intero albero perché la Quaglia non l'ha disegnato.
 Questo è un sottoalbero per l'albero di parsing della formula analizzata:
+% Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.5\textwidth]{second-ex-parse-tree-part.jpg}
+    \subimport{assets/figures/}{ex_parse_tree.tex}
     \caption{Pezzo del parse tree di \(3*5\)}
-    \label{fig:second-ex-parse-tree-part}
+    \label{fig:ex_parse_tree}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.5\textwidth]{second-ex-parse-tree-part.jpg}
+%     \caption{Pezzo del parse tree di \(3*5\)}
+%     \label{fig:second-ex-parse-tree-part}
+% \end{figure}
+
 Osserviamo come in questo caso abbiamo una digit che si trova nel sottoalbero sinistro della radice, mentre l'operatore \(*\) e l'altra digit si trovano nel sottoalbero destro della radice.
 Come facciamo a fare in modo che \(T.val\) abbia valore \(15\)?
 
 \noindent \emph{Chiediamo l'intervento degli attributi ereditati}
 
-\noindent Questo è il caso in cui possiamo aiutarci con l'utilizzo di attributi ereditati, presentiamo in Fig.\ref{fig:second-ex-dependency-graph-part} come si possono utilizzare gli attributi ereditati; in blu abbiamo ancora una volta gli archi del grafo delle dipendenze e le etichette \(.i\) e \(.s\) rappresentano rispetivamente attributi ereditati e sintetizzati.
+\noindent Questo è il caso in cui possiamo aiutarci con l'utilizzo di attributi ereditati, presentiamo in Fig.\ref{fig:dependency_graph_ex_parse_tree_1} come si possono utilizzare gli attributi ereditati; in blu abbiamo ancora una volta gli archi del grafo delle dipendenze e le etichette \(.i\) e \(.s\) rappresentano rispetivamente attributi ereditati e sintetizzati.
+% Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part.jpg}
+    \subimport{assets/figures/}{dependency_graph_ex_parse_tree_1.tex}
     \caption{Pezzo del grafo delle dipendenze di \(3*5\)}
-    \label{fig:second-ex-dependency-graph-part}
+    \label{fig:dependency_graph_ex_parse_tree_1}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part.jpg}
+%     \caption{Pezzo del grafo delle dipendenze di \(3*5\)}
+%     \label{fig:second-ex-dependency-graph-part}
+% \end{figure}
+
 Vediamo quindi come in questo caso sia necessario utilizzare gli attributi ereditati, che però aggiungono un livello di complessità.
 
 Quando studiamo la regola per una produzione dobbiamo usare solo le informazioni che abbiamo a quel livello, in quella produzione, così viene affrontata la costruzione dell'SDD.
@@ -267,23 +386,41 @@ In questo caso la regola che andiamo ad associare alla produzione rappresentata 
     T &\to FT' & & &\{T'.i = F.s; \; T.s = T'.s\}
 \end{align*}
 ovvero passiamo a \(T'\) come valore ereditato \(F.s\) ed assegnamo a \(T\) come valore sintetizzato \(T'.s\), il che viene rappresentata graficamente così:
+
+% Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part-1.jpg}
-    % \label{fig:second-ex-dependency-graph-part-1}
+    \subimport{assets/figures/}{dependency_graph_ex_parse_tree_2.tex}
+    \label{fig:dependency_graph_ex_parse_tree_2}
 \end{figure}
-Se andiamo invece ad osservare come viene generato il valore di \(T'\) vediamo dal pezzo di parse tree annotato in Fig.\ref{fig:second-ex-dependency-graph-part} che in pirmis ereditiamo un elemento dal fratello di sinistra, poi sappiamo che lo moltiplichiamo per il valore che ci è dato da \(F.s\) per ottenere il valore di \(T'_1\), che poi passeremo a \(T'\).
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part-1.jpg}
+%     % \label{fig:second-ex-dependency-graph-part-1}
+% \end{figure}
+
+Se andiamo invece ad osservare come viene generato il valore di \(T'\) vediamo dal pezzo di parse tree annotato in Fig.\ref{fig:dependency_graph_ex_parse_tree_1} che in pirmis ereditiamo un elemento dal fratello di sinistra, poi sappiamo che lo moltiplichiamo per il valore che ci è dato da \(F.s\) per ottenere il valore di \(T'_1\), che poi passeremo a \(T'\).
 
 La regola per questa produzione è quindi
 \begin{align*}
     T' &\to *FT_1' & & &\{T_1'.i = T'.i * F.s; \; T'.s = T_1'.s\}
 \end{align*}
 che si può rappresentare graficamente così:
+% Using Figure instead of Image
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part-2.jpg}
-    % \label{fig:second-ex-dependency-graph-part-1}
+    \subimport{assets/figures/}{dependency_graph_ex_parse_tree_3.tex}
+    \label{fig:dependency_graph_ex_parse_tree_3}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part-2.jpg}
+%     % \label{fig:second-ex-dependency-graph-part-1}
+% \end{figure}
+
 Ora che abbiamo studiato i due punti critici dell'SDD per questa grammatica riportiamo l'SDD nella sua completezza.
 \begin{align*}
     &V  \to E & &\{V.s = E.s\} \\
@@ -331,10 +468,16 @@ Il nostro obiettivo è quello di svolgere la traduzione durante il parsing ma pe
 
 Come abbiamo potuto osservare nei capitoli precedenti, l'algoritmo shift/reduce necessita della tabella di parsing per operare. La cortesia di poter osservare che tipo di operazioni venissero eseguite purtroppo non è stata concessa a quei poveri disgraziati che erano a lezione ma, per poter comprendere appieno l'esercizio, ci sentiamo in dovere di fornire, a chiunque stia leggendo, l'automa caratteristico e la relativa tabella di parsing LALR(1).
 
+% Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{lalr-automata.jpg}
+    \subimport{assets/figures/}{lalr_automata.tex}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=1\textwidth]{lalr-automata.jpg}
+% \end{figure}
 
 \begin{table}[H]
     \centering
@@ -527,12 +670,22 @@ Sia data la grammatica
     F &\to (E) \mid id \\
 \end{align*}
 Se vogliamo fare il parsing della parola \(digit+digit\) otteniamo i seguenti alberi di parsing e di sintassi astratta.
+
+% Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth]{ast-first-example.png}
+    \subimport{assets/figures/}{ex_ast_1.tex}
     \caption{Due alberi per la parola \(digit+digit\): sulla sinistra albero di sintassi astratta, sulla destra albero di derivazione}
-    \label{fig:ast-first-example}
+    \label{fig:ex_ast_1}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.8\textwidth]{ast-first-example.png}
+%     \caption{Due alberi per la parola \(digit+digit\): sulla sinistra albero di sintassi astratta, sulla destra albero di derivazione}
+%     \label{fig:ast-first-example}
+% \end{figure}
+
 Si noti come l'albero della sintassi astratta a sinistra sia molto più compatto.
 
 \paragraph{Memorizzazione degli AST} Di fatto questa struttura va a creare in memoiria un albero in cui ogni nodo rappresenta un passaggio intermedio del processo descritto dalla parola che stiamo analizzando. L'AST ottenuto dalla semplificazione dell'albero di derivazione viene quindi salvato nodo per nodo nel seguente modo:
@@ -548,7 +701,7 @@ Per fare questo dobbiamo immaginare di avere a disposizione due funzioni:
     \item \texttt{newLeaf(label, val)} che va a salvare un nodo foglia con due campi: l'etichetta ed il valore;
     \item \texttt{newNode(label, c1, ..., ck)} che crea un nodo con \(k\) figli, l'etichetta (che indica l'operazione rappresentata dal nodo) è \texttt{label} mentre \texttt{c1, ..., ck} sono i riferimenti ai nodi figli;
 \end{itemize}
-Applicando queste due funzioni all'esempio precedente (Fig.\ref{fig:ast-first-example}) avremo l'operazione \(+\) rappresentata da un nodo che avrà come etichetta \(+\) e come figli i due nodi \(digit\).
+Applicando queste due funzioni all'esempio precedente (Fig.\ref{fig:ex_ast_1}) avremo l'operazione \(+\) rappresentata da un nodo che avrà come etichetta \(+\) e come figli i due nodi \(digit\).
 I nodi \(digit\) saranno nodi foglia con identificatore e valore relativo (il valore sarà quello che ci viene ritornato dall'analisi lessicale, quindi lo possiamo ricavare con \(digit.lexval\)).\\
 
 \paragraph{Funzioni di attribuzione} Per creare l'albero di sintssi astratta durante la fase di parsing dobbiamo definire delle regole semantiche (dette anche funzioni di attribuzione o azioni semantiche) che, ogni volta che incontriamo una riduzione, ci indichino quando e come istanziare un nodo per l'AST durante il parsing.
@@ -600,6 +753,48 @@ Si invita il lettore a fermarsi un attimo e rileggere queste produzioni per conv
 Vediamo ora come viene creato in memoria l'Abstract Syntax Tree mentre stiamo svolgendo il parsing della stringa.
 Ogni volta che incontriamo una riduzione andiamo ad aggiungere un nodo all'AST che stiamo creando. Quale forma avrà questo nodo ci è dato dalle funzioni di attribuzione dei nodi dell'AST.
 Osserviamo quindi quale forma viene ad ottenere l'abero di sintassi astratta della nostra parola \(id-num+id\) mentre incontriamo le riduzioni passo dopo passo.
+
+% Using Figure instead of Image:
+
+% \begin{enumerate}
+%     \item La prima riduzone che incontriamo è \(T \to id\), che ha come funzione di attribuzione \(\{T.node = newLeaf(id, id.entry)\}\); la rappresentazione grafica di quello che si ottiene in questo caso è la seguente:
+%     \begin{figure}[H]
+%         \centering
+%         \subimport{assets/figures/}{ex_ast_creation_1.tex}
+%         \caption{Creaizone del nodo foglia per l'identificatore che referenzia la variabile \(a\)}
+%     \end{figure}
+%     \item La seconda riduzione che incontriamo, \(E \to T\), ci porta ad un semplice passaggio di rinominazione di un nodo dell'AST, in quanto la sua azione semantica è \(\{E.node = T.node\}\).
+%     \begin{figure}[H]
+%         \centering
+%         \subimport{assets/figures/}{ex_ast_creation_2.tex}
+%         \caption{Rinominazione del \(T.node\) in \(E.node\)}
+%     \end{figure} 
+%     \item Il terzo passo ci porta ad usare la riduzione \(T \to num\), con annessa funzione di attribuzione \(\{T.node = newLeaf(num, num.lexval)\}\), che crea una nuova foglia con valore numerico associato.
+%     \begin{figure}[H]
+%         \centering
+%         \subimport{assets/figures/}{ex_ast_creation_3.tex}
+%         \caption{Creazione di una nuova foglia con valore numerico associato}
+%     \end{figure} 
+%     \item La prossima riduzione che incontriamo è \(E \to E_1 - T\), con azione semantica \(\{E.node = newNode('-', E_1.node, T.node)\}\), che viene rappresentata graficamente creando un nuovo nodo intermedio per l'AST, la cui forma può essere osservata nella figura sottostante.
+%     \begin{figure}[H]
+%         \centering
+%         \subimport{assets/figures/}{ex_ast_creation_4.tex}
+%         \caption{Inserimento del nodo intermedio che rappresenta la sottrazione}
+%     \end{figure} 
+%     \item In seguito ci scontriamo di nuovo in una riduzione \(T \to id\), che ha come funzione di attribuzione \(\{T.node = newLeaf(id, id.entry)\}\), sappiamo già come funziona dal primo punto di questa lista. La rappresentazione grafica del nostro AST a questo stadio è la seguente:
+%     \begin{figure}[H]
+%         \centering
+%         \subimport{assets/figures/}{ex_ast_creation_5.tex}
+%         \caption{Creazione di un nodo foglia per \(id\) associato a \(c\)}
+%     \end{figure} 
+%     \item Infine applichiamo la riduzione \(E \to E_1 + T\), che prevede l'azione semantica \(\{E.node = newNode ('+', E_1.node, T.node)\}\) e va a completare il nostro AST che possiamo finalmente osservare in tutta la sua bellezza:
+%     \begin{figure}[H]
+%         \centering
+%         \subimport{assets/figures/}{ex_ast_creation_6.tex}
+%         \caption{Inserimento del nodo intermedio per la rappresentazione della somma}
+%     \end{figure} 
+% \end{enumerate}
+
 \begin{enumerate}
     \item La prima riduzone che incontriamo è \(T \to id\), che ha come funzione di attribuzione \(\{T.node = newLeaf(id, id.entry)\}\); la rappresentazione grafica di quello che si ottiene in questo caso è la seguente:
     \begin{figure}[H]
@@ -671,13 +866,23 @@ L'esercizio in questo caso ci richiede di calcolare gli attributi per definire l
     T &\to num & & \{...\} \notag \nonumber
 \end{align}
 In questo caso dobbiamo chiamare in causa gli attributi ereditati, e la motivazione è presto detta.
-Per visualizzare la situazione possiamo andare a rivedere l'SDD che abbiamo costruito per le operazioni \(+\) e \(*\) nella prima parte riguardo l'analisi semantica (Fig.\ref{fig:second-ex-parse-tree-part}, ma si può osservare tranquillamente la figura  qui sotto per rendersi conto).
+Per visualizzare la situazione possiamo andare a rivedere l'SDD che abbiamo costruito per le operazioni \(+\) e \(*\) nella prima parte riguardo l'analisi semantica (Fig.\ref{fig:ex_parse_tree}, ma si può osservare tranquillamente la figura  qui sotto per rendersi conto).
 In quel caso i valori sintetizzati in sottoalberi fratelli devono essere utilizzati da altri sottoalberi fratelli per ricavare il loro proprio valore, per esser chiari riportiamo qui la figura.
+
+% Using Figure instead of Image
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part.jpg}
+    \subimport{assets/figures/}{dependency_graph_ex_parse_tree_1.tex}
     \caption{Pezzo del grafo delle dipendenze di \(3*5\)}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part.jpg}
+%     \caption{Pezzo del grafo delle dipendenze di \(3*5\)}
+% \end{figure}
+
 Osservando quest'immagine è esemplice notare che per risolvere il valore di \(T'\) abbiamo bisogno dei valori nel sottoalbero di \(T'\) ma anche del valore di \(F\) che è fratello sinistro di \(T'\), quindi abbiamo bisogno di introdurre attributi ereditati.
 Lo stesso avviene per la grammatica che stiamo considerando ora, quella per gli operatori \(+\) e \(-\) di cui dobbiamo completare l'SDD (\ref{SDD:ex-2-AST}).
 
@@ -699,23 +904,40 @@ Per poter capire al meglio che tipo di regole devono essere applicate è necessa
 
 Il nostro \emph{parse tree} in questo particolare caso è così costruito
 
+% Using Figure instead of Image
 \begin{figure}[H]
-	\centering
-    \includegraphics[width=.6\textwidth]{parse-tree-ae.jpg}
-    \caption{parse tree attributi ereditati}
-    \label{fig:parse-tree-ae}
+    \centering
+    \subimport{assets/figures/}{ex_parse_tree_attributi_ereditati.tex}
+    \caption{Parse tree attribuiti ereditati}
+    \label{fig:parse_tree_ae}
 \end{figure}
+
+% \begin{figure}[H]
+% 	\centering
+%     \includegraphics[width=.6\textwidth]{parse-tree-ae.jpg}
+%     \caption{parse tree attributi ereditati}
+%     \label{fig:parse-tree-ae}
+% \end{figure}
 
 Dal parse tree possiamo osservare in modo più esplicito che il calcolo del sottoalbero destro (con radice in \(E'\)) necessita del sottoalbero sinistro (con radice in \(T\)) e quindi avremo bisogno degli attributi ereditati (quindi non potremo eseguire il parsing e la costruzione dell'abstract syntax tree contemporaneamente).
 
 Facendo delle osservazioni di questo tipo siamo in grado di costruire la prossima struttura che ci servirà, cioè il \emph{dependency graph}: 
 
+% Using Figure instead of Image
+
 \begin{figure}[H]
-	\centering
-    \includegraphics[width=.6\textwidth]{dependency-graph-ae.jpg}
+    \centering
+    \subimport{assets/figures/}{dependency_graph_ex_parse_tree_ae.tex}
     \caption{Dependency graph attributi ereditati}
-    \label{fig:dependency-graph-ae}
+    \label{fig:dependency_graph_ae}
 \end{figure}
+
+% \begin{figure}[H]
+% 	\centering
+%     \includegraphics[width=.6\textwidth]{dependency-graph-ae.jpg}
+%     \caption{Dependency graph attributi ereditati}
+%     \label{fig:dependency-graph-ae}
+% \end{figure}
 
 Può sembrare difficile ottenere questa struttura dal nostro parse tree, tuttavia i suoi archi rappresentano semplicemente le dipendenze tra gli attributi (i.e. quali sono necessari per poter effettuare una certa operazione); nella figura possiamo inoltre vedere quali fra gli attributi sono sintetizzati (in blu) e quali ereditati (in rosso). 
 
@@ -790,12 +1012,21 @@ Per questo motivo, possiamo osservare che la produzione \(E' \to +TE'\) svolge l
 
 A questo punto abbiamo bisogno dell'\emph{evaluation order}, ottenuto facendo l'ordinamento topologico del dependency graph; si tenga a mente che un qualsiasi ordinamento topologico del grafo può andare bene. Ricordiamo anche che non è detto che si riesca a trovare un ordinamento topologico: in questo caso non è possibile valutare il grafo ottenuto.
 
+% Using Figure instead of Image
+
 \begin{figure}[H]
-	\centering
-    \includegraphics[width=.6\textwidth]{dependency-graph-ae-evaluation-order.jpg}
+    \centering
+    \subimport{assets/figures/}{dependency_graph_ex_parse_tree_ae_evaluation_order.tex}
     \caption{Dependency Graph attributi ereditati con Evaluation Order}
-    \label{fig:dependency-graph-ae-evaluation-order}
+    \label{fig:dependency_graph_ae_evaluation_order}
 \end{figure}
+
+% \begin{figure}[H]
+% 	\centering
+%     \includegraphics[width=.6\textwidth]{dependency-graph-ae-evaluation-order.jpg}
+%     \caption{Dependency Graph attributi ereditati con Evaluation Order}
+%     \label{fig:dependency-graph-ae-evaluation-order}
+% \end{figure}
 
 Finalmente abbiamo la possibilità di osservare passo per passo come costruire il nostro abstract syntax tree seguendo l'evaluation order:
 
@@ -842,12 +1073,21 @@ Anche in questo caso partiamo da un esempio che può aiutarci per la definizione
 
 dunque il parse tree può essere così rappresentato
 
+% Using Figure instead of Image
+
 \begin{figure}[H]
 	\centering
-    \includegraphics[width=.6\textwidth]{parse-tree-int-float.jpg}
+    \subimport{assets/figures/}{parse_tree_int_float.tex}
     \caption{Parse tree aggiornamento tipo identificatori}
-    \label{fig:parse-tree-int-float}
+    \label{fig:parse_tree_int_float}
 \end{figure}
+
+% \begin{figure}[H]
+% 	\centering
+%     \includegraphics[width=.6\textwidth]{parse-tree-int-float.jpg}
+%     \caption{Parse tree aggiornamento tipo identificatori}
+%     \label{fig:parse-tree-int-float}
+% \end{figure}
 
 Partiamo dalle produzioni più semplici, cioè quelle che si occupano di definire il tipo degli attributi: in questo caso banalmente possiamo passare l'attributo sintetizzato al driver della produzione
 

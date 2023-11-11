@@ -1,0 +1,25 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[ruled,linesnumbered,vlined]{algorithm2e}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{algorithm}[H]
+        \DontPrintSemicolon
+
+        \SetKwData{t}{\textbf{true}}
+        \SetKwData{f}{\textbf{false}}
+        \SetKwData{not}{\textbf{not}}
+        
+        % \SetKwData{C}{\textbf{C}}
+        % \SetKwData{N}{\textbf{N}}
+
+        \ForEach{child \(C\) in \(N\) dalla sinistra}{
+            postorder(C)\;
+        }
+        calcola attributi di \(N\) \;
+
+        \caption{postorder(N)}
+    \end{algorithm}
+\end{document}
