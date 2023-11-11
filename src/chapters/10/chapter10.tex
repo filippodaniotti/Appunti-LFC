@@ -39,19 +39,29 @@ L'analizzatore lessicale passa poi all'analizzatore sintattico la tabella dei si
 È arrivato, come da prassi, il momento di applicare la nostra filosofia del \emph{learning by doing}, osservando un esempio di utilizzo di una grammatica attribuita.
 
 \subsection{Esempio}
-Prendiamo come esempio la nostra grammatica per la valutazione delle espressioni aritmetiche per valutare l'espressione rappresentata dall'albero di derivazione in Fig.\ref{fig:first-ex_SDD}.
+Prendiamo come esempio la nostra grammatica per la valutazione delle espressioni aritmetiche per valutare l'espressione rappresentata dall'albero di derivazione in Fig.\ref{fig:ex_albero_derivazione_somma_1}.
 \begin{align*}
     V &\to E \\
     E &\to E + T \mid T\\
     T &\to T * F \mid F\\
     F &\to (E) \mid digit
 \end{align*}
+
+% Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth]{first-ex_SDD.jpg}
+    \subimport{assets/figures}{ex_albero_derivazione_somma_1.tex}
     \caption{Albero di derivazione per una somma}
-    \label{fig:first-ex_SDD}
+    \label{fig:ex_albero_derivazione_somma_1}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.8\textwidth]{first-ex_sdd.jpg}
+%     \caption{Albero di derivazione per una somma}
+%     \label{fig:first-ex_SDD}
+% \end{figure}
+
 Prendiamo il caso in cui il primo digit abbia assegnato come valore 3, mentre il secondo abbia valore 4.
 Questi valori, come spiegato prima, sono memorizzati nella tabella dei simboli.
 
@@ -95,18 +105,28 @@ Nota che i pedici numerici usati in alcune produzioni sono usati solo per differ
 
 Per valutare un albero di derivazione si utilizza un parse tree annotato. Questo è un parse tree in cui ogni nodo contiene le annotazioni che riguardano gli attributi del simbolo che si trova in quel nodo.
 Si può capire al volo cosa intendiamo guardando il parse tree annotato corrispondente al parse tree precedente (Fig.\ref{fig:first-ex_SDD})) che è raffigurato qui sotto.
+
+% Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth]{first-ex_noted-parse-tree.jpg}
-    \caption{Parse tree annoiato per la somma in \ref{fig:first-ex_SDD}}
-    \label{fig:first-ex_noted-parse-tree}
+    \subimport{assets/figures/}{ex_albero_derivazione_somma_2.tex}
+    \caption{Albero di derivazione per una somma in \ref{fig:ex_albero_derivazione_somma_1}}
+    \label{fig:ex_albero_derivazione_somma_2}
 \end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.8\textwidth]{first-ex_noted-parse-tree.jpg}
+%     \caption{Parse tree annotato per la somma in \ref{fig:first-ex_SDD}}
+%     \label{fig:first-ex_noted-parse-tree}
+% \end{figure}
+
 Ciò a cui si deve fare attenzione in questo caso è che ad ogni nodo è aggiunta l'annotazione riguardante il valore del nodo stesso.
 
 Ma a cosa serve il parse tree annotato? È presto detto!
 
 \noindent Il parse tree annotato viene letto dal basso verso l'alto seguendo le regole di attribuzione che sono segnate sui vari nodi per ottenere la valutazione dell'albero stesso. Vediamo ora questo procedimento passo per passo.
 
+% Using Figure instead of Image
 \begin{enumerate}
     \item Partendo dal basso applichiamo innanzitutto la regola
     \begin{align*}
@@ -114,7 +134,7 @@ Ma a cosa serve il parse tree annotato? È presto detto!
     \end{align*}
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-1.jpg}
+        \subimport{assets/figures/}{res_albero_derivazione_somma_1.tex}
         \caption{Passo 1 della valutazione tramite SDD}
     \end{figure}
     \item Il secondo passo prevede di applicare la regola
@@ -123,7 +143,7 @@ Ma a cosa serve il parse tree annotato? È presto detto!
     \end{align*}
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-2.jpg}
+        \subimport{assets/figures/}{res_albero_derivazione_somma_2.tex}
         \caption{Passo 2 della valutazione tramite SDD}
     \end{figure}
     \item Successivamente applichiamo la regola
@@ -132,7 +152,7 @@ Ma a cosa serve il parse tree annotato? È presto detto!
     \end{align*}
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-3.jpg}
+        \subimport{assets/figures/}{res_albero_derivazione_somma_3.tex}
         \caption{Passo 3 della valutazione tramite SDD}
     \end{figure}
     \item Il quarto passo prevede di applicare la regola
@@ -141,7 +161,7 @@ Ma a cosa serve il parse tree annotato? È presto detto!
     \end{align*}
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-4.jpg}
+        \subimport{assets/figures/}{res_albero_derivazione_somma_4.tex}
         \caption{Passo 4 della valutazione tramite SDD}
     \end{figure}
     \item Infine, andiamo ad applicare la regola
@@ -150,10 +170,59 @@ Ma a cosa serve il parse tree annotato? È presto detto!
     \end{align*}
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-5.jpg}
+        \subimport{assets/figures/}{res_albero_derivazione_somma_5.tex}
         \caption{Passo finale della valutazione tramite SDD}
     \end{figure}
 \end{enumerate}
+
+% \begin{enumerate}
+%     \item Partendo dal basso applichiamo innanzitutto la regola
+%     \begin{align*}
+%         F &\to digit & &\{F.val = digit.lexval\}
+%     \end{align*}
+%     \begin{figure}[H]
+%         \centering
+%         \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-1.jpg}
+%         \caption{Passo 1 della valutazione tramite SDD}
+%     \end{figure}
+%     \item Il secondo passo prevede di applicare la regola
+%     \begin{align*}
+%         T &\to F & &\{T.val = F.val\}
+%     \end{align*}
+%     \begin{figure}[H]
+%         \centering
+%         \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-2.jpg}
+%         \caption{Passo 2 della valutazione tramite SDD}
+%     \end{figure}
+%     \item Successivamente applichiamo la regola
+%     \begin{align*}
+%         E &\to T & &\{E.val = T.val\}
+%     \end{align*}
+%     \begin{figure}[H]
+%         \centering
+%         \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-3.jpg}
+%         \caption{Passo 3 della valutazione tramite SDD}
+%     \end{figure}
+%     \item Il quarto passo prevede di applicare la regola
+%     \begin{align*}
+%         E &\to E_1 + T & &\{E.val = E_1.val + T.val\}
+%     \end{align*}
+%     \begin{figure}[H]
+%         \centering
+%         \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-4.jpg}
+%         \caption{Passo 4 della valutazione tramite SDD}
+%     \end{figure}
+%     \item Infine, andiamo ad applicare la regola
+%     \begin{align*}
+%         V &\to E & &\{V.val = E.val\}
+%     \end{align*}
+%     \begin{figure}[H]
+%         \centering
+%         \includegraphics[width=.5\textwidth]{first-ex_SDD-resolution-step-5.jpg}
+%         \caption{Passo finale della valutazione tramite SDD}
+%     \end{figure}
+% \end{enumerate}
+
 Dovrebbe essere chiaro a questo punto come si possa utilizzare una grammatica attribuita per calcolare il valore di una certa parola di una data grammatica:
 \begin{enumerate}
     \item si crea il parse tree annotato per tale parola;
