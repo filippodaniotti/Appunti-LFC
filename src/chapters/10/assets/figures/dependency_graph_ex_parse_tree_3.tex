@@ -1,0 +1,43 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usepackage{adjustbox}
+\usetikzlibrary{automata, positioning, arrows, fit}
+ 
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \tikzset{
+    every state/.style={draw=none, text centered, align=center, inner sep=1mm}, % sets style for all states
+    }
+    \begin{tikzpicture}[node distance=1cm and 2.5cm]
+
+        % Second level
+        \node[state, below right = of a] (c) {$T'$};
+
+        % Third level
+        \node[state, below left = of c] (e) {$\ast$};
+        \node[state, below = of c] (f) {$F$};
+        \node[state, below right = of c] (g) {${T'}_1$};
+
+        % Dotted edges
+        \draw 
+        (c) edge[dotted,-] node{} (e)
+        (c) edge[dotted,-] node{} (f)
+        (c) edge[dotted,-] node{} (g);
+
+        % Blue nodes
+        \node[right=0mm of c, xshift=-2mm, align=center, blue] (c_s) {.s};
+        \node[left=0mm of c, xshift=2mm, align=center, blue] (c_i) {.i};
+        \node[right=0mm of f, xshift=-2mm, align=center, blue] (f_s) {.s};
+        \node[right=0mm of g, xshift=-2mm, align=center, blue] (g_s) {.s};
+        \node[below left=0mm and 0mm of g, yshift=2mm, xshift=2mm, align=center, blue] (g_i) {.i};
+        
+        % Blue arrows
+        \draw
+        (f_s) edge[->, blue, bend right = 20] node{} (g_i) % from 3rd level
+        (g_s) edge[->, blue, bend right = 20] node{} (c_s)
+        (c_i) edge[->, blue, bend right = 20] node{} (g_i);
+
+    \end{tikzpicture}
+\end{document}

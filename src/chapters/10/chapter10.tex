@@ -359,13 +359,22 @@ Come facciamo a fare in modo che \(T.val\) abbia valore \(15\)?
 
 \noindent \emph{Chiediamo l'intervento degli attributi ereditati}
 
-\noindent Questo è il caso in cui possiamo aiutarci con l'utilizzo di attributi ereditati, presentiamo in Fig.\ref{fig:second-ex-dependency-graph-part} come si possono utilizzare gli attributi ereditati; in blu abbiamo ancora una volta gli archi del grafo delle dipendenze e le etichette \(.i\) e \(.s\) rappresentano rispetivamente attributi ereditati e sintetizzati.
+\noindent Questo è il caso in cui possiamo aiutarci con l'utilizzo di attributi ereditati, presentiamo in Fig.\ref{fig:dependency_graph_ex_parse_tree_1} come si possono utilizzare gli attributi ereditati; in blu abbiamo ancora una volta gli archi del grafo delle dipendenze e le etichette \(.i\) e \(.s\) rappresentano rispetivamente attributi ereditati e sintetizzati.
+% Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part.jpg}
+    \subimport{assets/figures/}{dependency_graph_ex_parse_tree_1.tex}
     \caption{Pezzo del grafo delle dipendenze di \(3*5\)}
-    \label{fig:second-ex-dependency-graph-part}
+    \label{fig:dependency_graph_ex_parse_tree_1}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part.jpg}
+%     \caption{Pezzo del grafo delle dipendenze di \(3*5\)}
+%     \label{fig:second-ex-dependency-graph-part}
+% \end{figure}
+
 Vediamo quindi come in questo caso sia necessario utilizzare gli attributi ereditati, che però aggiungono un livello di complessità.
 
 Quando studiamo la regola per una produzione dobbiamo usare solo le informazioni che abbiamo a quel livello, in quella produzione, così viene affrontata la costruzione dell'SDD.
@@ -377,23 +386,41 @@ In questo caso la regola che andiamo ad associare alla produzione rappresentata 
     T &\to FT' & & &\{T'.i = F.s; \; T.s = T'.s\}
 \end{align*}
 ovvero passiamo a \(T'\) come valore ereditato \(F.s\) ed assegnamo a \(T\) come valore sintetizzato \(T'.s\), il che viene rappresentata graficamente così:
+
+% Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part-1.jpg}
-    % \label{fig:second-ex-dependency-graph-part-1}
+    \subimport{assets/figures/}{dependency_graph_ex_parse_tree_2.tex}
+    \label{fig:dependency_graph_ex_parse_tree_2}
 \end{figure}
-Se andiamo invece ad osservare come viene generato il valore di \(T'\) vediamo dal pezzo di parse tree annotato in Fig.\ref{fig:second-ex-dependency-graph-part} che in pirmis ereditiamo un elemento dal fratello di sinistra, poi sappiamo che lo moltiplichiamo per il valore che ci è dato da \(F.s\) per ottenere il valore di \(T'_1\), che poi passeremo a \(T'\).
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part-1.jpg}
+%     % \label{fig:second-ex-dependency-graph-part-1}
+% \end{figure}
+
+Se andiamo invece ad osservare come viene generato il valore di \(T'\) vediamo dal pezzo di parse tree annotato in Fig.\ref{fig:dependency_graph_ex_parse_tree_1} che in pirmis ereditiamo un elemento dal fratello di sinistra, poi sappiamo che lo moltiplichiamo per il valore che ci è dato da \(F.s\) per ottenere il valore di \(T'_1\), che poi passeremo a \(T'\).
 
 La regola per questa produzione è quindi
 \begin{align*}
     T' &\to *FT_1' & & &\{T_1'.i = T'.i * F.s; \; T'.s = T_1'.s\}
 \end{align*}
 che si può rappresentare graficamente così:
+% Using Figure instead of Image
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part-2.jpg}
-    % \label{fig:second-ex-dependency-graph-part-1}
+    \subimport{assets/figures/}{dependency_graph_ex_parse_tree_3.tex}
+    \label{fig:dependency_graph_ex_parse_tree_3}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part-2.jpg}
+%     % \label{fig:second-ex-dependency-graph-part-1}
+% \end{figure}
+
 Ora che abbiamo studiato i due punti critici dell'SDD per questa grammatica riportiamo l'SDD nella sua completezza.
 \begin{align*}
     &V  \to E & &\{V.s = E.s\} \\
@@ -441,10 +468,16 @@ Il nostro obiettivo è quello di svolgere la traduzione durante il parsing ma pe
 
 Come abbiamo potuto osservare nei capitoli precedenti, l'algoritmo shift/reduce necessita della tabella di parsing per operare. La cortesia di poter osservare che tipo di operazioni venissero eseguite purtroppo non è stata concessa a quei poveri disgraziati che erano a lezione ma, per poter comprendere appieno l'esercizio, ci sentiamo in dovere di fornire, a chiunque stia leggendo, l'automa caratteristico e la relativa tabella di parsing LALR(1).
 
+% Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{lalr-automata.jpg}
+    \subimport{assets/figures/}{lalr_automata.tex}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=1\textwidth]{lalr-automata.jpg}
+% \end{figure}
 
 \begin{table}[H]
     \centering
