@@ -42,26 +42,26 @@
         (g) edge[dotted,-] node{} (i);
 
         % Blue nodes
-        \node[right=0mm of a, xshift=-2mm, align=center, blue] (a_s) {$\bullet$};
-        \node[below right=0mm and 0mm of b, yshift=2mm, xshift=-2mm, align=center, blue] (b_s) {$\bullet$};
-        \node[right=0mm of c, xshift=-2mm, align=center, blue] (c_s) {$\bullet$};
-        \node[left=0mm of c, xshift=2mm, align=center, red] (c_i) {$\bullet$};
-        \node[right=0mm of d, xshift=-2mm, align=center, blue] (d_s) {$\bullet$};
-        \node[right=0mm of f, xshift=-2mm, align=center, blue] (f_s) {$\bullet$};
-        \node[right=0mm of g, xshift=-2mm, align=center, blue] (g_s) {$\bullet$};
-        \node[below left=0mm and 0mm of g, yshift=2mm, xshift=2mm, align=center, red] (g_i) {$\bullet$};
-        \node[right=0mm of h, xshift=-2mm, align=center, blue] (h_s) {$\bullet$};
+        \node[right=0mm of a, xshift=-2mm, align=center, blue] (a_b) {$9$};
+        \node[below right=0mm and 0mm of b, yshift=2mm, xshift=-2mm, align=center, blue] (b_b) {$2$};
+        \node[right=0mm of c, xshift=-2mm, align=center, blue] (c_b) {$8$};
+        \node[left=0mm of c, xshift=2mm, align=center, red] (c_r) {$5$};
+        \node[right=0mm of d, xshift=-2mm, align=center, blue] (d_b) {$1$};
+        \node[right=0mm of f, xshift=-2mm, align=center, blue] (f_b) {$4$};
+        \node[right=0mm of g, xshift=-2mm, align=center, blue] (g_b) {$7$};
+        \node[below left=0mm and 0mm of g, yshift=2mm, xshift=2mm, align=center, red] (g_r) {$6$};
+        \node[right=0mm of h, xshift=-2mm, align=center, blue] (h_b) {$3$};
         
         % Blue arrows
         \draw
-        (h_s) edge[->, blue, bend right = 20] node{} (f_s) % from 4th level 
-        (f_s) edge[->, blue, bend right = 20] node{} (g_i) % from 3rd level
-        (g_i) edge[->, blue, bend right = 20] node{} (g_s)
-        (g_s) edge[->, blue, bend right = 20] node{} (c_s)
-        (d_s) edge[->, blue, bend right = 20] node{} (b_s) 
-        (b_s) edge[->, blue, bend right = 20] node{} (c_i) % from 2nd level
-        (c_i) edge[->, blue, bend right = 20] node{} (g_i)
-        (c_s) edge[->, blue, bend right = 20] node{} (a_s);
+        (h_b) edge[->, bend right = 20] node{} (f_b) % from 4th level 
+        (f_b) edge[->, bend right = 20] node{} (g_r) % from 3rd level
+        (g_r) edge[->, bend right = 20] node{} (g_b)
+        (g_b) edge[->, bend right = 20] node{} (c_b)
+        (d_b) edge[->, bend right = 20] node{} (b_b) 
+        (b_b) edge[->, bend right = 20] node{} (c_r) % from 2nd level
+        (c_r) edge[->, bend right = 20] node{} (g_r)
+        (c_b) edge[->, bend right = 20] node{} (a_b);
 
     \end{tikzpicture}
 \end{document}

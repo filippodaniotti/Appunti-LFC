@@ -293,9 +293,9 @@ si potrebbe trovare un ciclo all'interno del grafo delle dipendenze con una form
 % Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \subimport{assets/figures/}{dependence-conflict.tex}
+    \subimport{assets/figures/}{dependence_conflict.tex}
     \caption{Conflitto di dipendenza}
-    \label{fig:dependence-conflict}
+    \label{fig:dependence_conflict}
 \end{figure}
 
 % \begin{figure}[H]
@@ -927,9 +927,9 @@ Facendo delle osservazioni di questo tipo siamo in grado di costruire la prossim
 
 \begin{figure}[H]
     \centering
-    \subimport{assets/figures/}{dependency_graph_ex_parse_tree_attributi_ereditati.tex}
+    \subimport{assets/figures/}{dependency_graph_ex_parse_tree_ae.tex}
     \caption{Dependency graph attributi ereditati}
-    \label{fig:dependency-graph-ae}
+    \label{fig:dependency_graph_ae}
 \end{figure}
 
 % \begin{figure}[H]
@@ -1012,12 +1012,21 @@ Per questo motivo, possiamo osservare che la produzione \(E' \to +TE'\) svolge l
 
 A questo punto abbiamo bisogno dell'\emph{evaluation order}, ottenuto facendo l'ordinamento topologico del dependency graph; si tenga a mente che un qualsiasi ordinamento topologico del grafo può andare bene. Ricordiamo anche che non è detto che si riesca a trovare un ordinamento topologico: in questo caso non è possibile valutare il grafo ottenuto.
 
+% Using Figure instead of Image
+
 \begin{figure}[H]
-	\centering
-    \includegraphics[width=.6\textwidth]{dependency-graph-ae-evaluation-order.jpg}
+    \centering
+    \subimport{assets/figures/}{dependency_graph_ex_parse_tree_ae_evaluation_order.tex}
     \caption{Dependency Graph attributi ereditati con Evaluation Order}
-    \label{fig:dependency-graph-ae-evaluation-order}
+    \label{fig:dependency_graph_ae_evaluation_order}
 \end{figure}
+
+% \begin{figure}[H]
+% 	\centering
+%     \includegraphics[width=.6\textwidth]{dependency-graph-ae-evaluation-order.jpg}
+%     \caption{Dependency Graph attributi ereditati con Evaluation Order}
+%     \label{fig:dependency-graph-ae-evaluation-order}
+% \end{figure}
 
 Finalmente abbiamo la possibilità di osservare passo per passo come costruire il nostro abstract syntax tree seguendo l'evaluation order:
 
