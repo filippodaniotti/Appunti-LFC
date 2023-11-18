@@ -1,0 +1,23 @@
+\documentclass[tikz]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+\usepackage{array}
+\usetikzlibrary{arrows.meta}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{tikzpicture}
+        [every node/.append style={
+            draw=black,
+            line width=1pt,
+            single arrow}
+        ]
+        \node [
+        fill=gray!30,
+        minimum height=1cm,
+        minimum width=1cm
+        ] {};
+    \end{tikzpicture}
+\end{document}
