@@ -51,6 +51,7 @@ Come facciamo a calcolare la chiusura degli insiemi di LR(1)-items? Il metodo di
 \end{definition}
 \paragraph{Algoritmo}
 Dal momento che la Def.\ref{def:lr1-closure} non risponde molto bene al richiamo degli attributi "semplice e intuitiva", potrebbe essere una buona idea dare un'occhiata alla sua formulazione algoritmica in Alg.\ref{alg:lr1-closure}. \\
+
 % \begin{figure}[H]
 %     \centering
 %     \includegraphics[width=\textwidth,keepaspectratio]{alg_closure-lr1.png}
@@ -450,6 +451,7 @@ Rimarrebbe da analizzare \(\tau(11, id)\) ma, come già anticipato, conduce allo
 %     \caption{help}
 % \end{figure}
 % Per tutti gli stati 8,9 e 10 non ci sono chiusure ma si presentano riduzioni. Nello stato 11 il kernel permette di cercare una chiusura per R, la chiusura per R ci porta a R -> .L, {\$} che ci permette un'ulteriore chiusura, con conseguente inserimento di L->.*R,{\$} e L->.id,{\$}. Passiamo allo stato 12 ha un kernel che potrebbe sembrare uguale allo stato 5, ma il lookahead set è diverso… quindi lo stato 12 è diverso dal 5 Aggiungiamo anche lo stato 13 per rappresentare la transizione \(\tau(11,R)\) ecc. ecc. Nota che la Quaglia non ha riportato tutti gli stati ed i relativi items. Questo è l'automa che ricaviamo:
+
 \paragraph{Costruzione dell'automa}
 Ora che abbiamo gli stati non c'è più nulla di diverso rispetto a quello che facevamo prima, per cui possiamo terminare con la costruzione dell'automa caratteristico. Quest'ultimo (Fig.\ref{fig:pointers-automaton}) è alquanto complicato e pare una strana mappa del tesoro, ma ce l'aspettavamo: abbiamo già sottolineato come e perché gli automi LR(1) sono più complessi di un corrispondente SLR(1).
 \begin{figure}[H]
@@ -459,11 +461,13 @@ Ora che abbiamo gli stati non c'è più nulla di diverso rispetto a quello che f
     \label{fig:pointers-automaton}
 \end{figure}
 A questo punto potremmo chiederci: la grammatica Eq.\ref{gr:pointers-grammar} è effettivamente LR(1)? Non è che abbiamo fatto fatica per niente? Per rispondere, la prima cosa che ci viene in mente è costruire la tabella di parsing a partire dal nostro automa, ma possiamo essere più scaltri di così.
+
 % \begin{figure}[H]
 %     \centering
 %     \includegraphics[width=.8\textwidth]{send_help_4.png}
 %     \caption{help}
 % \end{figure}
+
 \paragraph{La grammatica è LR(1)?}
 Infatti, possiamo fin da subito escludere la presenza di conflitti r/r (ossia reduce/reduce), perché nessuno stato del nostro automa presenza due reducing items.
 
