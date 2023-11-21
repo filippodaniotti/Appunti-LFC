@@ -367,7 +367,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
   \end{align}
   Che tutto questo possa non risultare proprio chiarissimo a tutti è una cosa che francamente non ci stupisce; a tal proposito, proponiamo una descrizione discorsiva di questo negato della tesi del pumping lemma:
   \begin{displayquote}
-    Per un qualsiasi numero naturale \(p\) \textbf{arbitrariamente} scelto e scegliendo una parola \(z\) appartenente al linguaggio e la cui lunghezza è maggiore di \(p\), dobbiamo mostrare che qualsiasi decomposizione di \(z\) in sottostringhe di forma \(uvwxy\), in cui la lunghezza delle sottostringhe \(vwx\) è minore di \(p\) e la lunghezza di \(vx\) è non nulla, possiamo sempre trovare un indice \(i\) per cui la parola \(z\), le cui sottostringhe sono state alterate secondo \(uv^iwx^iy\), non appartiene al linguaggio considerato.
+    Per un qualsiasi numero naturale \(p\) \textbf{arbitrariamente} scelto e scegliendo una parola \(z\) appartenente al linguaggio e la cui lunghezza è maggiore di \(p\), dobbiamo mostrare che qualsiasi decomposizione di \(z\) in sottostringhe di forma \(uvwxy\), in cui la lunghezza delle sottostringhe \(vwx\) è minore o uguale a \(p\) e la lunghezza di \(vx\) è non nulla, possiamo sempre trovare un indice \(i\) per cui la parola \(z\), le cui sottostringhe sono state alterate secondo \(uv^iwx^iy\), non appartiene al linguaggio considerato.
   \end{displayquote}
   Bene, questo blocco infinito di logica e insiemistica è finito; per chi avesse sentito una paura folle montare dentro, niente paura, adesso passeremo a degli esempi pratici, che sapranno spiegare la teoria su cui essi stessi sono basati meglio di qualsiasi spiegazione a parole.
 
@@ -379,11 +379,11 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
     \quad cB &\to Bc\\
     \quad bB &\to bb
   \end{align*}
-  L'abbiamo già incontrata, è una grammatica contestuale che genera un linguaggio di questo tipo: \(\L(\G) = \{a^nb^nc^n \mid n > 0\}\). A questo punti ci chiediamo se \(\L(\G)\) è libero oppure no, il che significa, lo ripetiamo, riuscire a trovare una seconda grammatica \(\G'\). che generi lo stesso linguaggio (\(\L(\G') = \L(\G)\)) ma che sia anche libera. La risposta è negativa, quello non è un linguaggio libero, ed è il momento di tirare fuori il nostro pumping lemma e rendere ragione di ciò.
+  L'abbiamo già incontrata, è una grammatica contestuale che genera un linguaggio di questo tipo: \(\L(\G) = \{a^nb^nc^n \mid n > 0\}\). A questo punti ci chiediamo se \(\L(\G)\) è libero oppure no, il che significa, lo ripetiamo, riuscire a trovare una seconda grammatica \(\G'\) che generi lo stesso linguaggio (\(\L(\G') = \L(\G)\)) ma che sia anche libera. La risposta è negativa, quello non è un linguaggio libero, ed è il momento di tirare fuori il nostro pumping lemma e rendere ragione di ciò.
   \begin{proof}
     La dimostrazione è ovviamente per contraddizione, perché la nostra supposizione è che \(\L\) sia libero e stiamo per tentare di verificare la validità del negato della tesi del pumping lemma e questo contraddirrebbe la nostra supposizione (Eq.\ref{eq:pl-neg-abstract}). Diamo il via alle danze:
     \begin{itemize}
-      \item prendiamoci un intero \(P \in \mathbb{N}^+\) scelto arbitrariamente (Eq.\ref{eq:pl-neg_1});
+      \item prendiamoci un intero \(p \in \mathbb{N}^+\) scelto arbitrariamente (Eq.\ref{eq:pl-neg_1});
       \item scegliamoci una parola \(z\) che appartenga a \(\L\) e abbia una lunghezza maggiore di \(p\); noi scegliamo la parola \(z = a^pb^pc^p\), che ha lunghezza \(|z| = 3p > p\) e certamente appartiene al linguaggio:
       \begin{equation*}
         \underbrace{aa...a}_\text{\emph{p}}\underbrace{bb...b}_\text{\emph{p}}\underbrace{cc...c}_\text{\emph{p}}
@@ -393,7 +393,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
       \begin{itemize}
         \item sono una decomposizione della parola \(z\) (\(z = uvwxy\));
         \item la sottostringa \(vwx\) ha dimensione inferiore o uguale a \(p\) (\(|vwx| \le p\));
-        \item le due sottostringe \(v\) e \(x\) hanno dimensione non nulla (\(|vx| > 0\));
+        \item le due sottostringe \(v\) e \(x\) non hanno entrambe dimensione nulla (\(|vx| > 0\));
       \end{itemize}
       notiamo in particolare quali posizioni potrà assumere la sottostringa \(vwx\) all'interno della parola \(z\):
       \begin{equation*}
