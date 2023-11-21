@@ -1073,12 +1073,21 @@ Anche in questo caso partiamo da un esempio che può aiutarci per la definizione
 
 dunque il parse tree può essere così rappresentato
 
+% Using Figure instead of Image
+
 \begin{figure}[H]
 	\centering
-    \includegraphics[width=.6\textwidth]{parse-tree-int-float.jpg}
+    \subimport{assets/figures/}{parse_tree_int_float.tex}
     \caption{Parse tree aggiornamento tipo identificatori}
-    \label{fig:parse-tree-int-float}
+    \label{fig:parse_tree_int_float}
 \end{figure}
+
+% \begin{figure}[H]
+% 	\centering
+%     \includegraphics[width=.6\textwidth]{parse-tree-int-float.jpg}
+%     \caption{Parse tree aggiornamento tipo identificatori}
+%     \label{fig:parse-tree-int-float}
+% \end{figure}
 
 Partiamo dalle produzioni più semplici, cioè quelle che si occupano di definire il tipo degli attributi: in questo caso banalmente possiamo passare l'attributo sintetizzato al driver della produzione
 

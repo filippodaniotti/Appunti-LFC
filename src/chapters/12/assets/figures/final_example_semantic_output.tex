@@ -1,8 +1,7 @@
-\documentclass[varwidth]{standalone}
+\documentclass[tikz]{standalone}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english, italian]{babel}
-
 \usepackage{forest}
 
 % arara: pdflatex
@@ -14,17 +13,15 @@
             l sep=7.5mm, % level distance
             font=\itshape\fontsize{15}{14},
         },
-        [E
-            [T
-                [id]
-            ]
-            [E'
-                [-]
-                [T
-                    [num]
-                ]
-                [E'
-                    [$\varepsilon$]
+        [{$assign$}
+            [{$\langle id,1 \rangle$}]
+            [{$sumop$}
+                [{$\langle id,3 \rangle$}]
+                [{$mulop$}
+                    [{$\langle id,3 \rangle$}]
+                    [{$inttofloat$}
+                        [{$60$}]
+                    ]
                 ]
             ]
         ]

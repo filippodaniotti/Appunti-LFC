@@ -2,9 +2,8 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english, italian]{babel}
+
 \usepackage{forest}
-\usepackage{tikz}
-\usepackage{amsmath}
 
 % arara: pdflatex
 % arara: latexmk: { clean: partial }
@@ -13,19 +12,16 @@
         for tree={
             s sep=15mm, % siblings distance
             l sep=7.5mm, % level distance
-            font=\itshape,
-            edge=dotted, % Imposta tutti gli archi come puntini
+            font=\itshape\fontsize{15}{14},
         },
-        [D
-            [T
-                [int]
-            ]
-            [L
-                [L
-                    [id]
+        [{$assign$}
+            [{$\langle id,1 \rangle$}]
+            [{$sumop$}
+                [{$\langle id,3 \rangle$}]
+                [{$mulop$}
+                    [{$\langle id,3 \rangle$}]
+                    [{$\langle num,60 \rangle$}]
                 ]
-                [{$,$}]
-                [id]
             ]
         ]
     \end{forest}

@@ -2,6 +2,9 @@
 \usepackage{standalone}
 \usepackage{../../style}
 \usepackage[normalem]{ulem}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{graphicx}
 \graphicspath{{./assets/images/}}
 
 % arara: pdflatex: { synctex: yes, shell: yes }
@@ -62,12 +65,23 @@ Ora possiamo quindi passare in input all'analizzatore sintattico la lista di tok
 \section{Analisi sintattica}
 Nella fase di analisi sintattica vogliamo innanzitutto capire se la lista di token in ingresso aderisce alle regole della grammatica; da tale lista si ottiene, nel caso la stringa sia corretta, un albero di derivazione (o un albero di sintassi astratta, se sei proprio uno skillato).
 Nel nostro esempio, quello che andiamo ad ottenere dalla lista di token in Eq.\ref{eq:last-ex-tokens} è il seguente albero di parsing.
+
+% Using Figure instead of Image
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.5\textwidth]{final-example-parsing-tree.png}
+    \subimport{assets/figures/}{final_example_parsing_tree.tex}
     \caption{Parsing tree ricavato dal nostro esempio}
-    \label{fig:last-ex-parse-tree}
+    \label{fig:last_ex_parse_tree}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.5\textwidth]{final-example-parsing-tree.png}
+%     \caption{Parsing tree ricavato dal nostro esempio}
+%     \label{fig:last-ex-parse-tree}
+% \end{figure}
+
 Relativamente all'analisi sintattica abbiamo studiato ed utilizzato le due famiglie principali di metodi di parsing (basate su derivazioni leftmost in un caso e rightmost nell'altro). 
 È da sottolineare però, che esistono parser adatti all'analisi di una qualsiasi grammatica libera, tuttavia questi hanno complessità minima \(n^3\) (con \(n\) lungehezza dell'input) e questo li esclude dalla nostra wishlist.
 Non dimentichiamoci però che, concentrandoci principalmente sulle grammatiche regolari, i parser che abbiamo esaminato in questo corso riescono a ricavare un albero di derivazione con complessità \emph{LINEAREH}.
@@ -124,12 +138,48 @@ In caso l'analisi sia andata a buon fine, si ottiene un parse tree che indica qu
 
 \section{Analisi semantica}
 Questa è la fase in cui si va a valorizzare la sequenza di token che si ricava dall'analisi lessicale; nel nostro caso quello che otterremo dall'analisi semantica ha questa forma:
+% Using Figure instead of Image
+
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=.7\textwidth]{final-example-semantic-output.png}
+    \noindent\begin{minipage}{.4\textwidth}
+		\raggedleft
+        \scalebox{0.75}[0.75]{
+            \subimport{assets/figures/}{final_example_parsing_tree.tex}
+        }
+    \end{minipage}%
+    \noindent\begin{minipage}{.2\textwidth}
+        \centering
+        \subimport{assets/figures/}{gray_arrow.tex}
+    \end{minipage}%
+    \noindent\begin{minipage}{.1\textwidth}
+		\raggedright
+        \scalebox{0.75}[0.75]{
+        \subimport{assets/figures/}{final_example_semantic_output.tex}
+    }
+    \end{minipage}
+    \begin{center}
+        \begin{tabular}{c | c  | c | c |}
+            \multicolumn{4}{c}{\textbf{Symbol table}} \\
+            \cline{2-4}
+            1 & \textit{position} & float & ...... \\
+            \cline{2-4}
+            2 & \textit{initial} & float & ...... \\
+            \cline{2-4}
+            3 & \textit{rate} & float & ...... \\
+            \cline{2-4}
+        \end{tabular}
+    \end{center}
     \caption{Output dell'analisi semantica}
-    \label{fig:last-ex-semantic-output}
+    \label{fig:last_ex_semantic_output}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.7\textwidth]{final-example-semantic-output.png}
+%     \caption{Output dell'analisi semantica}
+%     \label{fig:last-ex-semantic-output}
+% \end{figure}
+
 Si noti che il \(<num, 60>\) è stato trasformato in \texttt{inttofloat} con nodo figlio \(60\): questo è avvenuto perchè l'analisi semantica è quella che si occupa di attribuire un valore (e di conseguenza anche un tipo) ai token. Proprio per questo motivo, gli effetti dell'analisi semantica non si vedranno solo nell'albero, come mostrato in Fig.\ref{fig:last-ex-semantic-output}, ma anche nella tabella dei simboli che riportiamo qui:
 \begin{table}[H]
 	\centering
@@ -178,12 +228,41 @@ A valle dell'ottimizzatore del codice intermedio abbiamo la generazione del codi
 
 \section{Generazione del codice target}
 A questo punto possiamo finalmente tradurre il codice intermedio in codice target. Riportiamo in seguito quello che otteniamo a seguito di questa fase dal nostro esempio.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=.6\textwidth]{final-example-target-code.png}
+
+% Using Figure instead of Image
+
+\begin{table}
+    \begin{tabular}{p{0.3\textwidth} p{0.3\textwidth} p{0.3\textwidth}}
+        \centering
+        \begin{minted}[]{c}
+t1 = id3 * 60.0
+id1 = id2 + t1
+        \end{minted}
+        &
+        \vfill % TODO: ALLINEARE VERICALMENTE!?
+        \centering
+        \subimport{assets/figures/}{gray_arrow.tex}
+        &
+        \centering
+        \begin{minted}[]{asm}
+LDF R2, id3
+MULF R2, R2, 60.0
+LDF R1, id2
+ADDF R1, R1, R2
+STF id1, R1
+        \end{minted}
+    \end{tabular}
     \caption{Generazione codice target da codice intermedio ottimizzato}
-    \label{fig:final-example-target-code}
-\end{figure}
+    \label{fig:last_ex_target_code}
+\end{table}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.6\textwidth]{final-example-target-code.png}
+%     \caption{Generazione codice target da codice intermedio ottimizzato}
+%     \label{fig:final-example-target-code}
+% \end{figure}
+
 Spiegamo qualche dettaglio: il suffisso \texttt{F} sta per float per sottolineare che tutte le operazioni coinvolgono dei float e, per questo motivo, è necessario ad esempio trattarli in maniera distinta dagli int. Possiamo osservare che nella prima riga viene caricato il contenuto di \texttt{id3} come float nel registro \texttt{R2}, poi avviene una moltiplicazione tra float che coinvolge \texttt{R2} e \(60\); segue un'operazione di \texttt{load} di un altro float e così via.
 
 L'ultima nota che aggiungiamo riguardo a questa fase è che, come già accennato precedentemente, anche qui intervengono meccanismi di ottimizzazione, in questo caso strettamente legati al codice macchina (e quindi alla macchina target).
