@@ -33,7 +33,7 @@ jobs:
 
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d_HH:mm')"
+        run: echo "echo "dat= $(date +'%Y-%m-%d_%H:%m')" >> $GITHUB_OUTPUT"
 
       - name: Publish Release
         id: release
@@ -42,6 +42,5 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: scr/build/$FILE_NAME
           asset_name: $FILE_NAME
-          tag: ${{ steps.date.outputs.date }}
           overwrite: true
-          body: "Appunti di Linguaggi Formali e Compilatori - Prof.ssa P. Quaglia - Università di Trento"
+          body: "Appunti di Linguaggi Formali e Compilatori - Prof.ssa P. Quaglia - Università di Trento. Compilato il ${{ steps.date.outputs.date }}"
