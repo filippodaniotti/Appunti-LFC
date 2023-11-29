@@ -22,7 +22,7 @@ jobs:
         run: |
           cd src/
           rm -rf src/build
-          mdkir build
+          mkdir build
           # compile the main file
           pdflatex -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory build/ -jobname=$FILE_NAME main.tex
           # compile againg because Latex is strange
