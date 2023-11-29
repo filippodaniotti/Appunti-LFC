@@ -1,0 +1,46 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [ "master"]
+  workflow_dispatch:
+
+env:
+  FILE_NAME: "Appunti-LFC.pdf"
+
+jobs:
+  Build_Release:
+    runs-on: [ self-hosted, linux, latex ]
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX document
+        id: compile
+        shell: bash
+        run: |
+          cd src/
+          rm -rf src/build
+          mdkir build
+          # compile the main file
+          pdflatex -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory build/ -jobname=$FILE_NAME main.tex
+          # compile againg because Latex is strange
+          pdflatex -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory build/ -jobname=$FILE_NAME main.tex
+          # compile a third time so we can finally have the index
+          pdflatex -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory build/ -jobname=$FILE_NAME main.tex
+
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d_HH:mm')"
+
+      - name: Publish Release
+        id: release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: scr/build/$FILE_NAME
+          asset_name: $FILE_NAME
+          tag: ${{ steps.date.outputs.date }}
+          overwrite: true
+          body: "Appunti di Linguaggi Formali e Compilatori - Prof.ssa P. Quaglia - Università di Trento"
