@@ -31,6 +31,14 @@ jobs:
           echo "Third build done"
           mv /build/main.pdf /build/Appunti-LFC.pdf
 
+      - name: Upload Log
+        id: uplaodLog
+        uses: actions/upload-artifact@v3
+        with:
+          name: Logs
+          path: /build/main.log
+          if-no-files-found: warn
+          
       - name: Publish Release
         id: release
         uses: svenstaro/upload-release-action@v2
@@ -40,3 +48,4 @@ jobs:
           asset_name: Appunti-LFC.pdf
           overwrite: true
           body: "Appunti di Linguaggi Formali e Compilatori - Prof.ssa P. Quaglia - Università di Trento"
+          release_name: "Appunti di Linguaggi Formali e Compilatori"
