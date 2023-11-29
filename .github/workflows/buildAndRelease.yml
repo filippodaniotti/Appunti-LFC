@@ -24,11 +24,12 @@ jobs:
           rm -rf src/build
           mkdir build
           # compile the main file
-          pdflatex -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory build/ -jobname=$FILE_NAME main.tex
+          pdflatex -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory build/ main.tex
           # compile againg because Latex is strange
-          pdflatex -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory build/ -jobname=$FILE_NAME main.tex
+          pdflatex -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory build/ main.tex
           # compile a third time so we can finally have the index
-          pdflatex -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory build/ -jobname=$FILE_NAME main.tex
+          pdflatex -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory build/ main.tex
+          mv build/main.pdf build/$FILE_NAME
 
       - name: Get current date
         id: date
