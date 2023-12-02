@@ -22,6 +22,7 @@ jobs:
       - name: Compile LaTeX document
         id: compile
         shell: bash
+        continue-on-error: true
         run: |
           cd src/
           rm -rf /build
@@ -41,12 +42,14 @@ jobs:
         id: uplaodLog
         uses: actions/upload-artifact@v3
         with:
-          name: Logs
+          name: LaTeX build logs
           path: /build/main.log
           if-no-files-found: warn
+          retention-days: 1
           
       - name: Publish Release
         id: release
+        if: steps.compile.outcome == 'success'
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
