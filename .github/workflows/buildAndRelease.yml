@@ -22,21 +22,21 @@ jobs:
       - name: Compile LaTeX document
         id: compile
         shell: bash
-        continue-on-error: true
         run: |
           cd src/
           rm -rf /build
           mkdir /build
           # compile the main file
-          pdflatex -quiet -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory /build/ main.tex > /dev/null 2>&1 || true
+          pdflatex -quiet -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error main.tex > /dev/null 2>&1
           echo "First build done"
-          # compile againg because Latex is strange
-          pdflatex -quiet -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory /build/ main.tex > /dev/null 2>&1 || true
+          # compile againg because of Toc
+          pdflatex -quiet -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error main.tex > /dev/null 2>&1
           echo "Second build done"
-          # compile a third time so we can finally have the index
-          pdflatex -quiet -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory /build/ main.tex > /dev/null 2>&1 || true
+          # compile a third time to adjust layout
+          pdflatex -quiet -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error main.tex > /dev/null 2>&1
           echo "Third build done"
-          mv /build/main.pdf /build/Appunti-LFC.pdf
+          mv ./main.log /build/main.log
+          mv ./main.pdf /build/Appunti-LFC.pdf
 
       - name: Upload Log
         id: uplaodLog
@@ -46,7 +46,7 @@ jobs:
           path: /build/main.log
           if-no-files-found: warn
           retention-days: 1
-          
+
       - name: Publish Release
         id: release
         if: steps.compile.outcome == 'success'
