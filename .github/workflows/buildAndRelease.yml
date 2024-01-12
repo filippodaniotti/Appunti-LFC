@@ -47,8 +47,18 @@ jobs:
           if-no-files-found: warn
           retention-days: 1
 
+      - name: Upload PDF as Artifact (Non-master branch)
+        id: uploadPdfAsArtifact
+        if: github.ref != 'refs/heads/master'
+        uses: actions/upload-artifact@v3
+        with:
+          name: Compiled PDF
+          path: /build/Appunti-LFC.pdf
+          if-no-files-found: warn
+          retention-days: 1
+
       - name: Delete previous release
-        id: delete_release
+        id: deletePreviuosRelease
         continue-on-error: true
         shell: bash
         run: |
@@ -64,7 +74,7 @@ jobs:
 
       - name: Publish Release
         id: release
-        if: steps.compile.outcome == 'success'
+        if: github.ref == 'refs/heads/master' && steps.compile.outcome == 'success'
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
