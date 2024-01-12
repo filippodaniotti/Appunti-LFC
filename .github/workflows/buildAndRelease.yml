@@ -2,45 +2,87 @@ name: Build & Release
 
 on:
   push:
-    branches: [ "master"]
+    branches: ["master"]
+    paths:
+      - 'src/**'
   workflow_dispatch:
-
-env:
-  FILE_NAME: "Appunti-LFC.pdf"
 
 jobs:
   Build_Release:
-    runs-on: [ self-hosted, linux, latex ]
+    runs-on: [self-hosted, linux, latex]
     steps:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v4
+
+      - name: Update LaTeX
+        id: update
+        continue-on-error: true
+        shell: bash
+        run: tlmgr update --all
 
       - name: Compile LaTeX document
         id: compile
         shell: bash
         run: |
           cd src/
-          rm -rf src/build
-          mkdir build
+          rm -rf /build
+          mkdir /build
           # compile the main file
-          pdflatex -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory build/ main.tex || true
-          # compile againg because Latex is strange
-          pdflatex -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory build/ main.tex || true
-          # compile a third time so we can finally have the index
-          pdflatex -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory build/ main.tex || true
-          mv build/main.pdf build/$FILE_NAME
+          pdflatex -quiet -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error main.tex > /dev/null 2>&1
+          echo "First build done"
+          # compile againg because of Toc
+          pdflatex -quiet -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error main.tex > /dev/null 2>&1
+          echo "Second build done"
+          # compile a third time to adjust layout
+          pdflatex -quiet -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error main.tex > /dev/null 2>&1
+          echo "Third build done"
+          mv ./main.log /build/main.log
+          mv ./main.pdf /build/Appunti-LFC.pdf
 
-      - name: Get current date
-        id: date
-        run: echo "echo "dat= $(date +'%Y-%m-%d_%H:%m')" >> $GITHUB_OUTPUT"
+      - name: Upload Log
+        id: uplaodLog
+        uses: actions/upload-artifact@v3
+        with:
+          name: LaTeX build logs
+          path: /build/main.log
+          if-no-files-found: warn
+          retention-days: 1
+
+      - name: Upload PDF as Artifact (Non-master branch)
+        id: uploadPdfAsArtifact
+        if: github.ref != 'refs/heads/master'
+        uses: actions/upload-artifact@v3
+        with:
+          name: Compiled PDF
+          path: /build/Appunti-LFC.pdf
+          if-no-files-found: warn
+          retention-days: 1
+
+      - name: Delete previous release
+        id: deletePreviuosRelease
+        if: github.ref == 'refs/heads/master' && steps.compile.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          # Get the latest release ID
+          LATEST_RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.id')
+
+          # Delete the latest release
+          if [ "$LATEST_RELEASE_ID" != "null" ]; then
+            curl -s -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/releases/$LATEST_RELEASE_ID"
+          else
+            echo "No previous release found."
+          fi
 
       - name: Publish Release
         id: release
+        if: github.ref == 'refs/heads/master' && steps.compile.outcome == 'success'
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: scr/build/$FILE_NAME
-          asset_name: $FILE_NAME
+          file: /build/Appunti-LFC.pdf
+          asset_name: Appunti-LFC.pdf
           overwrite: true
-          body: "Appunti di Linguaggi Formali e Compilatori - Prof.ssa P. Quaglia - Università di Trento. Compilato il ${{ steps.date.outputs.date }}"
+          body: "Appunti di Linguaggi Formali e Compilatori - Prof.ssa P. Quaglia - Università di Trento"
+          release_name: "Appunti di Linguaggi Formali e Compilatori"

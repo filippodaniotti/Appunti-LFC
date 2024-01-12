@@ -172,7 +172,7 @@ Il procedimento che seguiamo è il seguente:
     \item innanzitutto simuliamo l'NFA creato come sopra descritto;
     \item nel caso di ambiguità, ossia di situazioni come quella descritta sopra tra \mintinline{c}{if} e \mintinline{c}{iffoff}, la convenzione è di preoseguire la simulazione finché nessun’altra transizione è possibile, solitamente quando incontriamo uno spazio o un \texttt{\(\backslash\)n}, privilegiando quindi il match più lungo (si parla di cercare il \emph{longest match});
     \item se nell'insieme di stati che abbiamo raggiunto ci sono delle azioni disponibili, allora andremo ad eseguire quella appartenente al longest match, in caso di pareggio ciascuna azione avrà una priorità, e noi eseguiremo quella con più alta priorità;
-    \item se nessun'azione è disponibile, dobbiamo invece tornare indietro nella sequenza di stati percorsi, fermarci nel primo insieme di stati che presenta almeno uno stato finale e delle azioni associate e cercare di nuovo quella prioritaria; per ognuno di questi passi all'indietro, dobbiamo ricordari di aggiornare il puntatore all'input buffer.
+    \item se nessun'azione è disponibile, dobbiamo invece tornare indietro nella sequenza di stati percorsi, fermarci nel primo insieme di stati che presenta almeno uno stato finale e delle azioni associate e cercare di nuovo quella prioritaria; per ognuno di questi passi all'indietro, dobbiamo ricordarci di aggiornare il puntatore all'input buffer.
 \end{enumerate}
 
 Tutto questo funzionerebbe in maniera analoga se utilizzassimo un DFA: dovremmo semplicemente costruire il DFA a partire dal NFA, dimodoché l'insieme degli stati del DFA sia un sottoinsieme di quello dell'NFA corrispondente.
@@ -196,7 +196,7 @@ Il funzionamento di Flex (ma anche di tutti i generatori di questo tipo) è il s
 Si tenga bene a mente che queste tre righe descrivono come utilizzare Flex da solo; tuttavia, quest'ultima è un'eventualità piuttosto rara, dal momento che Flex è nato per essere usato in pipeline con un generatore di analizzatore di analisi sintattica, ma poiché questi sono elementi ancora sconosciuti per noi, al momento non ce ne preoccupiamo.
 
 \subsection{Struttura del \texttt{file.l}}
-I file con estensione \texttt{.l} che diamo da fagocitare a Flex hanno la seguente struttura:
+I file con estensione \texttt{.l} che diamo in pasto a Flex hanno la seguente struttura:
 \begin{minted}[breaklines, tabsize = 2]{bash}
 ...
 //(Preambolo)
@@ -267,7 +267,7 @@ In qusto primo esempio vediamo che nel preambolo non sono presenti né delle \te
     \item il pattern è dato dalla regular expression composta solo da \texttt{.}, il che significa che l'azione seguente farà riferimento a tutti i caratteri incontrati, tranne quello di \texttt{\(\backslash\)n} (\emph{new line});
     \item l'azione è quel \mintinline{c}{printf("hello world!")}, il che consiste banalmente nello stampare la stringa hello world ogni volta che viene eseguito un match sul pattern.
 \end{itemize}
-In sostanza, questo file ci farà sì che, nella lettura, qualsiasi carattere incontriamo, ad eccezione del new line, verrà sostituito da un'occorrenza della stringa \texttt{"hello world!"}; quindi, ad esempio:
+In sostanza, questo file farà sì che, nella lettura, qualsiasi carattere incontriamo, ad eccezione del new line, verrà sostituito da un'occorrenza della stringa \texttt{"hello world!"}; quindi, ad esempio:
 \begin{itemize}
     \item \(a\) diventerà \texttt{hello world!};
     \item \(aa\) diventerà \texttt{hello world!hello world!}.

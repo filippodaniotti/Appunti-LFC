@@ -53,7 +53,7 @@ Andiamo per prima cosa a indagare quale forma avranno gli stati del nostro autom
     \item[LR(0)-items] \(A \to \alpha \cdot \beta\)
     \item[LR(1)-items] [\(A \to \alpha \cdot \beta, L\)], dove \(L \subseteq T \cup \{\$\}\)\footnote{Ricordiamo che \(T\) è l'insieme dei terminali della grammatica considerata.}
 \end{labeling}
-Dalla definizione possiamo intuire cosa intendevamo quando prima abbiamo detto che gli LR(1)-items sono più ricchi dei loro corrispondenti LR(0), e ci permettono quindi di riconoscere grammatiche in modo più efficace: quell'insieme \(L\), come vedremo in seguito, contiene delle informazioni rispetto a quello che ci aspettiamo di leggere in futuro; nessuna informazine simile è presente negli LR(0)-items.
+Dalla definizione possiamo intuire cosa intendevamo quando prima abbiamo detto che gli LR(1)-items sono più ricchi dei loro corrispondenti LR(0), e ci permettono quindi di riconoscere grammatiche in modo più efficace: quell'insieme \(L\), come vedremo in seguito, contiene delle informazioni rispetto a quello che ci aspettiamo di leggere in futuro; nessuna informazione simile è presente negli LR(0)-items.
 
 \paragraph{Esempio}
 Andiamo a fare subito un esempio per aiutarci a capire di cosa stiamo parlando. Consideriamo la nostra fida grammatica:
@@ -214,7 +214,7 @@ Questi stati però potrebbero essere già presenti! Non è questo il caso dato c
         S \to aAB \cdot e
     \end{equation*}
     questo kernel è già chiuso (la sua chiusura, infatti, è un insieme vuoto) e ci offre come unica transizione possibile \(\tau (5, e) = 8\).
-    \item Analizziamo lo stato \(\tau (3, B) = 6\). \\
+    \item Analizziamo lo stato \(\tau (3, b) = 6\). \\
     Il kernel in questo caso è:
     \begin{equation*}
         A \to Ab \cdot c
@@ -331,7 +331,7 @@ In particolare, possiamo dire che i reducing item sono:
 Avendo a disposizione l'automa caratteristico e i dati sopra citati è dunque possibile costruire la tabella di parsing seguendo l'algoritmo per la costruzione di una tabella di parsing per il bottom-up parsing (ricordiamo all'utente distratto che siamo nell'ambito del parsing; parsing e chiudoing). Procediamo quindi in questo modo:
 \begin{enumerate}
     \item creiamo una tabella con tante righe quanti sono gli stati nel nostro automa caratteristico (in questo caso da 0 a 9) e con tante colonne quanti sono i terminali (a cui va aggiunto il \$) e i non-terminali presenti all'interno della nostra grammatica (in questo caso abbiamo di conseguenza \emph{a b c d e \$ A B S});
-    \item facendo riferimento all'automa caratteristico, se \(Y\) è un terminale e c'è una transizione \(\tau (P, Y) = Q\) (ovvero una transizione che va dallo stato \(P\) allo stato \(Q\) attraversando un arco con etichetta \(Y\)), allora inseriamo un'operazione di \texttt{shift} \(Q\) nella cella \(M[P, Y]\); ad esempio, nel nostro caso inseriremo \(M[0, a] = 2\);
+    \item facendo riferimento all'automa caratteristico, se \(Y\) è un terminale e c'è una transizione \(\tau (P, Y) = Q\) (ovvero una transizione che va dallo stato \(P\) allo stato \(Q\) attraversando un arco con etichetta \(Y\)), allora inseriamo un'operazione di \texttt{shift} \(Q\) nella cella \(M[P, Y]\); ad esempio, nel nostro caso inseriremo \(M[0, a] = s2\);
     \item a questo punto è necessario calcolare i follow (e di conseguenza i first, Tab.\ref{tab:first-follow-SLR(1)parsing}), in quanto per poter inserire correttamente le operazioni di \texttt{reduce} abbiamo bisogno di avere queste informazioni per la funzione di lookahead (\(\mathcal{LA}\));
     \begin{table}[H]
         \centering
@@ -603,7 +603,7 @@ Per concludere la parte di costruzione dell'automa caratteristico per la nostra 
 \label{subsec:precedence-conflicts}
 Quindi, partendo dalla grammatica Eq.\ref{eq:ex2-sh/re-grammar} siamo riusciti a ricavarne e l'automa caratteristico SLR(1) in Fig.\ref{fig:ex2-sh/re-automata} e i reducing items, che ricordiamo essere:
 \begin{align*}
-    2: E &\to id & 5: E &\to E + E \cdot & 6: E &\to E * E \cdot
+    2: E &\to id \cdot & 5: E &\to E + E \cdot & 6: E &\to E * E \cdot
 \end{align*}
 Tutto questo è fantastico, ma purtroppo c'è un grosso elefante nella nostra stanza. L'intrinseca ambiguità di Eq.\ref{eq:ex2-sh/re-grammar} ha un effetto collaterale piuttosto sgradevole: la sua tabella di parsing SLR(1) avrà dei conflitti, come possiamo ben vedere in Tab.\ref{tab:ex2-sh/re-table}.
 % \begin{figure}[H]
