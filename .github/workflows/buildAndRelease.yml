@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  Build_Release:
+  Build_And_Release:
     runs-on: [self-hosted, linux, latex]
     steps:
       - name: Checkout
@@ -86,3 +86,17 @@ jobs:
           overwrite: true
           body: "Appunti di Linguaggi Formali e Compilatori - Prof.ssa P. Quaglia - Università di Trento"
           release_name: "Appunti di Linguaggi Formali e Compilatori"
+    
+      - name: Upload release to lfc repo
+        id: uploadToLfcRepo
+        if: github.ref == 'refs/heads/master' && steps.compile.outcome == 'success'
+        shell: bash
+        run: |
+          git clone https://${{ secrets.PUSH_PDF_TOKEN }}@github.com/unitn-drive/linguaggi-formali-e-compilatori.git tmp
+          cd tmp/Appunti/
+          cp /build/Appunti-LFC.pdf ./Dispensa-Studenti.pdf
+          git config user.email "unitn.drive@gmail.com"
+          git config user.name "unitnDrive"
+          git add --all
+          git commit -m "Pubblicazione automatica Dispensa-Studenti.pdf"
+          git push https://${{ secrets.PUSH_PDF_TOKEN }}@github.com/unitn-drive/linguaggi-formali-e-compilatori.git
