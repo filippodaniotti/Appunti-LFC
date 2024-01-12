@@ -30,7 +30,7 @@ Gli attributi sono divisi in due categorie:
     \item \textbf{attributi sintetizzati}, sono gli attributi del driver di una produzione, questi sono definiti in funzione degli attributi dei simboli del body della produzione;
     \item \textbf{attributi ereditati}, sono gli attributi dei non-terminali nel body della produzione e sono definiti in funzione degli altri simboli del body della produzione.
 \end{itemize}
-Il lettore accorto si sarà reso cont senz'altro che non abbiamo definito degli attributi per i caratteri terminali, questo perché gli attributi dei terminali sono sempre noti: sono dati dall'analisi lessicale e di conseguenza non serve alcuna regola per calcolarli.
+Il lettore accorto si sarà senz'altro reso conto che non abbiamo definito degli attributi per i caratteri terminali, questo perché gli attributi dei terminali sono sempre noti: sono dati dall'analisi lessicale e di conseguenza non serve alcuna regola per calcolarli.
 Questo concetto risulta più chiaro se si tiene bene a mente che gli attributi servono per valorizzare i caratteri di una parola: i non-terminali hanno un valore che dipende da che funzione rappresentano e da quali terminali "utilizzano", i terminali invece rappresentano le variabili, ovvero dei valori ben definiti che sono già stati riconosciuti e salvati nel momento dell'analisi lessicale.
 
 Di fatto l'analizzatore lessicale prende il codice, sostituisce i terminali con i loro identificatori e ne memorizza il valore.
@@ -86,7 +86,7 @@ Vediamo subito quale forma deve avere l'SDD per la grammatica che stiamo utilizz
 \end{align}
 Nota che i pedici numerici usati in alcune produzioni sono usati solo per differenziare il body dal driver, non hanno nessuna valenza semantica, di fatto \(E_1\) ed \(E\) sono lo stesso non-terminale.
 
-\paragraph*{Significato delle regole} quelle che abbiamo elencato sulla destra delle produzioni tra parentesi giraffe sono le regole che compongono una grammatica attribuita.
+\paragraph*{Significato delle regole} quelle che abbiamo elencato sulla destra delle produzioni tra parentesi graffe sono le regole che compongono una grammatica attribuita.
 
 \noindent Tutto ciò che si trova all'interno delle regole sono gli attributi (nota però che i simboli + e \(*\) in questo caso non sono attributi, ma sono proprio le operazioni matematiche).
 
@@ -94,7 +94,7 @@ Nota che i pedici numerici usati in alcune produzioni sono usati solo per differ
 \begin{itemize}
     \item[Reg.\ref{reg:regola-1}] la prima produzione è una produzione aggiuntiva che abbiamo inserito noi  (un po' come \(S' \to S\)) e ci dice che quando incontriamo produzioni \(V \to E\) il valore di \(V\) è \(E.val\);
     \item[Reg.\ref{reg:regola-2}] per produzioni come \(E \to E_1 + T\) avremo che il valore di \(E\) corrisponde alla somma del sottoalbero \(E_1\) più il valore di \(T\) (nota che \(E_1\) è usato solo per differenziare da \(E\));
-    \item[Reg.\ref{reg:regola-3}] se ho una produzione \(E \to T\) il valore di \(E\) è uguale al valore di \(T\);
+    \item[Reg.\ref{reg:regola-3}] se ho una produzione \(E \to T\) il valore di \(E\) è uguale al valore di \(T.val\);
     \item[Reg.\ref{reg:regola-4}] se ho una produzione \(T\to T_1 * F\) il valore di \(T\) corrisponde al valore del sottoalbero \(T_1\) moltiplicato per il valore di \(F\) (nota che \(T_1\) è usato solo per differenziare da \(T\));
     \item[Reg.\ref{reg:regola-5}] se ho una produzione del tipo \(T\to F\) il valore di \(T\) è uguale a \(F.val\);
     \item[Reg.\ref{reg:regola-6}] se ho una produzione del tipo \(F \to (E)\) il valore che assegno a \(F\) corrisponde a \(E.val\);
