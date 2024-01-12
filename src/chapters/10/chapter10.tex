@@ -799,37 +799,37 @@ Osserviamo quindi quale forma viene ad ottenere l'abero di sintassi astratta del
     \item La prima riduzone che incontriamo è \(T \to id\), che ha come funzione di attribuzione \(\{T.node = newLeaf(id, id.entry)\}\); la rappresentazione grafica di quello che si ottiene in questo caso è la seguente:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.6\textwidth]{ex-ast-creation-1.png}
+        \includegraphics[width=.6\textwidth]{ex-ast-creation-1.png} % TODO: trasformare in figure
         \caption{Creaizone del nodo foglia per l'identificatore che referenzia la variabile \(a\)}
     \end{figure}
     \item La seconda riduzione che incontriamo, \(E \to T\), ci porta ad un semplice passaggio di rinominazione di un nodo dell'AST, in quanto la sua azione semantica è \(\{E.node = T.node\}\).
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.6\textwidth]{ex-ast-creation-2.png}
+        \includegraphics[width=.6\textwidth]{ex-ast-creation-2.png} % TODO: trasformare in figure
         \caption{Rinominazione del \(T.node\) in \(E.node\)}
     \end{figure} 
     \item Il terzo passo ci porta ad usare la riduzione \(T \to num\), con annessa funzione di attribuzione \(\{T.node = newLeaf(num, num.lexval)\}\), che crea una nuova foglia con valore numerico associato.
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.6\textwidth]{ex-ast-creation-3.png}
+        \includegraphics[width=.6\textwidth]{ex-ast-creation-3.png} % TODO: trasformare in figure
         \caption{Creazione di una nuova foglia con valore numerico associato}
     \end{figure} 
     \item La prossima riduzione che incontriamo è \(E \to E_1 - T\), con azione semantica \(\{E.node = newNode('-', E_1.node, T.node)\}\), che viene rappresentata graficamente creando un nuovo nodo intermedio per l'AST, la cui forma può essere osservata nella figura sottostante.
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.6\textwidth]{ex-ast-creation-4.png}
+        \includegraphics[width=.6\textwidth]{ex-ast-creation-4.png} % TODO: trasformare in figure
         \caption{Inserimento del nodo intermedio che rappresenta la sottrazione}
     \end{figure} 
     \item In seguito ci scontriamo di nuovo in una riduzione \(T \to id\), che ha come funzione di attribuzione \(\{T.node = newLeaf(id, id.entry)\}\), sappiamo già come funziona dal primo punto di questa lista. La rappresentazione grafica del nostro AST a questo stadio è la seguente:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.6\textwidth]{ex-ast-creation-5.png}
+        \includegraphics[width=.6\textwidth]{ex-ast-creation-5.png} % TODO: trasformare in figure
         \caption{Creazione di un nodo foglia per \(id\) associato a \(c\)}
     \end{figure} 
     \item Infine applichiamo la riduzione \(E \to E_1 + T\), che prevede l'azione semantica \(\{E.node = newNode ('+', E_1.node, T.node)\}\) e va a completare il nostro AST che possiamo finalmente osservare in tutta la sua bellezza:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.6\textwidth]{ex-ast-creation-6.png}
+        \includegraphics[width=.6\textwidth]{ex-ast-creation-6.png} % TODO: trasformare in figure
         \caption{Inserimento del nodo intermedio per la rappresentazione della somma}
     \end{figure} 
 \end{enumerate}
@@ -1046,7 +1046,7 @@ Il risultato finale è dunque rappresentabile nel seguente modo:
 
 \begin{figure}[H]
 	\centering
-    \includegraphics[width=.8\textwidth]{abstract-syntax-tree-ae.jpg}
+    \includegraphics[width=.8\textwidth]{abstract-syntax-tree-ae.jpg} % TODO: trasformare in figure
     \caption{Abstract syntax tree attributi ereditati}
     \label{fig:abstract-syntax-tree-ae}
 \end{figure}

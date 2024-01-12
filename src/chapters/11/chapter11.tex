@@ -94,7 +94,7 @@ In questo schema \(P\) sta per \emph{program}, \(S\) sta per \emph{statement} e 
 Diamo un'occhiata alla generazione del codice intermedio di un'istruzione condizionale come potrebbe essere un comune costrutto \texttt{if-then}. Possiamo schematizzarne la struttura in questo modo:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.3\textwidth]{if-then-abstract.png}
+    \includegraphics[width=.3\textwidth]{if-then-abstract.png}  % TODO: trasformare in figure
     \caption{}
 \end{figure}
 dove l'etichetta \(B.true\) punta al body dell'istruzione condizionale (perché naturalmente vuol dire che la condizione è stata verificata), mentre l'etichetta \(B.false\) punta alla prima istruzione successiva alla chiusura del blocco \texttt{then}.
@@ -147,7 +147,7 @@ Complessivamente, il valore che assegnamo al nostro statement \(S\) sarà quindi
 Supponiamo di voler tradurre un'istruzione condizionale che comprende anche un blocco \texttt{else}. Questo naturalmente cambia leggermente la traduzione, poiché l'etichetta \(B.false\) non punterà più alla prima istruzione successiva al blocco \texttt{then}, bensì dovrà essere creata ex novo, e punterà alla prima istruzione del blocco \texttt{else}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.4\textwidth]{if-else-trans.png}
+    \includegraphics[width=.4\textwidth]{if-else-trans.png} % TODO: trasformare in figure
     \caption{}
 \end{figure}
 Entrambe le etichette \(S_1.next\) e \(S_2.next\) punteranno all'istruzione successiva all'intero statement.
@@ -159,7 +159,7 @@ Entrambe le etichette \(S_1.next\) e \(S_2.next\) punteranno all'istruzione succ
     & & S.code =\; &B.code \triangleright label(B.true) \triangleright S_1.code\; \triangleright \\
     & & &gen(goto\; S.next) \triangleright label(B.false) \triangleright S_2.code
 \end{align*}
-Il codice intermedio dello statement \(S\) è dato quindi dalla concatenazione di tutti questi blocchi; particolare riguardo all'istruzione \(gen(goto\; S.next)\), che deve essere eplicitata per poter saltare all'istruzione contenuta in \(S.next\).
+Il codice intermedio dello statement \(S\) è dato quindi dalla concatenazione di tutti questi blocchi; particolare riguardo all'istruzione \(gen(goto\; S.next)\), che deve essere esplicitata per poter saltare all'istruzione contenuta in \(S.next\).
 
 \subsection{Traduzione di un ciclo \texttt{while}}
 Prendiamo adesso visione del codice intermedio di un ciclo. 
@@ -186,7 +186,7 @@ Andiamo a confrontare il codice intermedio di queste due espressioni, riga per r
 \begin{itemize}
     \item l'etichetta \(B_1.true\) rimanda direttamente all'etichetta \(B.true\) dell'intero statement nel caso dell'\texttt{OR} (perché naturalmente è sufficiente che un elemento sia \(true\) per rendere valida l'intera espressione), mentre invece per \texttt{AND} viene semplicemente creata una nuova label;
     \item la situazione è assolutamente analoga, ma a parti invertite, per l'etichetta \(B_1.false\);
-    \item nelle due righe successive andiamo a definire le etichette per il secondo elemento delle nsotre espressioni e, in entrambi i casi, queste ultime punteranno alle etichette di uscita dell'intero statement; questo accade perché sono l'ultimo elemento dell'espressione ed il loro valore andrà a determinare quello dell'intera espressione;
+    \item nelle due righe successive andiamo a definire le etichette per il secondo elemento delle nostre espressioni e, in entrambi i casi, queste ultime punteranno alle etichette di uscita dell'intero statement; questo accade perché sono l'ultimo elemento dell'espressione ed il loro valore andrà a determinare quello dell'intera espressione;
     \item la differenza nella composizione di \(B.code\) sta quindi esclusivamente nell'etichetta che si frappone fra il codice del primo e del secondo elemento: nel caso dell'\texttt{OR}, infatti, il secondo elemento verrà valutato solo se il primo risulta falso (e qui infatti mettiamo la nuova etichetta \(B_1.false\)); viceversa nell'\texttt{AND} valutiamo il secondo solo se il primo è vero, e quindi l'etichetta frapposta è \(B_2.false\).
 \end{itemize}
 \begin{align*}
