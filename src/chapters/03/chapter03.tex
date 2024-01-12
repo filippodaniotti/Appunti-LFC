@@ -8,7 +8,7 @@
 % arara: latexmk: { clean: partial }
 \begin{document}
 \chapter{Proprietà dei linguaggi liberi}
-È il momento di fare una gita domenicale di famiglia presso il supermercato MondoMatematica\textregistered e perderci tra i gli scaffali invitanti e variopinti, stregati dalla capitalistica attrazione che tutte quelle proprietà, quei lemmi e quei teoremi esercitano su di noi.
+È il momento di fare una gita domenicale di famiglia presso il supermercato MondoMatematica\textregistered $\space$ e perderci tra i gli scaffali invitanti e variopinti, stregati dalla capitalistica attrazione che tutte quelle proprietà, quei lemmi e quei teoremi esercitano su di noi.
 \section{Proprietà di chiusura}
 \subsection*{Chiusura rispetto all'unione}
 \begin{lemma}
@@ -35,7 +35,7 @@
 
   \begin{itemize}
     \item \(V'_1\) e \(V'_2\) si ottengo effettuando un'operazione di \emph{refresh} sui non terminali, in modo da evitare collisioni di nomi (vedremo più avanti come mai quest'operazione è importante), inoltre questo vocabolario è completato con l'introduzione di un nuovo start symbol;
-    \item l'insieme dei terminali è l'unione dei sue insiemi di terminali di \(\mathcal{G}_1\) e \(\mathcal{G}_2\);
+    \item l'insieme dei terminali è l'unione dei suoi insiemi di terminali di \(\mathcal{G}_1\) e \(\mathcal{G}_2\);
     \item \(S\) è il nuovo start symbol, non presente in \(V'_1 \cup V'_2\), e \(S'_1\) e \(S'_2\) sono di nuovo il refresh degli start symbol rispettivamente di \(\mathcal{G}_2\) e \(\mathcal{G}_2\);
     \item infine, l'insieme delle produzioni è dato dall'unione tra i refresh delle produzioni delle due grammatiche di partenza  \(\mathcal{G}_1\) e \(\mathcal{G}_2\), unito a una nuova produzione che, dal nuovo start symbol, produce il resfresh dello start symbol di una delle due grammatiche di partenza.
   \end{itemize}
@@ -91,7 +91,7 @@
 
   \noindent Il linguaggio prodotto da questa nuova grammatica sarebbe diverso da quello dato dall'unione delle due grammatiche di partenza, poiché avremmo \(\mathcal{L(G)} = \{aa, ab, ba, bb\} \neq \mathcal{L}(\mathcal{G}_1)  \cup \mathcal{L}(\mathcal{G}_2) \).
 
-  Con un'opportuno resfreshing otteniamo invece:
+  Con un opportuno resfreshing otteniamo invece:
   % \begin{figure}
   %   \centering
   %   \includegraphics[width=.3\textwidth,keepaspectratio]{why-refresh_3}
@@ -369,7 +369,7 @@ Si segua lentamente formulazione e dimostrazione per questo tanto articolato qua
   \begin{displayquote}
     Per un qualsiasi numero naturale \(p\) \textbf{arbitrariamente} scelto e scegliendo una parola \(z\) appartenente al linguaggio e la cui lunghezza è maggiore di \(p\), dobbiamo mostrare che qualsiasi decomposizione di \(z\) in sottostringhe di forma \(uvwxy\), in cui la lunghezza delle sottostringhe \(vwx\) è minore o uguale a \(p\) e la lunghezza di \(vx\) è non nulla, possiamo sempre trovare un indice \(i\) per cui la parola \(z\), le cui sottostringhe sono state alterate secondo \(uv^iwx^iy\), non appartiene al linguaggio considerato.
   \end{displayquote}
-  Bene, questo blocco infinito di logica e insiemistica è finito; per chi avesse sentito una paura folle montare dentro, niente paura, adesso passeremo a degli esempi pratici, che sapranno spiegare la teoria su cui essi stessi sono basati meglio di qualsiasi spiegazione a parole.
+  Bene, questo blocco infinito di logica e insiemistica è finito; per chi avesse sentito una paura folle montare dentro, niente paura, adesso passeremo a degli esempi pratici, che sapranno spiegare la teoria su cui essi stessi sono basati, meglio di qualsiasi spiegazione a parole.
 
 	\subsection{Esempi di utilizzo}
   \subsubsection{Esercizio 1}
