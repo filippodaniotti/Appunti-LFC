@@ -129,7 +129,7 @@ Abbiamo visto cosa sono gli stati che compongono gli automi caratteristici; a qu
 In primis, definiamo il kernel dello stato iniziale come \(P_0 = \{S' \to \cdot S\}\), dove \(S'\) è un carattere inserito da noi, mentre \(S\) è lo start symbol della nostra grammatica.
 
 \paragraph{Svolgimento}
-Fino a che non esauriamo gli stati ancora da visitare andiamo a prenderli uno alla volta e li analizziamo nel segiente modo:
+Fino a che non esauriamo gli stati ancora da visitare andiamo a prenderli uno alla volta e li analizziamo nel seguente modo:
 \begin{enumerate}
     \item calcoliamo la chiusura del kernel dello stato, questo insieme rappresenta tutte le produzioni che si possono compiere da un certo stato per transitare verso altri stati;
     \item una volta calcolata la chiusura del kernel, le produzioni (gli item) che abbiamo già collezionato avranno forma \(A \to \alpha \cdot x \beta\), il che significa che nello stato in cui mi trovo, diciamo \(P\), ho già visto \(\alpha\) e posso fare una transizione tramite \(x\);

@@ -10,7 +10,6 @@
     -   [Segnalazione errori](#segnalazione-errori)
     -   [How to build](#how-to-build)
         -   [Standard build chain](#standard-build-chain)
-        -   [How to build with Docker](#how-to-build-with-docker)
         -   [How to build with LateX Workshop (VS Code)](#how-to-build-with-latex-workshop-vs-code)
     -   [Principali pacchetti impiegati](#principali-pacchetti-impiegati)
     -   [La squadra](#la-squadra)
@@ -54,26 +53,6 @@ A questo punto:
 È possibile compilare singolarmente ogni capitolo e ogni asset, è sufficiente lanciare la compilazione sul singolo `.tex` desiderato.
 
 Se lavorate con degli IDE o con degli editor in coppia con dei tool per la scrittura LaTeX (e.g. [VS Code](https://code.visualstudio.com) + [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) o [Atom](https://atom.io) + [latex](https://atom.io/packages/latex)), assicuratevi di attivare il flag `-shell-escape` dalle impostazioni di compilazione del vostro tool.
-
-### How to build with Docker
-
-Se non disponete dei prerequisiti per la build indicati sopra (o non volete installarli system-wide), potete
-buildare con docker.  
-Se poi avete sia [VS Code](https://code.visualstudio.com) che [Docker](https://www.docker.com/), potete riferirvi a questo [gist](https://gist.github.com/civts/234f4e7be7d13df676937996f4d4f45c) per una configurazione già pronta.
-
-Prerequisiti:
-
--   [Docker](https://www.docker.com/)
--   almeno 5/6 GB liberi su disco
-
-Procedimento:
-
-1. clonate la repository con `git clone https://github.com/filippodaniotti/Appunti-LFC`
-2. se non siete su linux, buildate l'immagine docker contenuta nel Dockerfile con `docker build -t dispensa_lfc .`  
-   Nel caso siate su linux, usate questo comando per buildare `docker build -t dispensa_lfc --build-arg UID=$(id -u) --build-arg GID=$(id -g) .` (si assicura che il vostro userId e groupId corrispondano a quelli che il container userà)
-3. avviate un container, ricordandovi di montare la cartella della dispensa/
-   Esempio: `docker run -ti --rm -v $(pwd):/dispensa --name dispensa_lfc dispensa_lfc`
-4. ora avete accesso ad un ambiente con tutte le dipendenze installate e potete buildare usando i comandi della sezione [how to build](#How-to-build) (ad eccezione di Arara, perché il container non ha una JVM installata)
 
 ### How to build with LateX Workshop (VS Code)
 
