@@ -2,12 +2,12 @@ name: Build & Release
 
 on:
   push:
-    branches: [ "master"]
+    branches: ["master"]
   workflow_dispatch:
 
 jobs:
   Build_Release:
-    runs-on: [ self-hosted, linux, latex ]
+    runs-on: [self-hosted, linux, latex]
     steps:
       - name: Checkout
         id: checkout
@@ -46,6 +46,21 @@ jobs:
           path: /build/main.log
           if-no-files-found: warn
           retention-days: 1
+
+      - name: Delete previous release
+        id: delete_release
+        continue-on-error: true
+        shell: bash
+        run: |
+          # Get the latest release ID
+          LATEST_RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.id')
+
+          # Delete the latest release
+          if [ "$LATEST_RELEASE_ID" != "null" ]; then
+            curl -s -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/releases/$LATEST_RELEASE_ID"
+          else
+            echo "No previous release found."
+          fi
 
       - name: Publish Release
         id: release
