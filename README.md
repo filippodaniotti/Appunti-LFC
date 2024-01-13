@@ -11,6 +11,7 @@
     -   [How to build](#how-to-build)
         -   [Standard build chain](#standard-build-chain)
         -   [How to build with LateX Workshop (VS Code)](#how-to-build-with-latex-workshop-vs-code)
+        -   [Build & Release automatica](#ci-build--release-automatica)
     -   [Principali pacchetti impiegati](#principali-pacchetti-impiegati)
     -   [La squadra](#la-squadra)
 
@@ -38,13 +39,13 @@ Se preferite non segnalare l'errore tramite Github potete comunque contattarci p
 Prerequisiti:
 
 -   una distribuzione TeX, ad esempio [MiKTeX](https://miktex.org/) o [TeXLive](http://tug.org/texlive/)
--   `pip`, per cui assicuratevi di aver installato [Python](https://www.python.org/)
+-   `pip`, per cui assicuratevi di aver installato [Python](https://www.python.org/), con le nuove versioni di Python cosiglio di utilizzare [pipx](https://github.com/pypa/pipx)
 -   se volete compilare utilizzando il tool [Arara](https://gitlab.com/islandoftex/arara/), allora dovrete avere una [JVM](https://www.java.com/) installata
 
 A questo punto:
 
-1. clonate la repository con `git clone https://github.com/filippodaniotti/Appunti-LFC`
-2. installate il pacchetto Pygments con `pip install Pygments`
+1. clonate la repository con `git clone https://github.com/unitn-drive/Appunti-LFC`
+2. installate il pacchetto Pygments con `pip install Pygments` o `pipx install Pygments`
 3. compilate, ad esempio:
     - lanciando tre volte `pdflatex -shell-escape main.tex`
     - lanciando `latexmk -pdf -shell-escape main.tex`
@@ -73,6 +74,18 @@ Per utilizzare queste opzioni è necessario aprire solo la cartella contenente i
 Per disattivarle è sufficiente commentare o cancellare la riga corrispondente.
 Per maggiori informazioni consultare la documentazione sui [workspaces](https://code.visualstudio.com/docs/editor/multi-root-workspaces) e per le diverse opzioni di compiling quella di [Latex Workshop](https://github.com/James-Yu/LaTeX-Workshop/wiki/Compile).
 
+### CI: Build & Release automatica
+
+Ogniqualvolta si effettua un commit sul `branch master` contenente dei cambiamenti all'interno della cartella src
+verrà automaticamente avviato il processo di build & release, il quale compila la dispensa con l'ultima versione di Latex disponibile. I log della compilazione possono essere trovati nella pagina delle [actions](https://github.com/unitn-drive/Appunti-LFC/actions), nella relativa run. Dopo che la compilazione ha avuto esito positivo
+verrà creata una release impostata come latest contenente il pdf, lo stesso viene caricato nel repository [linguaggi-formali-e-compilatori](https://github.com/unitn-drive/linguaggi-formali-e-compilatori), dove potete 
+trovare altro materiale utile.
+
+#### Testare la compilazione senza la release
+
+Nel caso in cui vorreste effetturare una compilazione per vedere come sarà il risultato finale e accorgervi di 
+eventuali discrepanze tra la versione compilata localmente e quella che verrà generata, potete andare nella pagina della [action](https://github.com/unitn-drive/Appunti-LFC/actions/workflows/buildAndRelease.yml), ed eseguirla manualmente sul branch che avrete creato, contenente le modifiche, cliccate sul tasto **Run workflow**, selezionando il vostro branch. Il risultato sarà disponibile negli artifacts della run, al termine dell'esecuzione.
+
 ## Principali pacchetti impiegati
 
 -   `standalone` per gestire la compilazione autonoma di capitoli e assets
@@ -97,4 +110,8 @@ Per maggiori informazioni consultare la documentazione sui [workspaces](https://
 -   Revisori
     -   [Michele Yin](https://github.com/BigEmperor26)
     -   [Giacomo Zanolli](https://github.com/civts)
+-   Revisori del 2023
     -   [Marco Toniolo](https://github.com/Toniolo-Marco)
+    -   [Federico Frigerio](https://github.com/FrostWalk)
+    -   [Silvanus Bordignon](https://github.com/silvanusbordignon)
+    -   [Simone De Carli](https://github.com/Congiuntivo)
