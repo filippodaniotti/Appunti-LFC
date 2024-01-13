@@ -88,9 +88,9 @@ jobs:
           overwrite: true
           body: "Appunti di Linguaggi Formali e Compilatori - Prof.ssa P. Quaglia - Università di Trento"
           release_name: "Appunti di Linguaggi Formali e Compilatori"
-
-      - name: Upload release to lfc repo
-        id: uploadToLfcRepo
+    
+      - name: Upload pdf to lfc repo
+        id: uploadPdfToLfcRepo
         if: github.ref == 'refs/heads/master' && steps.compile.outcome == 'success'
         shell: bash
         run: |
