@@ -94,11 +94,11 @@ jobs:
         if: github.ref == 'refs/heads/master' && steps.compile.outcome == 'success'
         shell: bash
         run: |
-          git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/unitn-drive/linguaggi-formali-e-compilatori.git tmp
+          git clone https://${{ secrets.PDF_TOKEN }}@github.com/unitn-drive/linguaggi-formali-e-compilatori.git tmp
           cd tmp/Appunti/
           cp /build/Appunti-LFC.pdf ./Dispensa-Studenti.pdf
           git config user.email "unitn.drive@gmail.com"
           git config user.name "unitnDrive"
           git add --all
           git commit -m "Pubblicazione automatica Dispensa-Studenti.pdf"
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/unitn-drive/linguaggi-formali-e-compilatori.git
+          git push https://${{ secrets.PDF_TOKEN }}@github.com/unitn-drive/linguaggi-formali-e-compilatori.git
