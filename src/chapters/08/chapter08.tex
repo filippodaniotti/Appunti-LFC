@@ -603,7 +603,7 @@ Per concludere la parte di costruzione dell'automa caratteristico per la nostra 
 \label{subsec:precedence-conflicts}
 Quindi, partendo dalla grammatica Eq.\ref{eq:ex2-sh/re-grammar} siamo riusciti a ricavarne e l'automa caratteristico SLR(1) in Fig.\ref{fig:ex2-sh/re-automata} e i reducing items, che ricordiamo essere:
 \begin{align*}
-    2: E &\to id \cdot & 5: E &\to E + E \cdot & 6: E &\to E * E \cdot
+    2: E &\to id \cdot (r3) & 5: E &\to E + E \cdot (r1) & 6: E &\to E * E \cdot (r2)
 \end{align*}
 Tutto questo è fantastico, ma purtroppo c'è un grosso elefante nella nostra stanza. L'intrinseca ambiguità di Eq.\ref{eq:ex2-sh/re-grammar} ha un effetto collaterale piuttosto sgradevole: la sua tabella di parsing SLR(1) avrà dei conflitti, come possiamo ben vedere in Tab.\ref{tab:ex2-sh/re-table}.
 % \begin{figure}[H]
