@@ -180,7 +180,7 @@ Questa è la fase in cui si va a valorizzare la sequenza di token che si ricava 
 %     \label{fig:last-ex-semantic-output}
 % \end{figure}
 
-Si noti che il \(<num, 60>\) è stato trasformato in \texttt{inttofloat} con nodo figlio \(60\): questo è avvenuto perchè l'analisi semantica è quella che si occupa di attribuire un valore (e di conseguenza anche un tipo) ai token. Proprio per questo motivo, gli effetti dell'analisi semantica non si vedranno solo nell'albero, come mostrato in Fig.\ref{fig:last-ex-semantic-output}, ma anche nella tabella dei simboli che riportiamo qui:
+Si noti che il \(<num, 60>\) è stato trasformato in \texttt{inttofloat} con nodo figlio \(60\): questo è avvenuto perchè l'analisi semantica è quella che si occupa di attribuire un valore (e di conseguenza anche un tipo) ai token. Proprio per questo motivo, gli effetti dell'analisi semantica non si vedranno solo nell'albero, come mostrato in Fig.\ref{fig:last_ex_semantic_output}, ma anche nella tabella dei simboli che riportiamo qui:
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{symbol-table-updated.tex}
@@ -197,7 +197,7 @@ A questo punto si passa alla generazione del codice intermedio.
 
 \section{Generazione del codice intermedio}
 Un modo molto semplice per ottenere la generazione del codice intermedio consiste nell'attraversare l'albero sintattico, associando un temporaneo per ogni nodo intermedio.
-Si può osservare l'utilizzo di questa strategia applicata al nostro esempio: riportiamo dunque di seguito il codice intermedio generato partendo dal risultato dall'analisi semantica (Fig.\ref{fig:last-ex-semantic-output}).
+Si può osservare l'utilizzo di questa strategia applicata al nostro esempio: riportiamo dunque di seguito il codice intermedio generato partendo dal risultato dall'analisi semantica (Fig.\ref{fig:last_ex_semantic_output}).
 \begin{align*}
     t1 &= inttofloat(60) \\
     t2 &= id3 * t1 \\
