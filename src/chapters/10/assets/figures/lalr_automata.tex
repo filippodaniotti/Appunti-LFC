@@ -1,0 +1,85 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usepackage{adjustbox}
+\usetikzlibrary{automata, positioning, arrows, fit}
+ 
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \tikzset{
+    every state/.style={text centered, align=center, inner sep=1mm, minimum size = 1.5em, text width=1em}, % sets style for all states
+    every accepting/.style={accepting by double, thick},
+    }
+    \trimbox{4cm 2.5cm 0cm 1cm}{ 
+        \begin{tikzpicture}[node distance=1cm and 1.5cm]
+            % Nodes starting from 0 to 12
+            \node[state] (0) {$0$};                         
+            \node[state, fill=green!20, left = of 0] (1) {$1$};
+            \node[state, accepting, below right = of 0] (2) {$2$};
+            \node[state, accepting, right = of 0] (3) {$3$};
+            \node[state, accepting, above left = of 1] (4) {$4$};
+            \node[state, above right = of 0] (5) {$5$};
+            \node[state, accepting, below left = of 1] (6) {$6$};
+            \node[state, below right = of 2] (7) {$7$};
+            \node[state, right = of 3] (8) {$8$};
+            \node[state, above right = of 5] (9) {$9$};
+            \node[state, accepting, right = of 7] (10) {$10$};
+            \node[state, accepting, right = of 8] (11) {$11$};
+            \node[state, accepting, right = of 9] (12) {$12$};
+
+            % Node 0 edges
+            \draw
+            (0) edge[->, sloped] node[pos=0.5, above, font=\scriptsize]{$V$} (1)
+            (0) edge[->, sloped] node[pos=0.5, above, font=\scriptsize]{$E$} (2)
+            (0) edge[->, sloped] node[pos=0.5, above, font=\scriptsize]{$T$} (3)
+            (0) edge[->, sloped, bend right] node[pos=0.5, above, font=\scriptsize]{$F$} (4)
+            (0) edge[->, sloped] node[pos=0.5, above, font=\scriptsize]{$($} (5)
+            (0) edge[->, sloped, bend left] node[pos=0.5, above, font=\scriptsize]{$digit$} (6);
+
+            % Node 1 edges
+
+            % Node 2 edges
+            \draw (2) edge[->, sloped] node[pos=0.25, above, font=\scriptsize]{$+$} (7);
+
+            % Node 3 edges
+            \draw (3) edge[->, sloped] node[pos=0.25, above, font=\scriptsize]{$\ast$} (8);
+
+            % Node 4 edges
+            % Node 5 edges
+            \draw
+            (5) edge[->, sloped, bend right] node[pos=0.5, below, font=\scriptsize]{$F$} (4)
+            (5) edge[->, loop, above, sloped] node[pos=0.5, above, font=\scriptsize]{$($} (5)
+            (5) edge[->, sloped, bend right, relative = false, in = 150, out = 145, looseness = 2] node[pos=0.5, above, font=\scriptsize]{$digit$} (6)
+            (5) edge[->, sloped] node[pos=0.5, above, font=\scriptsize]{$E$} (9);
+
+            % Node 6 edges
+            % Node 7 edges
+            \draw 
+            (7) edge[->, sloped, bend left = 90, relative = false, in = 230, out = 230, looseness = 1.5, blue] node[pos=0.5, above, font=\scriptsize]{$F$} (4)
+            (7) edge[->, sloped, bend right] node[pos=0.25, above, font=\scriptsize]{$($} (5)
+            (7) edge[->, sloped, bend left] node[pos=0.5, above, font=\scriptsize]{$digit$} (6)
+            (7) edge[->, sloped] node[pos=0.5, above, font=\scriptsize]{$T$} (10);
+            
+            % Node 8 edges
+            \draw
+            (8) edge[->, sloped, bend right] node[pos=0.5, above, font=\scriptsize]{$($} (5)
+            (8) edge[->, sloped, bend left, relative = false, out = 250, in = -20, looseness = 1.25, blue] node[pos=0.5, above, font=\scriptsize]{$digit$} (6)
+            (8) edge[->, sloped] node[pos=0.5, above, font=\scriptsize]{$F$} (11);
+
+            % Node 9 edges
+            \draw
+            (9) edge[->, sloped, bend left, relative = false, in = -30, out = -20, looseness = 2.5] node[pos=0.5, below, font=\scriptsize]{$+$} (7)
+            (9) edge[->, sloped] node[pos=0.25, above, font=\scriptsize]{$)$} (12);
+
+            % Node 10 edges
+            \draw (10) edge[->, sloped, bend right, blue] node[pos=0.5, above, font=\scriptsize]{$\ast$} (8);
+
+            % Node 11 edges
+            % Node 12 edges
+
+            % bounding box
+            % \draw [red] (current bounding box.south west) rectangle (current bounding box.north east);
+        \end{tikzpicture}
+    }
+\end{document}

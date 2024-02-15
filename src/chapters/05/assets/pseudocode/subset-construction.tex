@@ -21,13 +21,14 @@
         \SetKwFunction{Unmark}{unmark}
         \SetKwFunction{NC}{nextChar}
         \SetKwFunction{Moved}{\(\textrm{move}_d\)}
+        \SetKwFunction{Moven}{\(\textrm{move}_n\)}
 
 		\(T_0\) = \Closure{\(\{S_0\}\)}\;
         	\(R\) = \(T_0\)\;
         	\While{qualche \(T \in R\) è unmarked} {
             	\Mark{\(T\)}\;
             	\ForEach{\(a \in \mathcal{A}\)} {
-                \(T'\) = \Closure{\(\bigcup_{t \in \textrm{\States}}\) \Moved{t, a}}
+                \(T'\) = \Closure{\(\bigcup_{t \in \textrm{T}}\) \Moven{t, a}}
                 
          		\If{\(T'\) \(\neq \emptyset\)} {
                 		\Moved{\(T\), a} = \(T'\)\;

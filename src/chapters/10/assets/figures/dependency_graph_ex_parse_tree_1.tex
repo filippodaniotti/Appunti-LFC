@@ -1,0 +1,65 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usepackage{adjustbox}
+\usetikzlibrary{automata, positioning, arrows, fit}
+ 
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \tikzset{
+    every state/.style={draw=none, text centered, align=center, inner sep=1mm}, % sets style for all states
+    }
+    \begin{tikzpicture}[node distance=1cm and 2.5cm]
+        % First level
+        \node[state] (a) {$T$};
+
+        % Second level
+        \node[state, below left = of a] (b) {$F$};
+        \node[state, below right = of a] (c) {$T'$};
+
+        % Third level
+        \node[state, below = of b] (d) {$digit$};
+        \node[state, below left = of c] (e) {$\ast$};
+        \node[state, below = of c] (f) {$F$};
+        \node[state, below right = of c] (g) {${T'}_1$};
+
+        % Fourth level
+        \node[state, below = of f] (h) {$digit$};
+        \node[state, below = of g] (i) {$\varepsilon$};
+
+        % Dotted edges
+        \draw 
+        (a) edge[dotted,-] node{} (b) % from 1st level to 2nd level
+        (a) edge[dotted,-] node{} (c)
+        (b) edge[dotted,-] node{} (d) % from 2nd level to 3rd level
+        (c) edge[dotted,-] node{} (e)
+        (c) edge[dotted,-] node{} (f)
+        (c) edge[dotted,-] node{} (g)
+        (f) edge[dotted,-] node{} (h) % from 3rd level to 4th level
+        (g) edge[dotted,-] node{} (i);
+
+        % Blue nodes
+        \node[right=0mm of a, xshift=-2mm, align=center, blue] (a_s) {.s};
+        \node[below right=0mm and 0mm of b, yshift=2mm, xshift=-2mm, align=center, blue] (b_s) {.s};
+        \node[right=0mm of c, xshift=-2mm, align=center, blue] (c_s) {.s};
+        \node[left=0mm of c, xshift=2mm, align=center, blue] (c_i) {.i};
+        \node[right=0mm of d, xshift=-2mm, align=center, blue] (d_s) {.s};
+        \node[right=0mm of f, xshift=-2mm, align=center, blue] (f_s) {.s};
+        \node[right=0mm of g, xshift=-2mm, align=center, blue] (g_s) {.s};
+        \node[below left=0mm and 0mm of g, yshift=2mm, xshift=2mm, align=center, blue] (g_i) {.i};
+        \node[right=0mm of h, xshift=-2mm, align=center, blue] (h_s) {.s};
+        
+        % Blue arrows
+        \draw
+        (h_s) edge[->, blue, bend right = 20] node{} (f_s) % from 4th level 
+        (f_s) edge[->, blue, bend right = 20] node{} (g_i) % from 3rd level
+        (g_i) edge[->, blue, bend right = 20] node{} (g_s)
+        (g_s) edge[->, blue, bend right = 20] node{} (c_s)
+        (d_s) edge[->, blue, bend right = 20] node{} (b_s) 
+        (b_s) edge[->, blue, bend right = 20] node{} (c_i) % from 2nd level
+        (c_i) edge[->, blue, bend right = 20] node{} (g_i)
+        (c_s) edge[->, blue, bend right = 20] node{} (a_s);
+
+    \end{tikzpicture}
+\end{document}

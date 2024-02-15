@@ -37,7 +37,7 @@ La precedente strategia sicuramente è ottima quando il linguaggio ha una forma 
 
 \begin{equation}
     \label{alfabeto}
-    S \to a \mid b \mid … \mid z \mid aS \mid bS \mid … \mid zS
+    S \to a \mid b \mid \cdots \mid z \mid aS \mid bS \mid \cdots \mid zS
 \end{equation}
 
 Per riconoscere parole generate da una tale grammatica il metodo di analisi naturale è una automa a stati finiti come quella in figura \ref{macchina_a_stati_finiti}.
@@ -79,7 +79,7 @@ Le espressioni regolari sono esprimibili tramite il meccanismo dell'induzione in
     \begin{itemize}
         \item \(r_1 \mid r_2\) è un’espressione regolare, detta \emph{alternanza};
         \item \(r_1 \cdot r_2\) è un’espressione regolare, scritta anche come \(r_1 r_2\) e detta \emph{concatenazione};
-        \item \(r_1\)\(^\ast\) è un’espressione regolare che significa ripetizione di \(r\) per un certo numero \(k\) di volte, detta \emph{Kleene star};
+        \item \(r_1\)\(^\ast\) è un’espressione regolare che significa ripetizione di \(r_1\) per un certo numero \(k\) di volte, detta \emph{Kleene star};
         \item \((r_1)\) è un’espressione regolare; è usata per definire l’ordine di svolgimento delle operazioni ed è detta \emph{parentesi}.
     \end{itemize} 
 \end{labeling}
@@ -139,7 +139,8 @@ Ecco presentati in veloce sequenza una serie di semplici esercizi sulle operazio
     \item \(\mathcal{L}(a^*) = \{a^n \mid n \ge 0\}\);
     \item \(\mathcal{L}(a \mid a^\ast b) = \{a\} \cup \{a^n b \mid n \ge 0\}\);
     \item \( (a \mid b \mid \ldots \mid z)(a \mid b \mid \ldots \mid z)^\ast \) denota l’insieme di tutte le parole generabili con l'alfabeto;
-    \item \( (0 \mid 1)^\ast 0\) denota l’insieme di tutti i numeri binari pari;
+    \item \( (0 \mid 1)^\ast 0\) denota l’insieme di tutti i numeri binari pari ( ammettendo numeri con ripetizioni di soli zeri all'inizio );
+    \item \( ( 1(0 \mid 1)^\ast 0) \mid 0 \)  denota l’insieme di tutti i numeri binari pari, senza zeri "inutili" all'inizio;
     \item \( b^\ast (abb^\ast )^\ast ( a \mid \varepsilon ) \) denota l’insieme delle parole su \(\{a,b\} \), senza alcuna occorenza consecutiva di \(a\);
     \item \( (a \mid b)^\ast aa(a \mid b)^\ast \) denota l’insieme delle parole su \( \{a,b\} \) in cui ci sono sicuramente delle occorrenze consecutive di \(a\) (date da \(aa\) in posizione centrale).
 \end{itemize}
@@ -160,7 +161,7 @@ in cui:
 \begin{itemize}
     \item \(S\) è un insieme di stati;
     \item \(\mathcal{A}\) è un alfabeto con \(\varepsilon \notin \mathcal{A}\);
-    \item \(s_0 \in S\) è lo stato iniziale;
+    \item \(S_0 \in S\) è lo stato iniziale;
     \item \(F \subseteq S\) è l’insieme degli stati finali o accettati;
     \item \(\textrm{move}_n : S \times (\mathcal{A} \cup \{\varepsilon\}) \to 2^S\) è la funzione di transizione: da un certo stato e con un certo simbolo (che può essere anche \(\varepsilon\)), mi muovo in un certo sottoinsieme di stati compreso nei sottoinsiemi di \(S\).
 \end{itemize}
@@ -259,9 +260,9 @@ Anche questa costruzione è espressa in modo induttivo.
 \subsection{Spiegazione in dettaglio}
 Vediamo ora la rappresentazione grafica di questo algoritmo. Partiamo dai passi base.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[width=.5\textwidth,keepaspectratio]{Thompson_base}
+    \subimport{assets/figures/}{thompson_base.tex}
     \caption{Thompson nel caso base}
     \label{Thompson_base}
 \end{figure}
@@ -270,7 +271,7 @@ Vediamo ora la rappresentazione grafica di questo algoritmo. Partiamo dai passi 
 
 \begin{figure}
     \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{Thompson_step}
+    \includegraphics[width=.7\textwidth,keepaspectratio]{Thompson_step} % TODO: trasformare in figure
     \caption{Thompson nello step induttivo}
     \label{Thompson_step}
 \end{figure}
@@ -308,12 +309,19 @@ Presentiamo ora un esempio particolare per assimilare meglio questa costruzione.
 \noindent Ci sono quindi due espressioni che compaiono in questo esempio: \(a = r_1\) e \(b = r_2\).
 In primis applichiamo la regola di base (\ref{Thompson_base}).
 
+% Using Figure instead of Image
 \begin{figure}
     \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{esempio_Thompson_0}
+    \subimport{assets/figures/}{esempio_Thompson_0.tex}
     \caption{Applicazione del passo base della costruzione di Thompson}
     \label{esempio_Thompson_0}
 \end{figure}
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.7\textwidth,keepaspectratio]{esempio_Thompson_0}
+%     \caption{Applicazione del passo base della costruzione di Thompson}
+% \end{figure}
 
 Concentriamoci ora sulla prima espressione, \( a \mid b = r_1 \mid r_2 = r_3\); applichiamo la costruzione di Thompson per l’alternanza ai due automi per \(r_1\) e \(r_2\), otteniamo quindi l’automa per \(r_3\).
 
@@ -401,7 +409,7 @@ Vediamo che leggere \(bbb\) da \(S_0\) è uguale a leggerlo da uno qualunque tra
 La risposta è sì, possiamo farlo! Per vedere in che modo dobbiamo prima introdurre il concetto di \(\varepsilon\)-chiusura.
 
 
-\subsection{\(\varepsilon\)-chiusura di un automa}
+\subsection{\texorpdfstring{$\varepsilon$}{Epsilon}-chiusura di un automa}
 Sia \((S, \mathcal{A}, \textrm{move}_n, S_0, F)\) un NFA, sia \(t\) uno stato in \(S\) e \(T\) un sottoinsieme di \(S\).
 
 Definiamo \(\varepsilon\)-chiusura\((\{t\})\) l’insieme di stati in \(S\) che sono raggiungibili da \(t\) tramite zero o più \(\varepsilon\)-transizioni (nota che \(t\) è sempre in questo insieme).
@@ -433,6 +441,7 @@ Continuiamo così finché lo stack non si svuota. L'algoritmo appena descritto s
 % \end{algorithm}
 Ora che abbiamo l'arma della \(\varepsilon\)-chiusura possiamo procedere con l'algoritmo per la verifica dell'appartenenza di una parola \(w\) al linguaggio riconosciuto da un automa, ovvero l'algoritmo di simulazione (Alg.\ref{alg:nfa-simulation}).
 
+\label{alg:nfa-simulation}
 \subimport{assets/pseudocode/}{nfa-simulation.tex}
 Dove \texttt{\$} è l’end-marker per la parola \(w\) (alcuni testi usano la “gratella” invece che \texttt{\$}).
 Il funzionamento dell'algoritmo è questo: calcoliamo la \(\varepsilon\)-chiusura di \(S_0\) e la aggiungiamo all'insieme \texttt{states}; prendiamo il primo simbolo nella parola tramite \(nextChar()\) e poi entriamo nel ciclo che compone il corpo della procedura.
@@ -474,14 +483,13 @@ Nel secondo step il simbolo che devo aggiungere è la seconda lettera di \(w\), 
 
 Continuo così finché non finisco i simboli; a quel punto devo verificare se esiste nel mio insieme \(states\) uno stato finale. In questo caso è presente (\(10\)), e quindi la parola \(w\) appartiene al linguaggio riconosciuto dall’automa raffigurato.
 
-
-\subsection{Nota sulla \(\varepsilon\)-chiusura}
+\subsection{Nota sulla \texorpdfstring{$\varepsilon$}{Epsilon}-chiusura}
 \begin{theorem}
     Sia \(N = (S, \mathcal{A}, \textrm{move}_n, S_0, F)\) un NFA e sia \(M \subseteq S\).
     
     Allora la \(\varepsilon\)-chiusura\((M)\) è il più piccolo insieme \(X \subseteq S\) tale che \(X\) è una soluzione alla seguente equazione:
     \begin{equation}
-        X = M \cup \{ N’ \mid N \in X \cap N’ \in \textrm{move}_n (N,\varepsilon)\}
+        X = M \cup \{ N^\prime \mid N \in X \cap N^\prime \in \textrm{move}_n (N,\varepsilon)\}
         \label{eps-closure-set-eq}
     \end{equation}
 \end{theorem}
@@ -495,7 +503,7 @@ Continuo così finché non finisco i simboli; a quel punto devo verificare se es
     \label{nfa_ciclico}
 \end{figure}
 
-Osserviamo con attenzione la formula appena descritta: \(X\) è \(M\) stesso, unito anche a tutti gli stati \(N’\) raggiungibili da \(N\) tramite una \(\varepsilon\)-transizione, dove \(N\) è uno stato qualsiasi in \(M\).
+Osserviamo con attenzione la formula appena descritta: \(X\) è \(M\) stesso, unito anche a tutti gli stati \(N^\prime \) raggiungibili da \(N\) tramite una \(\varepsilon\)-transizione, dove \(N\) è uno stato qualsiasi in \(M\).
 
 Balza subito all'occhio come la formula per definire \(X\) dipenda da \(X\) stessa; per questo motivo non dovremmo poterla calcolare, giusto? 
 Sbagliato! In informatica possiamo risolvere queste equazioni date certe caratteristiche, ed è qui che giunge in nostro aiuto il teorema del punto fisso. 
@@ -554,7 +562,7 @@ Andiamo quindi ad analizzare la complessità di queste procedure.
 \subsection{Complessità della costruzione di Thompson}
 Consideriamo la  complessità di generazione di un NFA con \(n\) nodi e \(m\) archi; conoscendo le quattro operazioni, sappiamo che, per ogni passo, aggiungeremo al massimo \(2\) nodi e \(4\) archi (dalla Kleene star, l'operazione più costosa), per cui avremo che \(n \le 2|r|\) e \(m \le 4|r|\), per cui abbiamo che la somma \(n + m\) è dell'ordine della dimensione dell'espressione regolare (\(\mathcal{O}(|r|)\)) e, poiché avremo in totale \(|r|\) passi, ciascuno dei quali eseguibile in tempo costante, possiamo felicemente concludere che \(T(\textrm{Thompson}(r)) = \mathcal{O}(|r|)\).
 
-\subsection{Complessità del calcolo della \(\varepsilon\)-chiusura}
+\subsection{Complessità del calcolo della \texorpdfstring{$\varepsilon$}{Epsilon}-chiusura}
 Prima di analizzare il costo della simulazione, dobbiamo analizzare il costo della \(\varepsilon\)-chiusura. Tenendo sempre a mente il codice (Alg.\ref{alg:ec-wrapper} e Alg.\ref{alg:ec-computation}), evidenziamo che le strutture usate sono:
 \begin{itemize}
     \item uno stack per contenere gli elementi non ancora incontrati;

@@ -1,0 +1,32 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+\usepackage{forest}
+\usepackage{tikz}
+\usepackage{amsmath}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{forest}
+        for tree={
+            s sep=15mm, % siblings distance
+            l sep=7.5mm, % level distance
+            font=\itshape,
+            edge=dotted, % Imposta tutti gli archi come puntini
+        },
+        [D
+            [T
+                [int]
+            ]
+            [L
+                [L
+                    [id]
+                ]
+                [{$,$}]
+                [id]
+            ]
+        ]
+    \end{forest}
+\end{document}

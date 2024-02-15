@@ -1,0 +1,28 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usetikzlibrary{automata, positioning, arrows}
+ 
+% \usepackage{../../../../style_automata}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \tikzset{
+    node distance=1mm, % specifies the minimum distance between two nodes.
+    every node/.style={draw, rectangle, minimum width=4cm, text width=3.8cm, font=\itshape, align=left, inner sep=2pt}
+    }
+    \begin{tikzpicture}[]
+        % Left side
+        \node [] (0) {$S \rightarrow L = R \cdot, \{x_{10}\}$};
+        \node [above, draw=none, font=\normalfont] at (0.north) {9:}; %label
+
+        % Right side
+        \node [right = 5cm of 0] (1) {$S \rightarrow L = R \cdot, \{\$\}$};
+        \node [above, draw=none, font=\normalfont] at (1.north) {9:}; %label
+    
+        % Text between nodes
+        \path (0.east) edge [draw=none] node[pos=0.5, above, font=\bfseries, draw=none, align=center] {invece di} (1.west);
+    \end{tikzpicture}
+\end{document}

@@ -1,0 +1,63 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"latex-workshop.latex.autoBuild.run": "never",
+		"latex-workshop.latex.autoClean.run": "onBuilt",
+		"latex-workshop.latex.clean.subfolder.enabled": true,
+		"latex-workshop.latex.clean.fileTypes": [
+			"*.aux",
+			"*.bbl",
+			"*.blg",
+			"*.idx",
+			"*.ind",
+			"*.lof",
+			"*.lot",
+			"*.out",
+			"*.toc",
+			"*.acn",
+			"*.acr",
+			"*.alg",
+			"*.glg",
+			"*.glo",
+			"*.gls",
+			"*.fls",
+			"*.log", // use log file to check errors
+			"*.fdb_latexmk",
+			"*.snm",
+			"*.synctex(busy)",
+			"*.synctex.gz(busy)",
+			"*.gz",
+			"*.nav",
+			"_minted*/*", //remove all minted folders content
+			"_minted*/" //remove the actual folder
+		],
+		"latex-workshop.latex.tools": [
+			{
+				"name": "pdflatex",
+				"command": "pdflatex",
+				"args": [
+					"-shell-escape",
+					"-synctex=1",
+					"-interaction=nonstopmode",
+					"-file-line-error",
+					// to compile always main.tex (even when saving a subfile)
+					"-output-directory=%WORKSPACE_FOLDER%/src",
+					"%WORKSPACE_FOLDER%/src/main.tex" // Original Path for
+					// to compile only the current file (useful when saving a subfile)
+					// "-output-directory=%OUTDIR%",
+					// "%DOC%"
+				]
+			}
+		],
+		"latex-workshop.latex.recipes": [
+			{
+				"name": "pdflatex",
+				"tools": ["pdflatex", "pdflatex", "pdflatex"]
+			}
+		]
+	}
+}

@@ -1,0 +1,46 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usetikzlibrary{automata, positioning, arrows}
+ 
+% \usepackage{../../../../style_automata}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \tikzset{
+    node distance=1mm, % specifies the minimum distance between two nodes.
+    every node/.style={draw, rectangle, minimum width=4cm, text width=3.8cm, font=\itshape, align=left, inner sep=2pt}
+    }
+    \begin{tikzpicture}[]
+        % Left side
+        \node [] (0) {$S' \rightarrow \cdot S, \{x_0\}$};
+        \node [above, draw=none, font=\normalfont] at (0.north) {0:}; %label
+        \node [below = 0mm of 0, fill=lightgray!50!white] (1) { 
+            \begin{tabular}{@{}l}
+                $S \rightarrow \cdot L = R, \{x_0\}$ \\
+                $S \rightarrow \cdot R, \{x_0\}$ \\
+                $L \rightarrow \cdot \ast R, \{= x_0\}$ \\
+                $L \rightarrow \cdot id, \{= x_0\}$ \\
+                $R \rightarrow \cdot L, \{ x_0\}$ \\
+            \end{tabular}
+        };
+
+        % Right side
+        \node [right = 5cm of 0] (2) {$S' \rightarrow \cdot S, \{\$\}$};
+        \node [above, draw=none, font=\normalfont] at (2.north) {0:}; %label
+        \node [below = 0mm of 2,fill=lightgray!50!white] (3) {
+            \begin{tabular}{@{}l}
+                $S \rightarrow \cdot L = R, \{\$\}$ \\
+                $S \rightarrow \cdot R, \{\$\}$ \\
+                $L \rightarrow \cdot \ast R, \{= \$\}$ \\
+                $L \rightarrow \cdot id, \{= \$\}$ \\
+                $R \rightarrow \cdot L, \{\$\}$ \\
+            \end{tabular}
+        };
+
+        % Text between nodes
+        \path (1.east) edge [draw=none] node[pos=0.5, above, font=\bfseries, draw=none, align=center] {invece di} (3.west);
+    \end{tikzpicture}
+\end{document}

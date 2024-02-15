@@ -1,0 +1,35 @@
+\documentclass[varwidth, 15pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{forest}
+        for tree={
+            s sep=15mm, % siblings distance
+            l sep=7.5mm, % level distance
+            font=\itshape\fontsize{15}{14},
+        },
+        [V.val
+            [E.val
+                [E.val
+                    [T.val
+                        [F.val
+                            [digit.lexval]
+                        ]
+                    ]
+                ]
+                [+]
+                [T.val
+                    [F.val
+                        [digit.lexval]
+                    ]
+                ]
+            ]
+        ]
+    \end{forest}
+\end{document}
