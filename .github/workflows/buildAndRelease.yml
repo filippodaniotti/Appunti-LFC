@@ -10,16 +10,11 @@ on:
 jobs:
   Build_And_Release:
     runs-on: [self-hosted, linux, latex]
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v4
-
-      - name: Update LaTeX
-        id: update
-        continue-on-error: true
-        shell: bash
-        run: tlmgr update --all
 
       - name: Compile LaTeX document
         id: compile
@@ -50,20 +45,9 @@ jobs:
           retention-days: 1
           compression-level: 0
 
-      - name: Upload PDF as Artifact (Non-master branch)
-        id: uploadPdfAsArtifact
-        if: github.ref != 'refs/heads/master'
-        uses: actions/upload-artifact@v4
-        with:
-          name: Compiled PDF
-          path: ${{ github.workspace }}/build/Appunti-LFC.pdf
-          if-no-files-found: error
-          retention-days: 1
-          compression-level: 0
-
       - name: Delete previous release
         id: deletePreviuosRelease
-        if: github.ref == 'refs/heads/master' && steps.compile.outcome == 'success'
+        if: steps.compile.outcome == 'success'
         continue-on-error: true
         shell: bash
         run: |
@@ -79,7 +63,7 @@ jobs:
 
       - name: Publish Release
         id: release
-        if: github.ref == 'refs/heads/master' && steps.compile.outcome == 'success'
+        if: steps.compile.outcome == 'success'
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -91,7 +75,7 @@ jobs:
 
       - name: Upload pdf to lfc repo
         id: uploadPdfToLfcRepo
-        if: github.ref == 'refs/heads/master' && steps.compile.outcome == 'success'
+        if: steps.compile.outcome == 'success'
         shell: bash
         run: |
           git clone https://${{ secrets.PDF_TOKEN }}@github.com/unitn-drive/linguaggi-formali-e-compilatori.git tmp

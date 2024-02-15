@@ -119,7 +119,7 @@ Per questo algoritmo utilizzeremo due strutture:
 L'obiettivo del nostro gioco è quello di raggiungere il \$ andando a eseguire dei \texttt{pop()} dalla pila senza mai incappare in degli \texttt{error()}.
 
 \subimport{assets/pseudocode/}{pred-tdparsing.tex}
-Nell'algoritmo di parsing si utilizza la variabile \(b\) come primo simbolo delle parola \(w\$\) e si inizializza la variabile \(X\) con la cima dello stack (il caso base corrisponde ad avere \(X = S\)). Finché \(X \neq \$\) (sostanzialmente finché non ho svuotato completamente la pila), sono dati i seguenti casi:
+Nell'algoritmo di parsing si utilizza la variabile \(b\) come primo simbolo della parola \(w\$\) e si inizializza la variabile \(X\) con la cima dello stack (il caso base corrisponde ad avere \(X = S\)). Finché \(X \neq \$\) (sostanzialmente finché non ho svuotato completamente la pila), sono dati i seguenti casi:
 
 \begin{enumerate}
     \item se \(X = b\), allora tolgo l'elemento dalla cima della pila e imposto \(b\) al simbolo successivo nell'input buffer. Questo corrisponde al caso in cui nella derivazione della costruzione parziale ho ottenuto un match con un terminale nella parola;
@@ -526,9 +526,6 @@ Viene proposta ora come esempio al lettore questa grammatica.
 Saprebbe dire il lettore se la grammatica qui presentata appartiene alla classe LL(1)?
 
 Mentre il lettore riflette su questo quesito può leggere un'altra importante citazione del nostro punto di riferimento, Paola Quaglia, la quale riflette sul senso di incomunicabilità che attraversa i tempi moderni, quel conflitto generazionale di cui tutti, in certo momento della nostra vita e in un certo schieramento, siamo stati attori.
-\begin{displayquote}
-    "NWY5YTliMmVjMmRhNiwyOS8xMC8yMDIwIDExOjUxLGthbHQxMA==  kaltura ci parla cosi' :-("
-\end{displayquote}
 Torniamo a noi: la risposta alla domanda posta in precedenza è che la grammatica in \ref{non-ll1_grammar} non appartiene alla classe \(LL(1)\); ciò si può dimostrare creandone la parsing table per tale grammatica.
 
 Si può notare di fatto come \(first(E) = first(T) = first(F) = \{(, id\}\).
@@ -867,8 +864,8 @@ Abbiamo anche un altro modo per constatare che la nostra grammatica rimane ambig
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{left_factorization_ambiguity.tex}
-    \caption{leftFactorizationAmbiguity}
-    \label{leftFactorizationAmbiguity}
+    \caption{Ambiguità della fattorizzazione a sinistra}
+    \label{Ambiguità della fattorizzazione a sinistra}
 \end{figure}
 
 Si può infatti notare che

@@ -4,16 +4,17 @@
 
 ## Indice
 
--   [Appunti di Linguaggi Formali e Compilatori](#appunti-di-linguaggi-formali-e-compilatori)
-    -   [Indice](#indice)
-    -   [Il progetto](#il-progetto)
-    -   [Segnalazione errori](#segnalazione-errori)
-    -   [How to build](#how-to-build)
-        -   [Standard build chain](#standard-build-chain)
-        -   [How to build with LateX Workshop (VS Code)](#how-to-build-with-latex-workshop-vs-code)
-        -   [Build & Release automatica](#ci-build--release-automatica)
-    -   [Principali pacchetti impiegati](#principali-pacchetti-impiegati)
-    -   [La squadra](#la-squadra)
+- [Appunti di Linguaggi Formali e Compilatori](#appunti-di-linguaggi-formali-e-compilatori)
+  - [Indice](#indice)
+  - [Il progetto](#il-progetto)
+  - [Segnalazione errori](#segnalazione-errori)
+  - [How to build](#how-to-build)
+    - [Standard build chain](#standard-build-chain)
+    - [How to build with LateX Workshop (VS Code)](#how-to-build-with-latex-workshop-vs-code)
+    - [Build & Release automatica](#ci-build--release-automatica)
+    - [Test build senza release](#test-build-senza-release)
+  - [Principali pacchetti impiegati](#principali-pacchetti-impiegati)
+  - [La squadra](#la-squadra)
 
 ## Il progetto
 
@@ -27,8 +28,8 @@ Maggiori informazioni sul progetto e e sugli autori possono essere trovate nella
 
 Se durante la lettura doveste incorrere in errori di qualsiasi tipo, tra gli altri errori di battitura, errori concettuali o di impaginazione, vi chiediamo di fare una segnalazione; ve ne saremo riconoscenti e provvederemo a correggere quanto prima. Se siete arrivati a questo punto assumiamo una buona familiarità con Github, per cui come canali per segnalare errori:
 
--   aprire una Github issue, se possibile referenziando all'interno del corpo anche la porzione di codice in cui è presente l'errore
--   se volete direttamente proporre un vostro fix, potete clonare la repo (istruzioni per la build [qui](#how-to-build)) e aprire una pull request con i commit che risolvono l'errore, vi daremo un riscontro quanto prima
+- aprire una Github issue, se possibile referenziando all'interno del corpo anche la porzione di codice in cui è presente l'errore
+- se volete direttamente proporre un vostro fix, potete clonare la repo (istruzioni per la build [qui](#how-to-build)) e aprire una pull request con i commit che risolvono l'errore, vi daremo un riscontro quanto prima
 
 Se preferite non segnalare l'errore tramite Github potete comunque contattarci personalmente tramite gli indirizzi email che trovate [sui nostri profili Github](#la-squadra), oppure con la mail istituzionale `nome.cognome@studenti.unitn.it`, o naturalmente con mezzi più informali.
 
@@ -38,18 +39,18 @@ Se preferite non segnalare l'errore tramite Github potete comunque contattarci p
 
 Prerequisiti:
 
--   una distribuzione TeX, ad esempio [MiKTeX](https://miktex.org/) o [TeXLive](http://tug.org/texlive/)
--   `pip`, per cui assicuratevi di aver installato [Python](https://www.python.org/), con le nuove versioni di Python cosiglio di utilizzare [pipx](https://github.com/pypa/pipx)
--   se volete compilare utilizzando il tool [Arara](https://gitlab.com/islandoftex/arara/), allora dovrete avere una [JVM](https://www.java.com/) installata
+- una distribuzione TeX, ad esempio [MiKTeX](https://miktex.org/) o [TeXLive](http://tug.org/texlive/)
+- `pip`, per cui assicuratevi di aver installato [Python](https://www.python.org/), con le nuove versioni di Python cosiglio di utilizzare [pipx](https://github.com/pypa/pipx)
+- se volete compilare utilizzando il tool [Arara](https://gitlab.com/islandoftex/arara/), allora dovrete avere una [JVM](https://www.java.com/) installata
 
 A questo punto:
 
-1. clonate la repository con `git clone https://github.com/unitn-drive/Appunti-LFC`
+1. clonate la repository con `git clone https://github.com/unitn-drive/_EXTRA-appunti-lfc`
 2. installate il pacchetto Pygments con `pip install Pygments` o `pipx install Pygments`
 3. compilate, ad esempio:
-    - lanciando tre volte `pdflatex -shell-escape main.tex`
-    - lanciando `latexmk -pdf -shell-escape main.tex`
-    - per una compilazione rapida, potete utilizzare Arara con `arara main.tex` (dovete necessariamente trovarvi nella directory `~/src/`), sarà equivalente a lanciare una sola passata di `pdflatex`
+   - lanciando tre volte `pdflatex -shell-escape main.tex`
+   - lanciando `latexmk -pdf -shell-escape main.tex`
+   - per una compilazione rapida, potete utilizzare Arara con `arara main.tex` (dovete necessariamente trovarvi nella directory `~/src/`), sarà equivalente a lanciare una sola passata di `pdflatex`
 
 È possibile compilare singolarmente ogni capitolo e ogni asset, è sufficiente lanciare la compilazione sul singolo `.tex` desiderato.
 
@@ -59,9 +60,9 @@ Se lavorate con degli IDE o con degli editor in coppia con dei tool per la scrit
 
 Prerequisiti:
 
--   [VS Code](https://code.visualstudio.com)
--   [Latex Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) (estensione di VS Code)
--   [TeXLive](http://tug.org/texlive/) distribuzione TeX, raccomandata dagli sviluppatori di Latex Workshop (vedi [qui](https://github.com/James-Yu/LaTeX-Workshop/wiki/Install#requirements))
+- [VS Code](https://code.visualstudio.com)
+- [Latex Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) (estensione di VS Code)
+- [TeXLive](http://tug.org/texlive/) distribuzione TeX, raccomandata dagli sviluppatori di Latex Workshop (vedi [qui](https://github.com/James-Yu/LaTeX-Workshop/wiki/Install#requirements))
 
 Procedimento:
 
@@ -77,41 +78,42 @@ Per maggiori informazioni consultare la documentazione sui [workspaces](https://
 ### CI: Build & Release automatica
 
 Ogniqualvolta si effettua un commit sul `branch master` contenente dei cambiamenti all'interno della cartella src
-verrà automaticamente avviato il processo di build & release, il quale compila la dispensa con l'ultima versione di Latex disponibile. I log della compilazione possono essere trovati nella pagina delle [actions](https://github.com/unitn-drive/Appunti-LFC/actions), nella relativa run. Dopo che la compilazione ha avuto esito positivo
-verrà creata una release impostata come latest contenente il pdf, lo stesso viene caricato nel repository [linguaggi-formali-e-compilatori](https://github.com/unitn-drive/linguaggi-formali-e-compilatori), dove potete 
+verrà automaticamente avviato il processo di build & release, il quale compila la dispensa con l'ultima versione di Latex disponibile. I log della compilazione possono essere trovati nella pagina delle [actions](https://github.com/unitn-drive/_EXTRA-appunti-lfc/actions), nella relativa run. Dopo che la compilazione ha avuto esito positivo
+verrà creata una release impostata come latest contenente il pdf, lo stesso viene caricato nel repository [linguaggi-formali-e-compilatori](https://github.com/unitn-drive/linguaggi-formali-e-compilatori), dove potete
 trovare altro materiale utile.
 
-#### Testare la compilazione senza la release
+### Test build senza release
 
-Nel caso in cui vorreste effetturare una compilazione per vedere come sarà il risultato finale e accorgervi di 
-eventuali discrepanze tra la versione compilata localmente e quella che verrà generata, potete andare nella pagina della [action](https://github.com/unitn-drive/Appunti-LFC/actions/workflows/buildAndRelease.yml), ed eseguirla manualmente sul branch che avrete creato, contenente le modifiche, cliccate sul tasto **Run workflow**, selezionando il vostro branch. Il risultato sarà disponibile negli artifacts della run, al termine dell'esecuzione.
+Ogni volta che viene effettuato un push su un branch diverso dal master verrà eseguita una action con gli stessi passaggi di quella per la release ad
+eccezione della pubblicazione del risultato finale. Si potrà trovare il pdf e i relativi log nella pagina dei [workflow](https://github.com/unitn-drive/_EXTRA-appunti-lfc/actions/workflows/testBuild.yml) (questi file saranno disponibili per 24 ore) cliccando sulla prima riga partendo dall'alto e recandosi nella sezione **Artifacts**.
+Questo è utile per vedere come sarà il risultato finale e accorgervi di eventuali discrepanze tra la versione compilata localmente e quella che verrà pubblicata una volta mergiato il vostro branch col master.
 
 ## Principali pacchetti impiegati
 
--   `standalone` per gestire la compilazione autonoma di capitoli e assets
--   `tabularx` per la gestione delle tabelle
--   `forest` per la generazione degli alberi
--   `tikz` con librerie `automata` per la generazione dei grafi
--   `algorithm2e` per la scrittura degli pseudocodici
--   `minted` per la scrittura di codice
+- `standalone` per gestire la compilazione autonoma di capitoli e assets
+- `tabularx` per la gestione delle tabelle
+- `forest` per la generazione degli alberi
+- `tikz` con librerie `automata` per la generazione dei grafi
+- `algorithm2e` per la scrittura degli pseudocodici
+- `minted` per la scrittura di codice
 
 ## La squadra
 
--   Curatori
-    -   [Filippo Daniotti](https://github.com/filippodaniotti)
-    -   [Samuele Conti](https://github.com/samaretas)
--   Scrittori
-    -   [Simone Alghisi](https://github.com/Simone-Alghisi)
-    -   [Emanuele Beozzo](https://github.com/emanuelebeozzo)
-    -   [Samuele Bortolotti](https://github.com/samuelebortolotti)
--   Tecnici
-    -   [Francesco Bozzo](https://github.com/FrancescoBozzo)
-    -   [Federico Izzo](https://github.com/fedeizzo)
--   Revisori
-    -   [Michele Yin](https://github.com/BigEmperor26)
-    -   [Giacomo Zanolli](https://github.com/civts)
--   Revisori del 2023
-    -   [Marco Toniolo](https://github.com/Toniolo-Marco)
-    -   [Federico Frigerio](https://github.com/FrostWalk)
-    -   [Silvanus Bordignon](https://github.com/silvanusbordignon)
-    -   [Simone De Carli](https://github.com/Congiuntivo)
+- Curatori
+  - [Filippo Daniotti](https://github.com/filippodaniotti)
+  - [Samuele Conti](https://github.com/samaretas)
+- Scrittori
+  - [Simone Alghisi](https://github.com/Simone-Alghisi)
+  - [Emanuele Beozzo](https://github.com/emanuelebeozzo)
+  - [Samuele Bortolotti](https://github.com/samuelebortolotti)
+- Tecnici
+  - [Francesco Bozzo](https://github.com/FrancescoBozzo)
+  - [Federico Izzo](https://github.com/fedeizzo)
+- Revisori
+  - [Michele Yin](https://github.com/BigEmperor26)
+  - [Giacomo Zanolli](https://github.com/civts)
+- Revisori del 2023
+  - [Marco Toniolo](https://github.com/Toniolo-Marco)
+  - [Federico Frigerio](https://github.com/FrostWalk)
+  - [Silvanus Bordignon](https://github.com/silvanusbordignon)
+  - [Simone De Carli](https://github.com/Congiuntivo)
