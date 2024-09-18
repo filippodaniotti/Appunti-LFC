@@ -1,3 +1,6 @@
+ Il pdf è disponibile nella sezione Releases a destra!
+
+
 # Appunti di Linguaggi Formali e Compilatori
 
 ![logo](src/chapters/titlepage/images/logo-unitn.png)
