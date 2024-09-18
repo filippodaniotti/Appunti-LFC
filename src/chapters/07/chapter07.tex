@@ -119,7 +119,7 @@ Per questo algoritmo utilizzeremo due strutture:
 L'obiettivo del nostro gioco è quello di raggiungere il \$ andando a eseguire dei \texttt{pop()} dalla pila senza mai incappare in degli \texttt{error()}.
 
 \subimport{assets/pseudocode/}{pred-tdparsing.tex}
-Nell'algoritmo di parsing si utilizza la variabile \(b\) come primo simbolo delle parola \(w\$\) e si inizializza la variabile \(X\) con la cima dello stack (il caso base corrisponde ad avere \(X = S\)). Finché \(X \neq \$\) (sostanzialmente finché non ho svuotato completamente la pila), sono dati i seguenti casi:
+Nell'algoritmo di parsing si utilizza la variabile \(b\) come primo simbolo della parola \(w\$\) e si inizializza la variabile \(X\) con la cima dello stack (il caso base corrisponde ad avere \(X = S\)). Finché \(X \neq \$\) (sostanzialmente finché non ho svuotato completamente la pila), sono dati i seguenti casi:
 
 \begin{enumerate}
     \item se \(X = b\), allora tolgo l'elemento dalla cima della pila e imposto \(b\) al simbolo successivo nell'input buffer. Questo corrisponde al caso in cui nella derivazione della costruzione parziale ho ottenuto un match con un terminale nella parola;
@@ -205,7 +205,7 @@ In questo esempio, invece, il linguaggio denotato dalla nostra grammatica è com
     \label{filling-parsing-table2}
 \end{table}
 
-\section{First(\(\alpha\))}
+\section{First(\texorpdfstring{$\alpha$}{Alpha})} 
 \subsection{Definizione}
 \begin{definition}
     Chiamiamo \(first(\alpha)\) quell'insieme di terminali che sono posti all'inizio delle stringhe derivate da \(\alpha\).
@@ -226,7 +226,7 @@ Il concetto di \(first\) può essere definito ricorsivamente come segue:
 
     Nell'ultimo caso, quello ricorsivo, si ha che \(first(A)\) è dato dall'unione di tutti i \(first(\alpha)\), dove \(\alpha\) è il body di tutte quelle produzioni della grammatica che hanno \(A\) come driver.
 
-\subsection{Algoritmo di calcolo di first(\(\alpha\))}
+\subsection{Algoritmo di calcolo di first(\texorpdfstring{$\alpha$}{Alpha})}
 
 Mostriamo ora un algoritmo che ci permette di calcolare \(first(Y_1 \ldots Y_n)\) (con \(Y_i \in V\)), cioè l'insieme dei first per una certa parola considerata.
 
@@ -274,9 +274,9 @@ A questo punto, il miglior modo per procedere con l'algoritmo è, in mancanza di
     \caption{Esercizio sui first}
     \label{computing-first}
 \end{table}
-Cosa succede se invece, al posto della produzione \(T \to FT'\), diventa \(T \to T’F\)? Lasciando il resto dell'esercizio invariato, proviamo a calcolare \(first(T)\). In questo caso avremmo dovuto analizzare prima i \(first(T’) = \{\varepsilon, \ast\}\) e aggiungere \(first(T’) \setminus \{\varepsilon\} = \{\ast\}\) a \(first(T)\); tuttavia, dal momento che \(\varepsilon \in first(T')\), l’algoritmo non può arrestarsi (perchè potrebbe darsi che \(T'\) sia nullo), ma è necessario considerare anche i \(first(F)\). Come svolto precedenetemente aggiungiamo \(first(F) \setminus \{\varepsilon\} = \{id, (\}\) a \(first(T)\); essendo che \(\varepsilon \notin first(T')\) posso interrompere l'algoritmo e segnare che \(first(T) = \{\ast, id, (\}\)
+Cosa succede se invece, al posto della produzione \(T \to FT^\prime \), diventa \(T \to T^\prime F\)? Lasciando il resto dell'esercizio invariato, proviamo a calcolare \(first(T)\). In questo caso avremmo dovuto analizzare prima i \(first(T ^\prime) = \{\varepsilon, \ast\}\) e aggiungere \(first(T ^\prime) \setminus \{\varepsilon\} = \{\ast\}\) a \(first(T)\); tuttavia, dal momento che \(\varepsilon \in first(T ^\prime)\), l’algoritmo non può arrestarsi (perchè potrebbe darsi che \(T ^\prime \) sia nullo), ma è necessario considerare anche i \(first(F)\). Come svolto precedenetemente aggiungiamo \(first(F) \setminus \{\varepsilon\} = \{id, (\}\) a \(first(T)\); essendo che \(\varepsilon \notin first(T ^\prime)\) posso interrompere l'algoritmo e segnare che \(first(T) = \{\ast, id, (\}\)
 
-\section{Follow(\(A\))}
+\section{Follow(\texorpdfstring{${A}$}{A})} 
 \subsection{Definizione}
 A differenza dei \emph{first}, che sono definiti per stringhe generiche di terminali e non-terminali, i \emph{follow} sono computati solamente per i non-terminali: scriveremo dunque \(follow(A)\).
 \begin{definition}
@@ -284,7 +284,7 @@ A differenza dei \emph{first}, che sono definiti per stringhe generiche di termi
 \end{definition}
 I \emph{first} evidenziano quali sono i terminali per cui iniziano le stringhe derivabili da certi elementi (stringhe o non-terminali), i \emph{follow} invece indicano quali sono i terminali che possono seguire.
 
-\subsection{Algoritmo per il calcolo dei follow(\(A\))}
+\subsection{Algoritmo per il calcolo dei follow(\texorpdfstring{${A}$}{A})}
 \subimport{assets/pseudocode/}{follow.tex}
 L'algoritmo comincia inizializzando \(follow(S) = \$\): dal momento che dallo start symbol si possono generare tutte le possibili parole appartenenti al linguaggio della grammatica, allora possiamo aspettarci di trovare il terminatore di stringa \$ dopo una qualsiasi parola. Negli altri casi, invece, \(\forall A\) tale che \(A\) è un non-terminale, inizializziamo \(follow(A) = \emptyset\).
 
@@ -309,7 +309,7 @@ Utilizziamo sempre la grammatica dell'esempio precedente, che qui riportiamo per
 \begin{enumerate}
     \item Dall'algoritmo sappiamo di dover inizializzare \(follow(E) = \$\).
     \item Iniziamo guardando la prima produzione, cioè \(E \rightarrow TE'\): se poniamo \(A = E'\), allora \(\beta = \varepsilon\) e quindi dobbiamo aggiungere i \(follow(E)\) (quelli del driver) a \(follow(E')\) (quelli del body).
-    \item Sempre soffermandoci sulla stessa produzione poniamo \(A = T\): questo vuol dire che \(\beta = E' \neq \varepsilon\) e quindi, ricadendo nel primo caso, aggiungiamo \(first(E) \setminus \{\varepsilon\} = \{+\}\) a \(follow(T)\); tuttavia, essendo che \(\varepsilon \in first((E')\), allora ricadiamo anche nel secondo caso, per cui aggiungiamo \(follow(E)\) a \(follow(T)\).
+    \item Sempre soffermandoci sulla stessa produzione poniamo \(A = T\): questo vuol dire che \(\beta = E' \neq \varepsilon\) e quindi, ricadendo nel primo caso, aggiungiamo \(first(E') \setminus \{\varepsilon\} = \{+\}\) a \(follow(T)\); tuttavia, essendo che \(\varepsilon \in first(E')\), allora ricadiamo anche nel secondo caso, per cui aggiungiamo \(follow(E')\) a \(follow(T)\).
     \item Passiamo ora alla produzione \(E' \rightarrow +TE'\): poniamo quindi \(A = E'\) e \(\beta = \varepsilon\); ricadendo nel secondo caso dovremmo aggiungere \(follow(E')\) a \(follow(E')\) ma, dato che questo non fornisce informazioni aggiuntive, possiamo scartare questa informazione.
     \item Facendo sempre riferimento ad \(E' \rightarrow +TE'\), esaminiamo il caso per cui \(A = T\): visto che \(\beta = E'\), tale caso è identico a quello esaminato al punto 3 e porterà all'aggiunta dei medesimi terminali.
     \item L'ultimo elemento che non abbiamo preso in considerazione per la produzione corrente è terminale \(+\) ma, in quanto terminale, non possiamo calcolarne i follow.
@@ -318,7 +318,7 @@ Utilizziamo sempre la grammatica dell'esempio precedente, che qui riportiamo per
 
 Un caso che potrebbe risultare interessante riguarda la produzione \(F \rightarrow (E)\). Poniamo come fatto precedentemente \(A = E\): essendo che \(\beta = \textrm{ } ) \neq \varepsilon\), è necessario aggiungere \(first(\beta) \setminus \{\varepsilon\} = \{)\}\) a \(follow(E)\); visto che la seconda condizione non è vera, possiamo fermarci ed affermare che \(follow(E)) = \{\$, )\}\).
 
-Inoltre, nei punti in cui si deovno aggiungere ai follow fi un non-terminale i follow di un altro si lasciano delle annotazioni che si andranno a risolvere una volta terminata l'analisi di tutte le produzioni. Il risultato finale verrà rappresentato come segue:
+Inoltre, nei punti in cui si devono aggiungere ai follow di un non-terminale i follow di un altro si lasciano delle annotazioni che si andranno a risolvere una volta terminata l'analisi di tutte le produzioni. Il risultato finale verrà rappresentato come segue:
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{computing-follow.tex}
@@ -432,7 +432,7 @@ Questa volta saremo più spigliati con la risoluzione dei \emph{first}, ma li sc
     \item infine torniamo a risolvere \(A\):
     \begin{itemize}
         \item analizziamo \(A \to Bd\): inseriamo \(first(B) \setminus \{\varepsilon\}\), ovvero inseriamo \(\{e\}\);
-        \item siccome \(\varepsilon \in first(B)\), aggiungiamo anche i \emph{first} di \(b\), che sono proprio \(\{b\}\);
+        \item siccome \(\varepsilon \in first(B)\), aggiungiamo anche i \emph{first} di \(d\), che è prorio \(\{d\}\);
         \item analizziam poi \(A \to Cc\);
         \item esattamente come per \(A \to Bd\), abbiamo che i \emph{first} sono \(\{f, c\}\);
     \end{itemize}
@@ -526,9 +526,6 @@ Viene proposta ora come esempio al lettore questa grammatica.
 Saprebbe dire il lettore se la grammatica qui presentata appartiene alla classe LL(1)?
 
 Mentre il lettore riflette su questo quesito può leggere un'altra importante citazione del nostro punto di riferimento, Paola Quaglia, la quale riflette sul senso di incomunicabilità che attraversa i tempi moderni, quel conflitto generazionale di cui tutti, in certo momento della nostra vita e in un certo schieramento, siamo stati attori.
-\begin{displayquote}
-    "NWY5YTliMmVjMmRhNiwyOS8xMC8yMDIwIDExOjUxLGthbHQxMA==  kaltura ci parla cosi' :-("
-\end{displayquote}
 Torniamo a noi: la risposta alla domanda posta in precedenza è che la grammatica in \ref{non-ll1_grammar} non appartiene alla classe \(LL(1)\); ciò si può dimostrare creandone la parsing table per tale grammatica.
 
 Si può notare di fatto come \(first(E) = first(T) = first(F) = \{(, id\}\).
@@ -648,7 +645,6 @@ Fermiamoci un attimo e facciamo il punto della situazione. Prima di questa ampia
 
 Consideriamo la grammatica delle espressioni aritmetiche, visto che siamo partiti da quella; proviamo ad applicare le nostre regole di eliminazione e vediamo cosa succede.
 \begin{align*}
-    \label{non-ll1_grammar}
     \G: E &\to E+T \mid T \\
     T &\to T*F \mid F \nonumber \\
     F &\to (E) \mid id \nonumber 
@@ -705,7 +701,7 @@ Ne abbiamo un ulteriore conferma se andiamo a calcolare i first/follow per \(E\)
 Nota bene: non dobbiamo cadere nell'errore di supporre che, magari, la nostra procedura funzioni a meno che non sia lanciata su grammatiche ambigue, perché non ne abbiamo fornito alcuna prova. Da questo  esempio possiamo solamente concludere, a malincuore, che la procedura di eliminazione della ricorsione sinistra \emph{non garantisce} di ottenere delle grammatiche \(LL(1)\).
 
 \subsection{Eliminare la ricorsione sinistra elimina l'ambiguità?}
-Possiamo però chiederci: la grammatica \(\mathcal{G'}\) che abbiamo ottenuto è ancora ambigua, oppure applicando la nostra procedura ne abbiamo eliminato l'ambiguità? Ricordiamo che l'ambiguità della grammatica di partenza risiedeva nell'impossibilità di esprimere l'associatività degli operatori e la precedenza dell'uno sull'altro \footnote{Si riveda a ~\ref{sec:ambguity} in caso servisse un ripasso.}. 
+Possiamo però chiederci: la grammatica \(\mathcal{G'}\) che abbiamo ottenuto è ancora ambigua, oppure applicando la nostra procedura ne abbiamo eliminato l'ambiguità? Ricordiamo che l'ambiguità della grammatica di partenza risiedeva nell'impossibilità di esprimere l'associatività degli operatori e la precedenza dell'uno sull'altro \footnote{Si riveda a ~\ref{sec:ambiguity} in caso servisse un ripasso.}. 
 
 Sfortunatamente, riusciamo a trovare senza troppi problemi due derivazioni rightmost che ci portano a ottenere la medesima stringa \(id + id * id\):
 \begin{align*}
@@ -743,7 +739,7 @@ A questo punto notiamo subito che, per ottenere la parola \(id + id * id\), poss
     \caption{Completamento di \ref{fxness-lrremove- ambiguity_1}, versione 1}
     \label{fxness-lrremove- ambiguity_2}
 \end{figure}
-Ma, allo stesso identico modo, potremmo completare lo stesso albero parzial e ottenere la stessa identica parola sostituendo gli stessi nodi con questi due diversi sottoalberi:
+Ma, allo stesso identico modo, potremmo completare lo stesso albero parziale e ottenere la stessa identica parola sostituendo gli stessi nodi con questi due diversi sottoalberi:
 \begin{figure}[H]
     \begin{minipage}[b]{0.4\textwidth}
         \centering
@@ -868,8 +864,8 @@ Abbiamo anche un altro modo per constatare che la nostra grammatica rimane ambig
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{left_factorization_ambiguity.tex}
-    \caption{leftFactorizationAmbiguity}
-    \label{leftFactorizationAmbiguity}
+    \caption{Ambiguità della fattorizzazione a sinistra}
+    \label{Ambiguità della fattorizzazione a sinistra}
 \end{figure}
 
 Si può infatti notare che

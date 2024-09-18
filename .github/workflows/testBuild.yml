@@ -1,0 +1,56 @@
+name: Test build
+
+on:
+  push:
+    branches: ["*", "!master"]
+    paths:
+      - "src/**"
+
+jobs:
+  Test_build:
+    runs-on: [self-hosted, linux, latex]
+    if: github.ref != 'refs/heads/master'
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX document
+        id: compile
+        shell: bash
+        run: |
+          cd src/
+          rm -rf ${{ github.workspace }}/build
+          mkdir ${{ github.workspace }}/build
+          # compile the main file
+          pdflatex -quiet -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error main.tex > /dev/null 2>&1
+          echo "First build done"
+          # compile againg because of Toc
+          pdflatex -quiet -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error main.tex > /dev/null 2>&1
+          echo "Second build done"
+          # compile a third time to adjust layout
+          pdflatex -quiet -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error main.tex > /dev/null 2>&1
+          echo "Third build done"
+          mv ./main.log ${{ github.workspace }}/build/main.log
+          mv ./main.pdf ${{ github.workspace }}/build/Appunti-LFC.pdf
+
+      - name: Upload Log
+        id: uplaodLog
+        uses: actions/upload-artifact@v4
+        with:
+          name: LaTeX build logs
+          path: ${{ github.workspace }}/build/main.log
+          if-no-files-found: warn
+          retention-days: 1
+          compression-level: 0
+
+      - name: Upload PDF as Artifact
+        id: uploadPdfAsArtifact
+        if: github.ref != 'refs/heads/master'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Compiled PDF
+          path: ${{ github.workspace }}/build/Appunti-LFC.pdf
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0

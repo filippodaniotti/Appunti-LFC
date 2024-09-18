@@ -121,12 +121,21 @@ I lessemi sono estremamente facili da descrivere utilizzando le espressioni rego
 Questo è molto interessante: se è vero che i lessemi sono perfettamente descrivibili con dei linguaggi regolari, allora vuol dire che possiamo utilizzare quelli in sede di analisi lessicale, senza dover tirare in ballo i più potenti ma decisamente più complessi linguaggi liberi.
 
 Quindi questi lessemi, essendo descritti da delle espressioni regolari, possono anche essere riconosciuti agevolmente da una macchina a stati finiti, come ad esempio quella in figura sotto, che descrive la classe \texttt{relop} di token per gli operatori relazionali.
+
+% Using Figure instead of Image
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth,keepaspectratio]{lec-14-1}
-    \caption{Automa chericonosce la classe \texttt{relop}}
+    \subimport{assets/figures/}{automa_relop.tex}
+    \caption{Automa che riconosce la classe \texttt{relop}}
     \label{automaton-relop}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=\textwidth,keepaspectratio]{lec-14-1}
+%     \caption{Automa che riconosce la classe \texttt{relop}}
+% \end{figure}
+
 È molto semplice intuire graficamente che ciascun percorso che termini in uno stato finale ritorna un token, sotto forma di coppia, in cui il \texttt{token-name} è appunto quello della classe \texttt{relop}, mentre il \texttt{token-value} indica qual è l'elemento della classe da ritornare.
 
 \paragraph{Retract}
@@ -139,12 +148,21 @@ Immaginiamo di avere delle espressioni regolari che denotano il linguaggio dei l
 
 Sappiamo anche che, avendo delle espressioni regolari, per ciascuna di queste possiamo costruire un NFA che riconosce il linguaggio denotato dall'espressione considerata; possiamo a questo punto immaginare di far collidere questi NFA inserendo uno stato iniziale extra e collegandolo a ciascun NFA tramite una \(\varepsilon\)-transizione, come mostrato in Fig.\ref{nfa_for_grammar_regular_expressions} sotto.
 Da notare che nel caso d'uso del compilatore ci sono delle azioni associate agli stati finali (se l'analizzatore legge un assegnamento compie, appunto, le azioni per registrare l'assegnamento).
+% use Figure instead of Image
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.4\textwidth,keepaspectratio]{lec-14-2.png}
+    \subimport{assets/figures/}{nfa_for_grammar_regular_expressions.tex}
     \caption{}
     \label{nfa_for_grammar_regular_expressions}
 \end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=.4\textwidth,keepaspectratio]{lec-14-2.png}
+%     \caption{}
+%     \label{nfa_for_grammar_regular_expressions}
+% \end{figure}
 Una struttura di questo tipo può riconoscere i linguaggi denotati da tutte le espressioni regolari per cui abbiamo costruito degli NFA. 
 
 Adesso dobbiamo pensare come ottimizzare l'uso di una struttura simile per l'analisi lessicale. Potremmo trovarci infatti a gestire problemi di diversa natura, in particolare relativi all'input buffering: ad esempio, come posso fare a sapere se i due caratteri \texttt{i} e \texttt{f} che ho appena letto stanno a indicare la keyword \mintinline{c}{if} e non un ipotetico identificatore \mintinline{c}{iffoff}? Detto in maniera informale, come decido quando fermarmi, quando tornare indietro, quando e se ho letto più di quanto mi serviva?
@@ -154,7 +172,7 @@ Il procedimento che seguiamo è il seguente:
     \item innanzitutto simuliamo l'NFA creato come sopra descritto;
     \item nel caso di ambiguità, ossia di situazioni come quella descritta sopra tra \mintinline{c}{if} e \mintinline{c}{iffoff}, la convenzione è di preoseguire la simulazione finché nessun’altra transizione è possibile, solitamente quando incontriamo uno spazio o un \texttt{\(\backslash\)n}, privilegiando quindi il match più lungo (si parla di cercare il \emph{longest match});
     \item se nell'insieme di stati che abbiamo raggiunto ci sono delle azioni disponibili, allora andremo ad eseguire quella appartenente al longest match, in caso di pareggio ciascuna azione avrà una priorità, e noi eseguiremo quella con più alta priorità;
-    \item se nessun'azione è disponibile, dobbiamo invece tornare indietro nella sequenza di stati percorsi, fermarci nel primo insieme di stati che presenta almeno uno stato finale e delle azioni associate e cercare di nuovo quella prioritaria; per ognuno di questi passi all'indietro, dobbiamo ricordari di aggiornare il puntatore all'input buffer.
+    \item se nessun'azione è disponibile, dobbiamo invece tornare indietro nella sequenza di stati percorsi, fermarci nel primo insieme di stati che presenta almeno uno stato finale e delle azioni associate e cercare di nuovo quella prioritaria; per ognuno di questi passi all'indietro, dobbiamo ricordarci di aggiornare il puntatore all'input buffer.
 \end{enumerate}
 
 Tutto questo funzionerebbe in maniera analoga se utilizzassimo un DFA: dovremmo semplicemente costruire il DFA a partire dal NFA, dimodoché l'insieme degli stati del DFA sia un sottoinsieme di quello dell'NFA corrispondente.
@@ -178,7 +196,7 @@ Il funzionamento di Flex (ma anche di tutti i generatori di questo tipo) è il s
 Si tenga bene a mente che queste tre righe descrivono come utilizzare Flex da solo; tuttavia, quest'ultima è un'eventualità piuttosto rara, dal momento che Flex è nato per essere usato in pipeline con un generatore di analizzatore di analisi sintattica, ma poiché questi sono elementi ancora sconosciuti per noi, al momento non ce ne preoccupiamo.
 
 \subsection{Struttura del \texttt{file.l}}
-I file con estensione \texttt{.l} che diamo da fagocitare a Flex hanno la seguente struttura:
+I file con estensione \texttt{.l} che diamo in pasto a Flex hanno la seguente struttura:
 \begin{minted}[breaklines, tabsize = 2]{bash}
 ...
 //(Preambolo)
@@ -249,7 +267,7 @@ In qusto primo esempio vediamo che nel preambolo non sono presenti né delle \te
     \item il pattern è dato dalla regular expression composta solo da \texttt{.}, il che significa che l'azione seguente farà riferimento a tutti i caratteri incontrati, tranne quello di \texttt{\(\backslash\)n} (\emph{new line});
     \item l'azione è quel \mintinline{c}{printf("hello world!")}, il che consiste banalmente nello stampare la stringa hello world ogni volta che viene eseguito un match sul pattern.
 \end{itemize}
-In sostanza, questo file ci farà sì che, nella lettura, qualsiasi carattere incontriamo, ad eccezione del new line, verrà sostituito da un'occorrenza della stringa \texttt{"hello world!"}; quindi, ad esempio:
+In sostanza, questo file farà sì che, nella lettura, qualsiasi carattere incontriamo, ad eccezione del new line, verrà sostituito da un'occorrenza della stringa \texttt{"hello world!"}; quindi, ad esempio:
 \begin{itemize}
     \item \(a\) diventerà \texttt{hello world!};
     \item \(aa\) diventerà \texttt{hello world!hello world!}.
@@ -275,7 +293,7 @@ Possiamo notare anche un'altra cosa molto interessante: solitamente, per poter u
 Diversamente dall'esempio precedente, in questo \texttt{file1.l} abbiamo del contenuto nel preambolo. Andiamo a vederlo nel dettaglio:
 
 \begin{enumerate}
-    \item il primo blocco (righe 1 e 2, in questo caso vuoto) è identificato dal simbolo di apertura \texttt{\%\{} e cui può seguire del codice C;
+    \item il primo blocco (righe 1 e 2, in questo caso vuoto) è identificato dal simbolo di apertura \texttt{\%\{} a cui può seguire del codice C;
     \item il secondo blocco (righe da 3 a 6), invece, è successivo al simbolo di chiusura \texttt{\%\}} e contiene quelli che sono gli shorthands per i pattern, vale a dire degli alias per delle espressioni regolari.
 \end{enumerate}
 

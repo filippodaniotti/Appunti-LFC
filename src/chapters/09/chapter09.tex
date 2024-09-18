@@ -51,6 +51,7 @@ Come facciamo a calcolare la chiusura degli insiemi di LR(1)-items? Il metodo di
 \end{definition}
 \paragraph{Algoritmo}
 Dal momento che la Def.\ref{def:lr1-closure} non risponde molto bene al richiamo degli attributi "semplice e intuitiva", potrebbe essere una buona idea dare un'occhiata alla sua formulazione algoritmica in Alg.\ref{alg:lr1-closure}. \\
+
 % \begin{figure}[H]
 %     \centering
 %     \includegraphics[width=\textwidth,keepaspectratio]{alg_closure-lr1.png}
@@ -204,7 +205,6 @@ Ora chiederemo al lettore di fare uno sforzo mnemonico poderoso e di ricordare c
     \centering
     \subimport{assets/figures/}{automa_conflict_LR.tex}
     \caption{Automa di tipo LR(0), si noti il conflitto sullo stato 6}
-    \label{fig:lr0-automata_conflict}
 \end{figure}
 Abbiamo già calcolato quali sono gli stati LR(1) per la grammatica in questione in un esercizio precedente (vedi \ref{ex:closure-lr1}), ed applicando l'algoritmo per la costruzione degli automi LR(1) arriviamo ad ottenere il seguente automa (parziale):
 \begin{figure}[H]
@@ -451,6 +451,7 @@ Rimarrebbe da analizzare \(\tau(11, id)\) ma, come già anticipato, conduce allo
 %     \caption{help}
 % \end{figure}
 % Per tutti gli stati 8,9 e 10 non ci sono chiusure ma si presentano riduzioni. Nello stato 11 il kernel permette di cercare una chiusura per R, la chiusura per R ci porta a R -> .L, {\$} che ci permette un'ulteriore chiusura, con conseguente inserimento di L->.*R,{\$} e L->.id,{\$}. Passiamo allo stato 12 ha un kernel che potrebbe sembrare uguale allo stato 5, ma il lookahead set è diverso… quindi lo stato 12 è diverso dal 5 Aggiungiamo anche lo stato 13 per rappresentare la transizione \(\tau(11,R)\) ecc. ecc. Nota che la Quaglia non ha riportato tutti gli stati ed i relativi items. Questo è l'automa che ricaviamo:
+
 \paragraph{Costruzione dell'automa}
 Ora che abbiamo gli stati non c'è più nulla di diverso rispetto a quello che facevamo prima, per cui possiamo terminare con la costruzione dell'automa caratteristico. Quest'ultimo (Fig.\ref{fig:pointers-automaton}) è alquanto complicato e pare una strana mappa del tesoro, ma ce l'aspettavamo: abbiamo già sottolineato come e perché gli automi LR(1) sono più complessi di un corrispondente SLR(1).
 \begin{figure}[H]
@@ -460,11 +461,13 @@ Ora che abbiamo gli stati non c'è più nulla di diverso rispetto a quello che f
     \label{fig:pointers-automaton}
 \end{figure}
 A questo punto potremmo chiederci: la grammatica Eq.\ref{gr:pointers-grammar} è effettivamente LR(1)? Non è che abbiamo fatto fatica per niente? Per rispondere, la prima cosa che ci viene in mente è costruire la tabella di parsing a partire dal nostro automa, ma possiamo essere più scaltri di così.
+
 % \begin{figure}[H]
 %     \centering
 %     \includegraphics[width=.8\textwidth]{send_help_4.png}
 %     \caption{help}
 % \end{figure}
+
 \paragraph{La grammatica è LR(1)?}
 Infatti, possiamo fin da subito escludere la presenza di conflitti r/r (ossia reduce/reduce), perché nessuno stato del nostro automa presenza due reducing items.
 
@@ -811,13 +814,23 @@ Andiamo a costruire l'automa simbolico per la nostra cara grammatica
 \end{align*}
 La costruzione dell'automa simbolico verrà affiancata dalla costruzione dell'automa LR(1) per rendere più chiare le differenze tra queste due costruzioni.
 
-Il primo passo è installare lo stato 0 dell'automa:
-\begin{figure}
+Il primo passo è installare lo stato 0 dell'automa (Figura \ref{fig:ex_automa_simbolico-kernel_s0}):
+
+% Using Figure instead of Image
+\begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-stato_0.png}
+    \subimport{assets/figures/}{ex_automa_simbolico-kernel_s0.tex}
     \caption{Stato 0: sulla sinistra automa simbolico, sulla destra automa LR(1)}
-    \label{img:ex_automa_simbolico-stato_0}
+    \label{fig:ex_automa_simbolico-kernel_s0}
 \end{figure}
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-stato_0.png}
+%     \caption{Stato 0: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+%     \label{img:ex_automa_simbolico-stato_0}
+% \end{figure}
+
 È subito chiaro cosa intendevamo dicendo "invece di inserire il lookahead set inseriamo una \emph{variabile}", di fatto come lookahead inseriamo un simbolo, che risolveremo solo alla fine della costruzione dell'automa.
 
 In questo caso al posto di inserire \(\$\) inseriamo una variabile chiamata \(x_0\).
@@ -869,12 +882,22 @@ Il consiglio per chi non ha capito questi passaggi è quello di fare qualche ese
 Orbene, passiamo ad analizzare le transazioni uscenti dallo stato 0.
 La prima transizione che troviamo è \(\tau(0,S)\) che ci porta ad un nuovo stato, lo stato 1.
 \\
-Kernel dello stato 1:
-\begin{figure}
+Kernel dello stato 1 (Figura \ref{fig:ex_automa_simbolico-kernel_s1}):
+
+% Using Figure instead of Image
+\begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolic-kernel_s1.png}
+    \subimport{assets/figures/}{ex_automa_simbolico-kernel_s1.tex}
     \caption{Kernel stato 1: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \label{fig:ex_automa_simbolico-kernel_s1}
 \end{figure}
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.7\textwidth]{ex_automa_simbolic-kernel_s1.png}
+%     \caption{Kernel stato 1: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+% \end{figure}
+
 notiamo come invece che scrivere il lookahead set come insieme creiamo una nuova variabile per indicarlo. Dobbiamo aggiornare anche il nostro sitema in cui salviamo il valore effettivo della variabile.
 In questo caso il lookahed set del kernel, essendo \(\beta = \varepsilon\) è proprio uguale al lookahead set della produzione da cui arriviamo, quindi \(x_0\), aggiorniamo dunque alacremente il nostro sistema di equazioni.
 \begin{align*}
@@ -886,12 +909,22 @@ Lo stato 1 non ha chiusure da calcolare e nemmeno transizioni, quindi passiamo o
 
 La prossima transizione che andiamo ad analizzare è \(\tau(0,L)\) che ci porta in un nuovo stato, diciamo 2.
 \\
-Kernel dello stato 2:
-\begin{figure}
+Kernel dello stato 2 (Figura \ref{fig:ex_automa_simbolico-kernel_s2})
+
+% Using Figure instead of Image
+\begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s2.png}
+    \subimport{assets/figures/}{ex_automa_simbolico-kernel_s2.tex}
     \caption{Kernel stato 2: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \label{fig:ex_automa_simbolico-kernel_s2}
 \end{figure}
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s2.png}
+%     \caption{Kernel stato 2: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+% \end{figure}
+
 in questo caso il kernel contiene due item perché nello stato 0 abbiamo due item che presentano la possibilità di una \(L\)-transizione; ognuno di questi item quindi avrà il suo lookahead set simbolico: andiamo ad aggiornare subito il nostro sistema, sapendo che le produzioni che ci portano allo stato due hanno come lookahead set \(x_0\).
 \begin{align*}
     Sistema:& \\
@@ -904,12 +937,22 @@ grazie al cielo non si presentano nè chiusure, le transizioni invece le analizz
 
 Passiamo quindi all'osservazione della transizione \(\tau(0,R)\), che ci porta nello stato 3.
 \\
-Kernel dello stato 3:
-\begin{figure}
+Kernel dello stato 3 (Figura \ref{fig:ex_automa_simbolico-kernel_s3}):
+
+% Using Figure instead of Image
+\begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s3.png}
+    \subimport{assets/figures/}{ex_automa_simbolico-kernel_s3.tex}
     \caption{Kernel stato 3: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \label{fig:ex_automa_simbolico-kernel_s3}
 \end{figure}
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s3.png}
+%     \caption{Kernel stato 3: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+% \end{figure}
+
 anche in questo caso abbiamo che \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), riportiamo subito questa informazione all'interno del sistema.
 \begin{align*}
     Sistema:& \\
@@ -923,12 +966,22 @@ il kernel dello stato 3 non presenta nè chiusure nè transizioni, quindi proced
 
 La prossima transizione che dobbiamo analizzare è \(\tau(0,*)\), questa deriva dalla produzione \([L \to \cdot *R, \; \{=, x_0\}]\).
 \\
-Kernel dello stato 4:
-\begin{figure}
+Kernel dello stato 4 (Figura \ref{fig:ex_automa_simbolico-kernel_s4}):
+
+% Using Figure instead of Image
+\begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s4.png}
+    \subimport{assets/figures/}{ex_automa_simbolico-kernel_s4.tex}
     \caption{Kernel stato 4: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \label{fig:ex_automa_simbolico-kernel_s4}
 \end{figure}
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s4.png}
+%     \caption{Kernel stato 4: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+% \end{figure}
+
 anche in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
 \begin{align*}
     Sistema:& \\
@@ -949,12 +1002,23 @@ che spettacolo, eh? passiamo oltre
 
 Prossima transizione da analizzare: \(\tau(0,id)\) che deriva dall'item \([L \to \cdot id, \; \{=, x_0\}]\) e ci porta nello stato 5.
 \\
-Kernel dello stato 5:
-\begin{figure}
+Kernel dello stato 5 (Figura \ref{fig:ex_automa_simbolico-kernel_s5}):
+
+% Using Figure instead of Image
+\begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s5.png}
+    \subimport{assets/figures/}{ex_automa_simbolico-kernel_s5.tex}
     \caption{Kernel stato 5: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \label{fig:ex_automa_simbolico-kernel_s5}
 \end{figure}
+
+% Note that useless (?) text has been removed from the image
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s5.png}
+%     \caption{Kernel stato 5: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+% \end{figure}
+
 anche in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
 \begin{align*}
     Sistema:& \\
@@ -970,12 +1034,22 @@ Anche qui, pace all'anima nostra, inseriamo il lookahead set come variabile e la
 
 Abbiamo finito le transizioni dallo stato 0! prossima trnsizione da analizzare \(\tau(2, =)\), che deriva dall'item \([S \to L \cdot = R, \; \{x_2\}]\), ci porta direttamente allo stato 6.
 \\
-Kernel dello stato 6:
-\begin{figure}
+Kernel dello stato 6 (Figura \ref{fig:ex_automa_simbolico-kernel_s6}):
+
+% Using Figure instead of Image
+\begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s6.png}
+    \subimport{assets/figures/}{ex_automa_simbolico-kernel_s6.tex}
     \caption{Kernel stato 6: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \label{fig:ex_automa_simbolico-kernel_s6}
 \end{figure}
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s6.png}
+%     \caption{Kernel stato 6: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+% \end{figure}
+
 in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
 \begin{align*}
     Sistema:& \\
@@ -998,12 +1072,21 @@ Grazie alla presenza del marker davanti ad una \(R\) aggiungiamo questi item all
 
 Passiamo ora ad analizzare la transizione \(\tau(4, R)\), che deriva dall'item \([L \to * \cdot R, \; \{x_5\}]\) e ci spara nello stato 7.
 \\
-Kernel dello stato 7:
-\begin{figure}
+Kernel dello stato 7 (Figura \ref{fig:ex_automa_simbolico-kernel_s7}):
+% Using Figure instead of Image
+\begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s7.png}
+    \subimport{assets/figures/}{ex_automa_simbolico-kernel_s7.tex}
     \caption{Kernel stato 7: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \label{fig:ex_automa_simbolico-kernel_s7}
 \end{figure}
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s7.png}
+%     \caption{Kernel stato 7: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+% \end{figure}
+
 in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
 \begin{align*}
     Sistema:& \\
@@ -1021,12 +1104,22 @@ a questo punto dovremmo fare la chiusura no? ma è già tutto chiuso, come alle 
 
 Passiamo quindi ad analizzare la transizione \(\tau(4, L)\) che prende le mosse dall'item \([R \to \cdot L, \; \{x_5\}]\) e ci porta nello stato 8.
 \\
-Kernel dello stato 8:
-\begin{figure}
+Kernel dello stato 8 (Figura \ref{fig:ex_automa_simbolico-kernel_s8}):
+
+% Using Figure instead of Image
+\begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s8.png}
+    \subimport{assets/figures/}{ex_automa_simbolico-kernel_s8.tex}
     \caption{Kernel stato 8: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \label{fig:ex_automa_simbolico-kernel_s8}
 \end{figure}
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s8.png}
+%     \caption{Kernel stato 8: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+% \end{figure}
+
 in questo caso il lookahead set del kernel è uguale a \(\Delta\), aggiorno quindi il sistema di equazioni.
 \begin{align*}
     Sistema:& \\
@@ -1078,12 +1171,22 @@ Il lookahead set della transizione \(\tau(4, id)\) è ancora una volta \(x_5\).
 
 Passiamo oltre, la prossima transizione su cui ci concentriamo è \(\tau(6, R)\), derivante da \([S \to L = \cdot R, \; \{x_7\}]\), che ci porta a scoprire lo stato 9.
 \\
-Kernel dello stato 9:
-\begin{figure}
+Kernel dello stato 9 (Figura \ref{fig:ex_automa_simbolico-kernel_s9}):
+
+% Using Figure instead of Image
+\begin{figure}[H]
     \centering
-    \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s9.png}
+    \subimport{assets/figures/}{ex_automa_simbolico-kernel_s9.tex}
     \caption{Kernel stato 9: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+    \label{fig:ex_automa_simbolico-kernel_s9}
 \end{figure}
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.7\textwidth]{ex_automa_simbolico-kernel_s9.png}
+%     \caption{Kernel stato 9: sulla sinistra automa simbolico, sulla destra automa LR(1)}
+% \end{figure}
+
 in questo caso  \(\beta = \varepsilon\) quindi il lookahead set del kernel è uguale a \(\Delta\), ovvero \(x_{10} = \{x_7\}\), aggiorno quindi il sistema di equazioni.
 \begin{align*}
     Sistema:& \\

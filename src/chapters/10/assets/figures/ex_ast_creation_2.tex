@@ -1,0 +1,34 @@
+\documentclass[convert = false, tikz]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usepackage{adjustbox}
+\usetikzlibrary{automata, positioning, arrows, fit}
+ 
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{tikzpicture}[node distance=7cm, auto]
+        
+        % Disegna il primo nodo
+        \node[draw, rectangle split, rectangle split parts=2, rectangle split horizontal] (first_node) {id \nodepart{second} };
+
+        % Definisci una coordinata, al centro della metà destra del primo nodo
+        \coordinate (start) at ([xshift=1em]first_node.center);
+
+        % Disegna la tabella
+        \node[right=of first_node, align=center] (table) {
+            \begin{tabular}{|p{0.03\textwidth}|p{0.18\textwidth}|}
+                \hline
+                c & \\ \hline
+                a & \\ \hline
+                \multicolumn{2}{|c|}{ } \\ \hline
+            \end{tabular}
+        };
+
+        % Disegna la freccia
+        \draw[->, bend right] (start) to (table.west);
+
+        % Aggiungi l'etichetta testuale
+        \node[below left=0.1cm and 0.1cm of first_node] {\small E.node};
+    \end{tikzpicture}
+\end{document}

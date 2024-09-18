@@ -1,0 +1,28 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    \begin{forest}
+        for tree={
+            s sep=15mm, % siblings distance
+            l sep=7.5mm, % level distance
+            font=\itshape\fontsize{15}{14},
+        },
+        [{$assign$}
+            [{$\langle id,1 \rangle$}]
+            [{$sumop$}
+                [{$\langle id,3 \rangle$}]
+                [{$mulop$}
+                    [{$\langle id,3 \rangle$}]
+                    [{$\langle num,60 \rangle$}]
+                ]
+            ]
+        ]
+    \end{forest}
+\end{document}

@@ -1,0 +1,88 @@
+name: Build & Release
+
+on:
+  push:
+    branches: ["master"]
+    paths:
+      - "src/**"
+  workflow_dispatch:
+
+jobs:
+  Build_And_Release:
+    runs-on: [self-hosted, linux, latex]
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX document
+        id: compile
+        shell: bash
+        run: |
+          cd src/
+          rm -rf ${{ github.workspace }}/build
+          mkdir ${{ github.workspace }}/build
+          # compile the main file
+          pdflatex -quiet -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error main.tex > /dev/null 2>&1
+          echo "First build done"
+          # compile againg because of Toc
+          pdflatex -quiet -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error main.tex > /dev/null 2>&1
+          echo "Second build done"
+          # compile a third time to adjust layout
+          pdflatex -quiet -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error main.tex > /dev/null 2>&1
+          echo "Third build done"
+          mv ./main.log ${{ github.workspace }}/build/main.log
+          mv ./main.pdf ${{ github.workspace }}/build/Appunti-LFC.pdf
+
+      - name: Upload Log
+        id: uplaodLog
+        uses: actions/upload-artifact@v4
+        with:
+          name: LaTeX build logs
+          path: ${{ github.workspace }}/build/main.log
+          if-no-files-found: warn
+          retention-days: 1
+          compression-level: 0
+
+      - name: Delete previous release
+        id: deletePreviuosRelease
+        if: steps.compile.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          # Get the latest release ID
+          LATEST_RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.id')
+
+          # Delete the latest release
+          if [ "$LATEST_RELEASE_ID" != "null" ]; then
+            curl -s -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/releases/$LATEST_RELEASE_ID"
+          else
+            echo "No previous release found."
+          fi
+
+      - name: Publish Release
+        id: release
+        if: steps.compile.outcome == 'success'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ github.workspace }}/build/Appunti-LFC.pdf
+          asset_name: Appunti-LFC.pdf
+          overwrite: true
+          body: "Appunti di Linguaggi Formali e Compilatori - Prof.ssa P. Quaglia - Università di Trento"
+          release_name: "Appunti di Linguaggi Formali e Compilatori"
+
+      - name: Upload pdf to lfc repo
+        id: uploadPdfToLfcRepo
+        if: steps.compile.outcome == 'success'
+        shell: bash
+        run: |
+          git clone https://${{ secrets.PDF_TOKEN }}@github.com/unitn-drive/linguaggi-formali-e-compilatori.git tmp
+          cd tmp/Appunti/
+          cp ${{ github.workspace }}/build/Appunti-LFC.pdf ./Dispensa-Studenti.pdf
+          git config user.email "unitn.drive@gmail.com"
+          git config user.name "unitnDrive"
+          git add --all
+          git commit -m "Pubblicazione automatica Dispensa-Studenti.pdf"
+          git push https://${{ secrets.PDF_TOKEN }}@github.com/unitn-drive/linguaggi-formali-e-compilatori.git
