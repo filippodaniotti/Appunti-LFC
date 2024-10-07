@@ -1,4 +1,4 @@
-name: Build LaTeX document
+name: Build LaTeX document and publish release
 on:
   push:
     branches: master
@@ -15,17 +15,38 @@ jobs:
           working_directory: src/
           latexmk_shell_escape: true
           extra_system_packages: "py-pygments"
-      - name: Upload pdf as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-dispensa
-          path: ./src/main.pdf
+      - name: Rename PDF file
+        id: rename-pdf-file
+        run: mv src/main.pdf src/dispensa-lfc.pdf
         if: ${{ success() }}
-      - name: Send dispensa to Telegram Group
-        uses: appleboy/telegram-action@master
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: Oh oh oh! buon natale piccoli dinosauri
-          document: src/main.pdf
+          tag_name: ${{ github.run_id }}
+          release_name: Release ${{ github.ref_name }}
+          body: "Release"
+          draft: false
+          prerelease: false
         if: ${{ success() }}
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: src/dispensa-lfc.pdf
+          asset_name: dispensa-lfc.pdf
+          asset_content_type: application/pdf
+        if: ${{ success() }}
+      # - name: Send dispensa to Telegram Group
+        # uses: appleboy/telegram-action@master
+        # with:
+          # to: ${{ secrets.TELEGRAM_TO }}
+          # token: ${{ secrets.TELEGRAM_TOKEN }}
+          # message: Oh oh oh! buon natale piccoli dinosauri
+          # document: src/dispensa-lfc.pdf
+        # if: ${{ success() }}
