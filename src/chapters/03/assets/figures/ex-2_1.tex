@@ -1,0 +1,36 @@
+\documentclass[varwidth]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, italian]{babel}
+
+\usepackage{forest}
+
+% arara: pdflatex
+% arara: latexmk: { clean: partial }
+\begin{document}
+    % \begin{forest}
+    %     [\(S\),delay={for tree={content=\texttt{#1}}}
+    %         [\(aSc\)
+    %             [\(aTc\)
+    %                 [\(abac\)]
+    %             ]
+    %         ]
+    %         [\(aTc\)
+    %             [\(abac\)]
+    %         ]
+    %         [\(T\)]
+    %     ]
+    % \end{forest} %
+    \begin{forest}
+        derivation tree
+        [\(S\),delay={for tree={content=\texttt{#1}}}
+            [\(a\)]
+            [\(S\)
+                [\(T\)
+                    [\(ba\)]
+                ]
+            ]
+            [\(c\)]
+        ]
+    \end{forest}
+\end{document}

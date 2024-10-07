@@ -13,10 +13,10 @@
     }
     \begin{tikzpicture}
         \node[state] (0) {0};
-        \node[align=right] at (-7, -4) {$S \to L=R\ |\ R$};
-        \node[align=right] at (-7, -4.5) {$L \to *R\ |\ id$};
-        \node[align=right] at (-7, -5) {$R \to L$};
-        \node[align=right] at (-7, -6) {in 2: reduce $R \to L $ per i follow di R};
+        % \node[align=right] at (-7, -4) {$S \to L=R\ |\ R$};
+        % \node[align=right] at (-7, -4.5) {$L \to *R\ |\ id$};
+        % \node[align=right] at (-7, -5) {$R \to L$};
+        % \node[align=right] at (-7, -6) {in 2: reduce $R \to L $ per i follow di R};
         \node[state, fill=green, right of=0] (1) {1};
         \node[state, fill=red, accepting, below right of=0] (2) {2};
         \node[state, accepting, left of=0] (3) {3};

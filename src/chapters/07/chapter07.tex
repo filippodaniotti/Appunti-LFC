@@ -25,11 +25,11 @@ Sia \(w\) = \(bd\) e sia \(\G\):
     B &\rightarrow b
 \end{align*}
 
-Per verificare se \(w \in \mathcal{L(G)}\) con un approccio top-down dobbiamo ottenere una derivazione leftmost a partire dallo start symbol. Ovviamente, si noterà subito che non è possibile scegliere \(Ad\) come derivazione iniziale dello start symbol, perché a quel punto l'unica parola ottenibile sarebbe parola \(ad\); dobbiamo invece optare per la seconda derivazione. La derivazione completa ci porta a
+Per verificare se \(w \in \mathcal{L(G)}\) con un approccio top-down dobbiamo ottenere una derivazione leftmost a partire dallo start symbol. Ovviamente, si noterà subito che non è possibile scegliere \(Ad\) come derivazione iniziale dello start symbol, perché a quel punto l'unica parola ottenibile sarebbe la parola \(ad\); dobbiamo invece optare per la seconda derivazione. La derivazione completa ci porta a
 \begin{align*}
     S \Rightarrow Bd \Rightarrow bd
 \end{align*}
-Visto che abbiamo dimostrato che \(w \in \mathcal{L(G)}\) e che tale derivazione esiste, allora possiamo fornire il suo derivation tree che, per questo esempio, risulta davvero molto semplice.
+Visto che abbiamo dimostrato che \(w \in \mathcal{L(G)}\) e che tale derivazione esiste, allora possiamo fornire il suo albero di derivazione che, per questo esempio, risulta davvero molto semplice.
 
 \begin{figure}[H]
     \centering
@@ -64,7 +64,7 @@ Nel caso del predictive top-down parsing non è mai necessario applicare la tecn
 \begin{itemize}
     \item guardiamo le parole da sinistra a destra;
     \item eseguiamo una produzione leftmost;
-    \item guardiamo un solo simbolo (non-terminale).
+    \item guardiamo un solo non-terminale per decidere quale produzione utilizzare.
 \end{itemize}
 Tali grammatiche prevedono una tipologia di parsing per cui non è necessario backtrack, e per di più è \textbf{completamente deterministica}.
 
@@ -122,7 +122,7 @@ L'obiettivo del nostro gioco è quello di raggiungere il \$ andando a eseguire d
 Nell'algoritmo di parsing si utilizza la variabile \(b\) come primo simbolo delle parola \(w\$\) e si inizializza la variabile \(X\) con la cima dello stack (il caso base corrisponde ad avere \(X = S\)). Finché \(X \neq \$\) (sostanzialmente finché non ho svuotato completamente la pila), sono dati i seguenti casi:
 
 \begin{enumerate}
-    \item se \(X = b\), allora tolgo l'elemento dalla cima della pila e imposto \(b\) al simbolo successivo nell'input buffer. Questo corrisponde al caso in cui nella derivazione della costruzione parziale ho ottenuto un match con un terminale nella parola;
+    \item se \(X = b\), allora tolgo l'elemento dalla cima della pila e imposto \(b\) al simbolo successivo nell'input buffer. Questo corrisponde al caso in cui nella derivazione parziale ho ottenuto un match con un terminale nella parola;
     \item se invece \(X\) è comunque un terminale, allora deve essere che \(X \neq b\), ma ciò produce un errore;
     \item se invece \(X\) è un non-terminale, allora è necessario verificare la tabella di top-down parsing in posizione \(M[X, b]\) e possono valere le seguenti:
     \begin{itemize}
@@ -138,6 +138,7 @@ Infine, come ultima operazione \(X\) viene assegnato all'elemento in cima alla p
     \caption{Tabella delle strutture a ogni passo}
     \label{tab:ptdp-ex1}
 \end{table} 
+Questo algoritmo ha complessità lineare.
 % \begin{figure}[H]
 %     \centering
 %     \includegraphics[width=.7\textwidth,keepaspectratio]{TopDownExercise.png}
@@ -146,8 +147,7 @@ Infine, come ultima operazione \(X\) viene assegnato all'elemento in cima alla p
 % \end{figure}
 
 \subsection{Tabella di parsing}
-
-L'algoritmo di Parsing predittivo ha una complessità lineare. Ci chiediamo quindi: come costruiamo le Parsing Table? In quale posizione dobbiamo mettere le produzioni della grammatica per fare sì che l'algoritmo funzioni?
+Qual è quindi la procedura che dobbiamo seguire per costruire codesta tabella di parsing? In quale posizione dobbiamo mettere le produzioni della grammatica per fare sì che l'algoritmo funzioni?
 
 Ricordiamo che la cella \(M[A, b]\) della parsing table viene consultata per espandere il non-terminale \(A\) sapendo che il prossimo terminale nell'input buffer è \(b\). Andiamo dunque a valorizzare la cella \(M[A, b]\) = \(A \rightarrow \alpha\) se:
 
@@ -167,7 +167,7 @@ Sia data la seguente grammatica:
     B &\rightarrow c
 \end{align*}
 
-Andiamo a vedere come costruire la tabella, aiutandoci dal fatto che è molto semplice ricavare a vista il linguaggio denotato dalla seguente grammatica, che include semplicemente le due parole \(ac\) oppure \(bc\). Partiamo dalle produzioni di \(S\):
+Andiamo a vedere come costruire la tabella, aiutandoci dal fatto che è molto semplice ricavare a vista il linguaggio denotato dalla seguente grammatica, che include semplicemente le due parole \(ac\) e \(bc\). Partiamo dalle produzioni di \(S\):
 \begin{itemize}
     \item se applichiamo la definizione precedente abbiamo che \(M[S, a] = S \rightarrow aA\), in quanto solamente utilizzando quella produzione riusciremmo ad avere una stringa che comincia per \(a\) (\(aA \Rightarrow ac\));
     \item lo stesso ragionamento può essere applicato per \(M[S, b] = S \rightarrow bB\);
@@ -240,7 +240,7 @@ Andiamo a vedere più da vicino quale idea stiamo seguendo in questo algoritmo. 
 \end{itemize} 
 L'ultimo controllo serve per verificare se, \(\forall\; Y_j \in (Y_1 \ldots Y_n)\), non sono in realtà tutti annullabili; in tal caso, sarebbe necessario aggiungere anche \(\varepsilon\) ai \(first(Y_1 \ldots Y_n)\), in quanto \((Y_1 \ldots Y_n)\) sarebbe annullabile.
 
-\subsection{Training}
+\subsection{Esempi di calcolo}
 Sia data la seguente grammatica:
 \begin{align*}
     \G: E &\rightarrow TE' \\
@@ -257,28 +257,28 @@ Osservando la grammatica è possibile, per la definizione espressa precedentemen
     \{id\} &\in first(F)\textrm{,} &\textrm{da } F\; &\to id
 \end{align*}
 
-Tuttavia, l'idea generale è quella di partire da quelle produzioni che necessitano di meno passaggi possibili, cioè quelle che hanno un terminale (o \(\varepsilon\)) come body, e il cui driver può essere utilizzato per risolvere i \(first\) di un'altra produzione.
+Insomma, l'idea generale è quella di partire da quelle produzioni che necessitano di meno passaggi possibili, cioè quelle che hanno un terminale (o \(\varepsilon\)) come body, e il cui driver può essere utilizzato per risolvere i \(first\) di un'altra produzione.
 
 Per calcolare i \(first\) della grammatica proposta ci conviene partire da \(first(F)\): per il passo induttivo dobbiamo calcolare \(\bigcup_{F \to \alpha} first(\alpha)\), cioè \(first((E)) \cup first(id)\). Separiamo dunque il calcolo nelle due componenti:
 \begin{itemize}
-    \item nel primo caso analizziamo \(first((E))\), per cui dobbiamo procedere al calcolo di una parola composta da tre elementi (\(Y_1 = '(', Y_2 = E, Y_3 = ')'\), il lettore perdoni l'abuso di notazione nell'utilizzo degli apici) e dunque per prima cosa dobbiamo considerare \(first(Y_1)\); tuttavia, \(Y_1 = '('\) è un terminale, per cui avremo che \(first(Y_1) = \{Y_1\}\): questo significa che \(\{Y_1\} \neq \varepsilon\) e che possiamo aggiungerlo a \(first(F)\) e interrompere subito l'algoritmo;
+    \item nel primo caso analizziamo \(first((E))\), per cui dobbiamo procedere al calcolo di una parola composta da tre elementi (\(Y_1 = '(', Y_2 = E, Y_3 = ')'\), il lettore perdoni l'abuso di notazione nell'utilizzo degli apici) e dunque per prima cosa dobbiamo considerare \(first(Y_1)\); tuttavia, \(Y_1 = '('\) è un terminale, per cui avremo che \(first(Y_1) = \{Y_1\}\): questo significa che \(\varepsilon \notin \{Y_1\}\) e che possiamo aggiungere \(\{Y_1\}\) a \(first(F)\) e interrompere subito l'analisi dei \(first((E))\);
     \item nel secondo caso, invece, ci troviamo di fronte al caso base \(first(id) = \{id\}\) e dunque possiamo subito aggiungerlo a \(first(F)\).
 \end{itemize}
 In questo caso il risultato finale è dunque \(first(F) = \{(\} \cup \{id\} = \{(, id\}\); in modo analogo è possibile arrivare alla soluzione per \(first(T')\) e \(first(E')\).
 
 \subparagraph{}
-A questo punto, il miglior modo per procedere con l'algoritmo è, in mancanza di casi base, quello di trovare una produzione del tipo \(A \rightarrow F\alpha\); in quel modo potremmo sfruttare le conoscenze appena ottenute relativamente a \(first(F)\). Applicando dunque l'algoritmo per \(first(T)\) ci si accorge che è necessario analizzare la produzione \(T \rightarrow FT' = Y_1Y_2\): iniziamo da \(first(Y_1)\). Dal momento che che abbiamo già calcolato \(first((F)\) e, poiché \(\varepsilon \notin first(F)\), possiamo arrestare l'algoritmo e affermare che \(first(T) = first(FT') = first(F) = \{(, id\}\). Svolgendo dunque l'esercizio nella sua interezza è possibile ottenere il seguente risultato:
+A questo punto, il miglior modo per procedere con l'algoritmo è, in mancanza di casi base, quello di trovare una produzione del tipo \(A \rightarrow F\alpha\); in quel modo potremmo sfruttare le conoscenze appena ottenute relativamente a \(first(F)\). Applicando dunque l'algoritmo per \(first(T)\) ci si accorge che è necessario analizzare la produzione \(T \rightarrow FT' = Y_1Y_2\): iniziamo da \(first(Y_1)\). Dal momento che che abbiamo già calcolato \(first(F)\) e, poiché \(\varepsilon \notin first(F)\), possiamo arrestare l'algoritmo e affermare che \(first(T) = first(FT') = first(F) = \{(, id\}\). Svolgendo dunque l'esercizio nella sua interezza è possibile ottenere il seguente risultato:
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{computing-first.tex}
     \caption{Esercizio sui first}
     \label{computing-first}
 \end{table}
-Cosa succede se invece, al posto della produzione \(T \to FT'\), diventa \(T \to T’F\)? Lasciando il resto dell'esercizio invariato, proviamo a calcolare \(first(T)\). In questo caso avremmo dovuto analizzare prima i \(first(T’) = \{\varepsilon, \ast\}\) e aggiungere \(first(T’) \setminus \{\varepsilon\} = \{\ast\}\) a \(first(T)\); tuttavia, dal momento che \(\varepsilon \in first(T')\), l’algoritmo non può arrestarsi (perchè potrebbe darsi che \(T'\) sia nullo), ma è necessario considerare anche i \(first(F)\). Come svolto precedenetemente aggiungiamo \(first(F) \setminus \{\varepsilon\} = \{id, (\}\) a \(first(T)\); essendo che \(\varepsilon \notin first(T')\) posso interrompere l'algoritmo e segnare che \(first(T) = \{\ast, id, (\}\)
+Cosa succede se invece, al posto della produzione \(T \to FT'\), diventa \(T \to T’F\)? Lasciando il resto dell'esercizio invariato, proviamo a calcolare \(first(T)\). In questo caso avremmo dovuto analizzare prima i \(first(T’) = \{\varepsilon, \ast\}\) e aggiungere \(first(T’) \setminus \{\varepsilon\} = \{\ast\}\) a \(first(T)\); tuttavia, dal momento che \(\varepsilon \in first(T')\), l’algoritmo non può arrestarsi (perché potrebbe darsi che \(T'\) sia nullo), ma è necessario considerare anche i \(first(F)\). Come svolto precedenetemente aggiungiamo \(first(F) \setminus \{\varepsilon\} = \{id, (\}\) a \(first(T)\); essendo che \(\varepsilon \notin first(F)\) posso interrompere l'algoritmo e segnare che \(first(T) = \{\ast, id, (\}\)
 
 \section{Follow(\(A\))}
 \subsection{Definizione}
-A differenza dei \emph{first}, che sono definiti per stringhe generiche di terminali e non-terminali, i \emph{follow} sono computati solamente per i non-terminali: scriveremo dunque \(follow(A)\).
+A differenza dei \emph{first}, che sono definiti per stringhe generiche di terminali e non-terminali, i \emph{follow} sono calcolati solamente per i non-terminali: scriveremo dunque \(follow(A)\).
 \begin{definition}
     Con \(follow(A)\) indichiamo l'insieme dei terminali che possono seguire A in qualche derivazione.    
 \end{definition}
@@ -288,14 +288,14 @@ I \emph{first} evidenziano quali sono i terminali per cui iniziano le stringhe d
 \subimport{assets/pseudocode/}{follow.tex}
 L'algoritmo comincia inizializzando \(follow(S) = \$\): dal momento che dallo start symbol si possono generare tutte le possibili parole appartenenti al linguaggio della grammatica, allora possiamo aspettarci di trovare il terminatore di stringa \$ dopo una qualsiasi parola. Negli altri casi, invece, \(\forall A\) tale che \(A\) è un non-terminale, inizializziamo \(follow(A) = \emptyset\).
 
-A questo punto, è necessario sottolineare che, visto che siamo interessati a quei terminali che seguono un particolare non terminale, ci interessano solamente le produzioni della grammatica per cui il generico non terminale \(A\) non compare nel driver della produzione, bensì nel body. Per ogni \(B \rightarrow \alpha A \beta\), si eseguono le sequenti operazioni: 
+A questo punto, è necessario sottolineare che, visto che siamo interessati a quei terminali che seguono un particolare non terminale, ci interessano solamente le produzioni della grammatica per cui il generico non terminale \(A\) non compare nel driver della produzione, bensì nel body. Per ogni \(B \rightarrow \alpha A \beta\), si eseguono le seguenti operazioni: 
 
 \begin{itemize}
     \item se \(\beta \neq \varepsilon\), allora aggiungiamo \(first(\beta) \setminus \{\varepsilon\}\) a \(follow(A)\);
     \item se \(\beta = \varepsilon\) or \(\varepsilon \in first(\beta)\), allora aggiungiamo \(follow(B)\) a \(follow(A)\); questo perché ciò che segue \(B\) potrà seguire anche \(A\) (si tenga presente che se \(\beta = \varepsilon\), allora \(A\) è la radice dell'ultimo sottoalbero generato da \(B\).
 \end{itemize}   
-% se si immagina un albero di derivazione qusto è formato da un sottoalbero per alpha, poi abbiamo un sottoalbero di A e poi quello di beta che contiene tutto quello che derivad a beta: tutti i terminali che sono diversi da epsilon e derivano da beta allora li mettiamo in A. Se invece beta è uguale a epsilon oppure epsilon appartiene ai first di beta allora dobbiamo aggiungere i follow di B ai follow di A perchè ciò che segue B potrà anche seguire A perchè se noi andiamo a considerare i sottoalberi che vengono generati andiamo a scoprire che A è la radice dell'utlimo sottoalbero della B e quindi quello che può seguire questa particolare occorrenza di B ... Si procede aggiungendo degli elementi ogni volta che andiamo a considerare delle partciolari istanze nella nostra grammatica e ci fermiamo fino a quando non possiamo inserire altro. 
-\subsection{Training: esercizi su first/follow}
+% se si immagina un albero di derivazione qusto è formato da un sottoalbero per alpha, poi abbiamo un sottoalbero di A e poi quello di beta che contiene tutto quello che derivad a beta: tutti i terminali che sono diversi da epsilon e derivano da beta allora li mettiamo in A. Se invece beta è uguale a epsilon oppure epsilon appartiene ai first di beta allora dobbiamo aggiungere i follow di B ai follow di A perché ciò che segue B potrà anche seguire A perché se noi andiamo a considerare i sottoalberi che vengono generati andiamo a scoprire che A è la radice dell'utlimo sottoalbero della B e quindi quello che può seguire questa particolare occorrenza di B ... Si procede aggiungendo degli elementi ogni volta che andiamo a considerare delle partciolari istanze nella nostra grammatica e ci fermiamo fino a quando non possiamo inserire altro. 
+\subsection{Esercizi su first/follow}
 \subsubsection{Esercizio first/follow 1}
 \label{first-follow-ex-1}
 Utilizziamo sempre la grammatica dell'esempio precedente, che qui riportiamo per comodità del lettore, e andiamone a definire i follow.
@@ -309,16 +309,16 @@ Utilizziamo sempre la grammatica dell'esempio precedente, che qui riportiamo per
 \begin{enumerate}
     \item Dall'algoritmo sappiamo di dover inizializzare \(follow(E) = \$\).
     \item Iniziamo guardando la prima produzione, cioè \(E \rightarrow TE'\): se poniamo \(A = E'\), allora \(\beta = \varepsilon\) e quindi dobbiamo aggiungere i \(follow(E)\) (quelli del driver) a \(follow(E')\) (quelli del body).
-    \item Sempre soffermandoci sulla stessa produzione poniamo \(A = T\): questo vuol dire che \(\beta = E' \neq \varepsilon\) e quindi, ricadendo nel primo caso, aggiungiamo \(first(E) \setminus \{\varepsilon\} = \{+\}\) a \(follow(T)\); tuttavia, essendo che \(\varepsilon \in first((E')\), allora ricadiamo anche nel secondo caso, per cui aggiungiamo \(follow(E)\) a \(follow(T)\).
+    \item Sempre soffermandoci sulla stessa produzione poniamo \(A = T\): questo vuol dire che \(\beta = E' \neq \varepsilon\) e quindi, ricadendo nel primo caso, aggiungiamo \(first(E') \setminus \{\varepsilon\} = \{+\}\) a \(follow(T)\); tuttavia, essendo che \(\varepsilon \in first(E')\), allora ricadiamo anche nel secondo caso, per cui aggiungiamo \(follow(E)\) a \(follow(T)\).
     \item Passiamo ora alla produzione \(E' \rightarrow +TE'\): poniamo quindi \(A = E'\) e \(\beta = \varepsilon\); ricadendo nel secondo caso dovremmo aggiungere \(follow(E')\) a \(follow(E')\) ma, dato che questo non fornisce informazioni aggiuntive, possiamo scartare questa informazione.
     \item Facendo sempre riferimento ad \(E' \rightarrow +TE'\), esaminiamo il caso per cui \(A = T\): visto che \(\beta = E'\), tale caso è identico a quello esaminato al punto 3 e porterà all'aggiunta dei medesimi terminali.
     \item L'ultimo elemento che non abbiamo preso in considerazione per la produzione corrente è terminale \(+\) ma, in quanto terminale, non possiamo calcolarne i follow.
     \item Continuiamo ad applicare l'algoritmo come visto nei punti precedenti per calcolare i follow delle produzioni rimanenti.
 \end{enumerate}
 
-Un caso che potrebbe risultare interessante riguarda la produzione \(F \rightarrow (E)\). Poniamo come fatto precedentemente \(A = E\): essendo che \(\beta = \textrm{ } ) \neq \varepsilon\), è necessario aggiungere \(first(\beta) \setminus \{\varepsilon\} = \{)\}\) a \(follow(E)\); visto che la seconda condizione non è vera, possiamo fermarci ed affermare che \(follow(E)) = \{\$, )\}\).
+Un caso che potrebbe risultare interessante riguarda la produzione \(F \rightarrow (E)\). Poniamo come fatto precedentemente \(A = E\): essendo che \(\beta = \textrm{ } ) \neq \varepsilon\), è necessario aggiungere \(first(\beta) \setminus \{\varepsilon\} = \{)\}\) a \(follow(E)\); visto che la seconda condizione non è vera, possiamo fermarci ed affermare che \(follow(E) = \{\$, )\}\).
 
-Inoltre, nei punti in cui si deovno aggiungere ai follow fi un non-terminale i follow di un altro si lasciano delle annotazioni che si andranno a risolvere una volta terminata l'analisi di tutte le produzioni. Il risultato finale verrà rappresentato come segue:
+Inoltre, nei punti in cui si devono aggiungere ai follow di un non-terminale i follow di un altro si lasciano delle annotazioni che si andranno a risolvere una volta terminata l'analisi di tutte le produzioni. Il risultato finale verrà rappresentato come segue:
 \begin{table}[H]
 	\centering
 	\subimport{assets/tables/}{computing-follow.tex}
@@ -360,7 +360,7 @@ Ora che abbiamo terminato la nostra ricerca dei \emph{first} possiamo ricavare l
     \caption{Esercizio \ref{first-follow-ex-2} su first/follow, step 1}
     \label{first-follow-ex-2_step-1}
 \end{table}
-Passiamo ora gaiamente al prossimo step, ovvero il calcolo dei vari \emph{follow} seguendo l'algoritmo indicato in Alg. \ref{alg:follow}.
+Passiamo ora gaiamente al prossimo step, ovvero il calcolo dei vari \emph{follow} seguendo l'algoritmo indicato in Alg.\ref{alg:follow}.
 
 Per comodità notazionale, dato che nelle produzioni dell'esercizio compare il non-terminale \(A\), scriveremo \(X\) per indicare la \(A\) dell'algoritmo per il calcolo dei \emph{follow} (assumiamo quindi che ogni \(A\) nell'algoritmo venga sostituita da \(X\); quindi, ad esempio, \(\alpha A \beta\) diventa \(\alpha X \beta\)).
 \begin{enumerate}
@@ -377,7 +377,7 @@ Per comodità notazionale, dato che nelle produzioni dell'esercizio compare il n
     \end{enumerate}
     \item Ho concluso quindi l’analisi delle produzioni di \(S\) e passo quindi ad analizzare la produzione di \(A\):
     \begin{enumerate}
-        \item parto da \(A \to Ac\): in questo caso non ho altra scelta che considerare \(X = A\), quindi \(\beta = c\): ricadentdo nel primo \texttt{if} dell'algoritmo, aggiungo \(first(c) \setminus \{\varepsilon\}\) (ovvero \(\{c\}\)) ai \(follow(A)\);
+        \item parto da \(A \to Ac\): in questo caso non ho altra scelta che considerare \(X = A\), quindi \(\beta = c\): ricadendo nel primo \texttt{if} dell'algoritmo, aggiungo \(first(c) \setminus \{\varepsilon\}\) (ovvero \(\{c\}\)) ai \(follow(A)\);
         \item chiudo quindi il branch dato che il secondo \texttt{if} non si applica;
         \item considero ora la seconda produzione di \(A\), ovvero \(A \to d\); tuttavia, questa non è nella forma \(\alpha X \beta\) e quindi non ci dà informazioni, per cui posso passare oltre; ho terminato le produzioni di \(A\).
     \end{enumerate}
@@ -432,7 +432,7 @@ Questa volta saremo più spigliati con la risoluzione dei \emph{first}, ma li sc
     \item infine torniamo a risolvere \(A\):
     \begin{itemize}
         \item analizziamo \(A \to Bd\): inseriamo \(first(B) \setminus \{\varepsilon\}\), ovvero inseriamo \(\{e\}\);
-        \item siccome \(\varepsilon \in first(B)\), aggiungiamo anche i \emph{first} di \(b\), che sono proprio \(\{b\}\);
+        \item siccome \(\varepsilon \in first(B)\), aggiungiamo anche i \emph{first} di \(d\), che sono proprio \(\{d\}\);
         \item analizziam poi \(A \to Cc\);
         \item esattamente come per \(A \to Bd\), abbiamo che i \emph{first} sono \(\{f, c\}\);
     \end{itemize}
@@ -444,7 +444,7 @@ Una volta inseriti i first nella tabella ci troveremo nella situazione rappresen
     \caption{Esercizio \ref{first-follow-ex-3} su first/follow, step 1}
     \label{first-follow-ex-3_step-1}
 \end{table}
-Ora è il momento di tuffarci a capofitto nel calcolo dei \emph{follow}; anche in questo caso tenterò di matentere la spiegazione concisa ma completa e, per comodità notazionale, dato che nelle produzioni dell'esercizio compare il non-terminale \(A\), anche in quest'esercizio scriveremo \(X\) per indicare la \(A\) dell'algoritmo per il calcolo del \emph{follow} (come già fatto per il caso precedente). 
+Ora è il momento di tuffarci a capofitto nel calcolo dei \emph{follow}; anche in questo caso tenteremo di matentere la spiegazione concisa ma completa e, per comodità notazionale, dato che nelle produzioni dell'esercizio compare il non-terminale \(A\), anche in quest'esercizio scriveremo \(X\) per indicare la \(A\) dell'algoritmo per il calcolo del \emph{follow} (come già fatto per il caso precedente). 
 
 Prima di affogare nei calcoli, è interessante osservare più da vicino qual è l’idea sottesa all'inserimento di \(\$\) in follow(\(S\)) come primo passo.
 
@@ -464,7 +464,7 @@ Questa azione risulta intuitiva se si pensa che \(follow(Z)\) rappresenta quello
         \item passiamo dentro al primo \texttt{if} e aggiungiamo \(first(c) = \{c\}\) a \(follow(B)\);
         \item il secondo \texttt{if} non si applica, quindi terminiamo.
     \end{enumerate}
-    \item Analizziamo ora \(A \to Bb\);
+    \item Analizziamo ora \(A \to Bd\);
     \begin{enumerate}
         \item dobbiamo scegliere \(X = B\), quindi abbiamo che \(\beta = d\);
         \item anche questa volta soddisfiamo la condizione del primo \texttt{if} ed aggiungiamo \(first(d)= \{d\}\) a \(follow(B)\);
@@ -497,10 +497,10 @@ Quindi, in Tab.\ref{first-follow-ex-3_step-3}, ammiriamo la soluzione finale del
 Ora che ci siamo esercitati con i meccanismi necessari, possiamo tornare ad occuparci della nostra preoccupazione principale, ovvero come costruire una tabella di parsing.
 
 \subsection{Algoritmo per la costruzione di una parsing table}
-Rappresentato in Alg. \ref{alg:parsing-table-comp} si può osservare l'algoritmo che, data in input una grammatica \(\G\), ritorna la parsing table propria di quella grammatica. 
+Rappresentato in Alg. \ref{alg:parsing-table-comp} si può osservare l'algoritmo che, data in input una grammatica \(\G\), ritorna la tabella di aprsing top down propria di quella grammatica. 
 
 \subimport{assets/pseudocode/}{parsing-table-comp.tex}
-Ricordiamo brevemente che le tabelle di parsing top-down ci servono per verificare se, data una certa parola, questa può essere derivata tramite derivazione leftmost da una data grammatica.
+Ricordiamo brevemente che le tabelle di parsing top-down ci servono per verificare se, data una certa parola, questa può essere derivata tramite derivazione leftmost da una certa grammatica.
 
 L'algoritmo prevede di scorrere tutte le produzioni \(A \to \alpha\) presenti nella grammatica e, per ognuna di queste:
 \begin{enumerate}
@@ -523,19 +523,20 @@ Viene proposta ora come esempio al lettore questa grammatica.
     T &\to T*F \mid F \nonumber \\ \notag
     F &\to (E) \mid id \nonumber  \notag
 \end{align}
-Saprebbe dire il lettore se la grammatica qui presentata appartiene alla classe LL(1)?
+Questa grammatica \emph{non} appartiene alla classe \(LL(1)\); ciò si può dimostrare creandone la parsing table per tale grammatica.
+% Saprebbe dire il lettore se la grammatica qui presentata appartiene alla classe LL(1)?
 
-Mentre il lettore riflette su questo quesito può leggere un'altra importante citazione del nostro punto di riferimento, Paola Quaglia, la quale riflette sul senso di incomunicabilità che attraversa i tempi moderni, quel conflitto generazionale di cui tutti, in certo momento della nostra vita e in un certo schieramento, siamo stati attori.
-\begin{displayquote}
-    "NWY5YTliMmVjMmRhNiwyOS8xMC8yMDIwIDExOjUxLGthbHQxMA==  kaltura ci parla cosi' :-("
-\end{displayquote}
-Torniamo a noi: la risposta alla domanda posta in precedenza è che la grammatica in \ref{non-ll1_grammar} non appartiene alla classe \(LL(1)\); ciò si può dimostrare creandone la parsing table per tale grammatica.
+% Mentre il lettore riflette su questo quesito può leggere un'altra importante citazione del nostro punto di riferimento, Paola Quaglia, la quale riflette sul senso di incomunicabilità che attraversa i tempi moderni, quel conflitto generazionale di cui tutti, in certo momento della nostra vita e in un certo schieramento, siamo stati attori.
+% \begin{displayquote}
+%     "NWY5YTliMmVjMmRhNiwyOS8xMC8yMDIwIDExOjUxLGthbHQxMA==  kaltura ci parla cosi' :-("
+% \end{displayquote}
+% Torniamo a noi: la risposta alla domanda posta in precedenza è che la grammatica in \ref{non-ll1_grammar} non appartiene alla classe \(LL(1)\); ciò si può dimostrare creandone la parsing table per tale grammatica.
 
 Si può notare di fatto come \(first(E) = first(T) = first(F) = \{(, id\}\).
-Di conseguenza, se seguiamo i passi dell'Alg. \ref{alg:parsing-table-comp} per la creazione di una parsing table, otteniamo una situazione in cui la casella \(M[E, id]\) contiene sia \(E \to E+T\) che \(E \to T\): ci troviamo nel caso di una \emph{entry multiply-defined}. Ma su questa grammatica abbiamo anche altre cose da dire.
+Di conseguenza, se seguiamo i passi dell'Alg.\ref{alg:parsing-table-comp} per la creazione di una parsing table, otteniamo una situazione in cui la casella \(M[E, id]\) contiene sia \(E \to E+T\) che \(E \to T\): ci troviamo nel caso di una \emph{entry multiply-defined}. Ma su questa grammatica abbiamo anche altre cose da dire.
 
 \section{Grammatiche con ricorsione sinistra}
-La grammatica vista sopra \ref{non-ll1_grammar} presenta anche una proprietà (o difetto) molto interessante, chiamata ricorsione sinistra:
+La grammatica vista sopra (Eq.\ref{non-ll1_grammar}) presenta anche una proprietà (o difetto) molto interessante, chiamata ricorsione sinistra:
 \begin{definition}
     Una grammatica presenta ricorsione sinistra (left recursive grammar) se, per qualche \(A\) e \(\alpha\), \(A \Rightarrow^* A\alpha\)
 \end{definition}
@@ -558,7 +559,7 @@ Presentiamo ora un lemma sulle grammatiche con ricorsione sinistra.
 \begin{lemma}\label{ll1-leftrec}
     Se una grammatica \(\G\) presenta ricorsione sinistra, immediata o no che sia, allora la tal grammatica \(\G\) \underline{non} appartiene alla classe LL(1).
 \end{lemma}
-Una volta venuti a conoscenza di questo lemma, è lecito chiedersi se tali grammatiche proprio non siano riducibili a grammatiche di tipo \(LL(1)\) per fare in modo da poterle analizzare in maniera deterministica (e di conseguenza più efficiente).
+Una volta venuti a conoscenza di questo lemma, è lecito chiedersi se tali grammatiche non siano riducibili a grammatiche di tipo \(LL(1)\) per fare in modo da poterle analizzare in maniera deterministica e di conseguenza più efficiente.
 
 \subsection{Eliminazione della ricorsione sinistra immediata}
 In molti casi è effettivamente possibile eliminare la ricorsione sinistra. 
@@ -567,10 +568,10 @@ Proviamo a capire l'intuizione da seguire per ottenere una grammatica \(LL(1)\) 
     \label{left-recursive_grammar}
     A \to A \alpha \mid \beta \textrm{  con  } \alpha \neq \varepsilon \land \beta \neq A \gamma
 \end{equation}
-Di fatto, se valesse \(\alpha = \varepsilon\), allora la grammatica sarebbe solo scritta male e non sarebbe quindi left recursive. Il nostro obbiettivo, ricordiamolo, è quello di ottenere una grammatica che ci consente di avere lo stesso linguaggio della precedente, ma che tuttavia non presenta ricorsione sinistra. 
+Di fatto, se valesse \(\alpha = \varepsilon\), allora la grammatica sarebbe solo scritta male e non sarebbe quindi left recursive. Il nostro obiettivo, ricordiamolo, è quello di ottenere una grammatica che ci consente di avere lo stesso linguaggio della precedente, ma che tuttavia non presenta ricorsione sinistra. 
 
 \subsubsection{Intuizione}
-Per aiutarci a trovare un'idea, possiamo tracciare un albero piuttosto grezzo che rappresenti, più o meno, quello che sta succedendo se cerchiamo di derivare lo schema \ref{left-recursive_grammar}:
+Per aiutarci a trovare un'idea, possiamo tracciare un albero piuttosto grezzo che rappresenti, più o meno, quello che sta succedendo se cerchiamo di derivare lo schema Eq.\ref{left-recursive_grammar}:
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{LR_elimination_problem.tex}
@@ -613,9 +614,9 @@ dove \(\alpha_j \ne \varepsilon \;\; \forall j: 1 \le j \le n\) e anche \(\beta_
 \end{align}
 dove \(A' \notin \A \setminus T\), cioè è un non-terminale \emph{fresh}.
 
-Andiamo adesso a vedere come (e se) è possibile elminare la ricorsione sinistra anche quando non è immediata.
+Andiamo adesso a vedere come (e se) è possibile eliminare la ricorsione sinistra anche quando non è immediata.
 
-\subsection{Eliminazione della ricorsione sinistra}
+\subsection{Eliminazione di una ricorsione sinistra qualsiasi}
 Qui il problema si fa più spinoso: possiamo già anticipare che non sarà un'operazione possibile in tutte le grammatiche e per cui c'è addirittura il rischio che, l'eliminazione della ricorsione sinistra per un certo non-terminale, causi la sua comparsa per un altro non-terminale.
 
 In ogni caso, l'idea è di ridurre gli steps della derivazione \(A \Rightarrow^* A \alpha\), in modo da ottenere una produzione che presenta ricorsione sinistra immediata ed applicare la tecnica vista in \ref{subsec:left-recursive-to-ll1}.
@@ -648,13 +649,12 @@ Fermiamoci un attimo e facciamo il punto della situazione. Prima di questa ampia
 
 Consideriamo la grammatica delle espressioni aritmetiche, visto che siamo partiti da quella; proviamo ad applicare le nostre regole di eliminazione e vediamo cosa succede.
 \begin{align*}
-    \label{non-ll1_grammar}
     \G: E &\to E+T \mid T \\
     T &\to T*F \mid F \nonumber \\
     F &\to (E) \mid id \nonumber 
 \end{align*}
 % TODO mostrare gli steps
-E il risultato finale è proprio lei, la grammatica che abbiamo visto a \ref{first-follow-ex-1} nel calcolo dei \emph{first/follow}! Contenti? Fossi in voi, me la tatuerei da qualche parte per evitare che, dopo averla trovata all'esame senza saper rispondere, infesti i vostri sogni per il resto della vostra vita.
+E il risultato finale è proprio lei, la grammatica che abbiamo visto a \ref{first-follow-ex-1} nel calcolo dei \emph{first/follow}!% Contenti? Fossi in voi, me la tatuerei da qualche parte per evitare che, dopo averla trovata all'esame senza saper rispondere, infesti i vostri sogni per il resto della vostra vita.
 \begin{align*}
     \mathcal{G'}: E &\rightarrow TE' \\
     E' &\rightarrow +TE' \mid \varepsilon \\
@@ -705,7 +705,7 @@ Ne abbiamo un ulteriore conferma se andiamo a calcolare i first/follow per \(E\)
 Nota bene: non dobbiamo cadere nell'errore di supporre che, magari, la nostra procedura funzioni a meno che non sia lanciata su grammatiche ambigue, perché non ne abbiamo fornito alcuna prova. Da questo  esempio possiamo solamente concludere, a malincuore, che la procedura di eliminazione della ricorsione sinistra \emph{non garantisce} di ottenere delle grammatiche \(LL(1)\).
 
 \subsection{Eliminare la ricorsione sinistra elimina l'ambiguità?}
-Possiamo però chiederci: la grammatica \(\mathcal{G'}\) che abbiamo ottenuto è ancora ambigua, oppure applicando la nostra procedura ne abbiamo eliminato l'ambiguità? Ricordiamo che l'ambiguità della grammatica di partenza risiedeva nell'impossibilità di esprimere l'associatività degli operatori e la precedenza dell'uno sull'altro \footnote{Si riveda a ~\ref{sec:ambguity} in caso servisse un ripasso.}. 
+Possiamo però chiederci: la grammatica \(\mathcal{G'}\) che abbiamo ottenuto è ancora ambigua, oppure applicando la nostra procedura ne abbiamo eliminato l'ambiguità? Ricordiamo che l'ambiguità della grammatica di partenza risiedeva nell'impossibilità di esprimere l'associatività degli operatori e la precedenza dell'uno sull'altro \footnote{Si riveda a \ref{sec:ambiguity} in caso servisse un ripasso.}. 
 
 Sfortunatamente, riusciamo a trovare senza troppi problemi due derivazioni rightmost che ci portano a ottenere la medesima stringa \(id + id * id\):
 \begin{align*}
@@ -743,7 +743,7 @@ A questo punto notiamo subito che, per ottenere la parola \(id + id * id\), poss
     \caption{Completamento di \ref{fxness-lrremove- ambiguity_1}, versione 1}
     \label{fxness-lrremove- ambiguity_2}
 \end{figure}
-Ma, allo stesso identico modo, potremmo completare lo stesso albero parzial e ottenere la stessa identica parola sostituendo gli stessi nodi con questi due diversi sottoalberi:
+Ma, allo stesso identico modo, potremmo completare lo stesso albero parziale e ottenere la stessa identica parola sostituendo gli stessi nodi con questi due diversi sottoalberi:
 \begin{figure}[H]
     \begin{minipage}[b]{0.4\textwidth}
         \centering
@@ -763,17 +763,17 @@ Ma, allo stesso identico modo, potremmo completare lo stesso albero parzial e ot
 \end{figure}
 
 \paragraph{Conclusione}
-Anche qui, non possiamo fare altro che concludere che applicare la procedura di eliminazione della ricorsione sinistra su una grammatica ambigua \emph{non} ne elimina l'ambguità.
+Anche qui, non possiamo fare altro che concludere che applicare la procedura di eliminazione della ricorsione sinistra su una grammatica ambigua \emph{non} ne elimina l'ambiguità.
 
 \section{Fattorizzabilità Sinistra}
-Consideriamo ora la grammatica \(\G: S \rightarrow aSb \mid ab\), che ormai ben conosciamo: questa grammatica ci permette di denotare, ad esempio, un linguaggio composto da parentesi annidate. Quello che non sapevamo è che non è una grammatica \(LL(1)\): ce ne possiamo accorgere calcolandone i \(first(S)\). Dal momento che l'unico elemento appartenente a questo insieme, nel caso delle due produzioni, risulta infatti essere il non-terminale \(a\), questo vuol dire che, applicando l'algoritmo per la generazione della tabella di parsing predittivo, ci troveremo con due produzioni nella posizione \(M[S, a]\).
+Consideriamo ora la grammatica \(\G: S \rightarrow aSb \mid ab\), che ormai ben conosciamo: questa grammatica ci permette di denotare, ad esempio, un linguaggio composto da parentesi annidate. Quello che non sapevamo è che non è una grammatica \(LL(1)\): ce ne possiamo accorgere calcolandone i \(first(S)\). Dal momento che l'unico elemento appartenente a questo insieme, nel caso delle due produzioni, risulta infatti essere il terminale \(a\), questo vuol dire che, applicando l'algoritmo per la generazione della tabella di parsing predittivo, ci troveremo con due produzioni nella posizione \(M[S, a]\).
 
 Il punto è che \(\G\) può essere \textbf{fattorizzata a sinistra}; in generale, una grammatica è fattorizzabile a sinistra quando:
 \begin{itemize}
     \item ci sono almeno due produzioni che hanno lo stesso non-terminale come driver;
     \item possiedono un prefisso comune nel body.
 \end{itemize}
-Nel caso precedente, ad esempio, vi sono due produzioni che hanno \(S\) come driver e \(a\) come prefisso. Rispetto a tutto ciò, analogmente alle grammatiche con ricorsione a sinsitra, abbiamo un lemma.
+Nel caso precedente, ad esempio, vi sono due produzioni che hanno \(S\) come driver e \(a\) come prefisso. Rispetto a tutto ciò, analogamente alle grammatiche con ricorsione a sinistra, abbiamo un lemma.
 
 \begin{lemma}
     Se la grammatica \(\G\) può essere fattorizzata a sinistra, allora sicuramente \(\G\) non è \(LL(1)\).    
@@ -808,7 +808,7 @@ L'idea è che, data in input una grammatica che può essere fattorizzata a sinis
 		\item viene scelto un non-terminale \(A' : A' \notin \A \setminus T\)
 		\item e si sostituiscono le produzioni di \(A\) nella forma
 		\begin{equation*}
-    			A \rightarrow \alpha \beta_1 \mid ... \mid \alpha \beta_n \mid \gamma_1 \mid \gamma_n
+    			A \rightarrow \alpha \beta_1 \mid ... \mid \alpha \beta_n \mid \gamma_1 \mid \ldots \mid \gamma_n
 		\end{equation*}
 		con le seguenti produzioni: 
 		\begin{align*}
@@ -868,25 +868,25 @@ Abbiamo anche un altro modo per constatare che la nostra grammatica rimane ambig
 \begin{figure}[H]
     \centering
     \subimport{assets/figures/}{left_factorization_ambiguity.tex}
-    \caption{leftFactorizationAmbiguity}
+    \caption{Albero di derivazione per una parola sulla grammatica degli \texttt{if-else}}
     \label{leftFactorizationAmbiguity}
 \end{figure}
 
 Si può infatti notare che
 
 \begin{itemize}
-	\item in un caso è possibile scegliere di sostituire \({S'}_1\) con \(\varepsilon\) e \({S'}_2\) con \texttt{else} \(c\)
-	\item nell'altro invece è possibile sostituire \({S'}_1\) con \texttt{else} \(c\) e \({S'}_2\) con \(\varepsilon\)
+	\item in un caso è possibile scegliere di sostituire \({S'}_1\) con \(\varepsilon\) e \({S'}_2\) con \texttt{else} \(c\);
+	\item nell'altro invece è possibile sostituire \({S'}_1\) con \texttt{else} \(c\) e \({S'}_2\) con \(\varepsilon\);
 \end{itemize}
 
-In entrambi i casi si arrivare di fatto alla stessa stringa da due alberi di derivazione differenti (ottenuti impiegando due derivazioni leftmost).
+In entrambi i casi si arriva di fatto alla stessa stringa da due alberi di derivazione differenti (ottenuti impiegando due derivazioni leftmost).
 
 Questo problema viene definito \emph{dangling else} e corrisponde a non sapere identificare in maniera certa a quale \texttt{then} appartenga un determinato \texttt{else}. Per poter risolvere tale problematica vi sono due differenti soluzioni:
 \begin{itemize}
     \item proibire il costrutto \texttt{if-then} e sostituirlo con un \texttt{if-then-else}, tecnica che viene impiegata nel caso dei linguaggi funzionali: l'idea è che bisogna avere un ramo in cui il booleano \(b\) sia valutato a true e un altro nel caso in cui sia valutato a false; nel caso in cui l'\texttt{else} dovesse rivelarsi completamente inutile, allora si crea un ramo fittizio;
     \item imporre l'\textbf{innermost binding}, dove si fa corrispondere l'\texttt{else} al \texttt{then} più vicino e non ancora matchato: ovviamente tale soluzione ha senso solo nel caso in cui non si vogliono utilizzare parentesizzazioni.
 \end{itemize}
-L'innermost binding può anche essere implementato attraverso la definizioni di policy per definire particolari direttive al parser (approfondiremo il discorso quando parleremo di Byson, niente paura); oppure specializzando la grammatica, permettendo solo a coppie di \texttt{then-else} che matchano tra le occorrenze di \texttt{then} e \texttt{else}: in particolare, il secondo risultato può essere ottenuto utilizzando la grammatica seguente:
+L'innermost binding può anche essere implementato attraverso la definizioni di policy per definire particolari direttive al parser (approfondiremo il discorso quando parleremo di Bison, niente paura); oppure specializzando la grammatica, permettendo solo a coppie di \texttt{then-else} che matchano tra le occorrenze di \texttt{then} e \texttt{else}: in particolare, il secondo risultato può essere ottenuto utilizzando la grammatica seguente:
 \begin{align*}
     S &\rightarrow M \mid U \\
     M &\rightarrow \texttt{if} \; b \; \texttt{then} \; M \; \texttt{else} \; M \mid c \\

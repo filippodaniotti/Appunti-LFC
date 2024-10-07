@@ -18,7 +18,7 @@ Per approcciarsi a questa fase del processo della compilazione è necessario int
 
 Questo tipo di grammatica è tale e quale ad una grammatica di quelle che siamo abituati ad utilizzare ormai quotidianamente, ma ci sorprende con due elementi aggiuntivi:
 \begin{itemize}
-    \item \textbf{Attributi} che sono associati ai simboli della grammatica e possono essere numeri, tipi, riferimenti alla tabella dei simboli ecc; 
+    \item \textbf{Attributi} che sono associati ai simboli della grammatica e possono essere numeri, tipi, riferimenti alla tabella dei simboli, \textit{et cetera}; 
     \item \textbf{Regole} che sono associate alle produzioni della grammatica e di norma sono funzioni degli attributi dei simboli della produzione.
 \end{itemize}
 Sia simboli che regole sono utilizzati per compiere l'analisi semantica, ovvero dare un valore a quello che è espresso da una parola di un a certa grammatica.
@@ -31,14 +31,14 @@ Gli attributi sono divisi in due categorie:
     \item \textbf{attributi ereditati}, sono gli attributi dei non-terminali nel body della produzione e sono definiti in funzione degli altri simboli del body della produzione.
 \end{itemize}
 Il lettore accorto si sarà reso cont senz'altro che non abbiamo definito degli attributi per i caratteri terminali, questo perché gli attributi dei terminali sono sempre noti: sono dati dall'analisi lessicale e di conseguenza non serve alcuna regola per calcolarli.
-Questo concetto risulta più chiaro se si tiene bene a mente che gli attributi servono per valorizzare i caratteri di una parola: i non-terminali hanno un valore che dipende da che funzione rappresentano e da quali terminali "utilizzano", i terminali invece rappresentano le variabili, ovvero dei valori ben definiti che sono già stati riconosciuti e salvati nel momento dell'analisi lessicale.
+Questo concetto risulta più chiaro se si tiene bene a mente che gli attributi servono per valorizzare i caratteri di una parola: i non-terminali hanno un valore che dipende da che funzione rappresentano e da quali terminali "utilizzano", i terminali invece rappresentano le variabili, ovvero dei valori ben definiti che sono già stati riconosciuti e salvati nel momento dell'analisi lessicale; chiameremo \emph{lexval} questo valore.
 
 Di fatto l'analizzatore lessicale prende il codice, sostituisce i terminali con i loro identificatori e ne memorizza il valore.
 L'analizzatore lessicale passa poi all'analizzatore sintattico la tabella dei simboli in cui ogni identificatore ha associato il suo valore lessicale (che in seguito indicheremo con la keyword \texttt{lexval}).
 
 È arrivato, come da prassi, il momento di applicare la nostra filosofia del \emph{learning by doing}, osservando un esempio di utilizzo di una grammatica attribuita.
 
-\subsection{Esempio}
+\subsection{Un primo esempio}
 Prendiamo come esempio la nostra grammatica per la valutazione delle espressioni aritmetiche per valutare l'espressione rappresentata dall'albero di derivazione in Fig.\ref{fig:first-ex_SDD}.
 \begin{align*}
     V &\to E \\
@@ -74,7 +74,7 @@ Vediamo subito quale forma deve avere l'SDD per la grammatica che stiamo utilizz
     \label{reg:regola-7}
     F &\to digit & &\{F.val = digit.lexval\}
 \end{align}
-Nota che i pedici numerici usati in alcune produzioni sono usati solo per differenziare il body dal driver, non hanno nessuna valenza semantica, di fatto \(E_1\) ed \(E\) sono lo stesso non-terminale.
+Nota che i pedici numerici usati in alcune produzioni sono usati solo per differenziare il simbolo del body dal simbolo del driver, non hanno nessuna valenza semantica, di fatto \(E_1\) ed \(E\) sono lo stesso non-terminale.
 
 \paragraph*{Significato delle regole} quelle che abbiamo elencato sulla destra delle produzioni tra parentesi giraffe sono le regole che compongono una grammatica attribuita.
 
@@ -94,7 +94,7 @@ Nota che i pedici numerici usati in alcune produzioni sono usati solo per differ
 \paragraph*{Utilizzo dell'SDD} Ora che abbiamo la grammatica attribuita possiamo utilizzarla appunto per dare un valore al parse tree della nostra somma.
 
 Per valutare un albero di derivazione si utilizza un parse tree annotato. Questo è un parse tree in cui ogni nodo contiene le annotazioni che riguardano gli attributi del simbolo che si trova in quel nodo.
-Si può capire al volo cosa intendiamo guardando il parse tree annotato corrispondente al parse tree precedente (Fig.\ref{fig:first-ex_SDD})) che è raffigurato qui sotto.
+Si può capire al volo cosa intendiamo guardando il parse tree annotato corrispondente al parse tree precedente (Fig.\ref{fig:first-ex_SDD}) che è raffigurato qui sotto.
 \begin{figure}[H]
     \centering
     \includegraphics[width=.8\textwidth]{first-ex_noted-parse-tree.jpg}
@@ -163,7 +163,7 @@ Dovrebbe essere chiaro a questo punto come si possa utilizzare una grammatica at
 Una nota interessante riguardo all'albero di parsing annotato visto in questo esempio è che gli attributi che compaiono in tutti i nodi sono attributi sintetizzati.
 
 \subsection{Verificare se un parse tree annotato può essere valutato}
-Non è sempre detto che un parse tree annotato possa essere valutato, per verificare che ciò sia possibile dobbiamo utilizziare un grafo delle dipendenze e verificare che non vi siano conflitti tra le dipendenze.
+Non è sempre detto che un parse tree annotato possa essere valutato, per verificare che ciò sia possibile dobbiamo utilizzare un grafo delle dipendenze e verificare che non vi siano conflitti tra le dipendenze.
 
 \paragraph*{Costruire il grafo delle dipendenze} per definire un grafo delle dipendenze per un determinato parse tree annotato dobbiamo svolgere i seguenti passi:
 
@@ -224,7 +224,7 @@ Gli SDD S-attribuiti sono ideali per il parsing bottom-up, perché si può crear
 
 \subsection{Un altro esempio di utilizzo dell'SDD}
 Grammatiche differenti pongono sfide differenti nella definizione degli SDD.
-Nel primo esercizio di applicazione dell'SDD abbiamo studiato una grammatica con ricorsione sinistra, osserviamo ora un caso di grammatica LL(1), consideriamo il caso della grammatica per le espressioni aritmetiche \(+\) e \(*\).
+Nel primo esercizio di applicazione dell'SDD abbiamo studiato una grammatica con ricorsione sinistra, osserviamo ora il caso di una grammatica LL(1), considerando la grammatica per le espressioni aritmetiche \(+\) e \(*\).
 \begin{align*}
     V &\to E \\
     E &\to TE' \\
@@ -249,7 +249,7 @@ Come facciamo a fare in modo che \(T.val\) abbia valore \(15\)?
 
 \noindent \emph{Chiediamo l'intervento degli attributi ereditati}
 
-\noindent Questo è il caso in cui possiamo aiutarci con l'utilizzo di attributi ereditati, presentiamo in Fig.\ref{fig:second-ex-dependency-graph-part} come si possono utilizzare gli attributi ereditati; in blu abbiamo ancora una volta gli archi del grafo delle dipendenze e le etichette \(.i\) e \(.s\) rappresentano rispetivamente attributi ereditati e sintetizzati.
+\noindent Questo è il caso in cui possiamo aiutarci con l'utilizzo di attributi ereditati, presentiamo in Fig.\ref{fig:second-ex-dependency-graph-part} come si possono utilizzare gli attributi ereditati; in blu abbiamo ancora una volta gli archi del grafo delle dipendenze e le etichette \(.i\) e \(.s\) rappresentano rispettivamente attributi ereditati e sintetizzati.
 \begin{figure}[H]
     \centering
     \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part.jpg}
@@ -258,7 +258,7 @@ Come facciamo a fare in modo che \(T.val\) abbia valore \(15\)?
 \end{figure}
 Vediamo quindi come in questo caso sia necessario utilizzare gli attributi ereditati, che però aggiungono un livello di complessità.
 
-Quando studiamo la regola per una produzione dobbiamo usare solo le informazioni che abbiamo a quel livello, in quella produzione, così viene affrontata la costruzione dell'SDD.
+Quando studiamo la regola per una produzione dobbiamo usare solo le informazioni che abbiamo a quel livello, in quella produzione; in questo modo viene affrontata la costruzione dell'SDD.
 
 Andiamo ora a vedere nello specifico come viene affrontata la questione delle dipendenze quando si generano le regole per questo determinato SDD.
 La prima cosa da notare è che quando il valore di \(T'\) viene copiato in \(T\) contiene già il valore della moltiplicazione.
@@ -272,7 +272,7 @@ ovvero passiamo a \(T'\) come valore ereditato \(F.s\) ed assegnamo a \(T\) come
     \includegraphics[width=.5\textwidth]{second-ex-dependency-graph-part-1.jpg}
     % \label{fig:second-ex-dependency-graph-part-1}
 \end{figure}
-Se andiamo invece ad osservare come viene generato il valore di \(T'\) vediamo dal pezzo di parse tree annotato in Fig.\ref{fig:second-ex-dependency-graph-part} che in pirmis ereditiamo un elemento dal fratello di sinistra, poi sappiamo che lo moltiplichiamo per il valore che ci è dato da \(F.s\) per ottenere il valore di \(T'_1\), che poi passeremo a \(T'\).
+Se andiamo invece ad osservare come viene generato il valore di \(T'\) vediamo dal pezzo di parse tree annotato in Fig.\ref{fig:second-ex-dependency-graph-part} che in primis ereditiamo un elemento dal fratello di sinistra, poi sappiamo che lo moltiplichiamo per il valore che ci è dato da \(F.s\) per ottenere il valore di \(T'_1\), che poi passeremo a \(T'\).
 
 La regola per questa produzione è quindi
 \begin{align*}
@@ -301,9 +301,9 @@ Ora che abbiamo studiato i due punti critici dell'SDD per questa grammatica ripo
 
 Il nostro obiettivo è considerare la traduzione direttamente durante la fase di parsing per poter ottimizzare le attività della compilazione. Questo ci permette di evitare una prima elaborazione sintattica per ottenere il parse tree e la seconda, semantica, per valutare gli attributi.
 
-Il caso più semplice in cui queste due elaborazioni possono essere eseguite in modo congiunto lo si ha considerando una grammatica adatta al parsing bottom-up a cui possiamo applicare l'algoritmo di shift/reduce (i.e. SLR(1), LR(1), LALR(1)) e l'SDD è S-attribuito (i.e. gli unici attributi presenti sono sintetizzati). Come mai?
+Il caso più semplice in cui queste due elaborazioni possono essere eseguite in modo congiunto lo si ha considerando una grammatica adatta al parsing bottom-up a cui possiamo applicare l'algoritmo di shift/reduce (i.e. SLR(1), LR(1), LALR(1)) e l'SDD è S-attribuito.
 
-L'algoritmo di shift/reduce si può eseguire con complessità lineare e necessità di due pile AA: una per mantenere gli stati (stSt) mentre l'altra per la catena dei simboli per poter conservare la derivazione parziale (sySt). L'idea è quella che insieme a queste due pile possiamo mantenerne una terza, che chiameremo \textbf{semSt}, dove conserveremo gli attributi (e.g. nel caso di una grammatica di espressioni aritmetiche degli interi).
+L'algoritmo di shift/reduce si può eseguire con complessità lineare e necessita di due pile AA: una per mantenere gli stati (stSt) mentre l'altra per la catena dei simboli per poter conservare la derivazione parziale (sySt). L'idea è quella che insieme a queste due pile possiamo mantenerne una terza, che chiameremo \textbf{semSt}, dove conserveremo gli attributi (e.g. nel caso di una grammatica di espressioni aritmetiche degli interi).
 
 \subsubsection{Esempio Algoritmo shift/reduce con semSt}
 
@@ -334,7 +334,6 @@ Come abbiamo potuto osservare nei capitoli precedenti, l'algoritmo shift/reduce 
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{lalr-automata.jpg}
-    \label{fig:lalr-automata}
 \end{figure}
 
 \begin{table}[H]
@@ -421,7 +420,7 @@ Dallo stato 7 possiamo eseguire \texttt{shift} 6 leggendo dall'input buffer \(di
     semSt &= 3\; 0\; 4 &\texttt{push}\;digit.lexval\\
 \end{align*}
 
-Il processo a questo risulta essere analogo a quello fatto precedentemente per il primo \(digit\) quindi ci riserviamo la possibilità di non spiegare così nel dettaglio i prossimi passaggi 
+Il processo a questo punto risulta essere analogo a quello fatto precedentemente per il primo \(digit\) quindi ci riserviamo la libertà di non spiegare così nel dettaglio i prossimi passaggi 
 
 \begin{align*}
     w &= \underline{digit + digit}\$ \\
@@ -488,11 +487,11 @@ Una possibile grammatica che genera il linguaggio descritto è questa:
 
 Quando ci troviamo nel caso di una stringa con il simbolo \(o\) davanti intendiamo che vogliamo ottenere il valore ottale della sequenza di digit. 
 
-La grammatica anche in questo caso è LALR(1) però abbiamo un problema: non è possibile sintetizzare le informazioni nello stesso modo di prima in quanto queste non sono disponibili nel momento in cui ci servono. Ragionando infatti sulla derivazione \(S \Rightarrow Num \Rightarrow o Digits\) ci si rende conto del fatto che il simbolo \(o\) si trova nel sottoalbero sinistro dell'albero mentre i \(Digits\) in quello destro: questo vuol dire che di fatto non siamo in grado di calcolare il valore fino a quando non raggiungiamo la cima dell'albero e quindi ciò significa che non ci troviamo di fronte a un SDD S-attribuito (il valore del sottoalbero di destra dipende infatti dal valore dei fratelli e non solamente da quello dei figli).
+La grammatica è LALR(1) anche in questo caso, però abbiamo un problema: non è possibile sintetizzare le informazioni nello stesso modo di prima in quanto queste non sono disponibili nel momento in cui ci servono. Ragionando infatti sulla derivazione \(S \Rightarrow Num \Rightarrow o Digits\) ci si rende conto del fatto che il simbolo \(o\) si trova nel sottoalbero sinistro dell'albero mentre i \(Digits\) in quello destro: questo vuol dire che di fatto non siamo in grado di calcolare il valore fino a quando non raggiungiamo la cima dell'albero e quindi ciò significa che non ci troviamo di fronte a un SDD l-attribuito (il valore del sottoalbero di destra dipende infatti dal valore dei fratelli e non solamente da quello dei figli).
 
-Per poter raggiungere i nostri obbiettivi a livello di efficienza dobbiamo riprovare modificando la grammatica in modo che ci consenta di svolgere entrambe le operazioni contemporaneamente.
+Per poter raggiungere i nostri obiettivi a livello di efficienza dobbiamo riprovare modificando la grammatica in modo che ci consenta di svolgere entrambe le operazioni contemporaneamente.
 
-Per poter ottenere un risultato migliore potremmo inserire due nuovi non terminali in modo da poterci aiutare con le regole in un secondo momento: consideriamo infatti di modificare la grammatica nel modo seguente
+Per poter ottenere un risultato migliore potremmo inserire due nuovi non-terminali in modo da poterci aiutare con le regole in un secondo momento: consideriamo infatti di modificare la grammatica nel modo seguente
 
 \begin{align*}
     S &\to Num \\
@@ -536,7 +535,7 @@ Se vogliamo fare il parsing della parola \(digit+digit\) otteniamo i seguenti al
 \end{figure}
 Si noti come l'albero della sintassi astratta a sinistra sia molto più compatto.
 
-\paragraph{Memorizzazione degli AST} Di fatto questa struttura va a creare in memoiria un albero in cui ogni nodo rappresenta un passaggio intermedio del processo descritto dalla parola che stiamo analizzando. L'AST ottenuto dalla semplificazione dell'albero di derivazione viene quindi salvato nodo per nodo nel seguente modo:
+\paragraph{Memorizzazione degli AST} Di fatto questa struttura va a creare in memoria un albero in cui ogni nodo rappresenta un passaggio intermedio del processo descritto dalla parola che stiamo analizzando. L'AST ottenuto dalla semplificazione dell'albero di derivazione viene quindi salvato nodo per nodo nel seguente modo:
 \begin{itemize}
     \item le foglie vengono salvate come link a record nella tabella dei simboli: viene creata una foglia per ogni identificatore ed ogni valore diretto (es.: valore numerico) presente nella parola che stiamo parsando;
     \item i nodi intermedi dell'albero costituiscono la struttura topologica dell'albero e rappresentano tutte le operazioni compiute tra variabili o valori diretti (quindi tutte le operazioni tra altri nodi).
@@ -547,12 +546,12 @@ L'AST si può creare semplicemente dopo aver ottenuto l'albero di derivazione tr
 Per fare questo dobbiamo immaginare di avere a disposizione due funzioni:
 \begin{itemize}
     \item \texttt{newLeaf(label, val)} che va a salvare un nodo foglia con due campi: l'etichetta ed il valore;
-    \item \texttt{newNode(label, c1, ..., ck)} che crea un nodo con \(k\) figli, l'etichetta (che indica l'operazione rappresentata dal nodo) è \texttt{label} mentre \texttt{c1, ..., ck} sono i riferimenti ai nodi figli;
+    \item \texttt{newNode(label, c1, ..., ck)} che crea un nodo con \(k\) figli, l'etichetta (che indica l'operazione rappresentata dal nodo) è \texttt{label} mentre \texttt{c1, ..., ck} sono i riferimenti ai nodi figli (ossia gli operatori);
 \end{itemize}
 Applicando queste due funzioni all'esempio precedente (Fig.\ref{fig:ast-first-example}) avremo l'operazione \(+\) rappresentata da un nodo che avrà come etichetta \(+\) e come figli i due nodi \(digit\).
 I nodi \(digit\) saranno nodi foglia con identificatore e valore relativo (il valore sarà quello che ci viene ritornato dall'analisi lessicale, quindi lo possiamo ricavare con \(digit.lexval\)).\\
 
-\paragraph{Funzioni di attribuzione} Per creare l'albero di sintssi astratta durante la fase di parsing dobbiamo definire delle regole semantiche (dette anche funzioni di attribuzione o azioni semantiche) che, ogni volta che incontriamo una riduzione, ci indichino quando e come istanziare un nodo per l'AST durante il parsing.
+\paragraph{Funzioni di attribuzione} Per creare l'albero di sintassi astratta durante la fase di parsing dobbiamo definire delle regole semantiche (dette anche funzioni di attribuzione o azioni semantiche) che, ogni volta che incontriamo una riduzione, ci indichino quando e come istanziare un nodo per l'AST durante il parsing.
 
 \noindent Vediamo un esempio: data la grammatica LALR per operazioni algebriche di somma e sottrazione 
 \begin{align}
@@ -606,7 +605,7 @@ Osserviamo quindi quale forma viene ad ottenere l'abero di sintassi astratta del
     \begin{figure}[H]
         \centering
         \includegraphics[width=.6\textwidth]{ex-ast-creation-1.png}
-        \caption{Creaizone del nodo foglia per l'identificatore che referenzia la variabile \(a\)}
+        \caption{Creazone del nodo foglia per l'identificatore che referenzia la variabile \(a\)}
     \end{figure}
     \item La seconda riduzione che incontriamo, \(E \to T\), ci porta ad un semplice passaggio di rinominazione di un nodo dell'AST, in quanto la sua azione semantica è \(\{E.node = T.node\}\).
     \begin{figure}[H]
@@ -686,9 +685,10 @@ Lo stesso avviene per la grammatica che stiamo considerando ora, quella per gli 
 %TODO bisogna mergiare queste due parti solo che non so che cosa è meglio tenere come introduzione
 % Ti dirò che a me sembrano carini così
 
-Il problema in questo caso specifico è che non possiamo sintetizzare tutte le informazioni che ci servono perchè, uno degli elementi necessari per ricavare il valore dell'espressione e per la formazione dell'abstract syntax tree, non è presente nello stesso sottoalbero nel quale troviamo l'operatore aritmetico e l'altro operando coinvolto nell'operazione. 
+Il problema in questo caso specifico è che non possiamo sintetizzare tutte le informazioni che ci servono;
+questo perché uno degli elementi necessari per ricavare il valore dell'espressione e per la formazione dell'abstract syntax tree, non è presente nello stesso sottoalbero nel quale troviamo l'operatore aritmetico e l'altro operando coinvolto nell'operazione. 
 
-Utilizzando gli attributi ereditati non si riesce ad eseguire in maniera immediata tutte le operazioni durante il parsing della grammatica: un'opzione, come già citato più volte, potrebbe essere quella di agire sulla grammatica in modo che, durante un'esecuzione del parsing bottom-up, si possa ottenere lo stesso risultato di una grammatica S-attribuita. Senza soffermarci troppo sui dettagli, tale operazione passerebbe per l'aggiunta di marker e \(\varepsilon\)-transizioni in modo che gli attributi vengano sintetizzati e non ereditati.
+Utilizzando gli attributi ereditati non si riesce ad eseguire in maniera immediata tutte le operazioni di assegnamento per reare l'AST durante il parsing della grammatica: un'opzione, come già citato più volte, potrebbe essere quella di agire sulla grammatica in modo che, durante un'esecuzione del parsing bottom-up, si possa ottenere lo stesso risultato di una grammatica S-attribuita. Senza soffermarci troppo sui dettagli, tale operazione passerebbe per l'aggiunta di marker e \(\varepsilon\)-transizioni in modo che gli attributi vengano sintetizzati e non ereditati.
 
 In questo caso per poter trasportare le informazioni da un ramo dell'albero ad un altro è necessario utilizzare degli attributi ereditati: in modo simile a quanto fatto per calcolare il valore delle espressioni aritmetiche, in questo caso assegniamo dei riferimenti a dei nodi. 
 
@@ -722,7 +722,7 @@ Può sembrare difficile ottenere questa struttura dal nostro parse tree, tuttavi
 
 Per rendere più chiaro il grafo utilizziamo un esempio: il sottoalbero sinistro possiede un arco da \(id\) a \(T\) (coincidente con quello del parse tree) perché sottolineiamo che, una volta effettuata l'operazione di riduzione \(T \to id\), \(T\) mantenga un riferimento a \(id\); visto che \(id\) è contenuto nel sottoalbero di \(T\) (i.e. è uno dei suoi figli) tale attributo è sintetizzato. 
 
-La situazione cambia se vogliamo esaminare l'arco esattamente successivo: l'arco da \(T\) ad \(E'\) infatti non coincide con nessun altro arco del parse tree e il suo scopo è quello di trasmettere i riferimenti di \(T\) al fratello \(E'\). Questa operazione viene fatta perchè, per poter calcolare in questo caso la differenza, è necessario che \(E'\) riceva le informazioni del fratello \(T\): dovremo dunque servirci di un attributo ereditato.
+La situazione cambia se vogliamo esaminare l'arco esattamente successivo: l'arco da \(T\) ad \(E'\) infatti non coincide con nessun altro arco del parse tree e il suo scopo è quello di trasmettere i riferimenti di \(T\) al fratello \(E'\). Questa operazione viene fatta perché, per poter calcolare in questo caso la differenza, è necessario che \(E'\) riceva le informazioni del fratello \(T\): dovremo dunque servirci di un attributo ereditato.
 
 A questo punto dobbiamo definire le \textbf{funzioni di attribuzione} associate alle produzioni: tale operazione come sempre non è facile da eseguire ma vedremo di analizzarla passo per passo. 
 
@@ -833,7 +833,7 @@ Consideriamo la seguente grammatica
     L &\to id
 \end{align*}
 
-L'obbiettivo è quello di associare alle produzioni descritte delle regole per cui si possa aggiungere il tipo nella entry della symbol table degli identificatori dichiarati. Per poter aggionrare la tabella è necessario utilizzare la funzione \texttt{addtype(table\_entry, type\_instance)}.
+L'obiettivo è quello di associare alle produzioni descritte delle regole per cui si possa aggiungere il tipo nella entry della symbol table degli identificatori dichiarati. Per poter aggionrare la tabella è necessario utilizzare la funzione \texttt{addtype(table\_entry, type\_instance)}.
 
 Anche in questo caso partiamo da un esempio che può aiutarci per la definizione delle regole: supponiamo di avere la parola \emph{int id, id}, in questo caso per una derivazione leftomost i passi di derivazione che dobbiamo compiere sono
 
